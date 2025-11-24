@@ -34,7 +34,7 @@
             --border-color: #dee2e6;
         }
 
-        /* GECE MODU DEĞİŞKENLERİ */
+        /* GECE MODU */
         body.dark-mode {
             --bg-color: #121212;
             --text-color: #e0e0e0;
@@ -67,7 +67,7 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: bold; margin-bottom: 20px; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* TABLO AYARLARI */
+        /* TABLO */
         .main-table { color: var(--text-color); }
         .main-table thead th { background-color: var(--table-head); color: white; vertical-align: middle; text-align: center; font-size: 0.9rem; white-space: nowrap; border-color: var(--border-color); }
         .main-table tbody td { vertical-align: middle; text-align: center; background-color: var(--table-row-bg); color: var(--text-color); font-weight: bold; white-space: nowrap; border-color: var(--border-color); }
@@ -78,18 +78,12 @@
         .btn-plus { background-color: #20c997; border: none; color: white; }
         .btn-minus { background-color: #6c757d; border: none; color: white; }
         .col-namaz { background-color: #f4a261 !important; color: black; } 
-        
         .hidden { display: none !important; }
-        
-        /* KARTLAR VE KUTULAR */
-        .login-card, .calculator-card, .chart-container, .badge-item { 
-            background-color: var(--card-bg); 
-            color: var(--text-color);
-            border-radius: 15px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-        }
+        @media (max-width: 768px) { .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+
+        /* KARTLAR */
+        .login-card, .calculator-card, .chart-container, .badge-item { background-color: var(--card-bg); color: var(--text-color); border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
-        
         .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
 
         .goal-card {
@@ -101,6 +95,14 @@
         .goal-card.success-mode { background: linear-gradient(135deg, #1aa179, #157347); border: 3px solid #ffc107; box-shadow: 0 0 20px rgba(255, 193, 7, 0.6); }
         .goal-input { width: 80px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
 
+        /* STREAK (ZİNCİR) ALANI */
+        .streak-box {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px; border-radius: 10px; margin-top: 15px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .streak-count { font-size: 1.5rem; font-weight: bold; color: #ffc107; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+
         .badge-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; margin-bottom: 40px; }
         .badge-item { text-align: center; width: 110px; padding: 10px; animation: popIn 0.5s ease; }
         .badge-title { font-size: 0.85rem; font-weight: bold; color: #198754; }
@@ -111,7 +113,6 @@
         body.dark-mode .history-row-up, body.dark-mode .history-row-up > td { background-color: #0f5132 !important; color: #fff !important; }
         body.dark-mode .history-row-down, body.dark-mode .history-row-down > td { background-color: #842029 !important; color: #fff !important; }
 
-        /* HESAPLAMA SİHİRBAZI INPUTLARI */
         .calc-row { background: var(--table-row-bg); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
         .calc-label { font-weight: bold; color: var(--sidebar-bg); font-size: 1.1rem; margin-bottom: 5px; display: block;}
         body.dark-mode .calc-label { color: #20c997; }
@@ -145,12 +146,7 @@
         <ul class="list-unstyled components">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-home me-2"></i> Ana Sayfa</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-2"></i> Hesap Sihirbazı</li>
-            
-            <!-- YENİ GECE MODU BUTONU -->
-            <li onclick="toggleDarkMode()">
-                <i class="fas fa-moon me-2"></i> <span id="darkModeText">Gece Modu</span>
-            </li>
-
+            <li onclick="toggleDarkMode()"><i class="fas fa-moon me-2"></i> <span id="darkModeText">Gece Modu</span></li>
             <li onclick="forceResetData()" class="text-warning"><i class="fas fa-wrench me-2"></i> Verileri Onar</li>
             <li onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap</li>
         </ul>
@@ -167,6 +163,7 @@
                 <div class="col-md-8 col-lg-6">
                     <div id="goalCard" class="goal-card text-center">
                         <h4>🎯 Günlük Hedef</h4>
+                        
                         <div class="d-flex justify-content-center align-items-center gap-2 mt-3 mb-2">
                             <span style="font-size: 1.2rem;">Bugün</span>
                             <strong style="font-size: 2rem;" id="dailyCountDisplay">0</strong>
@@ -174,13 +171,26 @@
                             <input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)">
                             <span style="font-size: 1.2rem;">Kaza</span>
                         </div>
+                        
                         <div class="progress mt-2" style="height: 10px; background-color: rgba(255,255,255,0.3);">
                             <div id="dailyProgressBar" class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
                         </div>
+                        
                         <div id="goalSuccessMessage" class="success-msg mt-2 fw-bold text-white" style="display: none;">
                             🎉 Günlük Hedefe Ulaşıldı!
                         </div>
-                        <small id="goalDefaultText" class="text-white-50 mt-1 d-block">Bugün içinde yapmadığınız işlemler hedefi etkilemez.</small>
+
+                        <!-- ZİNCİR (STREAK) ALANI -->
+                        <div class="streak-box">
+                            <i class="fas fa-fire fa-lg text-warning"></i>
+                            <span class="text-white">Zincir:</span>
+                            <span id="streakValue" class="streak-count">0</span>
+                            <span class="text-white">Gün</span>
+                        </div>
+                        
+                        <small id="goalDefaultText" class="text-white-50 mt-2 d-block">
+                            Zinciri kırmamak için her gün hedefini tamamla!
+                        </small>
                     </div>
                 </div>
             </div>
@@ -228,37 +238,23 @@
             </div>
         </div>
 
-        <!-- BÖLÜM 2: DETAYLI HESAPLAMA SİHİRBAZI -->
+        <!-- BÖLÜM 2: HESAPLAMA SİHİRBAZI -->
         <div id="section-calculator" class="hidden">
             <h2 class="app-header">Detaylı Hesap Sihirbazı</h2>
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="calculator-card">
                         <div class="alert alert-info small">
-                            <i class="fas fa-info-circle me-1"></i> 
-                            Lütfen ilgili namazın satırına tarihleri girin. "Hesaplanan Gün" otomatik çıkacaktır.
-                            <br><strong>İpucu:</strong> İlk satırı (Sabah) doldurduktan sonra aşağıdaki butonlarla diğerlerine kopyalayabilirsiniz.
+                            <i class="fas fa-info-circle me-1"></i> Tarihleri giriniz. <strong>İpucu:</strong> İlk satırı doldurup butonlarla kopyalayabilirsiniz.
                         </div>
-
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
-                            <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
-                                <i class="fas fa-arrow-down me-1"></i> Sorumluluk Tarihini Dağıt
-                            </button>
-                            <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">
-                                <i class="fas fa-arrow-down me-1"></i> Düzenli Başlamayı Dağıt
-                            </button>
+                            <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()"><i class="fas fa-arrow-down me-1"></i> Sorumluluk Tarihini Dağıt</button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()"><i class="fas fa-arrow-down me-1"></i> Düzenli Başlamayı Dağıt</button>
                         </div>
-
                         <div id="calcRowsContainer"></div>
-
                         <hr class="my-4">
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <strong>Dikkat:</strong> "Hesaplananları Aktar" butonuna bastığınızda, Ana Sayfa'daki "Kılınacak" sayılarınız buradaki değerlerle <u>değiştirilecektir.</u>
-                        </div>
-                        <button class="btn btn-danger w-100 py-2 fw-bold" onclick="applyAdvancedCalculation()">
-                            <i class="fas fa-check-circle me-2"></i> Onaylıyorum ve Hesaplananları Aktar
-                        </button>
+                        <div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> <strong>Dikkat:</strong> Onaylarsanız ana sayfadaki hedefler değişir.</div>
+                        <button class="btn btn-danger w-100 py-2 fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Onaylıyorum ve Hesaplananları Aktar</button>
                     </div>
                 </div>
             </div>
@@ -268,10 +264,7 @@
 </div>
 
 <script>
-    document.getElementById('sidebarCollapse').addEventListener('click', function () {
-        document.getElementById('sidebar').classList.toggle('active');
-    });
-
+    document.getElementById('sidebarCollapse').addEventListener('click', function () { document.getElementById('sidebar').classList.toggle('active'); });
     function showSection(sectionId) {
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         document.getElementById('menu-' + sectionId).classList.add('active');
@@ -282,135 +275,52 @@
         if(sectionId === 'calculator') { renderCalculatorRows(); }
     }
 
-    // --- GECE MODU FONKSİYONLARI ---
+    // GECE MODU
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
         document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu";
-        
-        // Grafikleri güncelle (Renk uyumu için)
-        if(chartCompletion) {
-            chartCompletion.options.plugins.legend.labels.color = isDark ? '#fff' : '#666';
-            chartCompletion.update();
-        }
+        if(chartCompletion) { chartCompletion.options.plugins.legend.labels.color = isDark ? '#fff' : '#666'; chartCompletion.update(); }
     }
+    window.addEventListener('load', () => { if(localStorage.getItem('theme') === 'dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; } });
 
-    // Sayfa Yüklendiğinde Tema Kontrolü
-    window.addEventListener('load', () => {
-        if(localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('darkModeText').innerText = "Gündüz Modu";
-        }
-    });
-
-    // --- GELİŞMİŞ HESAPLAMA MANTIĞI ---
+    // HESAP SİHİRBAZI
     const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"];
-
     function renderCalculatorRows() {
-        const container = document.getElementById('calcRowsContainer');
-        if(container.innerHTML.trim() !== "") return;
-
+        const container = document.getElementById('calcRowsContainer'); if(container.innerHTML.trim() !== "") return;
         let html = "";
         prayerTypes.forEach((prayer, index) => {
-            html += `
-            <div class="calc-row" id="row-${index}">
-                <span class="calc-label">${prayer}</span>
-                <div class="calc-input-group">
-                    <div>
-                        <small class="text-muted">Sorumluluk Başlangıcı</small>
-                        <input type="date" class="form-control start-date" onchange="calculateRow(${index})">
-                    </div>
-                    <div>
-                        <small class="text-muted">Düzenli Başlama</small>
-                        <input type="date" class="form-control end-date" onchange="calculateRow(${index})">
-                    </div>
-                    <div>
-                        <small class="text-muted">Hesaplanan Gün</small>
-                        <input type="number" class="form-control calc-result-input" id="res-${index}" value="0">
-                    </div>
-                </div>
-            </div>`;
+            html += `<div class="calc-row" id="row-${index}"><span class="calc-label">${prayer}</span><div class="calc-input-group">
+            <div><small class="text-muted">Sorumluluk Başlangıcı</small><input type="date" class="form-control start-date" onchange="calculateRow(${index})"></div>
+            <div><small class="text-muted">Düzenli Başlama</small><input type="date" class="form-control end-date" onchange="calculateRow(${index})"></div>
+            <div><small class="text-muted">Hesaplanan Gün</small><input type="number" class="form-control calc-result-input" id="res-${index}" value="0"></div></div></div>`;
         });
         container.innerHTML = html;
     }
-
     function calculateRow(index) {
-        const row = document.getElementById(`row-${index}`);
-        const startVal = row.querySelector('.start-date').value;
-        const endVal = row.querySelector('.end-date').value;
-        const resInput = document.getElementById(`res-${index}`);
-
-        if(startVal && endVal) {
-            const d1 = new Date(startVal);
-            const d2 = new Date(endVal);
-            if(d1 < d2) {
-                const diff = Math.ceil(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24));
-                resInput.value = diff;
-            } else { resInput.value = 0; }
-        }
+        const row = document.getElementById(`row-${index}`); const s = row.querySelector('.start-date').value; const e = row.querySelector('.end-date').value; const r = document.getElementById(`res-${index}`);
+        if(s && e) { const d1 = new Date(s); const d2 = new Date(e); if(d1 < d2) { r.value = Math.ceil(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24)); } else { r.value = 0; } }
     }
-
-    function copyStartDate() {
-        const row0 = document.getElementById('row-0');
-        const start0 = row0.querySelector('.start-date').value;
-        if(!start0) { alert("Lütfen Sabah namazı için Sorumluluk Tarihini girin."); return; }
-        for(let i = 1; i < 5; i++) {
-            const row = document.getElementById(`row-${i}`);
-            row.querySelector('.start-date').value = start0;
-            calculateRow(i);
-        }
-    }
-
-    function copyEndDate() {
-        const row0 = document.getElementById('row-0');
-        const end0 = row0.querySelector('.end-date').value;
-        if(!end0) { alert("Lütfen Sabah namazı için Düzenli Başlama Tarihini girin."); return; }
-        for(let i = 1; i < 5; i++) {
-            const row = document.getElementById(`row-${i}`);
-            row.querySelector('.end-date').value = end0;
-            calculateRow(i);
-        }
-    }
-
+    function copyStartDate() { const s0 = document.getElementById('row-0').querySelector('.start-date').value; if(!s0) return alert("Sabah tarihini girin"); for(let i=1; i<5; i++) { const r = document.getElementById(`row-${i}`); r.querySelector('.start-date').value = s0; calculateRow(i); } }
+    function copyEndDate() { const e0 = document.getElementById('row-0').querySelector('.end-date').value; if(!e0) return alert("Sabah tarihini girin"); for(let i=1; i<5; i++) { const r = document.getElementById(`row-${i}`); r.querySelector('.end-date').value = e0; calculateRow(i); } }
     function applyAdvancedCalculation() {
-        let newValues = [];
-        for(let i = 0; i < 5; i++) {
-            const val = parseInt(document.getElementById(`res-${i}`).value) || 0;
-            newValues.push(val);
-        }
-        if(newValues.every(v => v === 0)) { alert("Hesaplanan değerler 0 görünüyor."); return; }
-
-        if(confirm("Bu değerler ana sayfanızdaki hedeflerin üzerine yazılacak. Onaylıyor musunuz?")) {
-            ensureDataStructure();
-            localData.counts[0].target = newValues[0];
-            localData.counts[1].target = newValues[1];
-            localData.counts[2].target = newValues[2];
-            localData.counts[3].target = newValues[3];
-            localData.counts[4].target = newValues[4];
-            saveToCloud();
-            alert("Hedefler başarıyla güncellendi!");
-            showSection('dashboard');
+        let vals = []; for(let i=0; i<5; i++) vals.push(parseInt(document.getElementById(`res-${i}`).value)||0);
+        if(vals.every(v=>v===0)) return alert("Değerler 0.");
+        if(confirm("Hedefler değiştirilecek. Onaylıyor musunuz?")) {
+            ensureDataStructure(); vals.forEach((v,i)=> localData.counts[i].target = v); saveToCloud(); alert("Güncellendi!"); showSection('dashboard');
         }
     }
 
-    // --- PWA ---
+    // PWA & FIREBASE
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
-    const manifestBlob = new Blob([JSON.stringify({
-        "name": "Kaza Namazı", "short_name": "Namaz Takip", "start_url": ".", "display": "standalone",
-        "background_color": "#f8f9fa", "theme_color": "#198754",
-        "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }]
-    })], {type: 'application/json'});
+    const manifestBlob = new Blob([JSON.stringify({ "name": "Kaza Namazı", "short_name": "Namaz Takip", "start_url": ".", "display": "standalone", "background_color": "#f8f9fa", "theme_color": "#198754", "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] })], {type: 'application/json'});
     document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
-    
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register(URL.createObjectURL(new Blob([`self.addEventListener('install',e=>e.waitUntil(self.skipWaiting()));self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{})`], {type: 'application/javascript'})));
-    }
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([`self.addEventListener('install',e=>e.waitUntil(self.skipWaiting()));self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{})`], {type: 'application/javascript'})));
 
     Chart.register(ChartDataLabels);
     const jsConfetti = new JSConfetti();
 
-    // FIREBASE
     const firebaseConfig = {
         apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
         authDomain: "kazanamazi-ser.firebaseapp.com",
@@ -421,13 +331,12 @@
         appId: "1:951730390034:web:639f96ee859c10b0e944cb",
         measurementId: "G-5WGCDTL1RX"
     };
-
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
     const provider = new firebase.auth.GoogleAuthProvider();
-
     let dbRef = null;
+
     const BADGES = [
         { id: 1000, title: "Başlangıç", icon: "🎗️", desc: "1.000 Namaz" },
         { id: 5000, title: "İstikrar", icon: "🎖️", desc: "5.000 Namaz" },
@@ -437,51 +346,42 @@
     ];
 
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
-    
+    // Helper for yesterday date
+    function getYesterdayDateSimple() {
+        const d = new Date();
+        d.setDate(d.getDate() - 1);
+        return d.toLocaleDateString('tr-TR');
+    }
+
     const defaultData = {
         startDate: "2022-11-22",
-        daily: { date: getCurrentDateSimple(), counts: [0, 0, 0, 0, 0], target: 10 }, 
-        counts: [
-            { name: "Sabah", target: 0, done: 0 },
-            { name: "Öğle", target: 0, done: 0 },
-            { name: "İkindi", target: 0, done: 0 },
-            { name: "Akşam", target: 0, done: 0 },
-            { name: "Yatsı", target: 0, done: 0 }
-        ],
-        earnedBadges: [],
-        history: [] 
+        daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 }, 
+        // YENİ STREAK ALANI
+        streak: { current: 0, lastAchievedDate: "" },
+        counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
+        earnedBadges: [], history: [] 
     };
-
     let localData = JSON.parse(JSON.stringify(defaultData));
     let chartCompletion = null;
 
     function ensureDataStructure() {
-        const prayerNames = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"];
-        if (!localData.counts || !Array.isArray(localData.counts) || localData.counts.length !== 5) {
-            localData.counts = prayerNames.map(name => ({ name: name, target: 0, done: 0 }));
-        } else {
-            localData.counts.forEach((item, index) => {
-                if (!item.name) item.name = prayerNames[index];
-                if (typeof item.target === 'undefined') item.target = 0;
-                if (typeof item.done === 'undefined') item.done = 0;
-            });
-        }
-        const todayStr = getCurrentDateSimple();
-        if (!localData.daily) { localData.daily = { date: todayStr, counts: [0,0,0,0,0], target: 10 }; } 
-        else if (!localData.daily.counts) { localData.daily.counts = [0,0,0,0,0]; localData.daily.date = todayStr; }
-        if (!localData.history) localData.history = [];
-        if (!localData.earnedBadges) localData.earnedBadges = [];
-        if (!localData.startDate) { const now = new Date(); localData.startDate = now.toISOString().split('T')[0]; }
+        const pn = ["Sabah","Öğle","İkindi","Akşam","Yatsı"];
+        if (!localData.counts || !Array.isArray(localData.counts) || localData.counts.length !== 5) localData.counts = pn.map(n=>({name:n,target:0,done:0}));
+        else localData.counts.forEach((item,i)=>{ if(!item.name) item.name=pn[i]; if(typeof item.target==='undefined') item.target=0; if(typeof item.done==='undefined') item.done=0; });
+        
+        const t = getCurrentDateSimple();
+        if (!localData.daily) localData.daily={date:t,counts:[0,0,0,0,0],target:10};
+        else if(!localData.daily.counts) { localData.daily.counts=[0,0,0,0,0]; localData.daily.date=t; }
+        
+        // Streak yapısını kontrol et
+        if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
+
+        if(!localData.history) localData.history=[];
+        if(!localData.earnedBadges) localData.earnedBadges=[];
+        if(!localData.startDate) { const now=new Date(); localData.startDate=now.toISOString().split('T')[0]; }
     }
 
-    function forceResetData() {
-        if(confirm("DİKKAT: Bu işlem mevcut verileriniz bozuksa onarır. Emin misiniz?")) {
-            ensureDataStructure();
-            saveToCloud();
-            renderApp();
-            alert("Veriler onarıldı.");
-        }
-    }
+    function forceResetData() { if(confirm("Veriler onarılacak. Emin misiniz?")) { ensureDataStructure(); saveToCloud(); renderApp(); alert("Onarıldı."); } }
 
     auth.onAuthStateChanged((user) => {
         if (user) {
@@ -490,24 +390,20 @@
             document.getElementById('sidebarUserInfo').innerText = "Merhaba, " + user.displayName.split(' ')[0];
             dbRef = db.ref('users/' + user.uid + '/namazData');
             listenToData();
-        } else {
-            document.getElementById('login-screen').classList.remove('hidden');
-            document.getElementById('app-wrapper').classList.add('hidden');
-            dbRef = null;
-        }
+        } else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('hidden'); dbRef = null; }
     });
 
-    function loginWithGoogle() { auth.signInWithPopup(provider).catch((error) => alert("Giriş Hatası: " + error.message)); }
+    function loginWithGoogle() { auth.signInWithPopup(provider).catch((e)=>alert("Hata: "+e.message)); }
     function logout() { auth.signOut(); }
-    function saveToCloud() { if (dbRef) dbRef.set(localData); }
+    function saveToCloud() { if(dbRef) dbRef.set(localData); }
 
     function listenToData() {
-        dbRef.on('value', (snapshot) => {
-            const cloudData = snapshot.val();
-            if (cloudData) { localData = cloudData; } 
-            ensureDataStructure();
-            checkDailyReset();
-            if (!cloudData) saveToCloud(); 
+        dbRef.on('value', (s) => {
+            const d = s.val();
+            if(d) localData = d; 
+            ensureDataStructure(); 
+            checkDailyReset(); 
+            if(!d) saveToCloud(); 
             renderApp();
         });
     }
@@ -524,11 +420,22 @@
     const goalDefaultText = document.getElementById("goalDefaultText");
     const goalCard = document.getElementById("goalCard");
     const badgeContainer = document.getElementById("badgeContainer");
+    const streakValue = document.getElementById("streakValue"); // Yeni
 
     function checkDailyReset() {
-        const todayStr = getCurrentDateSimple();
-        if (localData.daily.date !== todayStr) {
-            localData.daily.date = todayStr; localData.daily.counts = [0, 0, 0, 0, 0]; saveToCloud();
+        const t = getCurrentDateSimple();
+        if (localData.daily.date !== t) {
+            localData.daily.date = t; localData.daily.counts = [0,0,0,0,0]; saveToCloud();
+        }
+        
+        // Zincir Kontrolü (Giriş yapıldığında):
+        // Eğer son başarı tarihi dünden eskiyse zincir kırılmıştır (0 olur).
+        // Ama bugün zaten başardıysa dokunma.
+        const yesterday = getYesterdayDateSimple();
+        if (localData.streak.lastAchievedDate !== t && localData.streak.lastAchievedDate !== yesterday && localData.streak.current > 0) {
+             // Zincir kırıldı
+             localData.streak.current = 0;
+             saveToCloud();
         }
     }
     window.updateDailyGoal = function(val) { if (!dbRef) return; localData.daily.target = parseInt(val) || 1; saveToCloud(); }
@@ -537,8 +444,37 @@
         if (delta > 0) {
             localData.daily.counts[index] = (localData.daily.counts[index] || 0) + 1;
             const currentTotal = localData.daily.counts.reduce((a, b) => a + b, 0);
-            if (currentTotal === localData.daily.target) {
-                jsConfetti.addConfetti({ emojis: ['🎉', '✨', '⭐', '🏆'], confettiNumber: 80 });
+            
+            // HEDEF TAMAMLANDI MI?
+            if (currentTotal >= localData.daily.target) {
+                // Eğer hedef TAM ŞİMDİ tamamlandıysa (önceden tamamlanmadıysa)
+                // Veya daha önce tamamlandı ama streak bugüne işlenmediyse
+                const today = getCurrentDateSimple();
+                const yesterday = getYesterdayDateSimple();
+
+                // Sadece ilk kez hedefe ulaşıldığında konfeti at
+                if (currentTotal === localData.daily.target) {
+                    jsConfetti.addConfetti({ emojis: ['🎉', '✨', '⭐', '🏆'], confettiNumber: 80 });
+                }
+
+                // STREAK MANTIĞI
+                if (localData.streak.lastAchievedDate !== today) {
+                    if (localData.streak.lastAchievedDate === yesterday) {
+                        localData.streak.current++; // Zincir devam ediyor
+                    } else {
+                        localData.streak.current = 1; // Zincir koptu, yeniden başladı
+                    }
+                    localData.streak.lastAchievedDate = today;
+                    
+                    // Özel Konfeti (5, 10, 15, 30 gün)
+                    const s = localData.streak.current;
+                    if([5,10,15,30,50,100].includes(s)) {
+                        setTimeout(() => {
+                            alert(`Harika! ${s} gündür zinciri kırmadın! 🔥`);
+                            jsConfetti.addConfetti({ emojis: ['🔥', '🔥', '😎'], confettiNumber: 100 });
+                        }, 1000);
+                    }
+                }
             }
         } else {
             if (localData.daily.counts[index] > 0) localData.daily.counts[index]--;
@@ -548,182 +484,91 @@
     }
     
     function checkBadges() {
-        let totalDone = 0;
-        localData.counts.forEach(c => totalDone += parseInt(c.done));
-        let newBadgeEarned = false;
-        BADGES.forEach(badge => {
-            if (totalDone >= badge.id && !localData.earnedBadges.includes(badge.id)) {
-                localData.earnedBadges.push(badge.id);
-                newBadgeEarned = true;
+        let t = 0; localData.counts.forEach(c => t += parseInt(c.done));
+        let earned = false;
+        BADGES.forEach(b => {
+            if (t >= b.id && !localData.earnedBadges.includes(b.id)) {
+                localData.earnedBadges.push(b.id); earned = true;
                 jsConfetti.addConfetti({ emojis: ['🏆', '👑', '💎', '🥇'], confettiNumber: 200 });
-                alert(`TEBRİKLER! ${badge.title} Rozetini Kazandın! 🏆`);
+                alert(`TEBRİKLER! ${b.title} Rozetini Kazandın! 🏆`);
             }
         });
-        if (newBadgeEarned) saveToCloud();
+        if (earned) saveToCloud();
     }
 
     function renderDailySection() {
-        const currentTotal = localData.daily.counts ? localData.daily.counts.reduce((a, b) => a + b, 0) : 0;
-        dailyCountDisplay.innerText = currentTotal;
-        dailyGoalInput.value = localData.daily.target;
-        let percent = (currentTotal / localData.daily.target) * 100;
-        if (percent > 100) percent = 100;
-        dailyProgressBar.style.width = percent + "%";
-        
-        if (currentTotal >= localData.daily.target) { 
+        const c = localData.daily.counts ? localData.daily.counts.reduce((a, b) => a + b, 0) : 0;
+        dailyCountDisplay.innerText = c; dailyGoalInput.value = localData.daily.target;
+        let p = (c / localData.daily.target) * 100; if (p > 100) p = 100;
+        dailyProgressBar.style.width = p + "%";
+        if (c >= localData.daily.target) { 
             dailyProgressBar.classList.remove('bg-warning'); dailyProgressBar.classList.add('bg-success');
             goalSuccessMessage.style.display = "block"; goalDefaultText.style.display = "none"; goalCard.classList.add("success-mode");
         } else { 
             dailyProgressBar.classList.add('bg-warning'); dailyProgressBar.classList.remove('bg-success');
             goalSuccessMessage.style.display = "none"; goalDefaultText.style.display = "block"; goalCard.classList.remove("success-mode");
         }
+        
+        // Streak Render
+        streakValue.innerText = localData.streak ? localData.streak.current : 0;
     }
 
     function renderBadges() {
-        badgeContainer.innerHTML = "";
-        let totalDone = 0;
-        localData.counts.forEach(c => totalDone += parseInt(c.done));
-        let anyBadge = false;
-        BADGES.forEach(badge => {
-            if (totalDone >= badge.id) {
-                anyBadge = true;
-                const div = document.createElement("div");
-                div.className = "badge-item unlocked";
-                div.innerHTML = `<span class="badge-icon">${badge.icon}</span><div class="badge-title">${badge.title}</div>`;
-                badgeContainer.appendChild(div);
+        badgeContainer.innerHTML = ""; let t = 0; localData.counts.forEach(c => t += parseInt(c.done));
+        let any = false;
+        BADGES.forEach(b => {
+            if (t >= b.id) {
+                any = true; const d = document.createElement("div"); d.className = "badge-item";
+                d.innerHTML = `<span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div>`;
+                badgeContainer.appendChild(d);
             }
         });
-        if (!anyBadge) { badgeContainer.innerHTML = `<div class="text-muted small">Henüz kazanılmış rozet yok.</div>`; }
+        if (!any) badgeContainer.innerHTML = `<div class="text-muted small">Henüz kazanılmış rozet yok.</div>`;
     }
 
-    function getElapsedDays() {
-        if (!localData.startDate) return 1;
-        const start = new Date(localData.startDate);
-        const now = new Date(); start.setHours(0,0,0,0); now.setHours(0,0,0,0);
-        const diffTime = Math.abs(now - start);
-        return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1; 
-    }
-    function formatTimeEstimator(days) {
-        if (!isFinite(days) || days < 0) return "Tamamlandı";
-        const years = Math.floor(days / 365); const rem = days % 365;
-        const months = Math.floor(rem / 30); const finalDays = Math.floor(rem % 30);
-        let result = "";
-        if (years > 0) result += `${years} Yıl `;
-        if (months > 0) result += `${months} Ay `;
-        if (years === 0 && months === 0) result += `${finalDays} Gün`;
-        else if (finalDays > 0 && years < 10) result += `${finalDays} G.`;
-        return result || "Bugün";
-    }
+    function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
+    function formatTimeEstimator(d) { if (!isFinite(d) || d < 0) return "Tamamlandı"; const y = Math.floor(d / 365); const r = d % 365; const m = Math.floor(r / 30); const fd = Math.floor(r % 30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y === 0 && m === 0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
 
-    function addHistory(namazName, oldVal, newVal) {
-        const record = { namaz: namazName, oldVal: parseInt(oldVal), newVal: parseInt(newVal), time: getCurrentTime() };
-        if (!localData.history) localData.history = [];
-        localData.history.unshift(record);
-        if (localData.history.length > 20) localData.history.pop(); 
-        saveToCloud();
+    function addHistory(n, o, nv) {
+        const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() };
+        if (!localData.history) localData.history = []; localData.history.unshift(r); if (localData.history.length > 20) localData.history.pop(); saveToCloud();
     }
 
     function renderApp() {
         if(!localData || !localData.counts) return;
-
-        startDateInput.value = localData.startDate;
-        renderDailySection();
-        renderBadges();
-        const elapsed = getElapsedDays(); elapsedDaysInput.value = elapsed;
-        tableBody.innerHTML = "";
-        
-        let totalTarget = 0; let totalDone = 0; let totalRemaining = 0;
+        startDateInput.value = localData.startDate; renderDailySection(); renderBadges();
+        const el = getElapsedDays(); elapsedDaysInput.value = el; tableBody.innerHTML = "";
+        let tt = 0; let td = 0; let tr = 0;
         localData.counts.forEach((item, index) => {
-            const remaining = item.target - item.done;
-            const avg = (item.done / elapsed).toFixed(2);
-            const estDays = avg > 0 ? Math.ceil(remaining / avg) : 0;
-            const estText = avg > 0 ? formatTimeEstimator(estDays) : "-";
-            totalTarget += parseInt(item.target); totalDone += parseInt(item.done); totalRemaining += remaining;
-            
-            let percent = item.target > 0 ? (item.done / item.target) * 100 : 0;
+            const rem = item.target - item.done; const avg = (item.done / el).toFixed(2); const est = avg > 0 ? Math.ceil(rem / avg) : 0; const estText = avg > 0 ? formatTimeEstimator(est) : "-";
+            tt += parseInt(item.target); td += parseInt(item.done); tr += rem;
+            let p = item.target > 0 ? (item.done / item.target) * 100 : 0;
             const row = document.createElement("tr");
-            row.innerHTML = `
-                <td class="col-namaz" style="background-color: #e0c09f;">${item.name}</td>
-                <td><input type="number" class="form-control form-control-sm" value="${item.target}" onchange="updateTarget(${index}, this.value)"></td>
-                <td>
-                    <input type="number" class="form-control form-control-sm mb-1" value="${item.done}" onchange="updateDoneManual(${index}, this.value)">
-                    <div class="progress" style="height: 6px; background-color: #d1e7dd;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: ${percent}%"></div>
-                    </div>
-                    <div class="text-success small fw-bold mt-1" style="font-size: 11px;">%${percent.toFixed(1)}</div>
-                </td>
-                <td>
-                    <button class="btn-action btn-plus" onclick="changeCount(${index}, 1)">+</button>
-                    <button class="btn-action btn-minus" onclick="changeCount(${index}, -1)">-</button>
-                </td>
-                <td>${avg}</td>
-                <td class="small">${estText}</td>
-            `;
+            row.innerHTML = `<td class="col-namaz" style="background-color: #e0c09f;">${item.name}</td>
+            <td><input type="number" class="form-control form-control-sm" value="${item.target}" onchange="updateTarget(${index}, this.value)"></td>
+            <td><input type="number" class="form-control form-control-sm mb-1" value="${item.done}" onchange="updateDoneManual(${index}, this.value)">
+            <div class="progress" style="height: 6px; background-color: #d1e7dd;"><div class="progress-bar bg-success" role="progressbar" style="width: ${p}%"></div></div><div class="text-success small fw-bold mt-1" style="font-size: 11px;">%${p.toFixed(1)}</div></td>
+            <td><button class="btn-action btn-plus" onclick="changeCount(${index}, 1)">+</button><button class="btn-action btn-minus" onclick="changeCount(${index}, -1)">-</button></td>
+            <td>${avg}</td><td class="small">${estText}</td>`;
             tableBody.appendChild(row);
         });
-
-        const overallAvg = (totalDone / elapsed).toFixed(2);
-        const overallEstDays = overallAvg > 0 ? Math.ceil(totalRemaining / overallAvg) : 0;
-        const overallEstText = overallAvg > 0 ? formatTimeEstimator(overallEstDays) : "-";
-
-        tableFoot.innerHTML = `
-            <tr>
-                <td>Toplam</td>
-                <td>${totalTarget}</td>
-                <td>${totalDone}</td>
-                <td style="background-color: #f8f9fa; border: none;"></td>
-                <td>${overallAvg}</td>
-                <td class="small">${overallEstText}</td>
-            </tr>
-        `;
-        renderHistory();
-        renderCharts(totalDone, totalRemaining);
+        const oa = (td / el).toFixed(2); const oed = oa > 0 ? Math.ceil(tr / oa) : 0; const oet = oa > 0 ? formatTimeEstimator(oed) : "-";
+        tableFoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td style="background-color: #f8f9fa; border: none;"></td><td>${oa}</td><td class="small">${oet}</td></tr>`;
+        renderHistory(); renderCharts(td, tr);
     }
 
-    function renderHistory() {
-        historyBody.innerHTML = "";
-        if (!localData.history) return;
-        localData.history.forEach(rec => {
-            const row = document.createElement("tr");
-            const oldV = parseFloat(rec.oldVal); const newV = parseFloat(rec.newVal);
-            if (newV > oldV) { row.classList.add('history-row-up'); } 
-            else if (newV < oldV) { row.classList.add('history-row-down'); }
-            row.innerHTML = `<td>${rec.namaz}</td><td>${rec.oldVal}</td><td>${rec.newVal}</td><td>${rec.time.split(' ')[1]}</td>`;
-            historyBody.appendChild(row);
-        });
+    function renderHistory() { historyBody.innerHTML = ""; if (!localData.history) return; localData.history.forEach(r => { const row = document.createElement("tr"); const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal); if (n > o) row.classList.add('history-row-up'); else if (n < o) row.classList.add('history-row-down'); row.innerHTML = `<td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td>${r.time.split(' ')[1]}</td>`; historyBody.appendChild(row); }); }
+
+    function renderCharts(d, r) {
+        const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy();
+        const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666';
+        chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [d, r], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc } }, datalabels: { color: '#fff', font: { weight: 'bold', size: 14 }, formatter: (v, c) => { let s = 0; c.chart.data.datasets[0].data.map(d => s += d); return (v*100 / s).toFixed(1)+"%"; } } } } });
     }
 
-    function renderCharts(totalDone, totalRemaining) {
-        const ctx1 = document.getElementById('completionChart').getContext('2d');
-        if (chartCompletion) chartCompletion.destroy();
-        
-        // Grafiğin rengini temaya göre ayarla
-        const isDark = document.body.classList.contains('dark-mode');
-        const labelColor = isDark ? '#fff' : '#666';
-
-        chartCompletion = new Chart(ctx1, {
-            type: 'doughnut',
-            data: {
-                labels: ['Kılınan', 'Kalan'],
-                datasets: [{ data: [totalDone, totalRemaining], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: {
-                    legend: { 
-                        position: 'bottom',
-                        labels: { color: labelColor } // Yazı rengini ata
-                    },
-                    datalabels: { color: '#fff', font: { weight: 'bold', size: 14 }, formatter: (value, ctx) => { let sum = 0; ctx.chart.data.datasets[0].data.map(d => sum += d); return (value*100 / sum).toFixed(1)+"%"; } }
-                }
-            }
-        });
-    }
-
-    window.updateTarget = function(index, value) { if (!dbRef) return; localData.counts[index].target = parseInt(value) || 0; saveToCloud(); }
-    window.updateDoneManual = function(index, value) { if (!dbRef) return; const oldVal = localData.counts[index].done; const newVal = parseInt(value) || 0; if (oldVal !== newVal) { localData.counts[index].done = newVal; addHistory(localData.counts[index].name, oldVal, newVal); checkBadges(); } }
-    window.changeCount = function(index, delta) { if (!dbRef) return; const oldVal = localData.counts[index].done; const newVal = oldVal + delta; if (newVal >= 0) { localData.counts[index].done = newVal; addHistory(localData.counts[index].name, oldVal, newVal); processDailyChange(index, delta); } }
+    window.updateTarget = function(i, v) { if (!dbRef) return; localData.counts[i].target = parseInt(v) || 0; saveToCloud(); }
+    window.updateDoneManual = function(i, v) { if (!dbRef) return; const o = localData.counts[i].done; const n = parseInt(v) || 0; if (o !== n) { localData.counts[i].done = n; addHistory(localData.counts[i].name, o, n); checkBadges(); } }
+    window.changeCount = function(i, d) { if (!dbRef) return; const o = localData.counts[i].done; const n = o + d; if (n >= 0) { localData.counts[i].done = n; addHistory(localData.counts[i].name, o, n); processDailyChange(i, d); } }
     startDateInput.addEventListener("change", (e) => { if (!dbRef) return; localData.startDate = e.target.value; saveToCloud(); });
 
 </script>
