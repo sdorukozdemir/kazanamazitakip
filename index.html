@@ -26,11 +26,13 @@
             --bg-color: #f8f9fa; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
             --table-head: #157347; --table-row-bg: #e6e6e6; --input-bg: #ffffff; --input-text: #000000; 
             --border-color: #dee2e6; --zikr-card-bg: #ffffff; --calc-row-bg: #f1f3f5;
+            --sub-text-color: #6c757d; /* Gündüz alt yazı rengi */
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
             --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #2d2d2d; --input-text: #ffffff; 
             --border-color: #444; --zikr-card-bg: #252525; --calc-row-bg: #2d2d2d;
+            --sub-text-color: #adb5bd; /* Gece alt yazı rengi (Açık gri) */
         }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Segoe UI', sans-serif; transition: 0.3s; overflow-x: hidden; }
 
@@ -54,15 +56,13 @@
         .main-table tbody td { background-color: var(--card-bg); color: var(--text-color); border-color: var(--border-color); text-align: center; vertical-align: middle; padding: 8px; }
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; border-color: #c9302c; }
 
-        /* INPUT VE HİZALAMA */
         .table-input { 
             text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); 
             border: 1px solid var(--border-color); width: 100%; padding: 5px; border-radius: 5px;
         }
         .col-namaz { background-color: #f4a261 !important; color: black; font-weight: bold; width: 10%; text-align: left !important; padding-left: 15px !important; }
-        .col-data { width: 22%; } /* Eşit genişlik */
+        .col-data { width: 22%; } 
         
-        /* Butonlar */
         .btn-action { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 5px; border: none; color: white; font-weight: bold; margin: 0 2px; cursor: pointer; }
         .btn-plus { background-color: #198754; } .btn-plus:hover { background-color: #146c43; }
         .btn-minus { background-color: #6c757d; } .btn-minus:hover { background-color: #5c636a; }
@@ -73,7 +73,6 @@
         }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         
-        /* GÜNLÜK HEDEF */
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; }
         .goal-card.success-mode { border: 3px solid #ffc107; box-shadow: 0 0 20px rgba(255, 193, 7, 0.6); }
         .goal-input { width: 80px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
@@ -85,22 +84,24 @@
         body.dark-mode .history-row-up td { background-color: #0f5132 !important; color: #fff !important; }
         body.dark-mode .history-row-down td { background-color: #842029 !important; color: #fff !important; }
 
-        /* HESAPLAMA */
-        .calc-row { background-color: var(--calc-row-bg); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-        .calc-label { font-weight: bold; color: var(--sidebar-bg); font-size: 1rem; display: block; margin-bottom: 5px; }
+        /* HESAPLAMA SİHİRBAZI STİLLERİ */
+        .calc-row { background-color: var(--calc-row-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .calc-label { font-weight: bold; color: var(--sidebar-bg); font-size: 1.1rem; display: block; margin-bottom: 10px; }
         body.dark-mode .calc-label { color: #20c997; }
         
-        /* ROZETLER */
+        /* Gece Modu Yazı Düzeltmesi */
+        .calc-sub-label { font-size: 0.85rem; color: var(--sub-text-color); display: block; margin-bottom: 4px; }
+        .form-control { background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); }
+
         .badge-item { text-align: center; width: 100px; padding: 10px; background: var(--card-bg); border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .badge-title { font-size: 0.8rem; font-weight: bold; color: #198754; }
         body.dark-mode .badge-title { color: #20c997; }
 
-        /* ZİKİR */
         .zikr-card { padding: 20px; text-align: center; border-top: 5px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
         .arabic-text { font-family: 'Amiri', serif; font-size: 2rem; color: #198754; margin: 10px 0; }
         body.dark-mode .arabic-text { color: #20c997; }
-        .zikr-count { font-size: 2.5rem; font-weight: bold; }
-        .btn-zikr-main { width: 60px; height: 60px; border-radius: 50%; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3); }
+        .zikr-count { font-size: 2.5rem; font-weight: bold; margin: 10px 0; color: var(--text-color); }
+        .btn-zikr-main { width: 70px; height: 70px; border-radius: 50%; font-size: 1.5rem; }
 
         @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
@@ -109,7 +110,7 @@
 </head>
 <body>
 
-<div id="login-screen">
+<div id="login-screen" style="height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color);">
     <div class="login-card p-5 text-center" style="max-width: 400px;">
         <h3 class="text-success fw-bold mb-4">İbadet Takip</h3>
         <button class="btn btn-dark w-100 py-2" onclick="loginWithGoogle()">
@@ -218,7 +219,7 @@
         <div id="section-calculator" class="hidden">
             <h3 class="app-header">Kaza Hesaplama</h3>
             <div class="row justify-content-center">
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <div class="calculator-card">
                         <div class="alert alert-info small">Tarihleri girin. "Kopyala" butonları ile diğerlerine dağıtın.</div>
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
@@ -227,7 +228,6 @@
                         </div>
                         <div id="calcRowsContainer"></div>
                         <hr>
-                        <div class="alert alert-warning small">Onaylarsanız "Kılınacak" sayıları değişir.</div>
                         <button class="btn btn-danger w-100" onclick="applyAdvancedCalculation()">Onayla ve Aktar</button>
                     </div>
                 </div>
@@ -328,7 +328,7 @@
 
     function forceResetData() { if(confirm("Veriler sıfırlanıp onarılacak. Emin misiniz?")) { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); alert("Onarıldı."); location.reload(); } }
 
-    // --- GLOBAL FUNCTIONS (WINDOW ATTACHED) ---
+    // --- GLOBAL FUNCTIONS ---
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
     window.upD = function(i, v) { 
         const o = localData.counts[i].done; const n = parseInt(v) || 0; 
@@ -390,13 +390,12 @@
         
         let tt=0, td=0, tr=0;
         const days = getElapsedDays();
-        document.getElementById('elapsedDays').value = days; // Gün hesaplama düzeltildi
+        document.getElementById('elapsedDays').value = days; 
 
         localData.counts.forEach((item, i) => {
             tt += parseInt(item.target); td += parseInt(item.done);
             const rem = item.target - item.done; tr += rem;
             const avg = (item.done / days).toFixed(2);
-            // Ortalama süre hesaplama düzeltildi
             const est = avg > 0 ? Math.ceil(rem/avg) : 0;
             const estText = avg > 0 ? formatTime(est) : "-";
             let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
@@ -473,7 +472,7 @@
                         <button class="btn btn-outline-secondary rounded-circle" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button>
                     </div>
                     <div class="mt-3 d-flex justify-content-center align-items-center gap-2">
-                        <small class="text-muted">Hedef:</small>
+                        <small class="calc-sub-label">Hedef:</small>
                         <input type="number" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)">
                     </div>
                     <div class="mt-2 d-flex justify-content-center align-items-center gap-2">
@@ -506,9 +505,9 @@
         const c = document.getElementById('calcRowsContainer'); if(c.innerHTML.trim()) return;
         prayerTypes.forEach((p, i) => {
             c.innerHTML += `<div class="calc-row" id="row-${i}"><span class="calc-label">${p}</span><div class="d-flex gap-2 flex-wrap">
-            <div><small class="text-muted">Sorumluluk</small><input type="date" class="form-control form-control-sm start-date" onchange="calcRow(${i})"></div>
-            <div><small class="text-muted">Düzenli</small><input type="date" class="form-control form-control-sm end-date" onchange="calcRow(${i})"></div>
-            <div><small class="text-muted">Gün</small><input type="number" class="form-control form-control-sm res-input" id="res-${i}" value="0" readonly></div></div></div>`;
+            <div><small class="calc-sub-label">Sorumluluk Başlangıcı</small><input type="date" class="form-control form-control-sm start-date" onchange="window.calcRow(${i})"></div>
+            <div><small class="calc-sub-label">Düzenli Başlama Tarihi</small><input type="date" class="form-control form-control-sm end-date" onchange="window.calcRow(${i})"></div>
+            <div><small class="calc-sub-label">Hesaplanan Gün</small><input type="number" class="form-control form-control-sm res-input" id="res-${i}" value="0" readonly></div></div></div>`;
         });
     };
     window.calcRow = function(i) { const r=document.getElementById(`row-${i}`); const s=r.querySelector('.start-date').value; const e=r.querySelector('.end-date').value; if(s&&e) document.getElementById(`res-${i}`).value = Math.max(0, Math.ceil((new Date(e)-new Date(s))/(86400000))); };
