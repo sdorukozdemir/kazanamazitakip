@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>İbadet ve Kaza Takip</title>
+    <title>Kaza ve İbadet Takip</title>
     
     <meta name="theme-color" content="#198754">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,95 +21,95 @@
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <style>
-        /* TEMA DEĞİŞKENLERİ */
+        /* --- TEMEL AYARLAR VE TEMA --- */
         :root {
-            --bg-color: #f8f9fa;
-            --text-color: #212529;
-            --card-bg: #ffffff;
-            --sidebar-bg: #157347;
-            --input-bg: #ffffff;
-            --border-color: #dee2e6;
+            --bg-color: #f8f9fa; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347;
+            --table-head: #157347; --table-row-bg: #e6e6e6; --input-bg: #ffffff; --input-text: #000000; --border-color: #dee2e6;
             --zikr-card-bg: #ffffff;
         }
-
         body.dark-mode {
-            --bg-color: #121212;
-            --text-color: #e0e0e0;
-            --card-bg: #1e1e1e;
-            --sidebar-bg: #0f5132;
-            --input-bg: #2d2d2d;
-            --border-color: #444;
+            --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132;
+            --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #2d2d2d; --input-text: #ffffff; --border-color: #444;
             --zikr-card-bg: #252525;
         }
-
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; transition: 0.3s; }
         
-        /* LAYOUT */
+        /* --- LAYOUT (SIDEBAR) --- */
         .wrapper { display: flex; width: 100%; align-items: stretch; }
         #sidebar { min-width: 250px; max-width: 250px; background: var(--sidebar-bg); color: #fff; min-height: 100vh; transition: all 0.3s; }
         #sidebar.active { margin-left: -250px; }
-        #sidebar ul li { padding: 10px; font-size: 1.1em; cursor: pointer; }
+        #sidebar .sidebar-header { padding: 20px; background: rgba(0,0,0,0.2); }
+        #sidebar ul.components { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        #sidebar ul li { padding: 10px; font-size: 1.1em; display: block; cursor: pointer; }
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: #fff; color: var(--sidebar-bg); border-radius: 5px 0 0 5px; margin-left: 10px; font-weight: bold; }
-        
-        #content { width: 100%; padding: 20px; min-height: 100vh; }
-        @media (max-width: 768px) {
-            #sidebar { margin-left: -250px; position: fixed; z-index: 999; height: 100%; }
-            #sidebar.active { margin-left: 0; }
-        }
+        #content { width: 100%; padding: 20px; min-height: 100vh; transition: all 0.3s; }
+        @media (max-width: 768px) { #sidebar { margin-left: -250px; position: fixed; z-index: 999; height: 100%; } #sidebar.active { margin-left: 0; } }
 
         .hidden { display: none !important; }
-        
-        /* TESBİHAT KARTLARI */
-        .zikr-card {
-            background-color: var(--zikr-card-bg);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            text-align: center;
-            border-top: 5px solid #198754;
-            position: relative;
-            transition: transform 0.2s;
-        }
-        .zikr-card:hover { transform: translateY(-5px); }
-        .arabic-text {
-            font-family: 'Amiri', serif;
-            font-size: 2rem;
-            color: #198754;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-        .zikr-count-display {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-        .btn-zikr-main {
-            width: 70px; height: 70px; border-radius: 50%; font-size: 1.5rem;
-            box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
-        }
-        .manual-input-group {
-            display: flex; gap: 5px; justify-content: center; margin-top: 15px;
-        }
-        
-        /* DİĞER STİLLER (Önceki kodlardan korundu) */
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: bold; margin-bottom: 20px; }
-        body.dark-mode .app-header, body.dark-mode .arabic-text { color: #20c997; }
-        .main-table { color: var(--text-color); }
-        .main-table thead th { background-color: var(--sidebar-bg); color: white; }
-        .main-table tbody td { background-color: var(--card-bg); color: var(--text-color); border-color: var(--border-color); }
-        .form-control { background-color: var(--input-bg); color: var(--text-color); border-color: var(--border-color); }
-        .form-control:focus { background-color: var(--input-bg); color: var(--text-color); }
+        body.dark-mode .app-header { color: #20c997; }
+
+        /* --- TABLO DÜZENLEMELERİ (ESKİ HALİ) --- */
+        .main-table { color: var(--text-color); font-size: 0.9rem; }
+        .main-table thead th { background-color: var(--table-head); color: white; vertical-align: middle; text-align: center; white-space: nowrap; }
+        .main-table tbody td { vertical-align: middle; text-align: center; background-color: var(--table-row-bg); color: var(--text-color); font-weight: bold; border-color: var(--border-color); }
+        .main-table input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; min-width: 60px; }
+        .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; border-color: #c9302c; }
         
-        .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
-        .badge-item { text-align: center; width: 110px; padding: 10px; background: var(--card-bg); border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-action { width: 28px; height: 28px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 2px; font-size: 0.8rem; }
+        .btn-plus { background-color: #20c997; border: none; color: white; }
+        .btn-minus { background-color: #6c757d; border: none; color: white; }
+        .col-namaz { background-color: #f4a261 !important; color: black; width: 15%; } 
+
+        /* --- KARTLAR VE KUTULAR --- */
+        .login-card, .calculator-card, .chart-container, .badge-item, .zikr-card { 
+            background-color: var(--card-bg); color: var(--text-color); border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+        }
+        #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
+        .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
+
+        /* GÜNLÜK HEDEF */
+        .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(32, 201, 151, 0.4); position: relative; overflow: hidden; }
+        .goal-card.success-mode { background: linear-gradient(135deg, #1aa179, #157347); border: 3px solid #ffc107; box-shadow: 0 0 20px rgba(255, 193, 7, 0.6); }
+        .goal-input { width: 80px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
+        .streak-box { background: rgba(0, 0, 0, 0.2); padding: 5px 10px; border-radius: 10px; margin-top: 10px; display: inline-flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+
+        /* ROZETLER */
+        .badge-container { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; margin-bottom: 40px; }
+        .badge-item { text-align: center; width: 100px; padding: 10px; animation: popIn 0.5s ease; }
+        .badge-icon { font-size: 2.5rem; display: block; }
+        .badge-title { font-size: 0.8rem; font-weight: bold; color: #198754; }
+        body.dark-mode .badge-title { color: #20c997; }
+
+        /* GEÇMİŞ TABLOSU RENKLERİ */
+        .history-row-up, .history-row-up > td { background-color: #d1e7dd !important; color: #0f5132 !important; }
+        .history-row-down, .history-row-down > td { background-color: #f8d7da !important; color: #842029 !important; }
+        body.dark-mode .history-row-up, body.dark-mode .history-row-up > td { background-color: #0f5132 !important; color: #fff !important; }
+        body.dark-mode .history-row-down, body.dark-mode .history-row-down > td { background-color: #842029 !important; color: #fff !important; }
+
+        /* TESBİHAT */
+        .zikr-card { text-align: center; border-top: 5px solid #198754; transition: transform 0.2s; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        .zikr-card:hover { transform: translateY(-5px); }
+        .arabic-text { font-family: 'Amiri', serif; font-size: 1.8rem; color: #198754; margin: 10px 0; font-weight: bold; }
+        body.dark-mode .arabic-text { color: #20c997; }
+        .zikr-count-display { font-size: 2rem; font-weight: bold; }
+        .btn-zikr-main { width: 60px; height: 60px; border-radius: 50%; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3); }
+
+        /* SİHİRBAZ */
+        .calc-row { background: var(--table-row-bg); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+        .calc-label { font-weight: bold; color: var(--sidebar-bg); font-size: 1rem; margin-bottom: 5px; display: block;}
+        body.dark-mode .calc-label { color: #20c997; }
+
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
+        .success-msg { animation: bounceIn 0.5s; font-size: 1.2rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
 
-<!-- GİRİŞ EKRANI -->
-<div id="login-screen" style="height: 100vh; display: flex; justify-content: center; align-items: center;">
-    <div class="card p-5 shadow text-center" style="max-width: 400px;">
+<div id="login-screen">
+    <div class="login-card p-5 text-center" style="max-width: 400px;">
         <h3 class="text-success fw-bold mb-4">İbadet Takip</h3>
         <p>Verilerinize erişmek için giriş yapın.</p>
         <button class="btn btn-dark w-100 py-2" onclick="loginWithGoogle()">
@@ -120,14 +120,15 @@
 
 <div id="app-wrapper" class="wrapper hidden">
     <nav id="sidebar">
-        <div class="p-4 text-center" style="background: rgba(0,0,0,0.2);">
-            <h4 class="mb-0">İbadet Takip</h4>
+        <div class="sidebar-header text-center">
+            <h4>İbadet Takip</h4>
             <small id="sidebarUserInfo" class="text-white-50">...</small>
         </div>
-        <ul class="list-unstyled components p-2">
+        <ul class="list-unstyled components">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-2"></i> Kaza Namazı</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-kaaba me-2"></i> Tesbihat</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-2"></i> Hesap Sihirbazı</li>
+            <li onclick="downloadDataAsCSV()"><i class="fas fa-file-download me-2"></i> Verileri İndir</li>
             <li onclick="toggleDarkMode()"><i class="fas fa-moon me-2"></i> <span id="darkModeText">Gece Modu</span></li>
             <li onclick="forceResetData()" class="text-warning"><i class="fas fa-wrench me-2"></i> Verileri Onar</li>
             <li onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap</li>
@@ -135,49 +136,87 @@
     </nav>
 
     <div id="content">
-        <button class="btn btn-success mb-3 d-md-none" onclick="document.getElementById('sidebar').classList.toggle('active')"><i class="fas fa-bars"></i></button>
+        <button class="btn btn-success mb-3 d-md-none" onclick="document.getElementById('sidebar').classList.toggle('active')"><i class="fas fa-bars"></i> Menü</button>
 
-        <!-- BÖLÜM 1: KAZA NAMAZI (DASHBOARD) -->
+        <!-- BÖLÜM 1: KAZA NAMAZI (ANA DASHBOARD - DÜZELTİLDİ) -->
         <div id="section-dashboard">
             <h2 class="app-header">Kaza Namazı Takip</h2>
             
+            <!-- Günlük Hedef -->
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
-                    <div class="goal-card text-center">
+                    <div id="goalCard" class="goal-card text-center">
                         <h4>🎯 Günlük Hedef</h4>
                         <div class="d-flex justify-content-center align-items-center gap-2 mt-3 mb-2">
                             <span style="font-size: 1.2rem;">Bugün</span>
                             <strong style="font-size: 2rem;" id="dailyCountDisplay">0</strong>
                             <span style="font-size: 1.2rem;">/</span>
-                            <input type="number" id="dailyGoalInput" class="form-control d-inline-block w-auto text-center fw-bold" style="width: 80px;" value="10" onchange="updateDailyGoal(this.value)">
+                            <input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)">
+                            <span style="font-size: 1.2rem;">Kaza</span>
                         </div>
-                        <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3);"><div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
+                        <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3);">
+                            <div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div>
+                        </div>
+                        <div id="goalSuccessMessage" class="success-msg mt-2 fw-bold text-white" style="display: none;">🎉 Hedef Tamam!</div>
+                        
+                        <div class="streak-box">
+                            <i class="fas fa-fire text-warning"></i> <span>Zincir:</span>
+                            <span id="streakValue" class="fw-bold text-warning">0</span> <span>Gün</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center gap-3 mb-3">
-                <div><label class="fw-bold text-secondary">Başlama:</label> <input type="date" id="startDate" class="form-control"></div>
+            <div class="d-flex justify-content-center gap-3 mb-3 flex-wrap">
+                <div><label class="fw-bold text-secondary">Başlama:</label> <input type="date" id="startDate" class="form-control d-inline-block w-auto"></div>
+                <div><label class="fw-bold text-secondary">Gün:</label> <input type="text" id="elapsedDays" class="form-control d-inline-block w-auto text-center fw-bold" readonly></div>
             </div>
 
+            <!-- TABLO -->
             <div class="table-responsive">
                 <table class="table table-bordered main-table text-center">
-                    <thead><tr><th>Namaz</th><th>Kılınacak</th><th>Kılınan</th><th>İşlem</th><th>Ort.</th><th>Süre</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Namaz</th>
+                            <th style="width: 15%;">Kılınacak</th>
+                            <th style="width: 25%;">Kılınan</th> <!-- Genişletildi -->
+                            <th>İşlem</th>
+                            <th>Ort.</th>
+                            <th>Süre</th>
+                        </tr>
+                    </thead>
                     <tbody id="prayerTableBody"></tbody>
                     <tfoot id="prayerTableFoot"></tfoot>
                 </table>
             </div>
+
+            <!-- GRAFİK -->
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-6 col-lg-5 mb-3">
+                    <div class="chart-container">
+                        <h5 class="text-center text-secondary mb-3">Genel Durum</h5>
+                        <canvas id="completionChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
+            </div>
             
             <div class="text-center mt-4"><h4 class="text-secondary fw-bold">🏆 Rozet Müzesi</h4></div>
-            <div id="badgeContainer" class="d-flex justify-content-center gap-3 flex-wrap mb-4"></div>
+            <div id="badgeContainer" class="badge-container"></div>
+
+            <!-- SON DEĞİŞİKLİKLER -->
+            <h4 class="text-center text-secondary fw-bold mt-4" style="font-size: 0.9rem;">Son Değişiklikler</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered text-center" style="font-size: 0.8rem;">
+                    <thead><tr class="table-light"><th>Namaz</th><th>Önceki</th><th>Son</th><th>Zaman</th></tr></thead>
+                    <tbody id="historyTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- BÖLÜM 2: TESBİHAT (YENİ) -->
+        <!-- BÖLÜM 2: TESBİHAT -->
         <div id="section-tesbihat" class="hidden">
             <h2 class="app-header">Tesbihat ve Zikir</h2>
-            <div class="row g-4" id="tesbihatContainer">
-                <!-- Zikir Kartları JS ile Buraya Gelecek -->
-            </div>
+            <div class="row g-4" id="tesbihatContainer"></div>
         </div>
 
         <!-- BÖLÜM 3: HESAPLAMA SİHİRBAZI -->
@@ -185,14 +224,15 @@
             <h2 class="app-header">Kaza Hesaplama</h2>
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <div class="card p-4 shadow-sm" style="background-color: var(--card-bg); color: var(--text-color);">
-                        <div class="alert alert-info small"><i class="fas fa-info-circle"></i> Tarihleri girerek borcunuzu hesaplayın.</div>
+                    <div class="calculator-card">
+                        <div class="alert alert-info small"><i class="fas fa-info-circle"></i> Tarihleri girin.</div>
                         <div class="d-flex justify-content-end gap-2 mb-3">
-                            <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">Sorumluluk Tarihini Dağıt</button>
-                            <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">Düzenli Başlamayı Dağıt</button>
+                            <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">Sorumluluk Kopyala</button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">Başlama Kopyala</button>
                         </div>
                         <div id="calcRowsContainer"></div>
                         <hr>
+                        <div class="alert alert-warning small">Onaylarsanız "Kılınacak" sayıları değişir.</div>
                         <button class="btn btn-danger w-100" onclick="applyAdvancedCalculation()">Onayla ve Aktar</button>
                     </div>
                 </div>
@@ -239,13 +279,16 @@
     let dbRef = null;
 
     // --- DATA STRUCTURE ---
+    function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
+    function getYesterdayDateSimple() { const d = new Date(); d.setDate(d.getDate() - 1); return d.toLocaleDateString('tr-TR'); }
+
     const defaultData = {
         startDate: new Date().toISOString().split('T')[0],
-        daily: { date: new Date().toLocaleDateString('tr-TR'), counts: [0,0,0,0,0], target: 10 },
+        daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 },
+        streak: { current: 0, lastAchievedDate: "" },
         counts: [
             {name:"Sabah",target:0,done:0}, {name:"Öğle",target:0,done:0}, {name:"İkindi",target:0,done:0}, {name:"Akşam",target:0,done:0}, {name:"Yatsı",target:0,done:0}
         ],
-        // YENİ: TESBİHAT VERİSİ
         tesbihat: [
             { name: "Sübhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
             { name: "Elhamdülillah", arabic: "ٱلْحَمْدُ لِلَّٰهِ", current: 0, target: 33 },
@@ -255,6 +298,7 @@
         earnedBadges: [], history: []
     };
     let localData = JSON.parse(JSON.stringify(defaultData));
+    let chartCompletion = null;
 
     // --- AUTH & DATA LOAD ---
     auth.onAuthStateChanged((user) => {
@@ -267,9 +311,9 @@
                 const d = s.val();
                 if (d) localData = d;
                 ensureDataStructure();
+                checkDailyReset();
                 if (!d) saveToCloud();
                 renderApp();
-                if(!document.getElementById('section-tesbihat').classList.contains('hidden')) renderTesbihat();
             });
         } else {
             document.getElementById('login-screen').classList.remove('hidden');
@@ -284,138 +328,83 @@
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
-        if (!localData.daily) localData.daily = JSON.parse(JSON.stringify(defaultData.daily));
+        
+        // Günlük hedef & Streak onarımı
+        const t = getCurrentDateSimple();
+        if (!localData.daily) localData.daily = { date: t, counts: [0,0,0,0,0], target: 10 };
+        if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
+        
         if (!localData.history) localData.history = [];
         if (!localData.earnedBadges) localData.earnedBadges = [];
-        
-        // Günlük reset kontrolü
-        const today = new Date().toLocaleDateString('tr-TR');
-        if (localData.daily.date !== today) {
-            localData.daily.date = today;
+    }
+
+    function checkDailyReset() {
+        const t = getCurrentDateSimple();
+        if (localData.daily.date !== t) {
+            localData.daily.date = t;
             localData.daily.counts = [0,0,0,0,0];
             saveToCloud();
+        }
+        // Streak Check
+        const yesterday = getYesterdayDateSimple();
+        if (localData.streak.lastAchievedDate !== t && localData.streak.lastAchievedDate !== yesterday && localData.streak.current > 0) {
+             localData.streak.current = 0;
+             saveToCloud();
         }
     }
 
     function forceResetData() { if(confirm("Veriler onarılacak?")) { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); alert("Onarıldı."); location.reload(); } }
 
-    // --- TESBİHAT FONKSİYONLARI ---
-    function renderTesbihat() {
-        const container = document.getElementById('tesbihatContainer');
-        container.innerHTML = "";
-        
-        localData.tesbihat.forEach((item, index) => {
-            // Hedef tamamlama oranı
-            let percent = item.target > 0 ? (item.current / item.target) * 100 : 0;
-            let barColor = percent >= 100 ? 'bg-success' : 'bg-primary';
-
-            const col = document.createElement('div');
-            col.className = "col-md-6 col-lg-6";
-            col.innerHTML = `
-                <div class="zikr-card">
-                    <h5>${item.name}</h5>
-                    <div class="arabic-text">${item.arabic}</div>
-                    
-                    <div class="d-flex align-items-center justify-content-center gap-3 my-3">
-                        <button class="btn btn-outline-secondary rounded-circle" onclick="updateTesbihat(${index}, -1)"><i class="fas fa-minus"></i></button>
-                        <button class="btn btn-success btn-zikr-main" onclick="updateTesbihat(${index}, 1)">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                        <button class="btn btn-outline-secondary rounded-circle" onclick="resetTesbihat(${index})"><i class="fas fa-undo"></i></button>
-                    </div>
-
-                    <div class="zikr-count-display mb-2">${item.current} <small class="text-muted fs-6">/ ${item.target}</small></div>
-                    
-                    <div class="progress mb-3" style="height: 8px;">
-                        <div class="progress-bar ${barColor}" role="progressbar" style="width: ${percent}%"></div>
-                    </div>
-
-                    <div class="manual-input-group">
-                        <input type="number" id="manualZikrInput-${index}" class="form-control form-control-sm" placeholder="Adet" style="width: 70px;">
-                        <button class="btn btn-sm btn-outline-primary" onclick="manualAddTesbihat(${index})">Ekle</button>
-                    </div>
-                    
-                    <div class="mt-3 d-flex justify-content-center align-items-center gap-2">
-                        <small class="text-muted">Hedef:</small>
-                        <input type="number" class="form-control form-control-sm d-inline-block" style="width: 60px;" value="${item.target}" onchange="setTesbihatTarget(${index}, this.value)">
-                    </div>
-                </div>
-            `;
-            container.appendChild(col);
-        });
-    }
-
-    function updateTesbihat(index, delta) {
-        const newVal = localData.tesbihat[index].current + delta;
-        if(newVal >= 0) {
-            localData.tesbihat[index].current = newVal;
-            if(delta > 0 && localData.tesbihat[index].current === localData.tesbihat[index].target) {
-                jsConfetti.addConfetti({ emojis: ['✨', '📿', '🤲'], confettiNumber: 50 });
-            }
-            saveToCloud();
-            renderTesbihat();
-        }
-    }
-
-    function manualAddTesbihat(index) {
-        const val = parseInt(document.getElementById(`manualZikrInput-${index}`).value) || 0;
-        if(val > 0) {
-            localData.tesbihat[index].current += val;
-            saveToCloud();
-            renderTesbihat();
-            document.getElementById(`manualZikrInput-${index}`).value = "";
-        }
-    }
-
-    function resetTesbihat(index) {
-        if(confirm(localData.tesbihat[index].name + " sayacı sıfırlansın mı?")) {
-            localData.tesbihat[index].current = 0;
-            saveToCloud();
-            renderTesbihat();
-        }
-    }
-
-    function setTesbihatTarget(index, val) {
-        localData.tesbihat[index].target = parseInt(val) || 33;
-        saveToCloud();
-        renderTesbihat();
-    }
-
-    // --- KAZA NAMAZI & DİĞER FONKSİYONLAR (Mevcut) ---
+    // --- RENDER APP (DASHBOARD) ---
     const BADGES = [{id:1000,title:"Başlangıç",icon:"🎗️"},{id:5000,title:"İstikrar",icon:"🎖️"},{id:10000,title:"Yıldız",icon:"⭐"},{id:25000,title:"Şampiyon",icon:"🏆"},{id:50000,title:"Efsane",icon:"👑"}];
 
     function renderApp() {
         if(!localData.counts) return;
         document.getElementById('startDate').value = localData.startDate;
         
-        // Günlük Hedef
-        const todayCount = localData.daily.counts.reduce((a,b)=>a+b,0);
-        document.getElementById('dailyCountDisplay').innerText = todayCount;
+        // Günlük & Streak
+        const c = localData.daily.counts.reduce((a,b)=>a+b,0);
+        document.getElementById('dailyCountDisplay').innerText = c;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
-        let p = (todayCount / localData.daily.target) * 100; if(p>100) p=100;
+        let p = (c / localData.daily.target) * 100; if(p>100) p=100;
         document.getElementById('dailyProgressBar').style.width = p + "%";
+        
+        const goalCard = document.getElementById('goalCard');
+        if(c >= localData.daily.target) {
+            goalCard.classList.add('success-mode');
+            document.getElementById('goalSuccessMessage').style.display='block';
+        } else {
+            goalCard.classList.remove('success-mode');
+            document.getElementById('goalSuccessMessage').style.display='none';
+        }
+        document.getElementById('streakValue').innerText = localData.streak.current;
 
         // Tablo
         const tbody = document.getElementById('prayerTableBody');
         const tfoot = document.getElementById('prayerTableFoot');
         tbody.innerHTML = "";
         
-        let tt=0, td=0;
+        let tt=0, td=0, tr=0;
         const days = Math.ceil(Math.abs(new Date() - new Date(localData.startDate))/(1000*60*60*24)) || 1;
 
         localData.counts.forEach((item, i) => {
             tt += parseInt(item.target); td += parseInt(item.done);
-            const rem = item.target - item.done;
+            const rem = item.target - item.done; tr += rem;
             const avg = (item.done / days).toFixed(2);
             const est = avg > 0 ? Math.ceil(rem/avg) : 0;
-            const estText = avg > 0 ? `${Math.floor(est/365)} Yıl ${Math.floor((est%365)/30)} Ay` : "-";
+            const estText = avg > 0 ? formatTime(est) : "-";
+            let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
 
             tbody.innerHTML += `
                 <tr>
-                    <td class="fw-bold text-start" style="background-color: #e0c09f;">${item.name}</td>
-                    <td><input type="number" class="form-control form-control-sm" value="${item.target}" onchange="upT(${i},this.value)"></td>
-                    <td><input type="number" class="form-control form-control-sm" value="${item.done}" onchange="upD(${i},this.value)"></td>
-                    <td>
+                    <td class="col-namaz text-start p-2">${item.name}</td>
+                    <td class="p-1"><input type="number" class="form-control form-control-sm" value="${item.target}" onchange="upT(${i},this.value)"></td>
+                    <td class="p-1">
+                        <input type="number" class="form-control form-control-sm mb-1" value="${item.done}" onchange="upD(${i},this.value)">
+                        <div class="progress" style="height: 5px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div>
+                        <div style="font-size:10px;">%${pp.toFixed(1)}</div>
+                    </td>
+                    <td class="p-1">
                         <button class="btn-action btn-plus" onclick="chC(${i},1)">+</button>
                         <button class="btn-action btn-minus" onclick="chC(${i},-1)">-</button>
                     </td>
@@ -427,7 +416,11 @@
         tfoot.innerHTML = `<tr><td>Top</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td></td></tr>`;
         
         renderBadges(td);
+        renderHistory();
+        renderCharts(td, tr);
     }
+
+    function formatTime(d) { if (!isFinite(d)) return "-"; const y = Math.floor(d/365); const m = Math.floor((d%365)/30); return y>0 ? `${y}Y ${m}A` : (m>0 ? `${m} Ay` : `${d} Gün`); }
 
     function renderBadges(total) {
         const c = document.getElementById('badgeContainer'); c.innerHTML = "";
@@ -440,24 +433,54 @@
         if(c.innerHTML === "") c.innerHTML = `<small class="text-muted">Henüz rozet yok.</small>`;
     }
 
-    // Kısa Fonksiyonlar (HTML içinden çağırmak için)
-    window.upT = (i,v) => { localData.counts[i].target = parseInt(v)||0; saveToCloud(); renderApp(); };
-    window.upD = (i,v) => { localData.counts[i].done = parseInt(v)||0; saveToCloud(); renderApp(); };
-    window.chC = (i,d) => { 
-        const n = localData.counts[i].done + d; 
+    function renderHistory() {
+        const hb = document.getElementById('historyTableBody'); hb.innerHTML = "";
+        if (!localData.history) return;
+        localData.history.forEach(r => {
+            const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal);
+            let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : '');
+            hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td>${r.time.split(' ')[1]}</td></tr>`;
+        });
+    }
+
+    function renderCharts(d, r) {
+        const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy();
+        const isDark = document.body.classList.contains('dark-mode');
+        chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [d, r], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: isDark ? '#fff':'#666' } }, datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => { let s = 0; c.chart.data.datasets[0].data.map(d => s += d); return (v*100 / s).toFixed(1)+"%"; } } } } });
+    }
+
+    // --- TESBİHAT ---
+    function renderTesbihat() {
+        const c = document.getElementById('tesbihatContainer'); c.innerHTML = "";
+        localData.tesbihat.forEach((item, i) => {
+            let p = item.target > 0 ? (item.current / item.target) * 100 : 0;
+            let bc = p >= 100 ? 'bg-success' : 'bg-primary';
+            c.innerHTML += `
+                <div class="col-md-6"><div class="zikr-card">
+                    <h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div>
+                    <div class="d-flex justify-content-center gap-3 my-3">
+                        <button class="btn btn-outline-secondary rounded-circle" onclick="upTes(${i},-1)"><i class="fas fa-minus"></i></button>
+                        <button class="btn btn-success btn-zikr-main" onclick="upTes(${i},1)"><i class="fas fa-plus"></i></button>
+                        <button class="btn btn-outline-secondary rounded-circle" onclick="resTes(${i})"><i class="fas fa-undo"></i></button>
+                    </div>
+                    <div class="zikr-count-display mb-2">${item.current} <small class="text-muted fs-6">/ ${item.target}</small></div>
+                    <div class="progress mb-3" style="height: 8px;"><div class="progress-bar ${bc}" style="width: ${p}%"></div></div>
+                    <div class="d-flex justify-content-center gap-2"><input type="number" id="manZ-${i}" class="form-control form-control-sm" style="width:70px"><button class="btn btn-sm btn-outline-primary" onclick="addTes(${i})">Ekle</button></div>
+                </div></div>`;
+        });
+    }
+    window.upTes = (i, d) => { 
+        const n = localData.tesbihat[i].current + d; 
         if(n>=0) { 
-            localData.counts[i].done = n; 
-            if(d>0) {
-                localData.daily.counts[i]++;
-                if(localData.daily.counts.reduce((a,b)=>a+b,0) === localData.daily.target) jsConfetti.addConfetti();
-            } else if(localData.daily.counts[i]>0) localData.daily.counts[i]--;
-            saveToCloud(); renderApp(); 
+            localData.tesbihat[i].current = n; 
+            if(d>0 && n === localData.tesbihat[i].target) jsConfetti.addConfetti({ emojis: ['✨', '📿'] }); 
+            saveToCloud(); renderTesbihat(); 
         } 
     };
-    window.updateDailyGoal = (v) => { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
-    document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
+    window.addTes = (i) => { const v = parseInt(document.getElementById(`manZ-${i}`).value)||0; if(v>0) { localData.tesbihat[i].current += v; saveToCloud(); renderTesbihat(); } };
+    window.resTes = (i) => { if(confirm("Sıfırlansın mı?")) { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); } };
 
-    // Hesaplama Sihirbazı
+    // --- HESAP SİHİRBAZI ---
     const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"];
     function renderCalculatorRows() {
         const c = document.getElementById('calcRowsContainer'); if(c.innerHTML.trim()) return;
@@ -483,8 +506,47 @@
         }
     };
 
-    // Gece Modu
-    window.toggleDarkMode = () => { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); };
+    // --- CORE FUNCTIONS ---
+    window.upT = (i,v) => { localData.counts[i].target = parseInt(v)||0; saveToCloud(); renderApp(); };
+    window.upD = (i,v) => { localData.counts[i].done = parseInt(v)||0; saveToCloud(); renderApp(); };
+    window.chC = (i,d) => { 
+        const n = localData.counts[i].done + d; 
+        if(n>=0) { 
+            localData.counts[i].done = n; 
+            // Günlük & Streak Logic
+            if(d>0) {
+                localData.daily.counts[i]++;
+                const ct = localData.daily.counts.reduce((a,b)=>a+b,0);
+                if(ct === localData.daily.target) jsConfetti.addConfetti();
+                
+                // Streak Update
+                const today = getCurrentDateSimple();
+                const yesterday = getYesterdayDateSimple();
+                if (localData.streak.lastAchievedDate !== today && ct >= localData.daily.target) {
+                    if (localData.streak.lastAchievedDate === yesterday) localData.streak.current++;
+                    else localData.streak.current = 1;
+                    localData.streak.lastAchievedDate = today;
+                }
+            } else if(localData.daily.counts[i]>0) localData.daily.counts[i]--;
+            
+            addHistory(localData.counts[i].name, localData.counts[i].done - d, n); 
+            saveToCloud(); renderApp(); 
+        } 
+    };
+    window.updateDailyGoal = (v) => { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
+    document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
+
+    // CSV Export
+    window.downloadDataAsCSV = () => {
+        let csv = "Namaz,Kilinacak,Kilinan\n";
+        localData.counts.forEach(c => csv += `${c.name},${c.target},${c.done}\n`);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob); link.download = "kaza_takip.csv"; link.click();
+    };
+
+    // Theme
+    window.toggleDarkMode = () => { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); renderApp(); };
     if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark-mode');
 
 </script>
