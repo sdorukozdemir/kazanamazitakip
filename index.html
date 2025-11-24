@@ -21,17 +21,42 @@
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; }
+        /* TEMA DEĞİŞKENLERİ */
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --card-bg: #ffffff;
+            --sidebar-bg: #157347;
+            --table-head: #157347;
+            --table-row-bg: #e6e6e6;
+            --input-bg: #ffffff;
+            --input-text: #000000;
+            --border-color: #dee2e6;
+        }
+
+        /* GECE MODU DEĞİŞKENLERİ */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --sidebar-bg: #0f5132;
+            --table-head: #0f5132;
+            --table-row-bg: #2d2d2d;
+            --input-bg: #2d2d2d;
+            --input-text: #ffffff;
+            --border-color: #444;
+        }
+
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
         
-        /* LAYOUT */
         .wrapper { display: flex; width: 100%; align-items: stretch; }
-        #sidebar { min-width: 250px; max-width: 250px; background: #157347; color: #fff; min-height: 100vh; transition: all 0.3s; }
+        #sidebar { min-width: 250px; max-width: 250px; background: var(--sidebar-bg); color: #fff; min-height: 100vh; transition: all 0.3s; }
         #sidebar.active { margin-left: -250px; }
-        #sidebar .sidebar-header { padding: 20px; background: #146c43; }
-        #sidebar ul.components { padding: 20px 0; border-bottom: 1px solid #47748b; }
+        #sidebar .sidebar-header { padding: 20px; background: rgba(0,0,0,0.2); }
+        #sidebar ul.components { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
         #sidebar ul li { padding: 10px; font-size: 1.1em; display: block; cursor: pointer; }
-        #sidebar ul li:hover { background: #146c43; }
-        #sidebar ul li.active { background: #fff; color: #157347; border-radius: 5px 0 0 5px; margin-left: 10px; font-weight: bold; }
+        #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
+        #sidebar ul li.active { background: #fff; color: var(--sidebar-bg); border-radius: 5px 0 0 5px; margin-left: 10px; font-weight: bold; }
         
         #content { width: 100%; padding: 20px; min-height: 100vh; transition: all 0.3s; }
         @media (max-width: 768px) {
@@ -39,39 +64,33 @@
             #sidebar.active { margin-left: 0; }
         }
 
-        .app-header { text-align: center; color: #198754; font-weight: bold; margin-bottom: 20px; }
-        
-        /* TABLO İYİLEŞTİRMELERİ (MOBİL İÇİN) */
-        .main-table thead th { 
-            background-color: #157347; color: white; vertical-align: middle; text-align: center; font-size: 0.9rem; 
-            white-space: nowrap; /* Başlıkların alt satıra geçmesini engelle */
-        }
-        .main-table tbody td { 
-            vertical-align: middle; text-align: center; background-color: #e6e6e6; font-weight: bold; 
-            white-space: nowrap; /* İçeriğin sıkışmasını engelle, kaydırmaya zorla */
-        }
-        .main-table input { text-align: center; font-weight: bold; min-width: 60px; }
+        .app-header { text-align: center; color: var(--sidebar-bg); font-weight: bold; margin-bottom: 20px; }
+        body.dark-mode .app-header { color: #20c997; }
+
+        /* TABLO AYARLARI */
+        .main-table { color: var(--text-color); }
+        .main-table thead th { background-color: var(--table-head); color: white; vertical-align: middle; text-align: center; font-size: 0.9rem; white-space: nowrap; border-color: var(--border-color); }
+        .main-table tbody td { vertical-align: middle; text-align: center; background-color: var(--table-row-bg); color: var(--text-color); font-weight: bold; white-space: nowrap; border-color: var(--border-color); }
+        .main-table input { text-align: center; font-weight: bold; min-width: 60px; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); }
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; border-color: #c9302c; }
         
         .btn-action { width: 30px; height: 30px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 2px; }
         .btn-plus { background-color: #20c997; border: none; color: white; }
         .btn-minus { background-color: #6c757d; border: none; color: white; }
         .col-namaz { background-color: #f4a261 !important; color: black; } 
+        
         .hidden { display: none !important; }
         
-        /* MOBİL ÖZEL AYARLAR */
-        @media (max-width: 768px) {
-            .main-table { font-size: 0.8rem; } /* Yazıları küçült */
-            .main-table th, .main-table td { padding: 0.4rem !important; } /* Boşlukları azalt */
-            .btn-action { width: 25px; height: 25px; font-size: 0.8rem; } /* Butonları küçült */
-            /* Telefondan girince tablo yatay kaydırılabilir olsun */
-            .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        /* KARTLAR VE KUTULAR */
+        .login-card, .calculator-card, .chart-container, .badge-item { 
+            background-color: var(--card-bg); 
+            color: var(--text-color);
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
         }
-
-        #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #e9ecef; }
-        .login-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 100%; }
+        #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         
-        .chart-container { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; }
+        .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
 
         .goal-card {
             background: linear-gradient(135deg, #198754, #20c997);
@@ -80,27 +99,28 @@
             position: relative; overflow: hidden; transition: all 0.3s ease;
         }
         .goal-card.success-mode { background: linear-gradient(135deg, #1aa179, #157347); border: 3px solid #ffc107; box-shadow: 0 0 20px rgba(255, 193, 7, 0.6); }
-        .goal-input { width: 80px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; }
+        .goal-input { width: 80px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
 
         .badge-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; margin-bottom: 40px; }
-        .badge-item { text-align: center; width: 110px; background: white; padding: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); animation: popIn 0.5s ease; }
-        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
-        .badge-icon { font-size: 3rem; display: block; margin-bottom: 5px; }
+        .badge-item { text-align: center; width: 110px; padding: 10px; animation: popIn 0.5s ease; }
         .badge-title { font-size: 0.85rem; font-weight: bold; color: #198754; }
+        body.dark-mode .badge-title { color: #20c997; }
 
         .history-row-up, .history-row-up > td { background-color: #d1e7dd !important; color: #0f5132 !important; }
         .history-row-down, .history-row-down > td { background-color: #f8d7da !important; color: #842029 !important; }
-        
+        body.dark-mode .history-row-up, body.dark-mode .history-row-up > td { background-color: #0f5132 !important; color: #fff !important; }
+        body.dark-mode .history-row-down, body.dark-mode .history-row-down > td { background-color: #842029 !important; color: #fff !important; }
+
+        /* HESAPLAMA SİHİRBAZI INPUTLARI */
+        .calc-row { background: var(--table-row-bg); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
+        .calc-label { font-weight: bold; color: var(--sidebar-bg); font-size: 1.1rem; margin-bottom: 5px; display: block;}
+        body.dark-mode .calc-label { color: #20c997; }
+        .form-control { background-color: var(--input-bg); color: var(--input-text); border-color: var(--border-color); }
+        .form-control:focus { background-color: var(--input-bg); color: var(--input-text); }
+
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
         .success-msg { animation: bounceIn 0.5s; font-size: 1.3rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
-
-        .calculator-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .result-box { background: #e9ecef; padding: 20px; border-radius: 10px; margin-top: 20px; display: none; }
-        .calc-row { background: #f1f3f5; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-        .calc-label { font-weight: bold; color: #198754; font-size: 1.1rem; margin-bottom: 5px; display: block;}
-        .calc-input-group { display: flex; gap: 10px; flex-wrap: wrap; }
-        .calc-input-group div { flex: 1; min-width: 140px; }
-        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; }
     </style>
 </head>
 <body>
@@ -125,6 +145,12 @@
         <ul class="list-unstyled components">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-home me-2"></i> Ana Sayfa</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-2"></i> Hesap Sihirbazı</li>
+            
+            <!-- YENİ GECE MODU BUTONU -->
+            <li onclick="toggleDarkMode()">
+                <i class="fas fa-moon me-2"></i> <span id="darkModeText">Gece Modu</span>
+            </li>
+
             <li onclick="forceResetData()" class="text-warning"><i class="fas fa-wrench me-2"></i> Verileri Onar</li>
             <li onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap</li>
         </ul>
@@ -226,12 +252,10 @@
                         <div id="calcRowsContainer"></div>
 
                         <hr class="my-4">
-                        
                         <div class="alert alert-warning">
                             <i class="fas fa-exclamation-triangle"></i>
                             <strong>Dikkat:</strong> "Hesaplananları Aktar" butonuna bastığınızda, Ana Sayfa'daki "Kılınacak" sayılarınız buradaki değerlerle <u>değiştirilecektir.</u>
                         </div>
-
                         <button class="btn btn-danger w-100 py-2 fw-bold" onclick="applyAdvancedCalculation()">
                             <i class="fas fa-check-circle me-2"></i> Onaylıyorum ve Hesaplananları Aktar
                         </button>
@@ -255,11 +279,30 @@
         document.getElementById('section-calculator').classList.add('hidden');
         document.getElementById('section-' + sectionId).classList.remove('hidden');
         if(window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('active'); }
+        if(sectionId === 'calculator') { renderCalculatorRows(); }
+    }
+
+    // --- GECE MODU FONKSİYONLARI ---
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu";
         
-        if(sectionId === 'calculator') {
-            renderCalculatorRows();
+        // Grafikleri güncelle (Renk uyumu için)
+        if(chartCompletion) {
+            chartCompletion.options.plugins.legend.labels.color = isDark ? '#fff' : '#666';
+            chartCompletion.update();
         }
     }
+
+    // Sayfa Yüklendiğinde Tema Kontrolü
+    window.addEventListener('load', () => {
+        if(localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeText').innerText = "Gündüz Modu";
+        }
+    });
 
     // --- GELİŞMİŞ HESAPLAMA MANTIĞI ---
     const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"];
@@ -301,13 +344,10 @@
         if(startVal && endVal) {
             const d1 = new Date(startVal);
             const d2 = new Date(endVal);
-            
             if(d1 < d2) {
                 const diff = Math.ceil(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24));
                 resInput.value = diff;
-            } else {
-                resInput.value = 0; 
-            }
+            } else { resInput.value = 0; }
         }
     }
 
@@ -339,28 +379,22 @@
             const val = parseInt(document.getElementById(`res-${i}`).value) || 0;
             newValues.push(val);
         }
-
-        if(newValues.every(v => v === 0)) {
-            alert("Hesaplanan değerler 0 görünüyor. Lütfen tarihleri kontrol edin.");
-            return;
-        }
+        if(newValues.every(v => v === 0)) { alert("Hesaplanan değerler 0 görünüyor."); return; }
 
         if(confirm("Bu değerler ana sayfanızdaki hedeflerin üzerine yazılacak. Onaylıyor musunuz?")) {
             ensureDataStructure();
-            
             localData.counts[0].target = newValues[0];
             localData.counts[1].target = newValues[1];
             localData.counts[2].target = newValues[2];
             localData.counts[3].target = newValues[3];
             localData.counts[4].target = newValues[4];
-            
             saveToCloud();
             alert("Hedefler başarıyla güncellendi!");
             showSection('dashboard');
         }
     }
 
-    // --- STANDART JS KODLARI ---
+    // --- PWA ---
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({
         "name": "Kaza Namazı", "short_name": "Namaz Takip", "start_url": ".", "display": "standalone",
@@ -402,7 +436,6 @@
         { id: 50000, title: "Efsane", icon: "👑", desc: "50.000 Namaz" }
     ];
 
-    // Varsayılan Veri
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     
     const defaultData = {
@@ -471,9 +504,7 @@
     function listenToData() {
         dbRef.on('value', (snapshot) => {
             const cloudData = snapshot.val();
-            if (cloudData) {
-                localData = cloudData;
-            } 
+            if (cloudData) { localData = cloudData; } 
             ensureDataStructure();
             checkDailyReset();
             if (!cloudData) saveToCloud(); 
@@ -562,7 +593,7 @@
                 badgeContainer.appendChild(div);
             }
         });
-        if (!anyBadge) { badgeContainer.innerHTML = `<div class="text-muted small">Henüz kazanılmış rozet yok. Kılmaya devam edin!</div>`; }
+        if (!anyBadge) { badgeContainer.innerHTML = `<div class="text-muted small">Henüz kazanılmış rozet yok.</div>`; }
     }
 
     function getElapsedDays() {
@@ -665,7 +696,12 @@
 
     function renderCharts(totalDone, totalRemaining) {
         const ctx1 = document.getElementById('completionChart').getContext('2d');
-        if (chartCompletion) chartCompletion.destroy(); 
+        if (chartCompletion) chartCompletion.destroy();
+        
+        // Grafiğin rengini temaya göre ayarla
+        const isDark = document.body.classList.contains('dark-mode');
+        const labelColor = isDark ? '#fff' : '#666';
+
         chartCompletion = new Chart(ctx1, {
             type: 'doughnut',
             data: {
@@ -675,7 +711,10 @@
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom' },
+                    legend: { 
+                        position: 'bottom',
+                        labels: { color: labelColor } // Yazı rengini ata
+                    },
                     datalabels: { color: '#fff', font: { weight: 'bold', size: 14 }, formatter: (value, ctx) => { let sum = 0; ctx.chart.data.datasets[0].data.map(d => sum += d); return (value*100 / sum).toFixed(1)+"%"; } }
                 }
             }
