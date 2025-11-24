@@ -40,16 +40,34 @@
         }
 
         .app-header { text-align: center; color: #198754; font-weight: bold; margin-bottom: 20px; }
-        .main-table thead th { background-color: #157347; color: white; vertical-align: middle; text-align: center; font-size: 0.9rem; }
-        .main-table tbody td { vertical-align: middle; text-align: center; background-color: #e6e6e6; font-weight: bold; }
-        .main-table input { text-align: center; font-weight: bold; }
+        
+        /* TABLO İYİLEŞTİRMELERİ (MOBİL İÇİN) */
+        .main-table thead th { 
+            background-color: #157347; color: white; vertical-align: middle; text-align: center; font-size: 0.9rem; 
+            white-space: nowrap; /* Başlıkların alt satıra geçmesini engelle */
+        }
+        .main-table tbody td { 
+            vertical-align: middle; text-align: center; background-color: #e6e6e6; font-weight: bold; 
+            white-space: nowrap; /* İçeriğin sıkışmasını engelle, kaydırmaya zorla */
+        }
+        .main-table input { text-align: center; font-weight: bold; min-width: 60px; }
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; border-color: #c9302c; }
+        
         .btn-action { width: 30px; height: 30px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 2px; }
         .btn-plus { background-color: #20c997; border: none; color: white; }
         .btn-minus { background-color: #6c757d; border: none; color: white; }
         .col-namaz { background-color: #f4a261 !important; color: black; } 
         .hidden { display: none !important; }
         
+        /* MOBİL ÖZEL AYARLAR */
+        @media (max-width: 768px) {
+            .main-table { font-size: 0.8rem; } /* Yazıları küçült */
+            .main-table th, .main-table td { padding: 0.4rem !important; } /* Boşlukları azalt */
+            .btn-action { width: 25px; height: 25px; font-size: 0.8rem; } /* Butonları küçült */
+            /* Telefondan girince tablo yatay kaydırılabilir olsun */
+            .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        }
+
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #e9ecef; }
         .login-card { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 100%; }
         
@@ -77,6 +95,7 @@
         .success-msg { animation: bounceIn 0.5s; font-size: 1.3rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
 
         .calculator-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .result-box { background: #e9ecef; padding: 20px; border-radius: 10px; margin-top: 20px; display: none; }
         .calc-row { background: #f1f3f5; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
         .calc-label { font-weight: bold; color: #198754; font-size: 1.1rem; margin-bottom: 5px; display: block;}
         .calc-input-group { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -157,9 +176,7 @@
                             <th>Kalan Süre</th>
                         </tr>
                     </thead>
-                    <tbody id="prayerTableBody">
-                        <!-- Tablo JS ile doldurulacak -->
-                    </tbody>
+                    <tbody id="prayerTableBody"></tbody>
                     <tfoot id="prayerTableFoot"></tfoot>
                 </table>
             </div>
@@ -197,7 +214,6 @@
                             <br><strong>İpucu:</strong> İlk satırı (Sabah) doldurduktan sonra aşağıdaki butonlarla diğerlerine kopyalayabilirsiniz.
                         </div>
 
-                        <!-- YENİLENEN BUTON GRUBU -->
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
                                 <i class="fas fa-arrow-down me-1"></i> Sorumluluk Tarihini Dağıt
@@ -207,7 +223,6 @@
                             </button>
                         </div>
 
-                        <!-- HESAPLAMA SATIRLARI -->
                         <div id="calcRowsContainer"></div>
 
                         <hr class="my-4">
@@ -296,13 +311,10 @@
         }
     }
 
-    // YENİ: SADECE SORUMLULUK TARİHİNİ KOPYALA
     function copyStartDate() {
         const row0 = document.getElementById('row-0');
         const start0 = row0.querySelector('.start-date').value;
-
         if(!start0) { alert("Lütfen Sabah namazı için Sorumluluk Tarihini girin."); return; }
-
         for(let i = 1; i < 5; i++) {
             const row = document.getElementById(`row-${i}`);
             row.querySelector('.start-date').value = start0;
@@ -310,13 +322,10 @@
         }
     }
 
-    // YENİ: SADECE DÜZENLİ BAŞLAMA TARİHİNİ KOPYALA
     function copyEndDate() {
         const row0 = document.getElementById('row-0');
         const end0 = row0.querySelector('.end-date').value;
-
         if(!end0) { alert("Lütfen Sabah namazı için Düzenli Başlama Tarihini girin."); return; }
-
         for(let i = 1; i < 5; i++) {
             const row = document.getElementById(`row-${i}`);
             row.querySelector('.end-date').value = end0;
