@@ -24,10 +24,18 @@
     <style>
         /* --- TEMA AYARLARI --- */
         :root { 
-            --bg-color: #f0f2f5; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
-            --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
-            --border-color: #e9ecef; --modal-bg: #ffffff;
-            --calc-box-bg: #e8f5e9; /* Hesaplama kutusu rengi */
+            /* Gündüz Modu: Arka plan biraz daha mat (koyu gri-mavimsi) yapıldı ki beyaz kartlar öne çıksın */
+            --bg-color: #eef1f5; 
+            --text-color: #212529; 
+            --card-bg: #ffffff; 
+            --sidebar-bg: #157347; 
+            --table-head: #157347; 
+            --table-row-bg: #ffffff; 
+            --input-bg: #f8f9fa; 
+            --input-text: #000000; 
+            --border-color: #dce1e6; 
+            --modal-bg: #ffffff;
+            --calc-box-bg: #e8f5e9;
             --calc-header-bg: #198754;
             --calc-header-text: #fff;
         }
@@ -63,7 +71,20 @@
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; padding: 10px; }
 
         .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; }
-        .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: left !important; padding-left: 15px !important; vertical-align: middle !important; min-width: 80px; }
+        
+        /* NAMAZ SÜTUNU RENKLERİ */
+        .col-namaz { 
+            background-color: #f4a261 !important; /* Gündüz Turuncu */
+            color: black; 
+            font-weight: 600; text-align: left !important; padding-left: 15px !important; vertical-align: middle !important; min-width: 80px; 
+        }
+        
+        /* GECE MODUNDA NAMAZ SÜTUNU RENGİ */
+        body.dark-mode .col-namaz {
+            background-color: #2f4f4f !important; /* Koyu Petrol Yeşili / Gri */
+            color: white !important;
+        }
+
         .col-input-area { min-width: 100px; }
         .col-action { min-width: 90px; padding-top: 15px !important; }
 
@@ -81,11 +102,8 @@
         .goal-input { width: 80px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* --- ZİKİR KARTI DÜZENLEMELERİ --- */
-        .zikr-card { 
-            padding: 25px; text-align: center; border-top: 6px solid #198754; 
-            height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; 
-        }
+        /* --- ZİKİR KARTI --- */
+        .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 15px 0; font-weight: bold; line-height: 1.4; }
         body.dark-mode .arabic-text { color: #20c997; }
         .zikr-count { font-size: 2.8rem; font-weight: bold; margin: 10px 0; color: var(--text-color); }
@@ -93,30 +111,13 @@
         .manual-zikr-group { display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center; margin-top: 15px; }
         .manual-zikr-input { width: 120px !important; text-align: center; }
 
-        /* --- HESAPLAMA SİHİRBAZI DÜZENLEMELERİ --- */
-        .calc-row { 
-            background-color: var(--calc-box-bg); 
-            padding: 0; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-        }
-        .calc-header {
-            background-color: var(--calc-header-bg);
-            color: var(--calc-header-text);
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
+        /* --- HESAPLAMA SİHİRBAZI --- */
+        .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); overflow: hidden; }
+        .calc-header { background-color: var(--calc-header-bg); color: var(--calc-header-text); padding: 10px; text-align: center; font-weight: bold; font-size: 1.1rem; }
         .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .calc-item { flex: 1; min-width: 150px; text-align: center; }
         .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
-        .calc-result-input { 
-            font-weight: bold; color: #d9534f; text-align: center; font-size: 1.1rem; 
-            background-color: var(--input-bg); border: 1px solid var(--border-color);
-        }
+        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.1rem; background-color: var(--input-bg); border: 1px solid var(--border-color); }
 
         /* TARİHÇE RENKLERİ */
         .history-row-up td { background-color: #d1e7dd !important; color: #0f5132 !important; }
@@ -261,7 +262,7 @@
             <div class="row g-4" id="tesbihatContainer"></div>
         </div>
 
-        <!-- HESAPLAMA SİHİRBAZI (YENİ TASARIM) -->
+        <!-- HESAPLAMA SİHİRBAZI -->
         <div id="section-calculator" class="hidden">
             <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
             <div class="row justify-content-center">
@@ -274,10 +275,10 @@
 
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
-                                <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Dağıt
+                                <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
                             </button>
                             <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">
-                                <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Dağıt
+                                <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala
                             </button>
                         </div>
 
@@ -296,7 +297,7 @@
 </div>
 
 <script>
-    // --- CUSTOM MODAL ---
+    // --- CUSTOM MODAL SYSTEM ---
     function showModal(title, message, onConfirm) {
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalMessage').innerText = message;
@@ -429,7 +430,8 @@
                 }
             } else if (localData.daily.counts[i] > 0) localData.daily.counts[i]--;
             addHistory(localData.counts[i].name, o, n); 
-            saveToCloud(); renderApp(); 
+            saveToCloud(); 
+            renderApp(); 
         } 
     };
     window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
@@ -447,21 +449,24 @@
         if(!localData.counts) return;
         document.getElementById('startDate').value = localData.startDate;
         
+        // Günlük & Streak
         const c = localData.daily.counts.reduce((a,b)=>a+b,0);
         document.getElementById('dailyCountDisplay').innerText = c;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
         let p = (c / localData.daily.target) * 100; if(p>100) p=100;
         document.getElementById('dailyProgressBar').style.width = p + "%";
         
+        const goalCard = document.getElementById('goalCard');
         if(c >= localData.daily.target) {
-            document.getElementById('goalCard').classList.add('success-mode');
+            goalCard.classList.add('success-mode');
             document.getElementById('goalSuccessMessage').style.display='block';
         } else {
-            document.getElementById('goalCard').classList.remove('success-mode');
+            goalCard.classList.remove('success-mode');
             document.getElementById('goalSuccessMessage').style.display='none';
         }
         document.getElementById('streakValue').innerText = localData.streak.current;
 
+        // Tablo
         const tbody = document.getElementById('prayerTableBody');
         const tfoot = document.getElementById('prayerTableFoot');
         tbody.innerHTML = "";
@@ -508,10 +513,13 @@
 
     function formatTime(d) { 
         if (!isFinite(d) || d <= 0) return "Tamamlandı"; 
-        const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); 
+        const y = Math.floor(d/365); const r = d % 365; 
+        const m = Math.floor(r/30); const fd = Math.floor(r%30); 
         let res = ""; 
-        if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; 
-        if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`;
+        if (y > 0) res += `${y} Yıl `; 
+        if (m > 0) res += `${m} Ay `; 
+        if (y===0 && m===0) res += `${fd} Gün`;
+        else if (fd > 0 && y < 10) res += `${fd} G.`;
         return res || "Bugün"; 
     }
 
@@ -523,7 +531,7 @@
                 if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); }
                 c.innerHTML += `<div class="badge-item"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`;
             } else if (!nextBadgeShown) {
-                c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Sonraki Hedef</div></div>`;
+                c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`;
                 nextBadgeShown = true; 
             }
         });
@@ -560,12 +568,12 @@
                         <button class="btn btn-success btn-zikr-main" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button>
                         <button class="btn btn-outline-secondary rounded-circle" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button>
                     </div>
-                    <div class="mt-3 manual-zikr-group">
-                        <small class="text-muted">Hedef:</small>
-                        <input type="number" class="form-control form-control-sm" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)">
+                    <div class="mt-3 d-flex justify-content-center align-items-center gap-2">
+                        <small class="calc-sub-label">Hedef:</small>
+                        <input type="number" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)">
                     </div>
-                    <div class="manual-zikr-group">
-                        <input type="number" id="manZ-${i}" class="form-control form-control-sm manual-zikr-input" placeholder="+Adet">
+                    <div class="mt-2 d-flex justify-content-center align-items-center gap-2">
+                        <input type="number" id="manZ-${i}" class="form-control form-control-sm" style="width:70px" placeholder="+Adet">
                         <button class="btn btn-sm btn-outline-primary" onclick="window.addTes(${i})">Ekle</button>
                     </div>
                 </div></div>`;
