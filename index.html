@@ -28,97 +28,106 @@
             --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
             --border-color: #ced4da; --modal-bg: #ffffff; --calc-box-bg: #e8f5e9;
             --calc-header-bg: #198754; --calc-header-text: #fff;
+            /* TESBİHAT BUTON RENKLERİ (GÜNDÜZ) */
+            --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057;
+            --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
+            --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
             --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
             --border-color: #444; --modal-bg: #2d2d2d; --calc-box-bg: #2d2d2d;
             --calc-header-bg: #0f5132; --calc-header-text: #ddd;
+            /* TESBİHAT BUTON RENKLERİ (GECE) */
+            --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
+            --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
+            --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
         }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; }
 
-        /* --- OVERLAY --- */
-        #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); z-index: 998; opacity: 0; transition: all 0.5s ease-in-out; top: 0; left: 0; }
-        #overlay.active { display: block; opacity: 1; }
-
         /* --- SIDEBAR --- */
         .wrapper { display: flex; width: 100%; }
-        #sidebar { 
-            min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; 
-            height: 100vh; transition: 0.3s; z-index: 999; 
-            position: fixed; top: 0; left: 0; 
-            overflow-y: auto; margin-left: -260px; 
-        }
-        @media (min-width: 769px) { #sidebar { position: sticky; margin-left: 0; } #sidebar.active { margin-left: -260px; } #overlay { display: none !important; } }
-        @media (max-width: 768px) { #sidebar { margin-left: -260px; } #sidebar.active { margin-left: 0; } }
-
+        #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; min-height: 100vh; transition: 0.3s; z-index: 999; }
+        #sidebar.active { margin-left: -260px; }
         #sidebar ul li { padding: 15px; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
-        #content { width: 100%; padding: 20px; min-height: 100vh; transition: 0.3s; }
-        @media (max-width: 768px) { #content { width: 100%; margin-left: 0; } }
+        #content { width: 100%; padding: 20px; min-height: 100vh; }
+        @media (max-width: 768px) { #sidebar { margin-left: -260px; position: fixed; height: 100%; } #sidebar.active { margin-left: 0; } }
         .hidden { display: none !important; }
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- TABLO (DÜZELTİLDİ) --- */
-        .table-responsive { 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
-            /* MOBİL İÇİN KRİTİK AYARLAR */
-            overflow-x: auto; 
-            -webkit-overflow-scrolling: touch;
-            width: 100%;
-            display: block;
-        }
-        .main-table { 
-            color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; 
-            /* Tablonun sıkışmasını engelle */
-            min-width: 650px; 
-        }
-        
-        .main-table thead th { 
-            background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; 
-            padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); 
-        }
-        .main-table tbody td { 
-            background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); 
-            text-align: center; vertical-align: top; padding: 12px 5px; 
-        }
-        .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #c9302c; }
+        /* --- KAZA NAMAZI TABLOSU --- */
+        .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; }
+        .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; white-space: normal; min-width: 80px; }
+        .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border-bottom: 1px solid var(--border-color); text-align: center; vertical-align: top; padding: 12px 8px; }
+        .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; padding: 10px; }
 
         .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; }
-        .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: left !important; padding-left: 10px !important; vertical-align: middle !important; min-width: 80px; }
+        .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: left !important; padding-left: 15px !important; vertical-align: middle !important; min-width: 80px; }
         body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
+        .col-input-area { min-width: 100px; } .col-action { min-width: 90px; padding-top: 15px !important; }
 
-        .btn-action { width: 32px; height: 32px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 2px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
+        .btn-action { width: 34px; height: 34px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 3px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-plus { background-color: #198754; } .btn-plus:hover { transform: scale(1.1); background-color: #146c43; }
+        .btn-minus { background-color: #6c757d; } .btn-minus:hover { transform: scale(1.1); background-color: #5c636a; }
 
-        /* KARTLAR */
+        /* --- KARTLAR --- */
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
-        .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; }
+
+        .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 25px; text-align: center; border: none; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
-        .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
-        .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
+        .goal-input { width: 80px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* ZİKİR */
-        .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .arabic-text { font-family: 'Amiri', serif; font-size: 2.2rem; color: #198754; margin: 10px 0; line-height: 1.3; }
+        /* --- TESBİHAT ÖZEL TASARIM --- */
+        .zikr-card { 
+            padding: 25px; text-align: center; border-top: 6px solid #198754; 
+            height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        }
+        .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 15px 0; font-weight: bold; line-height: 1.4; }
         body.dark-mode .arabic-text { color: #20c997; }
-        .zikr-count { font-size: 2.5rem; font-weight: bold; margin: 10px 0; color: var(--text-color); }
-        .btn-zikr-main { width: 80px; height: 80px; border-radius: 50%; font-size: 1.8rem; box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3); }
+        .zikr-count { font-size: 3.5rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+        
+        /* TESBİHAT BUTONLARI (Kavisli Kare) */
+        .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; }
+        .zikr-btn { 
+            border: none; display: flex; align-items: center; justify-content: center; 
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .zikr-btn:active { transform: scale(0.9); }
+
+        /* Eksi Butonu */
+        .z-minus { 
+            width: 55px; height: 55px; border-radius: 15px; /* Kavisli Kare */
+            background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem;
+        }
+        /* Artı Butonu (Ana) */
+        .z-plus { 
+            width: 90px; height: 90px; border-radius: 25px; /* Kavisli Kare */
+            background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; 
+            box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3);
+        }
+        /* Reset Butonu */
+        .z-reset { 
+            width: 55px; height: 55px; border-radius: 15px; /* Kavisli Kare */
+            background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem;
+        }
+
         .manual-zikr-group { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 15px; }
         .manual-zikr-input { width: 100px !important; text-align: center; }
 
-        /* HESAPLAMA */
+        /* --- HESAPLAMA SİHİRBAZI --- */
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); overflow: hidden; }
         .calc-header { background-color: var(--calc-header-bg); color: var(--calc-header-text); padding: 10px; text-align: center; font-weight: bold; font-size: 1.1rem; }
         .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        .calc-item { flex: 1; min-width: 140px; text-align: center; }
+        .calc-item { flex: 1; min-width: 150px; text-align: center; }
         .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.1rem; background-color: var(--input-bg); border: 1px solid var(--border-color); }
 
@@ -159,8 +168,6 @@
     </div>
 </div>
 
-<div id="overlay" onclick="toggleSidebar()"></div>
-
 <div id="login-screen">
     <div class="login-card p-5 text-center" style="max-width: 400px;">
         <h3 class="text-success fw-bold mb-4">İbadet Takip</h3>
@@ -188,7 +195,7 @@
     </nav>
 
     <div id="content">
-        <button class="btn btn-success mb-3 d-md-none" onclick="toggleSidebar()"><i class="fas fa-bars"></i> Menü</button>
+        <button class="btn btn-success mb-3 d-md-none" onclick="document.getElementById('sidebar').classList.toggle('active')"><i class="fas fa-bars"></i> Menü</button>
 
         <!-- DASHBOARD -->
         <div id="section-dashboard">
@@ -207,7 +214,7 @@
                             <div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div>
                         </div>
                         <div id="goalSuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🎉 Harika! Hedefe Ulaşıldı!</div>
-                        <div class="mt-2 streak-box" style="background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px;">
+                        <div class="mt-2 streak-box">
                             <i class="fas fa-fire text-warning"></i> <span>Zincir:</span>
                             <span id="streakValue" class="fw-bold text-warning">0</span> <span>Gün</span>
                         </div>
@@ -264,7 +271,7 @@
             <div class="row g-4" id="tesbihatContainer"></div>
         </div>
 
-        <!-- HESAPLAMA -->
+        <!-- HESAPLAMA SİHİRBAZI -->
         <div id="section-calculator" class="hidden">
             <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
             <div class="row justify-content-center">
@@ -274,15 +281,18 @@
                             <i class="fas fa-info-circle me-2"></i>
                             Lütfen <strong>Buluğ Çağı</strong> (Sorumluluk Başlangıcı) ve <strong>Düzenli Namaza Başlama</strong> tarihlerinizi giriniz.
                         </div>
+
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
-                                <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Dağıt
+                                <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
                             </button>
                             <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">
-                                <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Dağıt
+                                <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala
                             </button>
                         </div>
+
                         <div id="calcRowsContainer"></div>
+
                         <hr class="my-4">
                         <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()">
                             <i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar
@@ -296,13 +306,6 @@
 </div>
 
 <script>
-    function toggleSidebar() {
-        const sb = document.getElementById('sidebar');
-        const ov = document.getElementById('overlay');
-        sb.classList.toggle('active');
-        ov.classList.toggle('active');
-    }
-    
     function showModal(title, message, onConfirm) {
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalMessage').innerText = message;
@@ -379,7 +382,6 @@
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
     function logout() { auth.signOut(); }
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
-
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
@@ -450,14 +452,15 @@
     function renderHistory() { const hb = document.getElementById('historyTableBody'); hb.innerHTML = ""; if (!localData.history) return; localData.history.forEach(r => { const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal); let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td>${r.time.split(' ')[1]}</td></tr>`; }); }
     function renderCharts(d, r) { const ctx = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [d, r], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc } }, datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => { let s = 0; c.chart.data.datasets[0].data.map(d => s += d); return (v*100 / s).toFixed(1)+"%"; } } } } }); }
 
+    // --- TESBİHAT (GÜNCEL TASARIM) ---
     function renderTesbihat() {
         const c = document.getElementById('tesbihatContainer'); c.innerHTML = "";
         localData.tesbihat.forEach((item, i) => {
             let p = item.target > 0 ? (item.current / item.target) * 100 : 0;
-            c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="d-flex justify-content-center gap-3"><button class="btn btn-outline-secondary rounded-circle" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="btn btn-success btn-zikr-main" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="btn btn-outline-secondary rounded-circle" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="mt-3 d-flex justify-content-center align-items-center gap-2"><small class="calc-sub-label">Hedef:</small><input type="number" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-group"><input type="number" id="manZ-${i}" class="form-control form-control-sm manual-zikr-input" placeholder="+Adet"><button class="btn btn-sm btn-outline-primary" onclick="window.addTes(${i})">Ekle</button></div></div></div>`;
+            c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="mt-3 d-flex justify-content-center align-items-center gap-2"><small class="calc-sub-label">Hedef:</small><input type="number" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-group"><input type="number" id="manZ-${i}" class="form-control form-control-sm manual-zikr-input" placeholder="+Adet"><button class="btn btn-sm btn-outline-primary" onclick="window.addTes(${i})">Ekle</button></div></div></div>`;
         });
     }
-    window.upTes = function(i, d) { if (d > 0 && localData.tesbihat[i].current >= localData.tesbihat[i].target) { showModal("Hedef Tamamlandı!", "Günlük hedefe ulaştınız."); return; } const n = localData.tesbihat[i].current + d; if(n>=0) { localData.tesbihat[i].current = n; if(d>0 && n===localData.tesbihat[i].target) jsConfetti.addConfetti(); saveToCloud(); renderTesbihat(); } };
+    window.upTes = function(i, d) { if (d > 0 && localData.tesbihat[i].current >= localData.tesbihat[i].target) { showModal("Hedef Tamamlandı!", "Günlük hedefe ulaştınız."); return; } const n = localData.tesbihat[i].current + d; if(n>=0) { localData.tesbihat[i].current = n; if(d>0 && n===localData.tesbihat[i].target) jsConfetti.addConfetti({ emojis: ['✨', '📿'] }); saveToCloud(); renderTesbihat(); } };
     window.addTes = function(i) { const v = parseInt(document.getElementById(`manZ-${i}`).value)||0; if(v>0) { if (localData.tesbihat[i].current + v > localData.tesbihat[i].target) { showModal("Hata", "Hedefi aşacak miktar giremezsiniz."); return; } localData.tesbihat[i].current += v; saveToCloud(); renderTesbihat(); document.getElementById(`manZ-${i}`).value = ""; } };
     window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
