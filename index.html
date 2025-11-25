@@ -34,9 +34,13 @@
             --input-text: #000000; 
             --border-color: #ced4da; 
             --modal-bg: #ffffff;
-            --calc-box-bg: #e8f5e9;
+            
+            /* HESAPLAMA İÇİN ÖZEL RENKLER */
+            --calc-box-bg: #ffffff; /* Daha temiz beyaz */
+            --calc-row-border: #dee2e6;
             --calc-header-bg: #198754;
             --calc-header-text: #fff;
+            
             /* Tesbihat Buton Renkleri */
             --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057;
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
@@ -46,9 +50,13 @@
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
             --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
             --border-color: #444; --modal-bg: #2d2d2d;
-            --calc-box-bg: #2d2d2d;
+            
+            /* HESAPLAMA GECE MODU */
+            --calc-box-bg: #252525;
+            --calc-row-border: #444;
             --calc-header-bg: #0f5132;
             --calc-header-text: #ddd;
+            
             /* Tesbihat Buton Renkleri (Gece) */
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
@@ -56,18 +64,13 @@
         }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; }
 
-        /* --- SIDEBAR & OVERLAY (MOBİL İÇİN DÜZELTİLDİ) --- */
+        /* --- SIDEBAR & OVERLAY --- */
         .wrapper { display: flex; width: 100%; }
-        
         #sidebar { 
             min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; 
-            height: 100vh; transition: 0.3s; z-index: 1050; /* En üstte olsun */
-            position: fixed; top: 0; left: 0; 
-            overflow-y: auto; /* İÇİNDE KAYDIRMAYA İZİN VER */
-            margin-left: -260px; 
+            height: 100vh; transition: 0.3s; z-index: 1050; position: fixed; top: 0; left: 0; 
+            overflow-y: auto; margin-left: -260px; 
         }
-        
-        /* Overlay (Karartı) */
         #overlay {
             display: none; position: fixed; width: 100vw; height: 100vh; 
             background: rgba(0, 0, 0, 0.5); z-index: 1040; top: 0; left: 0;
@@ -76,18 +79,13 @@
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
 
-        /* Desktop Görünümü */
         @media (min-width: 769px) {
             #sidebar { position: sticky; margin-left: 0; height: 100vh; }
             #sidebar.active { margin-left: -260px; }
             #overlay { display: none !important; }
             #content { width: calc(100% - 260px); margin-left: 0; }
         }
-
-        /* Mobil Görünümü */
-        @media (max-width: 768px) {
-            #content { width: 100%; }
-        }
+        @media (max-width: 768px) { #content { width: 100%; } }
 
         #sidebar ul li { padding: 15px; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
@@ -99,25 +97,18 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- TABLO (MOBİL İÇİN KAYDIRMALI) --- */
+        /* --- TABLO --- */
         .table-responsive { 
             border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
-            /* Yatay Kaydırma */
-            overflow-x: auto; -webkit-overflow-scrolling: touch; 
+            overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; display: block;
         }
-        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; }
-        
-        /* Tablonun sıkışmaması için min-width */
-        .main-table { min-width: 600px; } 
-        
+        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
         .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); }
         .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: top; padding: 12px 5px; }
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #c9302c; }
-
         .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; }
         .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: left !important; padding-left: 10px !important; vertical-align: middle !important; min-width: 80px; }
         body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
-
         .btn-action { width: 32px; height: 32px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 2px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
@@ -125,43 +116,70 @@
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
-
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
-        .goal-input { width: 80px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
+        .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* --- ZİKİR (WEB & MOBİL UYUMLU) --- */
-        .zikr-card { 
-            padding: 25px; text-align: center; border-top: 6px solid #198754; 
-            height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; 
-        }
-        .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 15px 0; font-weight: bold; line-height: 1.4; }
+        /* --- ZİKİR --- */
+        .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .arabic-text { font-family: 'Amiri', serif; font-size: 2.2rem; color: #198754; margin: 10px 0; line-height: 1.3; }
         body.dark-mode .arabic-text { color: #20c997; }
-        .zikr-count { font-size: 2.8rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
-        
+        .zikr-count { font-size: 2.5rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
         .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; }
-        .zikr-btn { 
-            border: none; display: flex; align-items: center; justify-content: center; 
-            transition: all 0.2s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+        .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: all 0.2s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .zikr-btn:active { transform: scale(0.9); }
-
         .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
         .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
         .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
-
         .manual-zikr-group { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 15px; }
         .manual-zikr-input { width: 100px !important; text-align: center; }
 
-        /* --- HESAPLAMA --- */
-        .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); overflow: hidden; }
-        .calc-header { background-color: var(--calc-header-bg); color: var(--calc-header-text); padding: 10px; text-align: center; font-weight: bold; font-size: 1.1rem; }
-        .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        .calc-item { flex: 1; min-width: 150px; text-align: center; }
-        .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
-        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.1rem; background-color: var(--input-bg); border: 1px solid var(--border-color); }
+        /* --- HESAPLAMA SİHİRBAZI (GÜNCELLENDİ) --- */
+        .calculator-card { padding: 30px; }
+        .calc-row { 
+            background-color: var(--calc-box-bg); 
+            border: 1px solid var(--calc-row-border);
+            border-radius: 15px; 
+            margin-bottom: 25px; /* Aralığı açtık */
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .calc-row:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: #198754; /* Hoverda yeşil sınır */
+        }
+        .calc-header { 
+            background-color: var(--calc-header-bg); 
+            color: var(--calc-header-text); 
+            padding: 12px; 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+            letter-spacing: 1px;
+        }
+        .calc-body { 
+            padding: 25px 20px; /* İç boşluk artırıldı */
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 25px; /* Öğeler arası boşluk */
+            justify-content: space-between; 
+            align-items: flex-end;
+        }
+        .calc-item { flex: 1; min-width: 180px; text-align: left; } /* Sola yaslı ve geniş */
+        .calc-label-small { 
+            font-size: 0.9rem; 
+            font-weight: 600;
+            display: block; 
+            margin-bottom: 8px; 
+            color: var(--text-color); 
+        }
+        .calc-result-input { 
+            font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 50px;
+            background-color: var(--input-bg); border: 2px solid var(--border-color); 
+        }
 
         /* DİĞER */
         .history-row-up td { background-color: #d1e7dd !important; color: #0f5132 !important; }
@@ -187,6 +205,7 @@
 
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
+        .success-msg { animation: bounceIn 0.5s; font-size: 1.2rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -300,22 +319,23 @@
             </div>
         </div>
 
-        <!-- TESBİHAT (Düzeltildi: Kutular Boş Gelmez) -->
+        <!-- TESBİHAT -->
         <div id="section-tesbihat" class="hidden">
             <h3 class="app-header">Tesbihat ve Zikir</h3>
             <div class="row g-4" id="tesbihatContainer"></div>
         </div>
 
-        <!-- HESAPLAMA SİHİRBAZI (Düzeltildi: Kutular Boş Gelmez) -->
+        <!-- HESAPLAMA SİHİRBAZI -->
         <div id="section-calculator" class="hidden">
             <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
             <div class="row justify-content-center">
-                <div class="col-lg-10">
+                <div class="col-lg-12"> <!-- Genişletildi -->
                     <div class="calculator-card">
                         <div class="alert alert-info small mb-4">
                             <i class="fas fa-info-circle me-2"></i>
                             Lütfen <strong>Buluğ Çağı</strong> (Sorumluluk Başlangıcı) ve <strong>Düzenli Namaza Başlama</strong> tarihlerinizi giriniz.
                         </div>
+
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
                                 <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
@@ -324,7 +344,9 @@
                                 <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala
                             </button>
                         </div>
+
                         <div id="calcRowsContainer"></div>
+
                         <hr class="my-4">
                         <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()">
                             <i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar
@@ -381,7 +403,6 @@
     const provider = new firebase.auth.GoogleAuthProvider();
     let dbRef = null;
 
-    // Data Structure
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     function getYesterdayDateSimple() { const d = new Date(); d.setDate(d.getDate() - 1); return d.toLocaleDateString('tr-TR'); }
 
@@ -401,7 +422,6 @@
     let localData = JSON.parse(JSON.stringify(defaultData));
     let chartCompletion = null;
 
-    // Auth & Logic
     auth.onAuthStateChanged((user) => {
         if (user) {
             document.getElementById('login-screen').classList.add('hidden');
@@ -413,12 +433,8 @@
                 if (d) localData = d;
                 ensureDataStructure(); checkDailyReset();
                 if (!d) saveToCloud();
-                
-                // Veri geldikten sonra açık olan sayfayı render et
-                const activeSection = document.querySelector('.components li.active').id.replace('menu-', '');
-                renderApp(); // Her zaman dashboard verilerini hazırla
-                if(activeSection === 'tesbihat') renderTesbihat();
-                if(activeSection === 'calculator') renderCalculatorRows();
+                renderApp();
+                if(!document.getElementById('section-tesbihat').classList.contains('hidden')) renderTesbihat();
             });
         } else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('hidden'); }
     });
@@ -437,27 +453,8 @@
         if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
     }
     function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
-    function confirmResetData() { showModal("Dikkat!", "Tüm verileriniz silinecek. Emin misiniz?", forceResetData); }
+    function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    // Navigasyon (Güncellendi: Boş Gelme Sorunu İçin)
-    window.showSection = function(id) {
-        document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
-        document.getElementById('menu-' + id).classList.add('active');
-        ['dashboard', 'tesbihat', 'calculator'].forEach(sec => document.getElementById('section-' + sec).classList.add('hidden'));
-        document.getElementById('section-' + id).classList.remove('hidden');
-        
-        // Mobilde menüyü kapat
-        if(window.innerWidth < 768) {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
-        }
-        
-        // Sayfa değişiminde renderla (BOŞ EKRAN ÇÖZÜMÜ)
-        if(id === 'tesbihat') renderTesbihat();
-        if(id === 'calculator') renderCalculatorRows();
-    };
-
-    // Dashboard & Global
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
     window.upD = function(i, v) { const o = localData.counts[i].done; const n = parseInt(v) || 0; if (o !== n) { localData.counts[i].done = n; addHistory(localData.counts[i].name, o, n); saveToCloud(); renderApp(); } };
     window.chC = function(i, d) { 
@@ -466,7 +463,8 @@
             localData.counts[i].done = n; 
             if (d > 0) {
                 localData.daily.counts[i]++;
-                if (localData.daily.counts.reduce((a, b) => a + b, 0) === localData.daily.target) jsConfetti.addConfetti();
+                const ct = localData.daily.counts.reduce((a, b) => a + b, 0);
+                if (ct === localData.daily.target) jsConfetti.addConfetti();
                 const today = getCurrentDateSimple(), yesterday = getYesterdayDateSimple();
                 if (localData.streak.lastAchievedDate !== today && localData.daily.counts.reduce((a, b) => a + b, 0) >= localData.daily.target) {
                     if (localData.streak.lastAchievedDate === yesterday) localData.streak.current++; else localData.streak.current = 1;
@@ -517,9 +515,6 @@
     // --- TESBİHAT ---
     function renderTesbihat() {
         const c = document.getElementById('tesbihatContainer'); c.innerHTML = "";
-        // VERİ KONTROLÜ (BOŞ GELMEMESİ İÇİN)
-        if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
-        
         localData.tesbihat.forEach((item, i) => {
             let p = item.target > 0 ? (item.current / item.target) * 100 : 0;
             c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="mt-3 d-flex justify-content-center align-items-center gap-2"><small class="calc-sub-label">Hedef:</small><input type="number" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-group"><input type="number" id="manZ-${i}" class="form-control form-control-sm manual-zikr-input" placeholder="+Adet"><button class="btn btn-sm btn-outline-primary" onclick="window.addTes(${i})">Ekle</button></div></div></div>`;
@@ -533,9 +528,10 @@
     // --- HESAPLAMA ---
     const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"];
     window.renderCalculatorRows = function() {
-        const c = document.getElementById('calcRowsContainer'); 
-        if(c.innerHTML.trim()) return; // Zaten doluysa tekrar çizme
-        prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><small class="calc-label-small">Sorumluluk Başlangıcı</small><input type="date" class="form-control start-date" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Düzenli Başlama Tarihi</small><input type="date" class="form-control end-date" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Hesaplanan Gün</small><input type="number" class="form-control calc-result-input" id="res-${i}" value="0" readonly></div></div></div>`; });
+        const c = document.getElementById('calcRowsContainer'); if(c.innerHTML.trim()) return;
+        prayerTypes.forEach((p, i) => {
+            c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><small class="calc-label-small">Sorumluluk Başlangıcı</small><input type="date" class="form-control start-date" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Düzenli Başlama Tarihi</small><input type="date" class="form-control end-date" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Hesaplanan Gün</small><input type="number" class="form-control calc-result-input" id="res-${i}" value="0" readonly></div></div></div>`;
+        });
     };
     window.calcRow = function(i) { const r=document.getElementById(`row-${i}`); const s=r.querySelector('.start-date').value; const e=r.querySelector('.end-date').value; if(s&&e) document.getElementById(`res-${i}`).value = Math.max(0, Math.ceil((new Date(e)-new Date(s))/(86400000))); };
     window.copyStartDate = function() { const v = document.querySelector('#row-0 .start-date').value; for(let i=1;i<5;i++) { document.querySelector(`#row-${i} .start-date`).value = v; calcRow(i); } };
