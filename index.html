@@ -24,19 +24,10 @@
     <style>
         /* --- TEMA AYARLARI --- */
         :root { 
-            --bg-color: #e3e6ec; 
-            --text-color: #212529; 
-            --card-bg: #ffffff; 
-            --sidebar-bg: #157347; 
-            --table-head: #157347; 
-            --table-row-bg: #ffffff; 
-            --input-bg: #f8f9fa; 
-            --input-text: #000000; 
-            --border-color: #ced4da; 
-            --modal-bg: #ffffff;
-            --calc-box-bg: #f8f9fa;
-            --calc-header-bg: #198754;
-            --calc-header-text: #fff;
+            --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
+            --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
+            --border-color: #ced4da; --modal-bg: #ffffff;
+            --calc-box-bg: #e8f5e9; --calc-header-bg: #198754; --calc-header-text: #fff;
             --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057;
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
@@ -45,23 +36,23 @@
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
             --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
             --border-color: #444; --modal-bg: #2d2d2d;
-            --calc-box-bg: #2d2d2d;
-            --calc-header-bg: #0f5132;
-            --calc-header-text: #ddd;
+            --calc-box-bg: #2d2d2d; --calc-header-bg: #0f5132; --calc-header-text: #ddd;
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
         }
+        /* MOBİL EFEKT DÜZELTMESİ */
+        * { -webkit-tap-highlight-color: transparent; } 
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; }
 
-        /* --- SIDEBAR & OVERLAY --- */
+        /* --- SIDEBAR --- */
         .wrapper { display: flex; width: 100%; }
         #sidebar { 
             min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; 
             height: 100vh; transition: 0.3s; z-index: 1050; position: fixed; top: 0; left: 0; 
             overflow-y: auto; margin-left: -260px; 
         }
-        #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); z-index: 1040; top: 0; left: 0; backdrop-filter: blur(2px); }
+        #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1040; top: 0; left: 0; backdrop-filter: blur(2px); }
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
 
@@ -78,7 +69,6 @@
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
         #content { padding: 20px; min-height: 100vh; transition: 0.3s; }
-        .hidden { display: none !important; }
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
@@ -93,23 +83,16 @@
         .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: top; padding: 12px 5px; }
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #c9302c; }
         .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; }
-        .col-namaz { 
-            background-color: #f4a261 !important; color: black; font-weight: 600; 
-            text-align: center !important; vertical-align: middle !important; min-width: 80px; 
-        }
+        .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: center !important; vertical-align: middle !important; min-width: 80px; }
         body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
         
-        /* --- BUTON EFEKTLERİ (GÜÇLENDİRİLDİ) --- */
+        /* MOBİL BUTON EFEKTİ DÜZELTMESİ */
         .btn-action { 
-            width: 32px; height: 32px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 2px; 
-            cursor: pointer; transition: all 0.1s ease-in-out; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            width: 32px; height: 32px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 2px; cursor: pointer; 
+            transition: transform 0.1s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
         }
-        .btn-action:active { 
-            transform: scale(0.85) translateY(2px); /* İçeri gömülme ve küçülme */
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-        .btn-plus { background-color: #198754; } 
-        .btn-minus { background-color: #6c757d; }
+        .btn-action:active { transform: scale(0.9); box-shadow: none; }
+        .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
         /* --- KARTLAR --- */
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
@@ -135,59 +118,22 @@
         .manual-zikr-group { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 15px; }
         .manual-zikr-input { width: 100px !important; text-align: center; }
 
-        /* --- HESAPLAMA (DÜZELTİLDİ) --- */
-        .calculator-card { padding: 20px; }
-        .calc-row { 
-            background-color: var(--calc-box-bg); 
-            padding: 0; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            border: 1px solid var(--border-color);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-        }
-        .calc-header { 
-            background-color: var(--calc-header-bg); 
-            color: var(--calc-header-text); 
-            padding: 12px; 
-            text-align: center; 
-            font-weight: bold; 
-            font-size: 1.1rem; 
-        }
-        .calc-body { 
-            padding: 15px; 
-            display: flex; 
-            flex-wrap: wrap; /* Mobilde alt alta, webde yan yana */
-            gap: 15px; 
-            justify-content: center;
-        }
-        .calc-item { 
-            flex: 1 1 100%; /* Mobilde tam genişlik */
-            min-width: 0; /* Taşmayı önle */
-        }
-        /* Tablet ve üstü için yan yana */
-        @media (min-width: 576px) {
-            .calc-item { flex: 1; }
-        }
-        
-        .calc-label-small { 
-            font-size: 0.85rem; 
-            font-weight: 600; 
-            display: block; 
-            margin-bottom: 5px; 
-            color: var(--text-color); 
-            white-space: nowrap; /* Yazı kırılmasın */
-        }
-        .calc-result-input { 
-            font-weight: bold; color: #d9534f; text-align: center; font-size: 1.1rem; 
-            background-color: var(--input-bg); border: 1px solid var(--border-color); 
-            width: 100%;
-        }
+        /* --- HESAPLAMA --- */
+        .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); overflow: hidden; }
+        .calc-header { background-color: var(--calc-header-bg); color: var(--calc-header-text); padding: 10px; text-align: center; font-weight: bold; font-size: 1.1rem; }
+        .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .calc-item { flex: 1; min-width: 150px; text-align: center; }
+        .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
+        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.1rem; background-color: var(--input-bg); border: 1px solid var(--border-color); }
 
         /* DİĞER */
         .history-row-up td { background-color: #d1e7dd !important; color: #0f5132 !important; }
         .history-row-down td { background-color: #f8d7da !important; color: #842029 !important; }
         body.dark-mode .history-row-up td { background-color: #052c18 !important; color: #75b798 !important; }
         body.dark-mode .history-row-down td { background-color: #2c0b0e !important; color: #ea868f !important; }
+        
+        /* ROZETLER (HİZALAMA DÜZELTİLDİ) */
+        .badge-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 20px; margin-bottom: 40px; }
         .badge-item { text-align: center; width: 120px; padding: 15px 10px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
         .badge-item.locked { filter: grayscale(100%); opacity: 0.5; transform: scale(0.9); } 
         .badge-icon { font-size: 2.5rem; display: block; margin-bottom: 5px; }
@@ -208,7 +154,7 @@
         .success-msg { animation: bounceIn 0.5s; font-size: 1.2rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
     </style>
 </head>
-<body>
+<body ontouchstart=""> <!-- iOS Active State Fix -->
 
 <div id="customModal" class="custom-modal-overlay">
     <div class="custom-modal">
@@ -228,7 +174,7 @@
     </div>
 </div>
 
-<div id="app-wrapper" class="wrapper hidden">
+<div id="app-wrapper" class="wrapper" style="display:none;">
     <nav id="sidebar">
         <div class="p-4 text-center" style="background: rgba(0,0,0,0.1);">
             <h4 class="fw-bold"><i class="fas fa-kaaba me-2"></i>Takip</h4>
@@ -249,7 +195,7 @@
         <button class="btn btn-success mb-3 d-md-none" onclick="toggleSidebar()"><i class="fas fa-bars"></i> Menü</button>
 
         <!-- DASHBOARD -->
-        <div id="section-dashboard" class="section-panel active">
+        <div id="section-dashboard">
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
                     <div id="goalCard" class="goal-card">
@@ -317,13 +263,13 @@
         </div>
 
         <!-- TESBİHAT -->
-        <div id="section-tesbihat" class="section-panel hidden">
+        <div id="section-tesbihat" class="d-none">
             <h3 class="app-header">Tesbihat ve Zikir</h3>
             <div class="row g-4" id="tesbihatContainer"></div>
         </div>
 
         <!-- HESAPLAMA SİHİRBAZI -->
-        <div id="section-calculator" class="section-panel hidden">
+        <div id="section-calculator" class="d-none">
             <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
             <div class="row justify-content-center">
                 <div class="col-lg-10">
@@ -332,7 +278,6 @@
                             <i class="fas fa-info-circle me-2"></i>
                             Lütfen <strong>Buluğ Çağı</strong> (Sorumluluk Başlangıcı) ve <strong>Düzenli Namaza Başlama</strong> tarihlerinizi giriniz.
                         </div>
-
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
                                 <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
@@ -341,9 +286,7 @@
                                 <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala
                             </button>
                         </div>
-
                         <div id="calcRowsContainer"></div>
-
                         <hr class="my-4">
                         <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()">
                             <i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar
@@ -357,7 +300,6 @@
 </div>
 
 <script>
-    // Sidebar & Modal
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('active');
         document.getElementById('overlay').classList.toggle('active');
@@ -375,15 +317,16 @@
     }
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
 
-    // PWA & Libraries
+    // PWA
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ "name": "İbadet Takip", "short_name": "İbadet", "start_url": ".", "display": "standalone", "background_color": "#f8f9fa", "theme_color": "#198754", "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] })], {type: 'application/json'});
     document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
     if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([`self.addEventListener('install',e=>e.waitUntil(self.skipWaiting()));self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{})`], {type: 'application/javascript'})));
+    
     Chart.register(ChartDataLabels);
     const jsConfetti = new JSConfetti();
 
-    // Firebase Config
+    // Firebase Config (User Provided)
     const firebaseConfig = {
         apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
         authDomain: "kazanamazi-ser.firebaseapp.com",
@@ -421,8 +364,8 @@
 
     auth.onAuthStateChanged((user) => {
         if (user) {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('app-wrapper').classList.remove('hidden');
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
             dbRef = db.ref('users/' + user.uid + '/namazData');
             dbRef.on('value', (s) => {
@@ -431,15 +374,21 @@
                 ensureDataStructure(); checkDailyReset();
                 if (!d) saveToCloud();
                 
-                const activeId = document.querySelector('.components li.active').id.replace('menu-', '');
+                // Mevcut aktif sekmeyi yenile
+                const activeLi = document.querySelector('.components li.active');
+                const activeId = activeLi ? activeLi.id.replace('menu-', '') : 'dashboard';
                 showSection(activeId);
             });
-        } else { document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('hidden'); }
+        } else { 
+            document.getElementById('login-screen').style.display = 'flex'; 
+            document.getElementById('app-wrapper').style.display = 'none'; 
+        }
     });
 
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
     function logout() { auth.signOut(); }
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
+
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
@@ -453,20 +402,28 @@
     function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
+    // --- NAVIGASYON (GÜVENLİ) ---
     window.showSection = function(id) {
+        // Menü aktifliği
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
-        document.getElementById('menu-' + id).classList.add('active');
-        
-        document.querySelectorAll('.section-panel').forEach(el => el.classList.remove('active'));
-        const target = document.getElementById('section-' + id);
-        target.classList.remove('hidden'); 
-        target.classList.add('active'); 
+        const menuEl = document.getElementById('menu-' + id);
+        if(menuEl) menuEl.classList.add('active');
 
+        // Sadece ID ile Class Toggle (Bootstrap d-none)
+        document.getElementById('section-dashboard').classList.add('d-none');
+        document.getElementById('section-tesbihat').classList.add('d-none');
+        document.getElementById('section-calculator').classList.add('d-none');
+
+        const target = document.getElementById('section-' + id);
+        if(target) target.classList.remove('d-none');
+
+        // Mobilde menü kapat
         if(window.innerWidth < 768) {
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');
         }
 
+        // VERİYİ YENİLE
         if(id === 'dashboard') renderApp();
         if(id === 'tesbihat') renderTesbihat();
         if(id === 'calculator') renderCalculatorRows();
@@ -493,7 +450,6 @@
     window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
     
     const BADGES = [{id:1000,title:"Başlangıç",icon:"🎗️", desc:"1.000 Namaz"},{id:5000,title:"İstikrar",icon:"🎖️", desc:"5.000 Namaz"},{id:10000,title:"Yıldız",icon:"⭐", desc:"10.000 Namaz"},{id:25000,title:"Şampiyon",icon:"🏆", desc:"25.000 Namaz"},{id:50000,title:"Efsane",icon:"👑", desc:"50.000 Namaz"}];
-
     function renderApp() {
         if(!localData.counts) return;
         document.getElementById('startDate').value = localData.startDate;
@@ -529,9 +485,9 @@
     function renderHistory() { const hb = document.getElementById('historyTableBody'); hb.innerHTML = ""; if (!localData.history) return; localData.history.forEach(r => { const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal); let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td>${r.time.split(' ')[1]}</td></tr>`; }); }
     function renderCharts(d, r) { const ctx = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [d, r], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc } }, datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => { let s = 0; c.chart.data.datasets[0].data.map(d => s += d); return (v*100 / s).toFixed(1)+"%"; } } } } }); }
 
-    // --- TESBİHAT ---
     function renderTesbihat() {
         const c = document.getElementById('tesbihatContainer'); c.innerHTML = "";
+        if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
         localData.tesbihat.forEach((item, i) => {
             let p = item.target > 0 ? (item.current / item.target) * 100 : 0;
             c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="mt-3 d-flex justify-content-center align-items-center gap-2"><small class="calc-sub-label">Hedef:</small><input type="number" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-group"><input type="number" id="manZ-${i}" class="form-control form-control-sm manual-zikr-input" placeholder="+Adet"><button class="btn btn-sm btn-outline-primary" onclick="window.addTes(${i})">Ekle</button></div></div></div>`;
@@ -542,20 +498,12 @@
     window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
 
-    // --- HESAPLAMA ---
-    const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"];
-    window.renderCalculatorRows = function() {
-        const c = document.getElementById('calcRowsContainer'); if(c.innerHTML.trim()) return;
-        prayerTypes.forEach((p, i) => {
-            c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><small class="calc-label-small">Sorumluluk Başlangıcı</small><input type="date" class="form-control start-date" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Düzenli Başlama Tarihi</small><input type="date" class="form-control end-date" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Hesaplanan Gün</small><input type="number" class="form-control calc-result-input" id="res-${i}" value="0" readonly></div></div></div>`;
-        });
-    };
+    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(c.innerHTML.trim()) return; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><small class="calc-label-small">Sorumluluk Başlangıcı</small><input type="date" class="form-control start-date" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Düzenli Başlama Tarihi</small><input type="date" class="form-control end-date" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Hesaplanan Gün</small><input type="number" class="form-control calc-result-input" id="res-${i}" value="0" readonly></div></div></div>`; }); };
     window.calcRow = function(i) { const r=document.getElementById(`row-${i}`); const s=r.querySelector('.start-date').value; const e=r.querySelector('.end-date').value; if(s&&e) document.getElementById(`res-${i}`).value = Math.max(0, Math.ceil((new Date(e)-new Date(s))/(86400000))); };
     window.copyStartDate = function() { const v = document.querySelector('#row-0 .start-date').value; for(let i=1;i<5;i++) { document.querySelector(`#row-${i} .start-date`).value = v; calcRow(i); } };
     window.copyEndDate = function() { const v = document.querySelector('#row-0 .end-date').value; for(let i=1;i<5;i++) { document.querySelector(`#row-${i} .end-date`).value = v; calcRow(i); } };
     window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
 
-    // CSV & Theme
     window.downloadDataAsCSV = function() { let csv = "Namaz,Kilinacak,Kilinan\n"; localData.counts.forEach(c => csv += `${c.name},${c.target},${c.done}\n`); const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); link.download = "kaza_takip.csv"; link.click(); };
     window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode'); localStorage.setItem('theme', isDark ? 'dark' : 'light'); document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu"; renderApp(); };
     if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
