@@ -182,6 +182,32 @@
 
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
+
+        /* --- MOBİL ALT MENÜ (Bottom Navigation) --- */
+        .bottom-nav {
+            display: none; /* Masaüstünde gizli */
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: var(--card-bg); border-top: 1px solid var(--border-color);
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1060;
+            justify-content: space-around; align-items: center;
+            padding-bottom: 10px; /* iPhone home bar boşluğu */
+        }
+        .nav-item {
+            text-align: center; color: var(--text-color); opacity: 0.6;
+            font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        .nav-item.active { color: #198754; opacity: 1; font-weight: 600; transform: translateY(-3px); }
+        .nav-item:active { transform: scale(0.9); }
+
+        /* MOBİL GÖRÜNÜM AYARLARI */
+        @media (max-width: 768px) {
+            #sidebar { display: none !important; } /* Eski menüyü mobilde gizle */
+            .btn-success.d-md-none { display: none !important; } /* Eski menü butonunu gizle */
+            .bottom-nav { display: flex; } /* Alt menüyü göster */
+            #content { padding-bottom: 90px; } /* İçerik altta kalmasın */
+        }
     </style>
 </head>
 <body>
@@ -332,11 +358,38 @@
     </div>
 </div>
 
+<!-- MOBİL ALT MENÜ HTML -->
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)">
+        <i class="fas fa-mosque"></i>
+        <span>Kaza</span>
+    </div>
+    <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)">
+        <i class="fas fa-fingerprint"></i>
+        <span>Tesbihat</span>
+    </div>
+    <div class="nav-item" onclick="showSection('calculator'); activateNav(this)">
+        <i class="fas fa-calculator"></i>
+        <span>Hesap</span>
+    </div>
+    <div class="nav-item" onclick="toggleSidebar(); /* Mobilde ayarlar menüsü olarak kullanabilirsin */">
+        <i class="fas fa-bars"></i>
+        <span>Menü</span>
+    </div>
+</div>
+
 <script>
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('active');
         document.getElementById('overlay').classList.toggle('active');
     }
+    
+    // YENİ: Mobil Navigasyon Aktif Class Yönetimi
+    function activateNav(element) {
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        if(element) element.classList.add('active');
+    }
+
     function showModal(title, message, onConfirm) {
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalMessage').innerText = message;
@@ -433,7 +486,7 @@
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         document.getElementById('menu-' + id).classList.add('active');
         
-        // Doğrudan stil ile gizle/göster (En garantisi)
+        // Doğrudan stil ile gizle/göster
         document.getElementById('section-dashboard').style.display = 'none';
         document.getElementById('section-tesbihat').style.display = 'none';
         document.getElementById('section-calculator').style.display = 'none';
@@ -444,10 +497,19 @@
             document.getElementById('sidebar').classList.remove('active');
             document.getElementById('overlay').classList.remove('active');
         }
+
+        // Mobil Navigasyon Senkronizasyonu
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        const navMap = { 'dashboard': 0, 'tesbihat': 1, 'calculator': 2 };
+        const navIndex = navMap[id];
+        if (navIndex !== undefined) {
+             const navItems = document.querySelectorAll('.nav-item');
+             if(navItems[navIndex]) navItems[navIndex].classList.add('active');
+        }
         
         if(id === 'dashboard') renderApp();
         if(id === 'tesbihat') renderTesbihat();
-        if(id === 'calculator') renderCalculatorRows(); // Tekrar çağır garanti olsun
+        if(id === 'calculator') renderCalculatorRows(); 
     };
 
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
