@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <!-- EKRAN AYARLARI GÜNCELLENDİ: viewport-fit=cover ve user-scalable serbest bırakıldı -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- EKRAN AYARI: Yan dönme ve sığdırma için en kararlı ayar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Kaza ve İbadet Takip</title>
     
     <meta name="theme-color" content="#198754">
@@ -93,12 +93,12 @@
         body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
         
         .btn-action { 
-            width: 32px; height: 32px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 2px; cursor: pointer; 
-            transition: transform 0.1s, box-shadow 0.1s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
-            /* Dokunma iyileştirmesi */
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
+            width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; margin: 0 3px; cursor: pointer; 
+            transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            font-size: 1.2rem;
         }
+        /* BASMA HİSSİ İÇİN KÜÇÜLME EFEKTİ */
         .btn-action:active { transform: scale(0.85); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
@@ -118,7 +118,7 @@
         body.dark-mode .arabic-text { color: #20c997; }
         .zikr-count { font-size: 2.8rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
         .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; }
-        .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
+        .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.05s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
         .zikr-btn:active { transform: scale(0.9); }
         .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
         .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
@@ -191,7 +191,6 @@
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
 
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
 
         /* --- MOBİL ALT MENÜ (Bottom Navigation) --- */
         .bottom-nav {
@@ -204,38 +203,52 @@
         }
         .nav-item {
             text-align: center; color: var(--text-color); opacity: 0.6;
-            font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.1s; /* Daha hızlı transition */
+            font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.1s;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            
-            /* DOKUNMA HİSSİ İYİLEŞTİRMELERİ */
-            user-select: none; /* Metin seçimini engelle */
-            -webkit-tap-highlight-color: transparent; /* Mavi kutuyu kaldır */
-            touch-action: manipulation;
+            user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
         }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        
         .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
-        
-        /* TIKLAMA EFEKTİ (Basılı Tutunca) */
-        .nav-item:active { 
-            transform: scale(0.9); 
-            background-color: rgba(0,0,0,0.05); /* Hafif gri arka plan */
-            border-radius: 10px;
-        }
+        .nav-item:active { transform: scale(0.9); background-color: rgba(0,0,0,0.05); border-radius: 10px; }
 
-        /* MOBİL GÖRÜNÜM VE YATAY EKRAN (LANDSCAPE) AYARLARI */
+        /* MOBİL GÖRÜNÜM AYARLARI */
         @media (max-width: 768px) {
             .bottom-nav { display: flex; }
             #content { padding-bottom: 90px; }
             .btn-success.d-md-none { display: none !important; }
         }
 
-        /* Yatay ekran için özel ayar (Telefon yan çevrilince) */
-        @media (max-width: 900px) and (orientation: landscape) {
+        /* --- ÖZEL YATAY (LANDSCAPE) MOD DÜZENLEMELERİ --- */
+        @media (orientation: landscape) and (max-height: 500px) {
+            /* Başlığı gizle, yer kazan */
+            .app-header { display: none; }
+            
+            /* Alt menüyü incelt */
             .bottom-nav { height: 50px; padding-bottom: 0; }
             .nav-item i { font-size: 1.1rem; margin-bottom: 2px; }
-            .nav-item span { font-size: 0.65rem; }
-            #content { padding-bottom: 60px; }
+            .nav-item span { font-size: 0.6rem; }
+            
+            /* İçerik boşluğunu azalt */
+            #content { padding-top: 10px; padding-bottom: 60px; }
+            
+            /* Kartları sıkıştır */
+            .goal-card { padding: 10px; margin-bottom: 10px; }
+            .goal-content { margin: 5px 0; }
+            .goal-card h4 { font-size: 1rem; margin-bottom: 0; }
+            .streak-box { margin-top: 5px; padding: 2px 10px; font-size: 0.8rem; }
+            
+            /* Tabloyu küçült */
+            .main-table { font-size: 0.75rem; }
+            .main-table th, .main-table td { padding: 5px 2px; }
+            .btn-action { width: 28px; height: 28px; font-size: 1rem; }
+            .table-input { padding: 4px; height: 30px; font-size: 0.8rem; }
+            
+            /* Grafiği sınırla */
+            .chart-container { max-height: 200px; padding: 5px; }
+            
+            /* Rozetleri küçült */
+            .badge-item { width: 90px; padding: 8px; }
+            .badge-icon { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -406,19 +419,24 @@
 </div>
 
 <script>
+    // --- TİTREŞİM FONKSİYONU ---
+    function triggerHaptic() {
+        // Eğer cihaz destekliyorsa 10ms titret
+        if (navigator.vibrate) {
+            navigator.vibrate(10);
+        }
+    }
+
     function toggleSidebar() {
+        triggerHaptic();
         document.getElementById('sidebar').classList.toggle('active');
         document.getElementById('overlay').classList.toggle('active');
     }
     
     function activateNav(element) {
+        triggerHaptic();
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         if(element) element.classList.add('active');
-        
-        // HAPTIC FEEDBACK (TİTREŞİM)
-        if (navigator.vibrate) {
-            navigator.vibrate(15); // 15ms'lik kısa titreşim
-        }
     }
 
     function showModal(title, message, onConfirm) {
@@ -428,15 +446,13 @@
         btnGroup.innerHTML = '';
         if (onConfirm) {
             btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`;
-            document.getElementById('modalConfirmBtn').onclick = () => { onConfirm(); closeModal(); };
+            document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); };
         } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; }
         document.getElementById('customModal').style.display = 'flex';
     }
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
-    
-    // YENİ: Manifest içine orientation 'any' ve standalone eklendi
     const manifestBlob = new Blob([JSON.stringify({ 
         "name": "İbadet Takip", 
         "short_name": "İbadet", 
@@ -558,6 +574,7 @@
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
     window.upD = function(i, v) { const o = localData.counts[i].done; const n = parseInt(v) || 0; if (o !== n) { localData.counts[i].done = n; addHistory(localData.counts[i].name, o, n); saveToCloud(); renderApp(); } };
     window.chC = function(i, d) { 
+        triggerHaptic(); // TİTREŞİM EKLENDİ
         const o = localData.counts[i].done; const n = o + d; 
         if (n >= 0) { 
             localData.counts[i].done = n; 
@@ -620,9 +637,18 @@
             c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="mt-3 d-flex justify-content-center align-items-center gap-2"><small class="calc-sub-label">Hedef:</small><input type="number" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-group"><input type="number" id="manZ-${i}" class="form-control form-control-sm manual-zikr-input" placeholder="+Adet"><button class="btn btn-sm btn-outline-primary" onclick="window.addTes(${i})">Ekle</button></div></div></div>`;
         });
     }
-    window.upTes = function(i, d) { if (d > 0 && localData.tesbihat[i].current >= localData.tesbihat[i].target) { showModal("Hedef Tamamlandı!", "Günlük hedefe ulaştınız."); return; } const n = localData.tesbihat[i].current + d; if(n>=0) { localData.tesbihat[i].current = n; if(d>0 && n===localData.tesbihat[i].target) jsConfetti.addConfetti({ emojis: ['✨', '📿'] }); saveToCloud(); renderTesbihat(); } };
-    window.addTes = function(i) { const v = parseInt(document.getElementById(`manZ-${i}`).value)||0; if(v>0) { if (localData.tesbihat[i].current + v > localData.tesbihat[i].target) { showModal("Hata", "Hedefi aşacak miktar giremezsiniz."); return; } localData.tesbihat[i].current += v; saveToCloud(); renderTesbihat(); document.getElementById(`manZ-${i}`).value = ""; } };
-    window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
+    window.upTes = function(i, d) { 
+        triggerHaptic(); // TİTREŞİM EKLENDİ
+        if (d > 0 && localData.tesbihat[i].current >= localData.tesbihat[i].target) { showModal("Hedef Tamamlandı!", "Günlük hedefe ulaştınız."); return; } const n = localData.tesbihat[i].current + d; if(n>=0) { localData.tesbihat[i].current = n; if(d>0 && n===localData.tesbihat[i].target) jsConfetti.addConfetti({ emojis: ['✨', '📿'] }); saveToCloud(); renderTesbihat(); } 
+    };
+    window.addTes = function(i) { 
+        triggerHaptic(); // TİTREŞİM EKLENDİ
+        const v = parseInt(document.getElementById(`manZ-${i}`).value)||0; if(v>0) { if (localData.tesbihat[i].current + v > localData.tesbihat[i].target) { showModal("Hata", "Hedefi aşacak miktar giremezsiniz."); return; } localData.tesbihat[i].current += v; saveToCloud(); renderTesbihat(); document.getElementById(`manZ-${i}`).value = ""; } 
+    };
+    window.resTes = function(i) { 
+        // Titreşim showModal içinde tetikleniyor
+        showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); 
+    };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
 
     const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"];
