@@ -37,11 +37,8 @@
         }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; }
 
-        /* --- OVERLAY (MENÜ DIŞINA TIKLAMA İÇİN) --- */
-        #overlay {
-            display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5);
-            z-index: 998; opacity: 0; transition: all 0.5s ease-in-out; top: 0; left: 0;
-        }
+        /* --- OVERLAY --- */
+        #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.5); z-index: 998; opacity: 0; transition: all 0.5s ease-in-out; top: 0; left: 0; }
         #overlay.active { display: block; opacity: 1; }
 
         /* --- SIDEBAR --- */
@@ -49,42 +46,46 @@
         #sidebar { 
             min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; 
             height: 100vh; transition: 0.3s; z-index: 999; 
-            position: fixed; top: 0; left: 0; /* Mobilde sabit */
-            overflow-y: auto; /* YATAY ÇEVİRİNCE KAYDIRMA İÇİN */
-            margin-left: -260px; /* Varsayılan kapalı (Mobilde) */
+            position: fixed; top: 0; left: 0; 
+            overflow-y: auto; margin-left: -260px; 
         }
-        
-        /* Desktop Görünümü */
-        @media (min-width: 769px) {
-            #sidebar { position: sticky; margin-left: 0; }
-            #sidebar.active { margin-left: -260px; }
-            #overlay { display: none !important; } /* Masaüstünde overlay yok */
-        }
-
-        /* Mobil Görünümü */
-        @media (max-width: 768px) {
-            #sidebar { margin-left: -260px; }
-            #sidebar.active { margin-left: 0; }
-        }
+        @media (min-width: 769px) { #sidebar { position: sticky; margin-left: 0; } #sidebar.active { margin-left: -260px; } #overlay { display: none !important; } }
+        @media (max-width: 768px) { #sidebar { margin-left: -260px; } #sidebar.active { margin-left: 0; } }
 
         #sidebar ul li { padding: 15px; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
-        
         #content { width: 100%; padding: 20px; min-height: 100vh; transition: 0.3s; }
-        /* Mobilde content sidebar açılınca kaymasın, overlay üstüne gelsin */
         @media (max-width: 768px) { #content { width: 100%; margin-left: 0; } }
-        
         .hidden { display: none !important; }
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- TABLO --- */
-        .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; }
-        .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); }
-        .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: top; padding: 12px 5px; }
+        /* --- TABLO (DÜZELTİLDİ) --- */
+        .table-responsive { 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
+            /* MOBİL İÇİN KRİTİK AYARLAR */
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            display: block;
+        }
+        .main-table { 
+            color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; 
+            /* Tablonun sıkışmasını engelle */
+            min-width: 650px; 
+        }
+        
+        .main-table thead th { 
+            background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; 
+            padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); 
+        }
+        .main-table tbody td { 
+            background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); 
+            text-align: center; vertical-align: top; padding: 12px 5px; 
+        }
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #c9302c; }
 
         .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; }
@@ -94,18 +95,17 @@
         .btn-action { width: 32px; height: 32px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 2px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
-        /* --- KARTLAR --- */
+        /* KARTLAR */
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
-
-        /* GÜNLÜK HEDEF - TAŞMA DÜZELTMESİ */
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
         .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
+        .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* --- ZİKİR --- */
+        /* ZİKİR */
         .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .arabic-text { font-family: 'Amiri', serif; font-size: 2.2rem; color: #198754; margin: 10px 0; line-height: 1.3; }
         body.dark-mode .arabic-text { color: #20c997; }
@@ -114,7 +114,7 @@
         .manual-zikr-group { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 15px; }
         .manual-zikr-input { width: 100px !important; text-align: center; }
 
-        /* --- HESAPLAMA --- */
+        /* HESAPLAMA */
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); overflow: hidden; }
         .calc-header { background-color: var(--calc-header-bg); color: var(--calc-header-text); padding: 10px; text-align: center; font-weight: bold; font-size: 1.1rem; }
         .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
@@ -136,7 +136,6 @@
         .badge-desc { font-size: 0.65rem; color: var(--text-color); margin-top: 5px; opacity: 0.7; }
         body.dark-mode .badge-title { color: #20c997; }
 
-        /* MODAL */
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: popIn 0.3s ease; }
         .custom-modal h4 { margin-bottom: 15px; color: var(--sidebar-bg); }
@@ -160,7 +159,6 @@
     </div>
 </div>
 
-<!-- Menü Kapatma Overlay -->
 <div id="overlay" onclick="toggleSidebar()"></div>
 
 <div id="login-screen">
@@ -192,12 +190,12 @@
     <div id="content">
         <button class="btn btn-success mb-3 d-md-none" onclick="toggleSidebar()"><i class="fas fa-bars"></i> Menü</button>
 
+        <!-- DASHBOARD -->
         <div id="section-dashboard">
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
                     <div id="goalCard" class="goal-card">
                         <h4>🎯 Günlük Hedef</h4>
-                        <!-- Flex-wrap eklendi: Sığmazsa alta geçer -->
                         <div class="goal-content">
                             <span class="fs-5">Bugün</span>
                             <strong class="fs-1" id="dailyCountDisplay">0</strong>
@@ -260,11 +258,13 @@
             </div>
         </div>
 
+        <!-- TESBİHAT -->
         <div id="section-tesbihat" class="hidden">
             <h3 class="app-header">Tesbihat ve Zikir</h3>
             <div class="row g-4" id="tesbihatContainer"></div>
         </div>
 
+        <!-- HESAPLAMA -->
         <div id="section-calculator" class="hidden">
             <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
             <div class="row justify-content-center">
@@ -316,11 +316,11 @@
     }
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
 
-    // PWA & CONFIG
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ "name": "İbadet Takip", "short_name": "İbadet", "start_url": ".", "display": "standalone", "background_color": "#f8f9fa", "theme_color": "#198754", "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] })], {type: 'application/json'});
     document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
     if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([`self.addEventListener('install',e=>e.waitUntil(self.skipWaiting()));self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{})`], {type: 'application/javascript'})));
+    
     Chart.register(ChartDataLabels);
     const jsConfetti = new JSConfetti();
 
@@ -379,6 +379,7 @@
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
     function logout() { auth.signOut(); }
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
+
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
@@ -400,7 +401,8 @@
             localData.counts[i].done = n; 
             if (d > 0) {
                 localData.daily.counts[i]++;
-                if (localData.daily.counts.reduce((a, b) => a + b, 0) === localData.daily.target) jsConfetti.addConfetti();
+                const ct = localData.daily.counts.reduce((a, b) => a + b, 0);
+                if (ct === localData.daily.target) jsConfetti.addConfetti();
                 const today = getCurrentDateSimple(), yesterday = getYesterdayDateSimple();
                 if (localData.streak.lastAchievedDate !== today && localData.daily.counts.reduce((a, b) => a + b, 0) >= localData.daily.target) {
                     if (localData.streak.lastAchievedDate === yesterday) localData.streak.current++; else localData.streak.current = 1;
@@ -446,7 +448,7 @@
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } c.innerHTML += `<div class="badge-item"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
     function renderHistory() { const hb = document.getElementById('historyTableBody'); hb.innerHTML = ""; if (!localData.history) return; localData.history.forEach(r => { const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal); let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td>${r.time.split(' ')[1]}</td></tr>`; }); }
-    function renderCharts(d, r) { const ctx = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); chartCompletion = new Chart(ctx, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [d, r], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: isDark ? '#fff':'#666' } }, datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => { let s = 0; c.chart.data.datasets[0].data.map(d => s += d); return (v*100 / s).toFixed(1)+"%"; } } } } }); }
+    function renderCharts(d, r) { const ctx = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [d, r], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc } }, datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => { let s = 0; c.chart.data.datasets[0].data.map(d => s += d); return (v*100 / s).toFixed(1)+"%"; } } } } }); }
 
     function renderTesbihat() {
         const c = document.getElementById('tesbihatContainer'); c.innerHTML = "";
