@@ -2,11 +2,12 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <!-- EKRAN AYARI: Yan dönme ve sığdırma için en kararlı ayar -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- DÜZELTME: Ekran kısıtlamaları kaldırıldı, sadece genişlik ve ölçek ayarlandı -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaza ve İbadet Takip</title>
     
     <meta name="theme-color" content="#198754">
+    <!-- iOS için özel ayarlar -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" id="my-manifest">
@@ -98,7 +99,6 @@
             touch-action: manipulation; -webkit-tap-highlight-color: transparent;
             font-size: 1.2rem;
         }
-        /* BASMA HİSSİ İÇİN KÜÇÜLME EFEKTİ */
         .btn-action:active { transform: scale(0.85); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
@@ -160,21 +160,9 @@
         body.dark-mode .history-row-up td { background-color: #052c18 !important; color: #75b798 !important; }
         body.dark-mode .history-row-down td { background-color: #2c0b0e !important; color: #ea868f !important; }
         
-        /* ROZETLER (SABİT VE ORTALI - KAYMAZ) */
-        .badge-container { 
-            display: flex; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            gap: 15px; 
-            width: 100%;
-            margin: 20px auto 40px auto;
-        }
-        .badge-item { 
-            flex: 0 0 auto; 
-            text-align: center; width: 120px; padding: 15px 10px; 
-            background: var(--card-bg); border-radius: 15px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border-color); 
-        }
+        /* ROZETLER */
+        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; margin: 20px auto 40px auto; }
+        .badge-item { flex: 0 0 auto; text-align: center; width: 120px; padding: 15px 10px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
         .badge-item.locked { filter: grayscale(100%); opacity: 0.5; transform: scale(0.9); } 
         .badge-icon { font-size: 2.5rem; display: block; margin-bottom: 5px; }
         .badge-title { font-size: 0.85rem; font-weight: 600; color: #198754; line-height: 1.2; }
@@ -189,17 +177,14 @@
         .modal-btn-group { display: flex; gap: 10px; justify-content: center; }
         .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
-
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         /* --- MOBİL ALT MENÜ (Bottom Navigation) --- */
         .bottom-nav {
-            display: none; /* Masaüstünde gizli */
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
             background: var(--card-bg); border-top: 1px solid var(--border-color);
             box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1060;
-            justify-content: space-around; align-items: center;
-            padding-bottom: 10px;
+            justify-content: space-around; align-items: center; padding-bottom: 10px;
         }
         .nav-item {
             text-align: center; color: var(--text-color); opacity: 0.6;
@@ -211,44 +196,30 @@
         .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
         .nav-item:active { transform: scale(0.9); background-color: rgba(0,0,0,0.05); border-radius: 10px; }
 
-        /* MOBİL GÖRÜNÜM AYARLARI */
         @media (max-width: 768px) {
             .bottom-nav { display: flex; }
             #content { padding-bottom: 90px; }
             .btn-success.d-md-none { display: none !important; }
         }
 
-        /* --- ÖZEL YATAY (LANDSCAPE) MOD DÜZENLEMELERİ --- */
-        @media (orientation: landscape) and (max-height: 500px) {
-            /* Başlığı gizle, yer kazan */
-            .app-header { display: none; }
-            
-            /* Alt menüyü incelt */
-            .bottom-nav { height: 50px; padding-bottom: 0; }
+        /* --- YATAY EKRAN DÜZELTMELERİ (LANDSCAPE) --- */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .app-header { display: none; } /* Başlığı gizle */
+            .bottom-nav { height: 50px; padding-bottom: 0; } /* Menüyü incelt */
             .nav-item i { font-size: 1.1rem; margin-bottom: 2px; }
             .nav-item span { font-size: 0.6rem; }
+            #content { padding-top: 10px; padding-bottom: 60px; } /* Boşlukları azalt */
             
-            /* İçerik boşluğunu azalt */
-            #content { padding-top: 10px; padding-bottom: 60px; }
-            
-            /* Kartları sıkıştır */
             .goal-card { padding: 10px; margin-bottom: 10px; }
             .goal-content { margin: 5px 0; }
-            .goal-card h4 { font-size: 1rem; margin-bottom: 0; }
-            .streak-box { margin-top: 5px; padding: 2px 10px; font-size: 0.8rem; }
+            .goal-card h4 { font-size: 1rem; margin: 0; }
+            .streak-box { margin-top: 2px; padding: 2px 10px; font-size: 0.7rem; }
             
-            /* Tabloyu küçült */
-            .main-table { font-size: 0.75rem; }
-            .main-table th, .main-table td { padding: 5px 2px; }
-            .btn-action { width: 28px; height: 28px; font-size: 1rem; }
-            .table-input { padding: 4px; height: 30px; font-size: 0.8rem; }
+            .main-table { font-size: 0.7rem; }
+            .btn-action { width: 30px; height: 30px; }
+            .table-input { padding: 4px; height: 30px; }
             
-            /* Grafiği sınırla */
-            .chart-container { max-height: 200px; padding: 5px; }
-            
-            /* Rozetleri küçült */
-            .badge-item { width: 90px; padding: 8px; }
-            .badge-icon { font-size: 1.8rem; }
+            .chart-container { display: none; } /* Yatayda grafiği gizle (yer yok) */
         }
     </style>
 </head>
@@ -327,11 +298,11 @@
                     <thead>
                         <tr>
                             <th>Namaz</th>
-                            <th class="col-input-area">Kılınacak<br>Namaz</th>
-                            <th class="col-input-area">Kılınan<br>Namaz</th>
+                            <th class="col-input-area">Kılınacak</th>
+                            <th class="col-input-area">Kılınan</th>
                             <th class="col-action">İşlem</th>
-                            <th>Günlük<br>Ortalama</th>
-                            <th>Ortalama<br>Kalan Süre</th>
+                            <th>Ort.</th>
+                            <th>Kalan</th>
                         </tr>
                     </thead>
                     <tbody id="prayerTableBody"></tbody>
@@ -374,21 +345,20 @@
                     <div class="calculator-card">
                         <div class="alert alert-info small mb-4">
                             <i class="fas fa-info-circle me-2"></i>
-                            Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.
-                            Ayrıca hesaplanan gün değerini manuel olarak da değiştirebilirsiniz.
+                            Bilgilerinizi girerek kaza borcunuzu hesaplayın.
                         </div>
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
-                                <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
+                                <i class="fas fa-copy me-1"></i> Başlangıcı Kopyala
                             </button>
                             <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">
-                                <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala
+                                <i class="fas fa-copy me-1"></i> Bitişi Kopyala
                             </button>
                         </div>
                         <div id="calcRowsContainer"></div>
                         <hr class="my-4">
                         <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()">
-                            <i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar
+                            <i class="fas fa-check-circle me-2"></i> Onayla ve Aktar
                         </button>
                     </div>
                 </div>
@@ -398,7 +368,6 @@
     </div>
 </div>
 
-<!-- MOBİL ALT MENÜ HTML -->
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)">
         <i class="fas fa-mosque"></i>
@@ -412,20 +381,14 @@
         <i class="fas fa-calculator"></i>
         <span>Hesap</span>
     </div>
-    <div class="nav-item" onclick="toggleSidebar(); /* Mobilde ayarlar menüsü olarak kullanabilirsin */">
+    <div class="nav-item" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
         <span>Menü</span>
     </div>
 </div>
 
 <script>
-    // --- TİTREŞİM FONKSİYONU ---
-    function triggerHaptic() {
-        // Eğer cihaz destekliyorsa 10ms titret
-        if (navigator.vibrate) {
-            navigator.vibrate(10);
-        }
-    }
+    function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
 
     function toggleSidebar() {
         triggerHaptic();
@@ -545,7 +508,6 @@
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         document.getElementById('menu-' + id).classList.add('active');
         
-        // Doğrudan stil ile gizle/göster
         document.getElementById('section-dashboard').style.display = 'none';
         document.getElementById('section-tesbihat').style.display = 'none';
         document.getElementById('section-calculator').style.display = 'none';
@@ -557,7 +519,6 @@
             document.getElementById('overlay').classList.remove('active');
         }
 
-        // Mobil Navigasyon Senkronizasyonu
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         const navMap = { 'dashboard': 0, 'tesbihat': 1, 'calculator': 2 };
         const navIndex = navMap[id];
@@ -574,7 +535,7 @@
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
     window.upD = function(i, v) { const o = localData.counts[i].done; const n = parseInt(v) || 0; if (o !== n) { localData.counts[i].done = n; addHistory(localData.counts[i].name, o, n); saveToCloud(); renderApp(); } };
     window.chC = function(i, d) { 
-        triggerHaptic(); // TİTREŞİM EKLENDİ
+        triggerHaptic(); 
         const o = localData.counts[i].done; const n = o + d; 
         if (n >= 0) { 
             localData.counts[i].done = n; 
@@ -638,15 +599,14 @@
         });
     }
     window.upTes = function(i, d) { 
-        triggerHaptic(); // TİTREŞİM EKLENDİ
+        triggerHaptic(); 
         if (d > 0 && localData.tesbihat[i].current >= localData.tesbihat[i].target) { showModal("Hedef Tamamlandı!", "Günlük hedefe ulaştınız."); return; } const n = localData.tesbihat[i].current + d; if(n>=0) { localData.tesbihat[i].current = n; if(d>0 && n===localData.tesbihat[i].target) jsConfetti.addConfetti({ emojis: ['✨', '📿'] }); saveToCloud(); renderTesbihat(); } 
     };
     window.addTes = function(i) { 
-        triggerHaptic(); // TİTREŞİM EKLENDİ
+        triggerHaptic(); 
         const v = parseInt(document.getElementById(`manZ-${i}`).value)||0; if(v>0) { if (localData.tesbihat[i].current + v > localData.tesbihat[i].target) { showModal("Hata", "Hedefi aşacak miktar giremezsiniz."); return; } localData.tesbihat[i].current += v; saveToCloud(); renderTesbihat(); document.getElementById(`manZ-${i}`).value = ""; } 
     };
     window.resTes = function(i) { 
-        // Titreşim showModal içinde tetikleniyor
         showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); 
     };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
