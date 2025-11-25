@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <!-- EKRAN DÖNMESİ İÇİN DÜZELTME: user-scalable ve maximum-scale kaldırıldı -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- EKRAN AYARLARI GÜNCELLENDİ: viewport-fit=cover ve user-scalable serbest bırakıldı -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kaza ve İbadet Takip</title>
     
     <meta name="theme-color" content="#198754">
@@ -49,13 +49,13 @@
         .wrapper { display: flex; width: 100%; }
         #sidebar { 
             min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; 
-            height: 100vh; transition: 0.3s; z-index: 2000; /* Z-Index artırıldı (Alt menünün üstünde kalsın) */
+            height: 100vh; transition: 0.3s; z-index: 2000;
             position: fixed; top: 0; left: 0; 
             overflow-y: auto; margin-left: -260px; 
         }
         #overlay { 
             display: none; position: fixed; width: 100vw; height: 100vh; 
-            background: rgba(0,0,0,0.5); z-index: 1999; /* Sidebar'ın hemen altında */
+            background: rgba(0,0,0,0.5); z-index: 1999;
             top: 0; left: 0; backdrop-filter: blur(2px); 
         }
         #overlay.active { display: block; }
@@ -95,8 +95,11 @@
         .btn-action { 
             width: 32px; height: 32px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 2px; cursor: pointer; 
             transition: transform 0.1s, box-shadow 0.1s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+            /* Dokunma iyileştirmesi */
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
-        .btn-action:active { transform: scale(0.85) translateY(2px); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
+        .btn-action:active { transform: scale(0.85); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
         /* --- KARTLAR --- */
@@ -115,7 +118,7 @@
         body.dark-mode .arabic-text { color: #20c997; }
         .zikr-count { font-size: 2.8rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
         .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; }
-        .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.1s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
         .zikr-btn:active { transform: scale(0.9); }
         .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
         .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
@@ -197,23 +200,42 @@
             background: var(--card-bg); border-top: 1px solid var(--border-color);
             box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1060;
             justify-content: space-around; align-items: center;
-            padding-bottom: 10px; /* iPhone home bar boşluğu */
+            padding-bottom: 10px;
         }
         .nav-item {
             text-align: center; color: var(--text-color); opacity: 0.6;
-            font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.2s;
+            font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.1s; /* Daha hızlı transition */
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            
+            /* DOKUNMA HİSSİ İYİLEŞTİRMELERİ */
+            user-select: none; /* Metin seçimini engelle */
+            -webkit-tap-highlight-color: transparent; /* Mavi kutuyu kaldır */
+            touch-action: manipulation;
         }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        .nav-item.active { color: #198754; opacity: 1; font-weight: 600; transform: translateY(-3px); }
-        .nav-item:active { transform: scale(0.9); }
+        
+        .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
+        
+        /* TIKLAMA EFEKTİ (Basılı Tutunca) */
+        .nav-item:active { 
+            transform: scale(0.9); 
+            background-color: rgba(0,0,0,0.05); /* Hafif gri arka plan */
+            border-radius: 10px;
+        }
 
-        /* MOBİL GÖRÜNÜM AYARLARI */
+        /* MOBİL GÖRÜNÜM VE YATAY EKRAN (LANDSCAPE) AYARLARI */
         @media (max-width: 768px) {
-            /* DÜZELTME: Sidebar artık gizlenmiyor, sadece ekran dışına kayıyor */
-            .bottom-nav { display: flex; } /* Alt menüyü göster */
-            #content { padding-bottom: 90px; } /* İçerik altta kalmasın */
-            .btn-success.d-md-none { display: none !important; } /* Eski üst menü butonunu kaldır */
+            .bottom-nav { display: flex; }
+            #content { padding-bottom: 90px; }
+            .btn-success.d-md-none { display: none !important; }
+        }
+
+        /* Yatay ekran için özel ayar (Telefon yan çevrilince) */
+        @media (max-width: 900px) and (orientation: landscape) {
+            .bottom-nav { height: 50px; padding-bottom: 0; }
+            .nav-item i { font-size: 1.1rem; margin-bottom: 2px; }
+            .nav-item span { font-size: 0.65rem; }
+            #content { padding-bottom: 60px; }
         }
     </style>
 </head>
@@ -255,8 +277,6 @@
     </nav>
 
     <div id="content">
-        <!-- Eski buton kaldırıldı, kontrol alt menüde -->
-
         <!-- DASHBOARD -->
         <div id="section-dashboard" style="display: block;">
             <div class="row justify-content-center mb-4">
@@ -391,10 +411,14 @@
         document.getElementById('overlay').classList.toggle('active');
     }
     
-    // YENİ: Mobil Navigasyon Aktif Class Yönetimi
     function activateNav(element) {
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         if(element) element.classList.add('active');
+        
+        // HAPTIC FEEDBACK (TİTREŞİM)
+        if (navigator.vibrate) {
+            navigator.vibrate(15); // 15ms'lik kısa titreşim
+        }
     }
 
     function showModal(title, message, onConfirm) {
@@ -411,18 +435,20 @@
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
-    // DÜZELTME: Manifest içine orientation: "any" eklendi
+    
+    // YENİ: Manifest içine orientation 'any' ve standalone eklendi
     const manifestBlob = new Blob([JSON.stringify({ 
         "name": "İbadet Takip", 
         "short_name": "İbadet", 
         "start_url": ".", 
-        "display": "standalone", 
+        "display": "standalone",
         "orientation": "any", 
         "background_color": "#f8f9fa", 
         "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
     document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
+    
     if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([`self.addEventListener('install',e=>e.waitUntil(self.skipWaiting()));self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{})`], {type: 'application/javascript'})));
     Chart.register(ChartDataLabels);
     const jsConfetti = new JSConfetti();
