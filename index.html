@@ -112,7 +112,7 @@
         .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
         .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); }
         
-        /* ORTALAMA DÜZELTİLDİ (Vertical Align Middle) */
+        /* ORTALAMA DÜZELTİLDİ */
         .main-table tbody td { 
             background-color: var(--table-row-bg); 
             color: var(--text-color); 
@@ -123,7 +123,7 @@
         }
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #c9302c; vertical-align: middle; }
         
-        .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; }
+        .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; margin-bottom: 5px; }
         .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: center !important; vertical-align: middle !important; min-width: 80px; }
         body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
         
@@ -290,10 +290,13 @@
         .badge-desc { font-size: 0.6rem; color: var(--text-color); margin-top: 3px; opacity: 0.7; }
         body.dark-mode .badge-title { color: #20c997; }
 
+        /* MODAL BUTON BOŞLUĞU GÜNCELLENDİ */
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
+        /* Modal buton grubu için özel sınıf */
+        .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
 
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
@@ -864,7 +867,8 @@
             const avg = (item.done / days).toFixed(2);
             const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0);
             let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
-            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"></td><td class="col-input-area"><input type="number" class="table-input mb-2" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress" style="height: 5px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div style="font-size:10px; margin-top:2px;">%${pp.toFixed(1)}</div></td><td class="col-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td>${avg}</td><td>${estText}</td></tr>`;
+            
+            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="progress" style="height: 10px; opacity: 0;"><div class="progress-bar" style="width: 100%"></div></div><div style="font-size:10px; margin-top:2px; opacity: 0;">%100</div></td><td class="col-input-area"><input type="number" class="table-input mb-2" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress" style="height: 10px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div style="font-size:10px; margin-top:2px;">%${pp.toFixed(1)}</div></td><td class="col-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td>${avg}</td><td>${estText}</td></tr>`;
         });
         const oa = (td/days).toFixed(2);
         tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
@@ -983,9 +987,6 @@
             const box = document.createElement('div');
             box.className = 'heatmap-box';
             
-            // Kutunun içine numara ekle (1'den 30'a)
-            // Sol üst (i=29) -> 1. Gün
-            // Sağ alt (i=0) -> 30. Gün (Bugün)
             const dayNumber = 30 - i;
             box.innerText = dayNumber;
 
