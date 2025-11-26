@@ -63,7 +63,7 @@
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
         
-        /* SCROLL FIX: height 100vh yerine min-height ve overflow auto */
+        /* SCROLL FIX */
         html, body {
             height: 100%;
             overflow-x: hidden;
@@ -86,17 +86,15 @@
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
         
-        /* DESKTOP SIDEBAR */
         @media (min-width: 769px) { 
             #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; } 
             #sidebar.active { margin-left: -260px; } 
             #overlay { display: none !important; } 
             #content { width: calc(100% - 260px); margin-left: 0; } 
         }
-        /* MOBILE WRAPPER FIX - Scroll için Block yapıyoruz */
         @media (max-width: 768px) { 
             .wrapper { display: block; height: auto; }
-            #content { width: 100%; padding-bottom: 100px; /* Nav bar için extra boşluk */ } 
+            #content { width: 100%; padding-bottom: 100px; } 
         }
 
         #sidebar ul li { padding: 15px; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
@@ -108,8 +106,19 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* TABLO */
-        .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; width: 100%; display: block; }
+        /* TABLO & HORIZONTAL SCROLL FIX */
+        /* overflow-x: auto eklenerek yatay kaydırma sağlandı */
+        .table-responsive { 
+            border-radius: 12px; 
+            overflow-x: auto; 
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
+            width: 100%; 
+            display: block; 
+        }
+        
         .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
         .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; border: 1px solid var(--border-color); }
         .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: middle !important; padding: 12px 5px; }
@@ -124,17 +133,16 @@
         .btn-plus { background-color: #198754; } 
         .btn-minus { background-color: #6c757d; }
 
-        /* Mobil buton yerleşimi */
         .action-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px; /* Masaüstü boşluğu */
+            gap: 8px;
         }
         @media (max-width: 600px) {
             .action-wrapper {
-                flex-direction: column; /* Mobilde alt alta */
-                gap: 12px; /* Mobilde daha fazla boşluk */
+                flex-direction: column; 
+                gap: 12px;
             }
         }
 
@@ -174,7 +182,6 @@
         .heatmap-box { width: 24px; height: 24px; border-radius: 4px; background-color: var(--heatmap-empty); transition: transform 0.2s; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .heatmap-box:hover { transform: scale(1.2); }
         .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
-        /* BUGÜN İŞARETLEYİCİSİ */
         .heatmap-box.today-box { border: 2px solid #ffc107; position: relative; z-index: 2; transform: scale(1.1); }
 
         /* MODAL */
@@ -182,7 +189,6 @@
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
-        /* Modal butonları için grup ve boşluk */
         .modal-btn-group { display: flex; gap: 20px; justify-content: center; margin-top: 25px; }
         .btn-confirm { background: #dc3545; color: white; } 
         .btn-cancel { background: #6c757d; color: white; } 
@@ -847,7 +853,7 @@
         }
     }
 
-    // --- HEATMAP GÜNCELLENDİ: SAYILAR KALDIRILDI, BUGÜN İŞARETLENDİ ---
+    // --- HEATMAP ---
     function renderHeatmap() {
         const container = document.getElementById('heatmapContainer');
         if(!container) return;
@@ -862,7 +868,6 @@
             const box = document.createElement('div');
             box.className = 'heatmap-box';
             
-            // i=0 ise BUGÜN
             if (i === 0) {
                 box.classList.add('today-box');
                 box.title = "BUGÜN";
@@ -889,7 +894,6 @@
         const btnGroup = document.getElementById('modalButtons');
         btnGroup.innerHTML = '';
         if (onConfirm) {
-            // gap:20px CSS ile boşluk sağlandı
             btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`;
             document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); };
         } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; }
