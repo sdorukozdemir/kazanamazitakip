@@ -30,18 +30,20 @@
             --border-color: #ced4da; --modal-bg: #ffffff;
             --calc-box-bg: #f8f9fa; --calc-header-bg: #198754; --calc-header-text: #fff;
             
-            /* ZİKİR BUTON RENKLERİ (GÜNCELLENDİ: Daha belirgin gri) */
+            /* ZİKİR BUTON RENKLERİ */
             --z-btn-minus-bg: #dee2e6; --z-btn-minus-text: #212529;
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
             
             --heatmap-empty: #e9ecef; --heatmap-fill: #198754;
+            --heatmap-text-empty: #adb5bd; --heatmap-text-fill: #fff;
             --scroll-track: #e9ecef; --scroll-thumb: #ced4da;
             
             /* KUTU RENKLERİ (GÜNDÜZ) */
-            --box-target-bg: #fff8e1; --box-target-border: #ffecb3;
+            /* Hedef kutusu: Daha uyumlu soft yeşil */
+            --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724;
             --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe;
-            --stat-avg-color: #6610f2; /* Morumsu gündüz rengi */
+            --stat-avg-color: #6610f2;
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
@@ -54,12 +56,13 @@
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
             
             --heatmap-empty: #333; --heatmap-fill: #20c997;
+            --heatmap-text-empty: #555; --heatmap-text-fill: #000;
             --scroll-track: #2d2d2d; --scroll-thumb: #555;
             
             /* KUTU RENKLERİ (GECE) */
-            --box-target-bg: #3e2c00; --box-target-border: #664d03;
+            --box-target-bg: #0f2e1c; --box-target-border: #146c43; --box-target-text: #75b798;
             --box-add-bg: #052c65; --box-add-border: #084298;
-            --stat-avg-color: #d63384; /* Pembe/Lila gece rengi (Daha parlak) */
+            --stat-avg-color: #d63384; 
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
@@ -142,29 +145,28 @@
         .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
         .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
         
-        /* HEDEF KUTUSU (GÜNCELLENDİ: Altın Sarısı Tema ve Genişletildi) */
+        /* HEDEF KUTUSU (GÜNCELLENDİ) */
         .tesbihat-target-box {
             background: var(--box-target-bg);
             border: 1px solid var(--box-target-border);
             border-radius: 25px;
-            padding: 8px 25px; /* Daha geniş padding */
+            padding: 8px 25px;
             display: inline-flex;
             align-items: center;
             gap: 15px;
             margin-top: 15px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            min-width: 140px; /* Sabit minimum genişlik */
+            min-width: 150px; /* Genişlik arttırıldı */
             justify-content: space-between;
         }
-        .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; color: #b78a06; }
-        body.dark-mode .tesbihat-target-label { color: #ffc107; }
+        .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 1px; color: var(--box-target-text); }
         .tesbihat-target-input {
-            border: none; background: transparent; width: 60px;
+            border: none; background: transparent; width: 90px; /* Genişletildi */
             text-align: center; font-weight: bold; font-size: 1.2rem; color: var(--text-color);
             outline: none;
         }
 
-        /* MANUEL EKLEME KUTUSU (GÜNCELLENDİ: Mavi Tema ve Daraltıldı) */
+        /* MANUEL EKLEME KUTUSU (GÜNCELLENDİ) */
         .manual-zikr-container {
             position: relative;
             background-color: var(--box-add-bg);
@@ -174,7 +176,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 65%; /* Genişlik düşürüldü */
+            width: 45%; /* Daha da daraltıldı */
+            min-width: 130px;
             margin: 15px auto 0 auto;
             box-shadow: 0 3px 6px rgba(0,0,0,0.05);
             transition: transform 0.2s;
@@ -228,7 +231,6 @@
         .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #198754; }
         .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; }
 
-        /* GÜNLÜK ORTALAMA ÖZEL RENK AYARI */
         #statAverage { color: var(--stat-avg-color) !important; }
 
         .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
@@ -260,9 +262,11 @@
         .heatmap-box {
             width: 24px; height: 24px; border-radius: 4px; background-color: var(--heatmap-empty);
             transition: transform 0.2s; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: bold; color: var(--heatmap-text-empty);
         }
         .heatmap-box:hover { transform: scale(1.2); }
-        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
+        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); color: var(--heatmap-text-fill); }
 
         /* DİĞER */
         .history-row-up td { background-color: #d1e7dd !important; color: #0f5132 !important; }
@@ -776,25 +780,77 @@
                     if (ct === localData.daily.target) jsConfetti.addConfetti();
                 } else { delete localData.calendar[todayISO]; }
                 
-                const today = getCurrentDateSimple(), yesterday = getYesterdayDateSimple();
-                if (localData.streak.lastAchievedDate !== today && ct >= localData.daily.target) {
-                    if (localData.streak.lastAchievedDate === yesterday) localData.streak.current++; else localData.streak.current = 1;
-                    localData.streak.lastAchievedDate = today;
-                }
+                // Zinciri güncelleyen fonksiyon çağırılıyor (Manuel hesaplama yerine)
+                recalculateStreak();
             } else if (localData.daily.counts[i] > 0) {
                 localData.daily.counts[i]--;
                 const todayISO = getIsoDate(new Date());
                 if(localData.logs && localData.logs[todayISO] > 0) localData.logs[todayISO]--;
+                
+                // Hedefin altına düştüyse takvimden sil
+                const ct = localData.daily.counts.reduce((a, b) => a + b, 0);
+                if (ct < localData.daily.target) {
+                     delete localData.calendar[todayISO];
+                }
+                recalculateStreak();
             }
             addHistory(localData.counts[i].name, o, n); saveToCloud(); renderApp(); 
         } 
     };
+    
+    // ZİNCİRİ TAKVİM VERİSİNE GÖRE SIFIRDAN HESAPLAYAN FONKSİYON
+    function recalculateStreak() {
+        let currentStreak = 0;
+        const today = new Date();
+        
+        // Bugünü kontrol et
+        const isoToday = getIsoDate(today);
+        if (localData.calendar && localData.calendar[isoToday]) {
+            currentStreak++;
+        }
+        
+        // Geriye doğru kontrol et
+        for (let i = 1; i < 1000; i++) { // Max 1000 gün geriye bak
+            const d = new Date();
+            d.setDate(today.getDate() - i);
+            const iso = getIsoDate(d);
+            
+            if (localData.calendar && localData.calendar[iso]) {
+                currentStreak++;
+            } else {
+                // Eğer bugün yapılmadıysa, dün yapıldıysa zincir bozulmaz ama bugün dahil edilmez
+                // Ancak yukarıda "bugün" kontrolü yaptık.
+                // Eğer bugün BOŞ ise, ve dün DOLU ise, zincir dünden devam eder mi?
+                // Genelde streak: bugün boşsa dünkü değerdir. Bugün doluysa dünkü değer + 1'dir.
+                // Basit mantık: Kesintisiz geriye git.
+                
+                // Düzeltme: Eğer bugün boşsa, döngü ilk adımda (i=1 yani dün) başlar.
+                // Eğer bugün doluysa, zaten currentStreak 1 oldu, döngü dünden devam eder.
+                // Sorun: Bugün boşsa zincir 0 mı görünmeli yoksa dünkü zincir mi?
+                // Genelde: Bugün henüz tamamlanmadıysa "Mevcut Zincir" dünkü kadardır.
+                
+                if (i === 1 && currentStreak === 0) {
+                    // Bugün boş, dün dolu mu bakalım?
+                     // Döngü devam etsin, zinciri saymaya devam et.
+                } else {
+                    break; // Zincir koptu
+                }
+            }
+        }
+        
+        localData.streak.current = currentStreak;
+        // Last achieved date mantığına gerek kalmadı çünkü her seferinde hesaplıyoruz.
+    }
     
     window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
 
     // --- RENDER FONKSİYONLARI ---
     function renderApp() {
         if(!localData.counts) return;
+        
+        // Veri tutarlılığı için zinciri her renderda hesapla
+        recalculateStreak();
+        
         document.getElementById('startDate').value = localData.startDate;
         const c = localData.daily.counts.reduce((a,b)=>a+b,0);
         document.getElementById('dailyCountDisplay').innerText = c;
@@ -809,6 +865,7 @@
             document.getElementById('goalCard').classList.remove('success-mode'); 
             document.getElementById('goalSuccessMessage').style.display='none'; 
         }
+        
         document.getElementById('streakValue').innerText = localData.streak.current;
 
         const tbody = document.getElementById('prayerTableBody');
@@ -853,13 +910,13 @@
                         <button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button>
                     </div>
                     
-                    <!-- HEDEF KUTUSU (GÜNCELLENDİ: Altın Sarısı Tema) -->
+                    <!-- HEDEF KUTUSU (GÜNCELLENDİ) -->
                     <div class="tesbihat-target-box">
                         <span class="tesbihat-target-label">HEDEF</span>
                         <input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)">
                     </div>
                     
-                    <!-- MANUEL EKLEME KUTUSU (GÜNCELLENDİ: Mavi Tema, Daraltıldı) -->
+                    <!-- MANUEL EKLEME KUTUSU (GÜNCELLENDİ) -->
                     <div class="manual-zikr-container">
                         <input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet">
                         <button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button>
@@ -931,17 +988,27 @@
         }
     }
 
+    // HEATMAP GÜNCELLENDİ: Kronolojik Sıra + Numaralandırma
     function renderHeatmap() {
         const container = document.getElementById('heatmapContainer');
         if(!container) return;
         container.innerHTML = '';
         const today = new Date();
+        
+        // 29'dan 0'a doğru döngü: 29 gün önce (Sol Üst) -> Bugün (Sağ Alt)
         for (let i = 29; i >= 0; i--) {
             const d = new Date();
             d.setDate(today.getDate() - i);
             const isoDate = getIsoDate(d);
+            
             const box = document.createElement('div');
             box.className = 'heatmap-box';
+            
+            // Kutunun içine numara ekle (1'den 30'a kadar)
+            // i=29 ise 1. gün, i=0 ise 30. gün
+            const dayNumber = 30 - i;
+            box.innerText = dayNumber;
+
             if (localData.calendar && localData.calendar[isoDate]) {
                 box.classList.add('active');
                 box.title = `${d.toLocaleDateString('tr-TR')}: Hedef Tamamlandı`;
