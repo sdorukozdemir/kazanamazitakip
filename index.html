@@ -46,6 +46,21 @@
         
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
+        /* --- LOADING SPINNER (YENİ EKLENDİ) --- */
+        #loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2);
+            border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
         /* --- SIDEBAR --- */
         .wrapper { display: flex; width: 100%; }
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
@@ -164,6 +179,12 @@
     </style>
 </head>
 <body>
+
+<!-- LOADING OVERLAY -->
+<div id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Veriler Yükleniyor...</div>
+</div>
 
 <div id="customModal" class="custom-modal-overlay">
     <div class="custom-modal">
@@ -414,7 +435,7 @@
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v3", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -461,9 +482,11 @@
 
     auth.onAuthStateChanged((user) => {
         if (user) {
+            // Loading ekranı varsayılan olarak görünür kalır, giriş ekranı gizlenir
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
+            
             dbRef = db.ref('users/' + user.uid + '/namazData');
             dbRef.on('value', (s) => {
                 const d = s.val();
@@ -473,8 +496,18 @@
                 renderCalculatorRows();
                 const activeId = document.querySelector('.components li.active').id.replace('menu-', '');
                 showSection(activeId);
+                
+                // VERİLER YÜKLENDİ, LOADING EKRANINI GİZLE
+                const loader = document.getElementById('loading-overlay');
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.visibility = 'hidden'; }, 500);
             });
-        } else { document.getElementById('login-screen').style.display = 'flex'; document.getElementById('app-wrapper').style.display = 'none'; }
+        } else { 
+            // Giriş yapılmamışsa loading gizle, login ekranını göster
+            document.getElementById('loading-overlay').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex'; 
+            document.getElementById('app-wrapper').style.display = 'none'; 
+        }
     });
 
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
@@ -615,8 +648,7 @@
     window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
 
     window.downloadDataAsCSV = function() { 
-        // FIX: Türkçe karakterler için BOM eklendi (\uFEFF)
-        // FIX: Excel'de sütunların ayrılması için virgül yerine noktalı virgül (;) kullanıldı
+        // UTF-8 BOM ve Türkçe Excel için Noktalı Virgül
         let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; 
         localData.counts.forEach(c => {
             csv += `${c.name};${c.target};${c.done}\n`;
