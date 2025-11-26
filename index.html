@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Kaza ve İbadet Takip</title>
     
     <meta name="theme-color" content="#198754">
@@ -62,7 +62,15 @@
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
+        
+        /* SCROLL FIX: height 100vh yerine min-height ve overflow auto */
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; }
 
         /* LOADING */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
@@ -71,18 +79,32 @@
         .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* SIDEBAR */
-        .wrapper { display: flex; width: 100%; }
+        /* SIDEBAR & WRAPPER */
+        .wrapper { display: flex; width: 100%; min-height: 100vh; }
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
-        @media (min-width: 769px) { #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; } #sidebar.active { margin-left: -260px; } #overlay { display: none !important; } #content { width: calc(100% - 260px); margin-left: 0; } }
-        @media (max-width: 768px) { #content { width: 100%; } }
+        
+        /* DESKTOP SIDEBAR */
+        @media (min-width: 769px) { 
+            #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; } 
+            #sidebar.active { margin-left: -260px; } 
+            #overlay { display: none !important; } 
+            #content { width: calc(100% - 260px); margin-left: 0; } 
+        }
+        /* MOBILE WRAPPER FIX - Scroll için Block yapıyoruz */
+        @media (max-width: 768px) { 
+            .wrapper { display: block; height: auto; }
+            #content { width: 100%; padding-bottom: 100px; /* Nav bar için extra boşluk */ } 
+        }
+
         #sidebar ul li { padding: 15px; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
-        #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
+        
+        #content { padding: 20px; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
+
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
@@ -102,7 +124,7 @@
         .btn-plus { background-color: #198754; } 
         .btn-minus { background-color: #6c757d; }
 
-        /* Mobil buton yerleşimi için container */
+        /* Mobil buton yerleşimi */
         .action-wrapper {
             display: flex;
             align-items: center;
@@ -112,7 +134,7 @@
         @media (max-width: 600px) {
             .action-wrapper {
                 flex-direction: column; /* Mobilde alt alta */
-                gap: 10px; /* Mobilde dikey boşluk */
+                gap: 12px; /* Mobilde daha fazla boşluk */
             }
         }
 
@@ -147,10 +169,13 @@
         .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .prediction-icon { font-size: 2.5rem; color: #198754; margin-bottom: 10px; }
         .prediction-date { font-size: 1.5rem; font-weight: bold; color: #198754; margin: 5px 0; }
+        
         .heatmap-container { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin: 15px auto; padding: 15px; border-radius: 10px; background-color: var(--input-bg); border: 1px solid var(--border-color); max-width: 350px; }
-        .heatmap-box { width: 24px; height: 24px; border-radius: 4px; background-color: var(--heatmap-empty); transition: transform 0.2s; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: var(--heatmap-text-empty); }
+        .heatmap-box { width: 24px; height: 24px; border-radius: 4px; background-color: var(--heatmap-empty); transition: transform 0.2s; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .heatmap-box:hover { transform: scale(1.2); }
-        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); color: var(--heatmap-text-fill); }
+        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
+        /* BUGÜN İŞARETLEYİCİSİ */
+        .heatmap-box.today-box { border: 2px solid #ffc107; position: relative; z-index: 2; transform: scale(1.1); }
 
         /* MODAL */
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
@@ -180,7 +205,7 @@
         .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } }
+        @media (max-width: 768px) { .bottom-nav { display: flex; } }
         
         /* Rozetler */
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px auto 40px auto; }
@@ -708,7 +733,7 @@
             const avg = (item.done / days).toFixed(2);
             const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0);
             let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
-            // MOBİL İÇİN WRAPPER EKLENDİ
+            // MOBİL İÇİN WRAPPER KULLANIMI
             tbody.innerHTML += `<tr>
                 <td class="col-namaz">${item.name}</td>
                 <td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"></td>
@@ -822,30 +847,36 @@
         }
     }
 
-    // --- HEATMAP DÜZELTİLDİ (1'DEN 30'A) ---
+    // --- HEATMAP GÜNCELLENDİ: SAYILAR KALDIRILDI, BUGÜN İŞARETLENDİ ---
     function renderHeatmap() {
         const container = document.getElementById('heatmapContainer');
         if(!container) return;
         container.innerHTML = '';
         const today = new Date();
         
-        // 1'den 30'a kadar doldur. (1 = 29 gün önce, 30 = Bugün)
         for (let i = 29; i >= 0; i--) {
             const d = new Date();
-            d.setDate(today.getDate() - i); // i=29 ise 29 gün önce, i=0 ise bugün
+            d.setDate(today.getDate() - i);
             const isoDate = getIsoDate(d);
             
             const box = document.createElement('div');
             box.className = 'heatmap-box';
             
-            const dayNumber = 30 - i; // i=29 -> 1, i=0 -> 30
-            box.innerText = dayNumber;
+            // i=0 ise BUGÜN
+            if (i === 0) {
+                box.classList.add('today-box');
+                box.title = "BUGÜN";
+            } else if (i === 1) {
+                box.title = "Dün";
+            } else {
+                box.title = i + " gün önce";
+            }
 
             if (localData.calendar && localData.calendar[isoDate]) {
                 box.classList.add('active');
-                box.title = `${d.toLocaleDateString('tr-TR')}: Hedef Tamamlandı`;
+                box.title += ": Hedef Tamamlandı";
             } else {
-                box.title = `${d.toLocaleDateString('tr-TR')}: Tamamlanmadı`;
+                box.title += ": Tamamlanmadı";
             }
             container.appendChild(box);
         }
@@ -858,7 +889,7 @@
         const btnGroup = document.getElementById('modalButtons');
         btnGroup.innerHTML = '';
         if (onConfirm) {
-            // Butonlar arasına boşluk (css ile sağlandı: gap:20px)
+            // gap:20px CSS ile boşluk sağlandı
             btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`;
             document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); };
         } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; }
