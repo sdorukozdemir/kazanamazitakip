@@ -614,7 +614,20 @@
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
     window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
 
-    window.downloadDataAsCSV = function() { let csv = "Namaz,Kilinacak,Kilinan\n"; localData.counts.forEach(c => csv += `${c.name},${c.target},${c.done}\n`); const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); link.download = "kaza_takip.csv"; link.click(); };
+    window.downloadDataAsCSV = function() { 
+        // FIX: Türkçe karakterler için BOM eklendi (\uFEFF)
+        // FIX: Excel'de sütunların ayrılması için virgül yerine noktalı virgül (;) kullanıldı
+        let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; 
+        localData.counts.forEach(c => {
+            csv += `${c.name};${c.target};${c.done}\n`;
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); 
+        const link = document.createElement("a"); 
+        link.href = URL.createObjectURL(blob); 
+        link.download = "kaza_takip.csv"; 
+        link.click(); 
+    };
     
     // --- YENİ YEDEKLEME FONKSİYONLARI ---
     window.downloadBackupJSON = function() {
