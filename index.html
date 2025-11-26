@@ -2,14 +2,18 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <!-- EKRAN AYARI: Dönme kilidi kaldırıldı, ölçekleme serbest bırakıldı -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kaza ve İbadet Takip</title>
     
     <meta name="theme-color" content="#198754">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Dinamik Manifest JS ile oluşturuluyor -->
     <link rel="manifest" id="my-manifest">
 
+    <!-- KÜTÜPHANELER -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:wght@700&display=swap" rel="stylesheet">
@@ -23,7 +27,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <style>
-        /* --- TEMA AYARLARI --- */
+        /* --- TEMA DEĞİŞKENLERİ --- */
         :root { 
             --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
             --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
@@ -45,11 +49,17 @@
             --heatmap-empty: #333; --heatmap-fill: #20c997;
         }
         
+        /* Gece modu düzeltmeleri */
         body.dark-mode .text-muted { color: #adb5bd !important; }
+        body.dark-mode ::placeholder { color: #ccc; opacity: 0.5; }
         
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
+        body { 
+            background-color: var(--bg-color); color: var(--text-color); 
+            font-family: 'Poppins', sans-serif; transition: 0.3s; 
+            overflow-x: hidden; min-height: 100vh; 
+        }
 
-        /* --- LOADING SPINNER --- */
+        /* --- LOADING EKRANI --- */
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--bg-color); z-index: 9999;
@@ -66,8 +76,15 @@
 
         /* --- SIDEBAR --- */
         .wrapper { display: flex; width: 100%; }
-        #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
-        #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
+        #sidebar { 
+            min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; 
+            height: 100vh; transition: 0.3s; z-index: 2000; 
+            position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; 
+        }
+        #overlay { 
+            display: none; position: fixed; width: 100vw; height: 100vh; 
+            background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); 
+        }
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
 
@@ -99,11 +116,18 @@
         .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: center !important; vertical-align: middle !important; min-width: 80px; }
         body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
         
-        .btn-action { width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; margin: 0 3px; cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); touch-action: manipulation; -webkit-tap-highlight-color: transparent; font-size: 1.2rem; }
+        .btn-action { 
+            width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; margin: 0 3px; cursor: pointer; 
+            transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent; font-size: 1.2rem; 
+        }
         .btn-action:active { transform: scale(0.85); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
-        .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { 
+            border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
+            background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); 
+        }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; }
@@ -135,7 +159,6 @@
         .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
         .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; }
-        body.dark-mode ::placeholder { color: #ccc; opacity: 0.7; }
 
         /* --- YEDEKLEME & AYARLAR --- */
         .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
@@ -144,7 +167,7 @@
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
 
-        /* --- İSTATİSTİKLER KARTI --- */
+        /* --- İSTATİSTİK KARTI --- */
         .stat-card { padding: 15px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .stat-number { font-size: 1.5rem; font-weight: bold; color: #198754; margin-bottom: 5px; }
         .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
@@ -167,7 +190,6 @@
         }
         .heatmap-box:hover { transform: scale(1.2); }
         .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
-        .heatmap-label { text-align: center; font-size: 0.7rem; color: var(--text-color); margin-bottom: 5px; opacity: 0.8; }
 
         /* DİĞER */
         .history-row-up td { background-color: #d1e7dd !important; color: #0f5132 !important; }
@@ -175,6 +197,7 @@
         body.dark-mode .history-row-up td { background-color: #052c18 !important; color: #75b798 !important; }
         body.dark-mode .history-row-down td { background-color: #2c0b0e !important; color: #ea868f !important; }
         
+        /* ROZETLER */
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; margin: 20px auto 40px auto; }
         .badge-item { flex: 0 0 auto; text-align: center; width: 120px; padding: 15px 10px; background: var(--card-bg); border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
         .badge-item.locked { filter: grayscale(100%); opacity: 0.5; transform: scale(0.9); } 
@@ -183,6 +206,7 @@
         .badge-desc { font-size: 0.65rem; color: var(--text-color); margin-top: 5px; opacity: 0.7; }
         body.dark-mode .badge-title { color: #20c997; }
 
+        /* MODAL */
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: popIn 0.3s ease; }
         .custom-modal h4 { margin-bottom: 15px; color: var(--sidebar-bg); }
@@ -192,13 +216,26 @@
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
-        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        /* --- MOBİL ALT MENÜ (Bottom Navigation) --- */
+        .bottom-nav {
+            display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: var(--card-bg); border-top: 1px solid var(--border-color);
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1060;
+            justify-content: space-around; align-items: center; padding-bottom: 10px;
+        }
+        .nav-item {
+            text-align: center; color: var(--text-color); opacity: 0.6;
+            font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.1s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+        }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
         .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
         .nav-item:active { transform: scale(0.9); background-color: rgba(0,0,0,0.05); border-radius: 10px; }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
+        
+        /* --- YATAY EKRAN (LANDSCAPE) --- */
         @media (orientation: landscape) and (max-height: 600px) {
             .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; }
             .goal-card { padding: 8px; margin-bottom: 8px; } .goal-content { margin: 2px 0; } .goal-card h4 { font-size: 0.9rem; margin: 0; } .streak-box { margin-top: 2px; padding: 2px 10px; font-size: 0.7rem; }
@@ -299,7 +336,7 @@
                 </table>
             </div>
 
-            <!-- TAHMİNİ BİTİŞ KARTI (Dashboard'da Kalıyor) -->
+            <!-- TAHMİNİ BİTİŞ KARTI (Dashboard) -->
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="prediction-card h-100">
@@ -316,7 +353,6 @@
                         </div>
                         
                         <hr class="my-3" style="opacity:0.2">
-                        
                         <h6 class="text-muted small fw-bold mb-2">SON 30 GÜN ZİNCİRİ</h6>
                         <div id="heatmapContainer" class="heatmap-container"></div>
                     </div>
@@ -335,7 +371,7 @@
             </div>
         </div>
 
-        <!-- İSTATİSTİKLER (YENİ SEKME) -->
+        <!-- İSTATİSTİKLER -->
         <div id="section-stats" style="display: none;">
             <h3 class="app-header">İstatistikler & Analiz</h3>
             
@@ -502,6 +538,17 @@
 <script>
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
 
+    function hideLoader() {
+        const loader = document.getElementById('loading-overlay');
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => { loader.style.visibility = 'hidden'; }, 500);
+        }
+    }
+
+    // GÜVENLİK SİGORTASI
+    setTimeout(() => { hideLoader(); }, 5000);
+
     function toggleSidebar() {
         triggerHaptic();
         document.getElementById('sidebar').classList.toggle('active');
@@ -529,7 +576,7 @@
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v3", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v5", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -539,6 +586,7 @@
     Chart.register(ChartDataLabels);
     const jsConfetti = new JSConfetti();
 
+    // --- BURAYA KENDİ FIREBASE AYARLARINI YAPIŞTIR ---
     const firebaseConfig = {
         apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
         authDomain: "kazanamazi-ser.firebaseapp.com",
@@ -549,6 +597,8 @@
         appId: "1:951730390034:web:639f96ee859c10b0e944cb",
         measurementId: "G-5WGCDTL1RX"
     };
+    // ------------------------------------------------
+    
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
@@ -563,8 +613,7 @@
         startDate: new Date().toISOString().split('T')[0],
         daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 },
         streak: { current: 0, lastAchievedDate: "" },
-        calendar: {},
-        logs: {}, // YENİ: Günlük Loglar
+        calendar: {}, logs: {},
         counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
         tesbihat: [
             { name: "Sübhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
@@ -577,7 +626,7 @@
     let localData = JSON.parse(JSON.stringify(defaultData));
     let chartCompletion = null;
     let barChart = null;
-    let lineChart = null; // YENİ ÇİZGİ GRAFİK
+    let lineChart = null;
 
     auth.onAuthStateChanged((user) => {
         if (user) {
@@ -587,17 +636,18 @@
             
             dbRef = db.ref('users/' + user.uid + '/namazData');
             dbRef.on('value', (s) => {
-                const d = s.val();
-                if (d) localData = d;
-                ensureDataStructure(); checkDailyReset();
-                if (!d) saveToCloud();
-                renderCalculatorRows();
-                const activeId = document.querySelector('.components li.active').id.replace('menu-', '');
-                showSection(activeId);
-                
-                const loader = document.getElementById('loading-overlay');
-                loader.style.opacity = '0';
-                setTimeout(() => { loader.style.visibility = 'hidden'; }, 500);
+                try {
+                    const d = s.val();
+                    if (d) localData = d;
+                    ensureDataStructure(); 
+                    checkDailyReset();
+                    if (!d) saveToCloud();
+                    
+                    renderCalculatorRows();
+                    const activeId = document.querySelector('.components li.active') ? document.querySelector('.components li.active').id.replace('menu-', '') : 'dashboard';
+                    showSection(activeId);
+                } catch (err) { console.error("Data Error:", err); } 
+                finally { hideLoader(); }
             });
         } else { 
             document.getElementById('loading-overlay').style.display = 'none';
@@ -609,11 +659,12 @@
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
     function logout() { auth.signOut(); }
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
+    
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
         if (!localData.calendar) localData.calendar = {};
-        if (!localData.logs) localData.logs = {}; // YENİ: Log sistemi
+        if (!localData.logs) localData.logs = {}; 
         const t = new Date().toLocaleDateString('tr-TR');
         if (!localData.daily || localData.daily.date !== t) { localData.daily = { date: t, counts: [0,0,0,0,0], target: localData.daily?.target || 10 }; saveToCloud(); }
         if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
@@ -625,17 +676,16 @@
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
     window.showSection = function(id) {
+        if(!id) id = 'dashboard';
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         const menuItem = document.getElementById('menu-' + id);
         if(menuItem) menuItem.classList.add('active');
         
-        document.getElementById('section-dashboard').style.display = 'none';
-        document.getElementById('section-stats').style.display = 'none';
-        document.getElementById('section-tesbihat').style.display = 'none';
-        document.getElementById('section-calculator').style.display = 'none';
-        document.getElementById('section-settings').style.display = 'none';
+        const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings'];
+        sections.forEach(sec => { const el = document.getElementById('section-' + sec); if(el) el.style.display = 'none'; });
         
-        document.getElementById('section-' + id).style.display = 'block';
+        const activeSec = document.getElementById('section-' + id);
+        if(activeSec) activeSec.style.display = 'block';
 
         if(window.innerWidth < 768) {
             document.getElementById('sidebar').classList.remove('active');
@@ -650,10 +700,12 @@
              if(navItems[navIndex]) navItems[navIndex].classList.add('active');
         }
         
-        if(id === 'dashboard') renderApp();
-        if(id === 'stats') renderStats();
-        if(id === 'tesbihat') renderTesbihat();
-        if(id === 'calculator') renderCalculatorRows(); 
+        try {
+            if(id === 'dashboard') renderApp();
+            if(id === 'stats') renderStats();
+            if(id === 'tesbihat') renderTesbihat();
+            if(id === 'calculator') renderCalculatorRows(); 
+        } catch(e) { console.log("Render error:", e); }
     };
 
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
@@ -666,19 +718,16 @@
             if (d > 0) {
                 localData.daily.counts[i]++;
                 
-                // LOG SİSTEMİ (YENİ)
                 if (!localData.logs) localData.logs = {};
                 const todayISO = getIsoDate(new Date());
                 localData.logs[todayISO] = (localData.logs[todayISO] || 0) + 1;
 
-                // CALENDAR
                 const ct = localData.daily.counts.reduce((a, b) => a + b, 0);
                 if (ct >= localData.daily.target) {
                     localData.calendar[todayISO] = true; 
                     if (ct === localData.daily.target) jsConfetti.addConfetti();
-                } else {
-                    delete localData.calendar[todayISO]; 
-                }
+                } else { delete localData.calendar[todayISO]; }
+                
                 const today = getCurrentDateSimple(), yesterday = getYesterdayDateSimple();
                 if (localData.streak.lastAchievedDate !== today && ct >= localData.daily.target) {
                     if (localData.streak.lastAchievedDate === yesterday) localData.streak.current++; else localData.streak.current = 1;
@@ -686,7 +735,6 @@
                 }
             } else if (localData.daily.counts[i] > 0) {
                 localData.daily.counts[i]--;
-                // Logdan düş (Negatif olmasın)
                 const todayISO = getIsoDate(new Date());
                 if(localData.logs && localData.logs[todayISO] > 0) localData.logs[todayISO]--;
             }
@@ -700,13 +748,14 @@
         let totalDebt = 0;
         localData.counts.forEach(c => totalDebt += (c.target - c.done));
         
+        const elContainer = document.getElementById('prediction-container');
+        const elSuccess = document.getElementById('prediction-success');
+        if(!elContainer || !elSuccess) return;
+
         if (totalDebt <= 0) {
-            document.getElementById('prediction-container').style.display = 'none';
-            document.getElementById('prediction-success').style.display = 'block';
-            return;
+            elContainer.style.display = 'none'; elSuccess.style.display = 'block'; return;
         }
-        document.getElementById('prediction-container').style.display = 'block';
-        document.getElementById('prediction-success').style.display = 'none';
+        elContainer.style.display = 'block'; elSuccess.style.display = 'none';
 
         if (dailyTarget > 0) {
             const daysLeft = Math.ceil(totalDebt / dailyTarget);
@@ -724,6 +773,7 @@
 
     function renderHeatmap() {
         const container = document.getElementById('heatmapContainer');
+        if(!container) return;
         container.innerHTML = '';
         const today = new Date();
         for (let i = 29; i >= 0; i--) {
@@ -742,17 +792,12 @@
         }
     }
 
-    // --- İSTATİSTİK HESAPLAMALARI ---
     function calculatePeriodStats() {
-        if (!localData.logs) return { weekly: 0, monthly: 0, last7: [] };
-        
+        if (!localData.logs) return { weekly: 0, monthly: 0, last7Data: [], last7Labels: [] };
         const today = new Date();
-        let weeklyTotal = 0;
-        let monthlyTotal = 0;
-        let last7Data = [];
-        let last7Labels = [];
+        let weeklyTotal = 0, monthlyTotal = 0;
+        let last7Data = [], last7Labels = [];
 
-        // Bu Hafta (Pazartesi'den itibaren değil, son 7 gün)
         for(let i=6; i>=0; i--) {
             const d = new Date();
             d.setDate(today.getDate() - i);
@@ -763,7 +808,6 @@
             last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'}));
         }
 
-        // Bu Ay
         const currentMonth = today.getMonth();
         Object.keys(localData.logs).forEach(dateKey => {
             const d = new Date(dateKey);
@@ -771,7 +815,6 @@
                 monthlyTotal += localData.logs[dateKey];
             }
         });
-
         return { weekly: weeklyTotal, monthly: monthlyTotal, last7Data, last7Labels };
     }
 
@@ -782,28 +825,22 @@
         let maxName = "", minName = "";
 
         localData.counts.forEach(c => {
-            totalTarget += c.target;
-            totalDone += c.done;
+            totalTarget += c.target; totalDone += c.done;
             const remaining = Math.max(0, c.target - c.done);
-            labels.push(c.name);
-            remainingData.push(remaining);
-
+            labels.push(c.name); remainingData.push(remaining);
             if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; }
             if (remaining < minRemaining && remaining > 0) { minRemaining = remaining; minName = c.name; }
         });
 
-        // Period Stats
         const periodStats = calculatePeriodStats();
         document.getElementById('statWeekly').innerText = periodStats.weekly;
         document.getElementById('statMonthly').innerText = periodStats.monthly;
 
-        // Insight
         const insightEl = document.getElementById('statInsight');
         if (totalDone === 0) insightEl.innerText = "Henüz veri girişi yapılmamış.";
         else if (totalDone >= totalTarget) insightEl.innerText = "Tüm borçlar ödenmiş.";
         else insightEl.innerHTML = `En çok borç: <strong>${maxName}</strong> (${maxRemaining})`;
 
-        // CHART 1: PIE (Genel)
         const ctx1 = document.getElementById('completionChart').getContext('2d');
         if (chartCompletion) chartCompletion.destroy();
         const isDark = document.body.classList.contains('dark-mode');
@@ -817,78 +854,45 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } 
         });
 
-        // CHART 2: BAR (Kalan - GÜZELLEŞTİRİLMİŞ)
         const ctx2 = document.getElementById('barChart').getContext('2d');
         if (barChart) barChart.destroy();
-        
-        // Gradient Oluşturma
         const gradientBar = ctx2.createLinearGradient(0, 0, 0, 400);
-        gradientBar.addColorStop(0, '#ffc107');
-        gradientBar.addColorStop(1, '#fd7e14');
+        gradientBar.addColorStop(0, '#ffc107'); gradientBar.addColorStop(1, '#fd7e14');
 
         barChart = new Chart(ctx2, {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Kalan',
-                    data: remainingData,
-                    backgroundColor: gradientBar,
-                    borderRadius: 10, // Yuvarlak köşeler
-                    barThickness: 20, // İnce çubuklar
-                }]
+                datasets: [{ label: 'Kalan', data: remainingData, backgroundColor: gradientBar, borderRadius: 10, barThickness: 20 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { display: false }, 
-                    datalabels: { color: isDark ? '#fff':'#000', anchor: 'end', align: 'top', font: { weight: 'bold', family: 'Poppins' } } 
-                },
-                scales: { 
-                    y: { beginAtZero: true, grid: { display: false }, ticks:{ display: false } }, // Gridleri gizle
-                    x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } 
-                }
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, datalabels: { color: isDark ? '#fff':'#000', anchor: 'end', align: 'top', font: { weight: 'bold', family: 'Poppins' } } },
+                scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ display: false } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } }
             }
         });
 
-        // CHART 3: LINE (Trend - YENİ)
         const ctx3 = document.getElementById('lineChart').getContext('2d');
         if (lineChart) lineChart.destroy();
-        
         const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200);
-        gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)');
-        gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)');
+        gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)');
 
         lineChart = new Chart(ctx3, {
             type: 'line',
             data: {
                 labels: periodStats.last7Labels,
-                datasets: [{
-                    label: 'Günlük Kılınan',
-                    data: periodStats.last7Data,
-                    borderColor: '#198754',
-                    backgroundColor: gradientLine,
-                    tension: 0.4, // Yumuşak çizgiler
-                    fill: true,
-                    pointRadius: 3
-                }]
+                datasets: [{ label: 'Günlük Kılınan', data: periodStats.last7Data, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: 3 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false }, datalabels: { display: false } },
-                scales: { 
-                    y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, 
-                    x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } 
-                }
+                scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } }
             }
         });
     }
 
     const BADGES = [{id:1000,title:"Başlangıç",icon:"🎗️", desc:"1.000 Namaz"},{id:5000,title:"İstikrar",icon:"🎖️", desc:"5.000 Namaz"},{id:10000,title:"Yıldız",icon:"⭐", desc:"10.000 Namaz"},{id:25000,title:"Şampiyon",icon:"🏆", desc:"25.000 Namaz"},{id:50000,title:"Efsane",icon:"👑", desc:"50.000 Namaz"}];
     
-    // ... (Diğer render fonksiyonları aynı kalır) ...
     function renderHistory() { const hb = document.getElementById('historyTableBody'); hb.innerHTML = ""; if (!localData.history) return; localData.history.forEach(r => { const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal); let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td>${r.time.split(' ')[1]}</td></tr>`; }); }
     
     window.downloadDataAsCSV = function() { let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; localData.counts.forEach(c => { csv += `${c.name};${c.target};${c.done}\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kaza_takip.csv"; link.click(); };
@@ -902,6 +906,11 @@
     function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
     function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); if (localData.history.length > 20) localData.history.pop(); saveToCloud(); }
+    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><small class="calc-label-small">Sorumluluk Başlangıcı</small><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Düzenli Başlama Tarihi</small><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Hesaplanan Gün</small><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div>`; }); };
+    window.calcRow = function(i) { const r=document.getElementById(`row-${i}`); const inputs=r.querySelectorAll('input'); const s=inputs[0].value; const e=inputs[1].value; if(s&&e) document.getElementById(`res-${i}`).value = Math.max(0, Math.ceil((new Date(e)-new Date(s))/(86400000))); };
+    window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
+    window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
+    window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
 </script>
 </body>
 </html>
