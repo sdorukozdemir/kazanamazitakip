@@ -26,19 +26,29 @@
         /* --- TEMA AYARLARI --- */
         :root { 
             --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
-            --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
-            --border-color: #ced4da; --modal-bg: #ffffff;
+            --input-bg: #ffffff; --input-text: #000000; 
+            --border-color: #e9ecef; --modal-bg: #ffffff;
+            --calc-box-bg: #f8f9fa; --calc-header-bg: #198754; --calc-header-text: #fff;
             
-            /* ZİKİR BUTON RENKLERİ */
-            --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057;
+            /* TABLO RENKLERİ */
+            --zebra-odd: #ffffff;
+            --zebra-even: #f8f9fa; 
+            --table-head-bg: #198754; 
+            
+            /* GÜNCELLENEN RENKLER (Daha uyumlu) */
+            --col-namaz-bg: #2e7d32; /* Yosun Yeşili (Eski Turuncu Yerine) */
+            --table-foot-bg: #343a40; /* Antrasit Gri (Eski Kırmızı Yerine) */
+            
+            /* ZİKİR BUTONLARI */
+            --z-btn-minus-bg: #dee2e6; --z-btn-minus-text: #212529;
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
             
             /* HEATMAP */
             --heatmap-empty: #e9ecef; --heatmap-fill: #198754;
+            --heatmap-text-hover: #333;
             --heatmap-today-border: #ffc107; 
             --heatmap-today-shadow: rgba(255, 193, 7, 0.6);
-            --heatmap-text-hover: #000;
 
             --scroll-track: #e9ecef; --scroll-thumb: #ced4da;
             
@@ -49,17 +59,26 @@
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
-            --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
+            --input-bg: #2d2d2d; --input-text: #ffffff; 
             --border-color: #444; --modal-bg: #2d2d2d;
+            --calc-box-bg: #2d2d2d; --calc-header-bg: #0f5132; --calc-header-text: #ddd;
+            
+            --zebra-odd: #1e1e1e;
+            --zebra-even: #252525; 
+            --table-head-bg: #0f5132; 
+            
+            /* GECE MODU RENKLERİ */
+            --col-namaz-bg: #1b5e20; /* Koyu Yeşil */
+            --table-foot-bg: #000000; /* Tam Siyah */
             
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
             
             --heatmap-empty: #333; --heatmap-fill: #20c997;
+            --heatmap-text-hover: #fff;
             --heatmap-today-border: #ffc107;
             --heatmap-today-shadow: rgba(255, 193, 7, 0.4);
-            --heatmap-text-hover: #fff;
 
             --scroll-track: #2d2d2d; --scroll-thumb: #555;
             
@@ -111,14 +130,15 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- KLASİK TABLO DÜZENİ (SAĞLAM VE HİZALI) --- */
+        /* --- TABLO DÜZENİ --- */
         .table-responsive { 
-            border-radius: 12px; 
+            border-radius: 16px; 
             overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
             margin-bottom: 20px; 
             overflow-x: auto; 
             width: 100%; display: block; 
+            border: none; 
         }
         
         .main-table { 
@@ -129,87 +149,102 @@
         }
         
         .main-table thead th { 
-            background-color: var(--table-head); color: white; 
+            background-color: var(--table-head-bg); color: white; 
             text-align: center; vertical-align: middle; 
-            padding: 12px 5px; line-height: 1.2; 
-            border: 1px solid var(--border-color); 
+            padding: 15px 5px; 
+            border: none; 
+            font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem;
         }
+        
+        .main-table tbody tr:nth-of-type(odd) { background-color: var(--zebra-odd); }
+        .main-table tbody tr:nth-of-type(even) { background-color: var(--zebra-even); }
         
         .main-table tbody td { 
-            background-color: var(--table-row-bg); 
-            color: var(--text-color); 
-            border: 1px solid var(--border-color); 
+            border: none; 
             text-align: center; 
-            vertical-align: middle !important; /* Dikey ortalama garantisi */
-            padding: 10px 5px; 
+            vertical-align: middle !important; 
+            padding: 15px 10px; 
         }
         
+        /* Footer Rengi Güncellendi (Antrasit) */
         .main-table tfoot td { 
-            background-color: #d9534f; color: white; 
-            font-weight: bold; text-align: center; padding: 10px; 
-            border: 1px solid #c9302c; vertical-align: middle;
+            background-color: var(--table-foot-bg); color: white; 
+            font-weight: bold; text-align: center; padding: 15px; 
+            border: none; vertical-align: middle; 
         }
         
-        /* KUTULAR VE HİZALAMA */
+        /* KUTULAR */
         .table-input, .table-value-box { 
             text-align: center; font-weight: bold; 
             background-color: var(--input-bg); color: var(--input-text); 
             border: 1px solid var(--border-color); 
             width: 100%; 
-            height: 38px; /* Sabit Yükseklik */
+            padding: 0; 
             border-radius: 8px; 
             outline: none; 
-            margin: 0;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
             display: block;
-            padding: 0;
-        }
-        
-        /* Salt Okunur Kutu (Ortalama & Süre) */
-        .table-value-box {
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
+            height: 42px; 
+            margin: 0 auto;
         }
 
+        .table-value-box {
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        /* Namaz Sütunu Rengi Güncellendi (Yeşil) */
         .col-namaz { 
-            background-color: #f4a261 !important; 
-            color: black; 
+            background-color: var(--col-namaz-bg) !important; 
+            color: white !important; 
             font-weight: 600; 
             text-align: center !important; vertical-align: middle !important; 
             min-width: 80px; 
+            border: none !important;
         }
-        body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
         
-        /* BUTONLAR */
-        .col-action {
-            padding: 5px !important;
+        /* İŞLEM BUTONLARI */
+        .col-action { 
+            display: flex !important; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 12px; 
+            min-width: 100px;
+            background-color: transparent !important;
         }
-        .action-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px; /* Buton arası boşluk */
-            height: 100%;
+        
+        td.td-action {
+            background-color: transparent;
+            vertical-align: middle !important;
+            padding: 0 !important;
         }
+
         .btn-action { 
-            width: 38px; height: 38px; 
+            width: 42px; height: 42px; 
             border-radius: 8px; border: none; color: white; font-weight: bold; 
-            cursor: pointer; transition: transform 0.05s; 
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2); font-size: 1.2rem; 
-            margin: 0;
+            cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15); font-size: 1.2rem; 
+            margin: 0; 
             display: flex; justify-content: center; align-items: center;
         }
-        .btn-action:active { transform: scale(0.85); }
+        .btn-action:active { transform: scale(0.90); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
-        /* Progress Bar */
-        .progress-container {
-            height: 16px; /* Yer tutucu */
-            display: flex; flex-direction: column; justify-content: flex-end;
-            margin-top: 4px;
+        /* PROGRESS BAR (KALINLAŞTIRILDI) */
+        .progress-wrapper {
+            margin-top: 8px; /* Biraz daha aşağı */
+            height: 16px; /* Yer tutucu yükseklik */
+            margin-bottom: 0;
+            width: 100%;
         }
-        .progress { height: 6px; border-radius: 3px; background-color: #e9ecef; width: 100%; }
-        .progress-text { font-size: 9px; margin-top: 1px; line-height: 1; }
+        .progress { 
+            height: 14px; /* Kalınlık arttırıldı */
+            border-radius: 4px; 
+            background-color: #e9ecef; 
+        }
+        .progress-text { 
+            font-size: 10px; margin-top: 3px; line-height: 1; display: block; opacity: 0.8;
+        }
+        /* Görünmez Bar (Hizalama İçin) */
+        .ghost-element { visibility: hidden; opacity: 0; }
 
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
@@ -220,7 +255,7 @@
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* --- ZİKİR KARTLARI --- */
+        /* --- ZİKİR YENİ STİL --- */
         .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 10px 0; line-height: 1.3; }
         body.dark-mode .arabic-text { color: #20c997; }
@@ -264,7 +299,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 45%; min-width: 130px;
+            width: 45%; 
+            min-width: 130px;
             margin: 15px auto 0 auto;
             box-shadow: 0 3px 6px rgba(0,0,0,0.05);
             transition: transform 0.2s;
@@ -339,7 +375,7 @@
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
 
-        /* --- ZİNCİR TAKVİMİ (HEATMAP) - GÜNCELLENDİ --- */
+        /* --- ZİNCİR TAKVİMİ (HEATMAP) --- */
         .heatmap-container {
             display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; 
             margin: 15px auto; padding: 15px; border-radius: 10px; 
@@ -355,7 +391,7 @@
             color: transparent; /* Gizli Yazı */
             position: relative;
         }
-        .heatmap-box:hover { transform: scale(1.2); color: var(--heatmap-text-hover); } /* Hoverda Göster */
+        .heatmap-box:hover { transform: scale(1.2); color: var(--heatmap-text-hover); }
         .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
         
         /* Bugün kutusu */
@@ -957,7 +993,7 @@
             const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0);
             let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
             
-            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"></td><td class="col-input-area"><input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress-container"><div class="progress"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div class="progress-text">%${pp.toFixed(1)}</div></div></td><td class="col-action"><div class="action-wrapper"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></div></td><td><div class="table-value-box">${avg}</div></td><td><div class="table-value-box">${estText}</div></td></tr>`;
+            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="progress-wrapper" style="visibility: hidden;"><div class="progress"></div></div></td><td class="col-input-area"><input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress-wrapper"><div class="progress"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div class="progress-text">%${pp.toFixed(1)}</div></div></td><td class="col-action td-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td><div class="table-value-box">${avg}</div></td><td><div class="table-value-box">${estText}</div></td></tr>`;
         });
         const oa = (td/days).toFixed(2);
         tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
