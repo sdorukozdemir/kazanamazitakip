@@ -8,7 +8,6 @@
     <meta name="theme-color" content="#198754">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
     <link rel="manifest" id="my-manifest">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -34,6 +33,7 @@
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
             --heatmap-empty: #e9ecef; --heatmap-fill: #198754;
+            --scroll-track: #e9ecef; --scroll-thumb: #ced4da;
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
@@ -44,18 +44,14 @@
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
             --heatmap-empty: #333; --heatmap-fill: #20c997;
+            --scroll-track: #2d2d2d; --scroll-thumb: #555;
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
-        body.dark-mode ::placeholder { color: #ccc; opacity: 0.5; }
         
-        body { 
-            background-color: var(--bg-color); color: var(--text-color); 
-            font-family: 'Poppins', sans-serif; transition: 0.3s; 
-            overflow-x: hidden; min-height: 100vh; 
-        }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
-        /* --- LOADING EKRANI --- */
+        /* --- LOADING SPINNER --- */
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--bg-color); z-index: 9999;
@@ -71,16 +67,9 @@
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         /* --- SIDEBAR --- */
-        .wrapper { display: flex; width: 100%; justify-content: center; } /* Ortalamak için */
-        #sidebar { 
-            min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; 
-            height: 100vh; transition: 0.3s; z-index: 2000; 
-            position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; 
-        }
-        #overlay { 
-            display: none; position: fixed; width: 100vw; height: 100vh; 
-            background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); 
-        }
+        .wrapper { display: flex; width: 100%; }
+        #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
+        #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
 
@@ -96,39 +85,27 @@
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
-        /* --- DÜZELTME: İÇERİK ALANI GENİŞLİK KISITLAMASI --- */
-        #content { 
-            padding: 20px; min-height: 100vh; transition: 0.3s; 
-            width: 100%; max-width: 900px; /* Masaüstünde çok yayılmasın */
-            margin: 0 auto; /* Ortala */
-        }
+        #content { padding: 20px; min-height: 100vh; transition: 0.3s; }
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
         /* --- TABLO & KARTLAR --- */
-        .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; overflow-x: auto; display: block; }
-        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 600px; }
-        .main-table th { background-color: var(--table-head); color: white; text-align: center; padding: 12px 5px; border: 1px solid var(--border-color); }
-        .main-table td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; padding: 12px 5px; }
+        .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; display: block; }
+        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
+        .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); }
+        .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: top; padding: 12px 5px; }
         .main-table tfoot td { background-color: #d9534f; color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid #c9302c; }
         
         .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; }
-        .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: center !important; min-width: 80px; }
+        .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: center !important; vertical-align: middle !important; min-width: 80px; }
         body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
         
-        .btn-action { 
-            width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; margin: 0 3px; cursor: pointer; 
-            transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
-            touch-action: manipulation; -webkit-tap-highlight-color: transparent; font-size: 1.2rem; 
-        }
+        .btn-action { width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; margin: 0 3px; cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); touch-action: manipulation; -webkit-tap-highlight-color: transparent; font-size: 1.2rem; }
         .btn-action:active { transform: scale(0.85); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
-        .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { 
-            border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
-            background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); 
-        }
+        .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; }
@@ -160,6 +137,7 @@
         .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
         .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; }
+        body.dark-mode ::placeholder { color: #ccc; opacity: 0.7; }
 
         /* --- YEDEKLEME & AYARLAR --- */
         .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
@@ -168,10 +146,46 @@
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
 
-        /* --- İSTATİSTİK KARTI --- */
-        .stat-card { padding: 15px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .stat-number { font-size: 1.5rem; font-weight: bold; color: #198754; margin-bottom: 5px; }
-        .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+        /* --- İSTATİSTİK KARTLARI VE KAYDIRILABİLİR ALAN --- */
+        .scrolling-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+        }
+        .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
+        .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
+        .scrolling-wrapper::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 10px; }
+
+        .stat-card-scroll {
+            display: inline-block;
+            width: 160px;
+            margin-right: 15px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            white-space: normal;
+            vertical-align: top;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #198754; }
+        .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; }
+
+        /* --- ANALİZ KUTUSU (YENİ) --- */
+        .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .analysis-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .analysis-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .analysis-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; }
+        .icon-good { background: #d1e7dd; color: #0f5132; }
+        .icon-bad { background: #f8d7da; color: #842029; }
+        .analysis-text { flex: 1; }
+        .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
+        .analysis-value { font-size: 1.1rem; font-weight: bold; }
         
         /* --- TAHMİN KARTI --- */
         .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
@@ -179,22 +193,15 @@
         .prediction-date { font-size: 1.5rem; font-weight: bold; color: #198754; margin: 5px 0; }
         .prediction-days { font-size: 0.9rem; color: #6c757d; font-weight: 600; }
 
-        /* --- ZİNCİR TAKVİMİ (HEATMAP) - DÜZELTİLDİ --- */
+        /* --- ZİNCİR TAKVİMİ (HEATMAP) --- */
         .heatmap-container {
-            display: flex; 
-            flex-wrap: wrap; 
-            gap: 5px; 
-            justify-content: center; 
-            margin: 15px auto; 
-            padding: 15px; 
-            border-radius: 10px; 
-            background-color: var(--input-bg); 
-            border: 1px solid var(--border-color);
-            max-width: 350px; /* Genişliği kısıtla ki dağılmasın */
+            display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; 
+            margin: 15px auto; padding: 15px; border-radius: 10px; 
+            background-color: var(--input-bg); border: 1px solid var(--border-color);
+            max-width: 350px;
         }
         .heatmap-box {
-            width: 24px; height: 24px; border-radius: 4px; 
-            background-color: var(--heatmap-empty);
+            width: 24px; height: 24px; border-radius: 4px; background-color: var(--heatmap-empty);
             transition: transform 0.2s; cursor: pointer;
         }
         .heatmap-box:hover { transform: scale(1.2); }
@@ -206,8 +213,7 @@
         body.dark-mode .history-row-up td { background-color: #052c18 !important; color: #75b798 !important; }
         body.dark-mode .history-row-down td { background-color: #2c0b0e !important; color: #ea868f !important; }
         
-        /* ROZETLER */
-        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px auto; }
+        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; margin: 20px auto 40px auto; }
         .badge-item { width: 110px; padding: 10px; background: var(--card-bg); border-radius: 15px; border: 1px solid var(--border-color); text-align: center; }
         .badge-item.locked { filter: grayscale(100%); opacity: 0.5; }
         .badge-icon { font-size: 2rem; display: block; margin-bottom: 5px; }
@@ -215,23 +221,26 @@
         .badge-desc { font-size: 0.6rem; color: var(--text-color); margin-top: 3px; opacity: 0.7; }
         body.dark-mode .badge-title { color: #20c997; }
 
-        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
-        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: popIn 0.3s ease; }
+        .custom-modal h4 { margin-bottom: 15px; color: var(--sidebar-bg); }
+        .custom-modal p { margin-bottom: 25px; color: var(--text-color); opacity: 0.8; }
+        .modal-btn-group { display: flex; gap: 10px; justify-content: center; }
         .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
-        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
+        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
+        .nav-item:active { transform: scale(0.9); background-color: rgba(0,0,0,0.05); border-radius: 10px; }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
-        @media (orientation: landscape) and (max-height: 600px) { 
-            .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } 
-            .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } 
-            #content { padding-top: 5px; padding-bottom: 55px; } 
-            .chart-container { display: none; } 
+        @media (orientation: landscape) and (max-height: 600px) {
+            .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; }
+            .goal-card { padding: 8px; margin-bottom: 8px; } .goal-content { margin: 2px 0; } .goal-card h4 { font-size: 0.9rem; margin: 0; } .streak-box { margin-top: 2px; padding: 2px 10px; font-size: 0.7rem; }
+            .main-table { font-size: 0.7rem; } .btn-action { width: 28px; height: 28px; font-size: 1rem; } .table-input { padding: 2px; height: 28px; font-size: 0.8rem; } .col-namaz { min-width: 60px; } .chart-container { display: none; }
         }
     </style>
 </head>
@@ -340,7 +349,9 @@
                             <div class="prediction-date" id="estFinishDate">Hesaplanıyor...</div>
                             <div class="prediction-days" id="estDaysLeft">...</div>
                         </div>
-                        <div id="prediction-success" class="text-success fw-bold mt-2" style="display:none;">🎉 Borcunuz bulunmamaktadır!</div>
+                        <div id="prediction-success" class="text-success fw-bold mt-2" style="display:none;">
+                            🎉 Borcunuz bulunmamaktadır!
+                        </div>
                         
                         <hr class="my-3" style="opacity:0.2">
                         <h6 class="text-muted small fw-bold mb-2">SON 30 GÜN ZİNCİRİ</h6>
@@ -361,18 +372,74 @@
             </div>
         </div>
 
-        <!-- İSTATİSTİKLER -->
+        <!-- İSTATİSTİKLER (GÜNCELLENDİ) -->
         <div id="section-stats" style="display: none;">
             <h3 class="app-header">İstatistikler & Analiz</h3>
-            <div class="row g-3 mb-4">
-                <div class="col-6"><div class="stat-card"><div class="stat-number text-primary" id="statWeekly">0</div><div class="stat-label">BU HAFTA KILINAN</div></div></div>
-                <div class="col-6"><div class="stat-card"><div class="stat-number text-success" id="statMonthly">0</div><div class="stat-label">BU AY KILINAN</div></div></div>
+            
+            <!-- Kaydırılabilir Özet Kartları -->
+            <div class="scrolling-wrapper mb-4">
+                <div class="stat-card-scroll">
+                    <div class="stat-number text-primary" id="statWeekly">0</div>
+                    <div class="stat-label">Bu Hafta</div>
+                </div>
+                <div class="stat-card-scroll">
+                    <div class="stat-number text-success" id="statMonthly">0</div>
+                    <div class="stat-label">Bu Ay</div>
+                </div>
+                <div class="stat-card-scroll">
+                    <div class="stat-number text-info" id="stat3Months">0</div>
+                    <div class="stat-label">Son 3 Ay</div>
+                </div>
+                <div class="stat-card-scroll">
+                    <div class="stat-number text-warning" id="stat6Months">0</div>
+                    <div class="stat-label">Son 6 Ay</div>
+                </div>
+                <div class="stat-card-scroll">
+                    <div class="stat-number text-danger" id="statYearly">0</div>
+                    <div class="stat-label">Son 1 Yıl</div>
+                </div>
             </div>
-            <div class="alert alert-info small"><i class="fas fa-info-circle me-2"></i> <span id="statInsight">Analiz yapılıyor...</span></div>
+
+            <!-- Yeni Analiz Kutusu -->
+            <div class="analysis-box">
+                <div class="analysis-row">
+                    <div class="analysis-icon icon-good"><i class="fas fa-check"></i></div>
+                    <div class="analysis-text">
+                        <span class="analysis-title">En İyi Performans</span>
+                        <span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span>
+                    </div>
+                </div>
+                <div class="analysis-row">
+                    <div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div>
+                    <div class="analysis-text">
+                        <span class="analysis-title">En Çok Borç</span>
+                        <span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grafikler -->
             <div class="row g-4">
-                <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım (Kalan)</h5><canvas id="barChart" style="max-height: 300px;"></canvas></div></div>
-                <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Son 7 Gün Performansı</h5><canvas id="lineChart" style="max-height: 250px;"></canvas></div></div>
-                <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
+                <div class="col-md-12">
+                    <div class="chart-container">
+                        <h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5>
+                        <canvas id="barChart" style="max-height: 350px;"></canvas>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5 class="text-center mb-3 fw-bold">Son 7 Gün Performansı</h5>
+                        <canvas id="lineChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5 class="text-center mb-3 fw-bold">Genel Durum</h5>
+                        <canvas id="completionChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -394,12 +461,18 @@
                             Ayrıca hesaplanan gün değerini manuel olarak da değiştirebilirsiniz.
                         </div>
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
-                            <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button>
-                            <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button>
+                            <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
+                                <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">
+                                <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala
+                            </button>
                         </div>
                         <div id="calcRowsContainer"></div>
                         <hr class="my-4">
-                        <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar</button>
+                        <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()">
+                            <i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -414,7 +487,9 @@
                         <i class="fas fa-download settings-icon"></i>
                         <div class="settings-title">Yedek Al (Tavsiye Edilen)</div>
                         <div class="settings-desc">Tüm verilerinizi bir dosya olarak indirin.</div>
-                        <button class="btn btn-success w-100" onclick="downloadBackupJSON()"><i class="fas fa-file-export me-2"></i> Yedek İndir (.json)</button>
+                        <button class="btn btn-success w-100" onclick="downloadBackupJSON()">
+                            <i class="fas fa-file-export me-2"></i> Yedek İndir (.json)
+                        </button>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
@@ -422,7 +497,9 @@
                         <i class="fas fa-upload settings-icon text-primary"></i>
                         <div class="settings-title">Yedekten Dön</div>
                         <div class="settings-desc">Daha önce indirdiğiniz yedek dosyasını seçerek geri yükleyin.</div>
-                        <button class="btn btn-primary w-100" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i> Yedek Yükle</button>
+                        <button class="btn btn-primary w-100" onclick="document.getElementById('importFile').click()">
+                            <i class="fas fa-file-import me-2"></i> Yedek Yükle
+                        </button>
                         <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupJSON(this)">
                     </div>
                 </div>
@@ -431,7 +508,9 @@
                         <i class="fas fa-file-csv settings-icon text-warning"></i>
                         <div class="settings-title">Excel Raporu</div>
                         <div class="settings-desc">Sayaçlarınızı Excel'de görüntülemek için liste olarak indirin.</div>
-                        <button class="btn btn-warning w-100 text-white" onclick="downloadDataAsCSV()"><i class="fas fa-table me-2"></i> Rapor İndir (.csv)</button>
+                        <button class="btn btn-warning w-100 text-white" onclick="downloadDataAsCSV()">
+                            <i class="fas fa-table me-2"></i> Rapor İndir (.csv)
+                        </button>
                     </div>
                 </div>
                 <div class="col-12">
@@ -439,7 +518,9 @@
                         <i class="fas fa-exclamation-triangle settings-icon text-danger"></i>
                         <div class="settings-title text-danger">Verileri Sıfırla</div>
                         <div class="settings-desc">Tüm ibadet sayılarınızı ve ayarlarınızı siler. Bu işlem geri alınamaz!</div>
-                        <button class="btn btn-danger py-2 px-5" onclick="confirmResetData()"><i class="fas fa-trash-alt me-2"></i> Her Şeyi Sil ve Sıfırla</button>
+                        <button class="btn btn-danger py-2 px-5" onclick="confirmResetData()">
+                            <i class="fas fa-trash-alt me-2"></i> Her Şeyi Sil ve Sıfırla
+                        </button>
                     </div>
                 </div>
             </div>
@@ -462,12 +543,12 @@
         const loader = document.getElementById('loading-overlay');
         if (loader) { loader.style.opacity = '0'; setTimeout(() => { loader.style.visibility = 'hidden'; }, 500); }
     }
-    setTimeout(() => { hideLoader(); }, 5000); // Güvenlik Sigortası
+    setTimeout(() => { hideLoader(); }, 5000); 
 
-    // --- MANIFEST OLUŞTURMA (Dinamik) ---
+    // --- MANIFEST OLUŞTURMA ---
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v7", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v8", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -689,26 +770,31 @@
 
     function renderStats() {
         let totalTarget = 0, totalDone = 0;
-        let labels = [], remainingData = [];
-        let maxRemaining = -1, minRemaining = Infinity;
-        let maxName = "", minName = "";
+        let labels = [], remainingData = [], doneData = [];
+        let maxRemaining = -1, maxName = "", maxDone = -1, bestName = "";
 
         localData.counts.forEach(c => {
             totalTarget += c.target; totalDone += c.done;
             const remaining = Math.max(0, c.target - c.done);
-            labels.push(c.name); remainingData.push(remaining);
+            labels.push(c.name); 
+            remainingData.push(remaining);
+            doneData.push(c.done);
+
             if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; }
-            if (remaining < minRemaining && remaining > 0) { minRemaining = remaining; minName = c.name; }
+            if (c.done > maxDone) { maxDone = c.done; bestName = c.name; }
         });
 
+        // SCROLLABLE CARDS
         const periodStats = calculatePeriodStats();
         document.getElementById('statWeekly').innerText = periodStats.weekly;
         document.getElementById('statMonthly').innerText = periodStats.monthly;
+        document.getElementById('stat3Months').innerText = periodStats.months3;
+        document.getElementById('stat6Months').innerText = periodStats.months6;
+        document.getElementById('statYearly').innerText = periodStats.yearly;
 
-        const insightEl = document.getElementById('statInsight');
-        if (totalDone === 0) insightEl.innerText = "Henüz veri girişi yapılmamış.";
-        else if (totalDone >= totalTarget) insightEl.innerText = "Tüm borçlar ödenmiş.";
-        else insightEl.innerHTML = `En çok borç: <strong>${maxName}</strong> (${maxRemaining})`;
+        // SMART INSIGHT
+        document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`;
+        document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`;
 
         // PIE CHART
         const ctx1 = document.getElementById('completionChart').getContext('2d');
@@ -724,21 +810,23 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } 
         });
 
-        // BAR CHART
+        // BAR CHART (Grouped: Done vs Remaining)
         const ctx2 = document.getElementById('barChart').getContext('2d');
         if (barChart) barChart.destroy();
-        const gradientBar = ctx2.createLinearGradient(0, 0, 0, 400);
-        gradientBar.addColorStop(0, '#ffc107'); gradientBar.addColorStop(1, '#fd7e14');
+        
         barChart = new Chart(ctx2, {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{ label: 'Kalan', data: remainingData, backgroundColor: gradientBar, borderRadius: 10, barThickness: 20 }]
+                datasets: [
+                    { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 },
+                    { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 }
+                ]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false }, datalabels: { color: isDark ? '#fff':'#000', anchor: 'end', align: 'top', font: { weight: 'bold', family: 'Poppins' } } },
-                scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ display: false } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } }
+                plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } },
+                scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } }
             }
         });
 
@@ -759,6 +847,43 @@
                 scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } }
             }
         });
+    }
+
+    function calculatePeriodStats() {
+        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [] };
+        
+        const today = new Date();
+        let weeklyTotal = 0, monthlyTotal = 0, m3 = 0, m6 = 0, y1 = 0;
+        let last7Data = [], last7Labels = [];
+
+        // Last 7 Days Graph Data
+        for(let i=6; i>=0; i--) {
+            const d = new Date();
+            d.setDate(today.getDate() - i);
+            const iso = getIsoDate(d);
+            const val = localData.logs[iso] || 0;
+            weeklyTotal += val;
+            last7Data.push(val);
+            last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'}));
+        }
+
+        // Calculate Periods
+        const oneMonthAgo = new Date(); oneMonthAgo.setMonth(today.getMonth() - 1);
+        const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3);
+        const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6);
+        const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+        Object.keys(localData.logs).forEach(dateKey => {
+            const d = new Date(dateKey);
+            const val = localData.logs[dateKey];
+            
+            if(d >= oneMonthAgo) monthlyTotal += val;
+            if(d >= threeMonthsAgo) m3 += val;
+            if(d >= sixMonthsAgo) m6 += val;
+            if(d >= oneYearAgo) y1 += val;
+        });
+
+        return { weekly: weeklyTotal, monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels };
     }
 
     function renderTesbihat() {
@@ -824,32 +949,6 @@
             }
             container.appendChild(box);
         }
-    }
-
-    function calculatePeriodStats() {
-        if (!localData.logs) return { weekly: 0, monthly: 0, last7Data: [], last7Labels: [] };
-        const today = new Date();
-        let weeklyTotal = 0, monthlyTotal = 0;
-        let last7Data = [], last7Labels = [];
-
-        for(let i=6; i>=0; i--) {
-            const d = new Date();
-            d.setDate(today.getDate() - i);
-            const iso = getIsoDate(d);
-            const val = localData.logs[iso] || 0;
-            weeklyTotal += val;
-            last7Data.push(val);
-            last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'}));
-        }
-
-        const currentMonth = today.getMonth();
-        Object.keys(localData.logs).forEach(dateKey => {
-            const d = new Date(dateKey);
-            if (d.getMonth() === currentMonth && d.getFullYear() === today.getFullYear()) {
-                monthlyTotal += localData.logs[dateKey];
-            }
-        });
-        return { weekly: weeklyTotal, monthly: monthlyTotal, last7Data, last7Labels };
     }
 
     function showModal(title, message, onConfirm) {
