@@ -85,7 +85,7 @@
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
-        #content { padding: 20px; min-height: 100vh; transition: 0.3s; }
+        #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
@@ -114,7 +114,7 @@
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* --- ZİKİR --- */
+        /* --- ZİKİR YENİ STİL --- */
         .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 10px 0; line-height: 1.3; }
         body.dark-mode .arabic-text { color: #20c997; }
@@ -125,6 +125,26 @@
         .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
         .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
         .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
+        
+        /* Yeni Hedef Kutusu Tasarımı */
+        .tesbihat-target-box {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 5px 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .tesbihat-target-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; letter-spacing: 1px; }
+        .tesbihat-target-input {
+            border: none; background: transparent; width: 60px;
+            text-align: center; font-weight: bold; font-size: 1.1rem; color: var(--text-color);
+            outline: none;
+        }
+        
         .manual-zikr-group { display: flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 15px; }
         .manual-zikr-input { width: 100px !important; text-align: center; }
 
@@ -137,7 +157,6 @@
         .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
         .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; }
-        body.dark-mode ::placeholder { color: #ccc; opacity: 0.7; }
 
         /* --- YEDEKLEME & AYARLAR --- */
         .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
@@ -146,37 +165,24 @@
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
 
-        /* --- İSTATİSTİK KARTLARI VE KAYDIRILABİLİR ALAN --- */
+        /* --- İSTATİSTİK KARTLARI --- */
         .scrolling-wrapper {
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 15px;
-            scrollbar-width: thin;
-            scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+            overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch;
+            padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track);
         }
         .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
         .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
         .scrolling-wrapper::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 10px; }
 
         .stat-card-scroll {
-            display: inline-block;
-            width: 160px;
-            margin-right: 15px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 15px;
-            text-align: center;
-            white-space: normal;
-            vertical-align: top;
+            display: inline-block; width: 160px; margin-right: 15px;
+            background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px;
+            padding: 15px; text-align: center; white-space: normal; vertical-align: top;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #198754; }
         .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; }
 
-        /* --- ANALİZ KUTUSU (YENİ) --- */
         .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
         .analysis-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
         .analysis-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
@@ -186,7 +192,7 @@
         .analysis-text { flex: 1; }
         .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
         .analysis-value { font-size: 1.1rem; font-weight: bold; }
-        
+
         /* --- TAHMİN KARTI --- */
         .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .prediction-icon { font-size: 2.5rem; color: #198754; margin-bottom: 10px; }
@@ -221,26 +227,23 @@
         .badge-desc { font-size: 0.6rem; color: var(--text-color); margin-top: 3px; opacity: 0.7; }
         body.dark-mode .badge-title { color: #20c997; }
 
-        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
-        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: popIn 0.3s ease; }
-        .custom-modal h4 { margin-bottom: 15px; color: var(--sidebar-bg); }
-        .custom-modal p { margin-bottom: 25px; color: var(--text-color); opacity: 0.8; }
-        .modal-btn-group { display: flex; gap: 10px; justify-content: center; }
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); box-shadow: 0 -5px 15px rgba(0,0,0,0.05); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
-        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
+        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
-        .nav-item:active { transform: scale(0.9); background-color: rgba(0,0,0,0.05); border-radius: 10px; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
-        @media (orientation: landscape) and (max-height: 600px) {
-            .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; }
-            .goal-card { padding: 8px; margin-bottom: 8px; } .goal-content { margin: 2px 0; } .goal-card h4 { font-size: 0.9rem; margin: 0; } .streak-box { margin-top: 2px; padding: 2px 10px; font-size: 0.7rem; }
-            .main-table { font-size: 0.7rem; } .btn-action { width: 28px; height: 28px; font-size: 1rem; } .table-input { padding: 2px; height: 28px; font-size: 0.8rem; } .col-namaz { min-width: 60px; } .chart-container { display: none; }
+        @media (orientation: landscape) and (max-height: 600px) { 
+            .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } 
+            .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } 
+            #content { padding-top: 5px; padding-bottom: 55px; } 
+            .chart-container { display: none; } 
         }
     </style>
 </head>
@@ -349,9 +352,7 @@
                             <div class="prediction-date" id="estFinishDate">Hesaplanıyor...</div>
                             <div class="prediction-days" id="estDaysLeft">...</div>
                         </div>
-                        <div id="prediction-success" class="text-success fw-bold mt-2" style="display:none;">
-                            🎉 Borcunuz bulunmamaktadır!
-                        </div>
+                        <div id="prediction-success" class="text-success fw-bold mt-2" style="display:none;">🎉 Borcunuz bulunmamaktadır!</div>
                         
                         <hr class="my-3" style="opacity:0.2">
                         <h6 class="text-muted small fw-bold mb-2">SON 30 GÜN ZİNCİRİ</h6>
@@ -548,7 +549,7 @@
     // --- MANIFEST OLUŞTURMA ---
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v8", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v9", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -891,7 +892,7 @@
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
         localData.tesbihat.forEach((item, i) => {
             let p = item.target > 0 ? (item.current / item.target) * 100 : 0;
-            c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="mt-3 d-flex justify-content-center align-items-center gap-2"><small class="calc-sub-label">Hedef:</small><input type="number" class="form-control form-control-sm d-inline-block" style="width: 70px;" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-group"><input type="number" id="manZ-${i}" class="form-control form-control-sm manual-zikr-input" placeholder="+Adet"><button class="btn btn-sm btn-outline-primary" onclick="window.addTes(${i})">Ekle</button></div></div></div>`;
+            c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="mt-3 d-flex justify-content-center align-items-center gap-2"><div class="tesbihat-target-box"><span class="tesbihat-target-label">HEDEF</span><input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div></div><div class="manual-zikr-group"><input type="number" id="manZ-${i}" class="form-control form-control-sm manual-zikr-input" placeholder="+Adet"><button class="btn btn-sm btn-outline-primary" onclick="window.addTes(${i})">Ekle</button></div></div></div>`;
         });
     }
 
@@ -967,12 +968,61 @@
     // --- TESBİHAT FONKSİYONLARI ---
     window.upTes = function(i, d) { 
         triggerHaptic(); 
-        if (d > 0 && localData.tesbihat[i].current >= localData.tesbihat[i].target) { showModal("Hedef Tamamlandı!", "Günlük hedefe ulaştınız."); return; } const n = localData.tesbihat[i].current + d; if(n>=0) { localData.tesbihat[i].current = n; if(d>0 && n===localData.tesbihat[i].target) jsConfetti.addConfetti({ emojis: ['✨', '📿'] }); saveToCloud(); renderTesbihat(); } 
+        const item = localData.tesbihat[i];
+        const target = item.target;
+
+        if (d > 0 && item.current >= target) {
+            showModal("Tebrikler", "Bu tesbihat için günlük hedef tamamlandı.");
+            return;
+        }
+
+        const newVal = item.current + d;
+        if (newVal < 0) return;
+
+        item.current = newVal;
+        saveToCloud();
+        renderTesbihat(); 
+
+        if (d > 0 && newVal === target) {
+            jsConfetti.addConfetti(); 
+            setTimeout(() => {
+                showModal("Hedef Tamamlandı!", "Harika! Bu zikri tamamladınız. 📿");
+            }, 800);
+        }
     };
+
     window.addTes = function(i) { 
         triggerHaptic(); 
-        const v = parseInt(document.getElementById(`manZ-${i}`).value)||0; if(v>0) { if (localData.tesbihat[i].current + v > localData.tesbihat[i].target) { showModal("Hata", "Hedefi aşacak miktar giremezsiniz."); return; } localData.tesbihat[i].current += v; saveToCloud(); renderTesbihat(); document.getElementById(`manZ-${i}`).value = ""; } 
+        const valInput = document.getElementById(`manZ-${i}`);
+        const v = parseInt(valInput.value) || 0;
+        
+        if(v > 0) { 
+            const item = localData.tesbihat[i];
+            const target = item.target;
+            
+            // Eğer eklenen miktar hedefi geçiyorsa, sadece hedefe kadar ekle (Opsiyonel, şu an direkt ekliyor)
+            // Ancak kullanıcı hedefe ulaşmak istiyorsa:
+            
+            if (item.current >= target) {
+                showModal("Tebrikler", "Zaten hedef tamamlandı.");
+                return;
+            }
+            
+            const newVal = item.current + v;
+            item.current = newVal;
+            saveToCloud();
+            renderTesbihat(); 
+            valInput.value = "";
+
+            if (newVal >= target) {
+                 jsConfetti.addConfetti();
+                 setTimeout(() => {
+                    showModal("Hedef Tamamlandı!", "Harika! Bu zikri tamamladınız. 📿");
+                }, 800);
+            }
+        } 
     };
+    
     window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
 
