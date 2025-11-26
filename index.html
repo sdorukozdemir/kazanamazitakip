@@ -29,22 +29,37 @@
             --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
             --border-color: #ced4da; --modal-bg: #ffffff;
             --calc-box-bg: #f8f9fa; --calc-header-bg: #198754; --calc-header-text: #fff;
-            --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057;
+            
+            /* ZİKİR BUTON RENKLERİ (GÜNCELLENDİ: Daha belirgin gri) */
+            --z-btn-minus-bg: #dee2e6; --z-btn-minus-text: #212529;
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
+            
             --heatmap-empty: #e9ecef; --heatmap-fill: #198754;
             --scroll-track: #e9ecef; --scroll-thumb: #ced4da;
+            
+            /* KUTU RENKLERİ (GÜNDÜZ) */
+            --box-target-bg: #fff8e1; --box-target-border: #ffecb3;
+            --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe;
+            --stat-avg-color: #6610f2; /* Morumsu gündüz rengi */
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
             --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
             --border-color: #444; --modal-bg: #2d2d2d;
             --calc-box-bg: #2d2d2d; --calc-header-bg: #0f5132; --calc-header-text: #ddd;
+            
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
+            
             --heatmap-empty: #333; --heatmap-fill: #20c997;
             --scroll-track: #2d2d2d; --scroll-thumb: #555;
+            
+            /* KUTU RENKLERİ (GECE) */
+            --box-target-bg: #3e2c00; --box-target-border: #664d03;
+            --box-add-bg: #052c65; --box-add-border: #084298;
+            --stat-avg-color: #d63384; /* Pembe/Lila gece rengi (Daha parlak) */
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
@@ -122,56 +137,61 @@
         .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; }
         .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.05s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
         .zikr-btn:active { transform: scale(0.9); }
+        
         .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
         .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
         .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
         
-        /* Yeni Hedef Kutusu Tasarımı */
+        /* HEDEF KUTUSU (GÜNCELLENDİ: Altın Sarısı Tema ve Genişletildi) */
         .tesbihat-target-box {
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
+            background: var(--box-target-bg);
+            border: 1px solid var(--box-target-border);
             border-radius: 25px;
-            padding: 5px 20px;
+            padding: 8px 25px; /* Daha geniş padding */
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             margin-top: 15px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            min-width: 140px; /* Sabit minimum genişlik */
+            justify-content: space-between;
         }
-        .tesbihat-target-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; letter-spacing: 1px; }
+        .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; color: #b78a06; }
+        body.dark-mode .tesbihat-target-label { color: #ffc107; }
         .tesbihat-target-input {
             border: none; background: transparent; width: 60px;
-            text-align: center; font-weight: bold; font-size: 1.1rem; color: var(--text-color);
+            text-align: center; font-weight: bold; font-size: 1.2rem; color: var(--text-color);
             outline: none;
         }
 
-        /* YENİ MANUEL ZİKİR EKLEME TASARIMI */
+        /* MANUEL EKLEME KUTUSU (GÜNCELLENDİ: Mavi Tema ve Daraltıldı) */
         .manual-zikr-container {
             position: relative;
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
+            background-color: var(--box-add-bg);
+            border: 1px solid var(--box-add-border);
             border-radius: 50px;
-            padding: 4px 4px 4px 15px;
+            padding: 4px 5px 4px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 80%;
+            width: 65%; /* Genişlik düşürüldü */
             margin: 15px auto 0 auto;
             box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-            transition: border-color 0.2s;
+            transition: transform 0.2s;
         }
-        .manual-zikr-container:focus-within { border-color: #198754; }
+        .manual-zikr-container:focus-within { transform: scale(1.02); }
         .manual-zikr-input-clean {
             border: none; background: transparent; font-weight: bold; color: var(--text-color);
             width: 100%; outline: none; font-size: 0.95rem; text-align: center;
         }
         .btn-add-clean {
-            background: var(--sidebar-bg); color: white; border: none; border-radius: 50px;
-            padding: 6px 18px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            background: #0d6efd; color: white; border: none; border-radius: 50px;
+            padding: 6px 15px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
             transition: background 0.2s, transform 0.1s; white-space: nowrap;
         }
         .btn-add-clean:active { transform: scale(0.95); }
-        body.dark-mode .btn-add-clean { background: #20c997; color: #121212; }
+        .btn-add-clean:hover { background: #0b5ed7; }
+        body.dark-mode .btn-add-clean { background: #3d8bfd; color: #121212; }
 
         /* --- HESAPLAMA SİHİRBAZI --- */
         .calculator-card { padding: 20px; }
@@ -207,6 +227,9 @@
         }
         .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #198754; }
         .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; }
+
+        /* GÜNLÜK ORTALAMA ÖZEL RENK AYARI */
+        #statAverage { color: var(--stat-avg-color) !important; }
 
         .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
         .analysis-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
@@ -416,9 +439,9 @@
             <h3 class="app-header">İstatistikler & Analiz</h3>
             
             <div class="scrolling-wrapper mb-4">
-                <!-- Yeni eklenen Günlük Ortalama kartı -->
+                <!-- Günlük Ortalama (Rengi düzeltildi) -->
                 <div class="stat-card-scroll">
-                    <div class="stat-number text-dark" id="statAverage">0</div>
+                    <div class="stat-number" id="statAverage">0</div>
                     <div class="stat-label">Günlük Ortalama</div>
                 </div>
                 <div class="stat-card-scroll">
@@ -830,14 +853,13 @@
                         <button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button>
                     </div>
                     
-                    <div class="mt-3 d-flex justify-content-center align-items-center gap-2">
-                        <div class="tesbihat-target-box">
-                            <span class="tesbihat-target-label">HEDEF</span>
-                            <input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)">
-                        </div>
+                    <!-- HEDEF KUTUSU (GÜNCELLENDİ: Altın Sarısı Tema) -->
+                    <div class="tesbihat-target-box">
+                        <span class="tesbihat-target-label">HEDEF</span>
+                        <input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)">
                     </div>
                     
-                    <!-- YENİ TASARIM MANUEL EKLEME -->
+                    <!-- MANUEL EKLEME KUTUSU (GÜNCELLENDİ: Mavi Tema, Daraltıldı) -->
                     <div class="manual-zikr-container">
                         <input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet">
                         <button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button>
