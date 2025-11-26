@@ -32,10 +32,10 @@
             
             /* TABLO RENKLERİ (SOFT ZEBRA - GÜNDÜZ) */
             --zebra-odd: #ffffff;
-            --zebra-even: #f1f3f5; /* Çok hafif gri */
-            --table-head-bg: #198754; /* Yeşil Başlık */
-            --col-namaz-bg: #198754; /* Yeşil İsim Alanı */
-            --table-foot-bg: #343a40; /* Antrasit Footer */
+            --zebra-even: #f1f3f5; 
+            --table-head-bg: #198754; 
+            --col-namaz-bg: #198754; 
+            --table-foot-bg: #343a40; 
             
             /* ZİKİR BUTON RENKLERİ */
             --z-btn-minus-bg: #dee2e6; --z-btn-minus-text: #212529;
@@ -62,10 +62,10 @@
             
             /* TABLO RENKLERİ (SOFT ZEBRA - GECE) */
             --zebra-odd: #1e1e1e;
-            --zebra-even: #252525; /* Hafif açık siyah */
+            --zebra-even: #252525; 
             --table-head-bg: #0f5132; 
-            --col-namaz-bg: #0f5132; /* Koyu Yeşil */
-            --table-foot-bg: #000000; /* Tam Siyah Footer */
+            --col-namaz-bg: #0f5132; 
+            --table-foot-bg: #000000; 
             
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
@@ -133,7 +133,7 @@
             margin-bottom: 20px; 
             overflow-x: auto; -webkit-overflow-scrolling: touch; 
             width: 100%; display: block; 
-            border: none; /* Dış kenarlık yok */
+            border: none; 
         }
         
         .main-table { 
@@ -143,7 +143,6 @@
             min-width: 650px; 
         }
         
-        /* Header: Sadece alt çizgi yok, renkli zemin */
         .main-table thead th { 
             background-color: var(--table-head-bg); color: white; 
             text-align: center; vertical-align: middle; 
@@ -152,34 +151,47 @@
             font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem;
         }
         
-        /* Zebra Satırlar */
         .main-table tbody tr:nth-of-type(odd) { background-color: var(--zebra-odd); }
         .main-table tbody tr:nth-of-type(even) { background-color: var(--zebra-even); }
         
         .main-table tbody td { 
-            border: none; /* Dikey çizgileri kaldır */
+            border: none; 
             text-align: center; 
             vertical-align: middle !important; 
-            padding: 12px 5px; 
+            padding: 12px 8px; /* Padding biraz arttırıldı */
         }
         
-        /* Footer: Seçenek B (Koyu Gri) */
         .main-table tfoot td { 
             background-color: var(--table-foot-bg); color: white; 
             font-weight: bold; text-align: center; padding: 15px; 
             border: none; vertical-align: middle; 
         }
         
-        /* Input Kutuları */
-        .table-input { 
+        /* INPUT VE VALUE KUTULARI (ORTAK STİL) */
+        .table-input, .table-value-box { 
             text-align: center; font-weight: bold; 
             background-color: var(--input-bg); color: var(--input-text); 
             border: 1px solid var(--border-color); 
-            width: 100%; padding: 8px; border-radius: 8px; outline: none; 
-            margin-bottom: 5px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            width: 100%; 
+            padding: 10px 5px; /* İçerik ortalama */
+            border-radius: 8px; 
+            outline: none; 
+            margin-bottom: 5px; 
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            display: block; /* Blok olarak davran */
+            min-height: 42px; /* Sabit yükseklik */
+            line-height: 1.2;
         }
         
-        /* Namaz İsmi Sütunu: Seçenek B (Yeşil) */
+        /* .table-value-box sadece gösterim için */
+        .table-value-box {
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            margin-bottom: 0; /* Hizalama için */
+        }
+        
+        /* Namaz İsmi Sütunu */
         .col-namaz { 
             background-color: var(--col-namaz-bg) !important; 
             color: white !important; 
@@ -189,9 +201,23 @@
             border: none !important;
         }
         
-        /* Butonlar */
-        .col-action { display: flex !important; justify-content: center; align-items: center; gap: 10px; height: 100%; }
-        .btn-action { width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 2px 5px rgba(0,0,0,0.15); font-size: 1.2rem; margin: 0; }
+        /* Butonlar Alanı Düzeltme */
+        .col-action { 
+            display: flex !important; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 12px; 
+            height: 100%; 
+            min-width: 100px;
+        }
+        .btn-action { 
+            width: 40px; height: 40px; /* Biraz büyütüldü */
+            border-radius: 10px; border: none; color: white; font-weight: bold; 
+            cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15); font-size: 1.2rem; 
+            margin: 0; 
+            display: flex; justify-content: center; align-items: center;
+        }
         .btn-action:active { transform: scale(0.85); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
@@ -332,7 +358,7 @@
             max-width: 350px;
         }
         .heatmap-box {
-            width: 30px; height: 30px; border-radius: 3px; /* Hafif büyütüldü */
+            width: 30px; height: 30px; border-radius: 3px; 
             background-color: var(--heatmap-empty);
             transition: transform 0.2s; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
@@ -940,7 +966,7 @@
             const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0);
             let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
             
-            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="progress" style="height: 10px; opacity: 0;"><div class="progress-bar" style="width: 100%"></div></div><div style="font-size:10px; margin-top:2px; opacity: 0;">%100</div></td><td class="col-input-area"><input type="number" class="table-input mb-2" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress" style="height: 10px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div style="font-size:10px; margin-top:2px;">%${pp.toFixed(1)}</div></td><td class="col-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td>${avg}</td><td>${estText}</td></tr>`;
+            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="progress" style="height: 10px; opacity: 0;"><div class="progress-bar" style="width: 100%"></div></div><div style="font-size:10px; margin-top:2px; opacity: 0;">%100</div></td><td class="col-input-area"><input type="number" class="table-input mb-2" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress" style="height: 10px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div style="font-size:10px; margin-top:2px;">%${pp.toFixed(1)}</div></td><td class="col-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td><div class="table-value-box">${avg}</div></td><td><div class="table-value-box">${estText}</div></td></tr>`;
         });
         const oa = (td/days).toFixed(2);
         tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
