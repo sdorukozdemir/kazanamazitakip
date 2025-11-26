@@ -45,8 +45,7 @@
             --heatmap-empty: #333; --heatmap-fill: #20c997;
         }
         
-        /* DÜZELTME: Gece modunda okunmayan gri yazılar için */
-        body.dark-mode .text-muted { color: #ced4da !important; }
+        body.dark-mode .text-muted { color: #adb5bd !important; }
         
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
@@ -104,7 +103,7 @@
         .btn-action:active { transform: scale(0.85); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
-        .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; }
@@ -144,6 +143,11 @@
         .settings-icon { font-size: 2rem; margin-bottom: 10px; color: #198754; }
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
+
+        /* --- İSTATİSTİKLER KARTI --- */
+        .stat-card { padding: 15px; text-align: center; height: 100%; }
+        .stat-number { font-size: 1.8rem; font-weight: bold; color: #198754; }
+        .stat-label { font-size: 0.8rem; color: var(--text-color); opacity: 0.8; }
 
         /* --- TAHMİN KARTI --- */
         .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
@@ -236,6 +240,7 @@
         </div>
         <ul class="list-unstyled components p-2">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
+            <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
             <li id="menu-settings" onclick="showSection('settings')"><i class="fas fa-cog me-3"></i> Yedekleme & Ayarlar</li>
@@ -294,17 +299,9 @@
                 </table>
             </div>
 
-            <div class="row mt-4 justify-content-center align-items-stretch">
-                <!-- GRAFİK KARTI -->
-                <div class="col-md-6 mb-4">
-                    <div class="chart-container h-100">
-                        <h5 class="text-center mb-3 fw-bold">Genel Durum</h5>
-                        <canvas id="completionChart" style="max-height: 250px;"></canvas>
-                    </div>
-                </div>
-                
-                <!-- TAHMİNİ BİTİŞ KARTI -->
-                <div class="col-md-6 mb-4">
+            <!-- TAHMİNİ BİTİŞ KARTI (Dashboard'da Kalıyor) -->
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-8 col-lg-6">
                     <div class="prediction-card h-100">
                         <i class="fas fa-hourglass-half prediction-icon"></i>
                         <h5 class="fw-bold">Ne Zaman Biter?</h5>
@@ -335,6 +332,54 @@
                     <thead><tr class="table-light"><th>Namaz</th><th>Önceki</th><th>Son</th><th>Zaman</th></tr></thead>
                     <tbody id="historyTableBody"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <!-- İSTATİSTİKLER (YENİ SEKME) -->
+        <div id="section-stats" style="display: none;">
+            <h3 class="app-header">İstatistikler & Analiz</h3>
+            
+            <!-- Özet Kartları -->
+            <div class="row g-3 mb-4">
+                <div class="col-4">
+                    <div class="stat-card">
+                        <div class="stat-number" id="statTotalDone">0</div>
+                        <div class="stat-label">Kılınan</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="stat-card">
+                        <div class="stat-number text-danger" id="statTotalLeft">0</div>
+                        <div class="stat-label">Kalan</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="stat-card">
+                        <div class="stat-number text-primary" id="statPercent">0%</div>
+                        <div class="stat-label">Tamamlanan</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info small">
+                <i class="fas fa-info-circle me-2"></i> 
+                <span id="statInsight">Analiz yapılıyor...</span>
+            </div>
+
+            <!-- Grafikler -->
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5 class="text-center mb-3 fw-bold">Genel Durum</h5>
+                        <canvas id="completionChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım (Kalan)</h5>
+                        <canvas id="barChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -438,13 +483,13 @@
         <i class="fas fa-mosque"></i>
         <span>Kaza</span>
     </div>
+    <div class="nav-item" onclick="showSection('stats'); activateNav(this)">
+        <i class="fas fa-chart-pie"></i>
+        <span>İstatistik</span>
+    </div>
     <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)">
         <i class="fas fa-fingerprint"></i>
         <span>Tesbihat</span>
-    </div>
-    <div class="nav-item" onclick="showSection('calculator'); activateNav(this)">
-        <i class="fas fa-calculator"></i>
-        <span>Hesap</span>
     </div>
     <div class="nav-item" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
@@ -516,7 +561,7 @@
         startDate: new Date().toISOString().split('T')[0],
         daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 },
         streak: { current: 0, lastAchievedDate: "" },
-        calendar: {}, // YENİ: Takvim verisi
+        calendar: {}, 
         counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
         tesbihat: [
             { name: "Sübhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
@@ -528,6 +573,7 @@
     };
     let localData = JSON.parse(JSON.stringify(defaultData));
     let chartCompletion = null;
+    let barChart = null; // YENİ GRAFİK DEĞİŞKENİ
 
     auth.onAuthStateChanged((user) => {
         if (user) {
@@ -562,7 +608,7 @@
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
-        if (!localData.calendar) localData.calendar = {}; // YENİ
+        if (!localData.calendar) localData.calendar = {};
         const t = new Date().toLocaleDateString('tr-TR');
         if (!localData.daily || localData.daily.date !== t) { localData.daily = { date: t, counts: [0,0,0,0,0], target: localData.daily?.target || 10 }; saveToCloud(); }
         if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
@@ -579,6 +625,7 @@
         if(menuItem) menuItem.classList.add('active');
         
         document.getElementById('section-dashboard').style.display = 'none';
+        document.getElementById('section-stats').style.display = 'none';
         document.getElementById('section-tesbihat').style.display = 'none';
         document.getElementById('section-calculator').style.display = 'none';
         document.getElementById('section-settings').style.display = 'none';
@@ -591,7 +638,7 @@
         }
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        const navMap = { 'dashboard': 0, 'tesbihat': 1, 'calculator': 2 };
+        const navMap = { 'dashboard': 0, 'stats': 1, 'tesbihat': 2, 'calculator': 3 };
         const navIndex = navMap[id];
         if (navIndex !== undefined) {
              const navItems = document.querySelectorAll('.nav-item');
@@ -599,6 +646,7 @@
         }
         
         if(id === 'dashboard') renderApp();
+        if(id === 'stats') renderStats(); // YENİ: İstatistikleri çiz
         if(id === 'tesbihat') renderTesbihat();
         if(id === 'calculator') renderCalculatorRows(); 
     };
@@ -612,18 +660,14 @@
             localData.counts[i].done = n; 
             if (d > 0) {
                 localData.daily.counts[i]++;
-                
-                // GÜNLÜK HEDEF KONTROL VE TAKVİM GÜNCELLEME
                 const ct = localData.daily.counts.reduce((a, b) => a + b, 0);
                 const todayISO = getIsoDate(new Date());
-                
                 if (ct >= localData.daily.target) {
-                    localData.calendar[todayISO] = true; // Takvime yeşil at
+                    localData.calendar[todayISO] = true; 
                     if (ct === localData.daily.target) jsConfetti.addConfetti();
                 } else {
-                    delete localData.calendar[todayISO]; // Hedefin altındaysa sil
+                    delete localData.calendar[todayISO]; 
                 }
-
                 const today = getCurrentDateSimple(), yesterday = getYesterdayDateSimple();
                 if (localData.streak.lastAchievedDate !== today && ct >= localData.daily.target) {
                     if (localData.streak.lastAchievedDate === yesterday) localData.streak.current++; else localData.streak.current = 1;
@@ -635,7 +679,6 @@
     };
     window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
     
-    // --- TAHMİNİ BİTİŞ TARİHİ HESAPLAMA ---
     function calculateEstFinish() {
         const dailyTarget = localData.daily.target || 10;
         let totalDebt = 0;
@@ -646,7 +689,6 @@
             document.getElementById('prediction-success').style.display = 'block';
             return;
         }
-        
         document.getElementById('prediction-container').style.display = 'block';
         document.getElementById('prediction-success').style.display = 'none';
 
@@ -655,7 +697,6 @@
             const today = new Date();
             const finishDate = new Date();
             finishDate.setDate(today.getDate() + daysLeft);
-            
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('estFinishDate').innerText = finishDate.toLocaleDateString('tr-TR', options);
             document.getElementById('estDaysLeft').innerText = `${daysLeft} Gün Kaldı`;
@@ -665,17 +706,14 @@
         }
     }
 
-    // --- ZİNCİR TAKVİMİ (HEATMAP) ÇİZİMİ ---
     function renderHeatmap() {
         const container = document.getElementById('heatmapContainer');
         container.innerHTML = '';
         const today = new Date();
-        // Son 30 günü göster
         for (let i = 29; i >= 0; i--) {
             const d = new Date();
             d.setDate(today.getDate() - i);
             const isoDate = getIsoDate(d);
-            
             const box = document.createElement('div');
             box.className = 'heatmap-box';
             if (localData.calendar && localData.calendar[isoDate]) {
@@ -716,15 +754,81 @@
         });
         const oa = (td/days).toFixed(2);
         tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
-        renderBadges(td); renderHistory(); renderCharts(td, tr);
-        calculateEstFinish(); 
-        renderHeatmap(); // TAKVİMİ ÇİZ
+        renderBadges(td); renderHistory(); calculateEstFinish(); renderHeatmap();
     }
     
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } c.innerHTML += `<div class="badge-item"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
     function renderHistory() { const hb = document.getElementById('historyTableBody'); hb.innerHTML = ""; if (!localData.history) return; localData.history.forEach(r => { const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal); let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td>${r.time.split(' ')[1]}</td></tr>`; }); }
-    function renderCharts(d, r) { const ctx = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [d, r], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc } }, datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => { let s = 0; c.chart.data.datasets[0].data.map(d => s += d); return (v*100 / s).toFixed(1)+"%"; } } } } }); }
+    
+    // --- YENİ İSTATİSTİK VE GRAFİK FONKSİYONLARI ---
+    function renderStats() {
+        let totalTarget = 0, totalDone = 0;
+        let labels = [], remainingData = [];
+        let maxRemaining = -1, minRemaining = Infinity;
+        let maxName = "", minName = "";
+
+        localData.counts.forEach(c => {
+            totalTarget += c.target;
+            totalDone += c.done;
+            const remaining = Math.max(0, c.target - c.done);
+            labels.push(c.name);
+            remainingData.push(remaining);
+
+            if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; }
+            if (remaining < minRemaining && remaining > 0) { minRemaining = remaining; minName = c.name; }
+        });
+
+        document.getElementById('statTotalDone').innerText = totalDone.toLocaleString();
+        document.getElementById('statTotalLeft').innerText = (totalTarget - totalDone).toLocaleString();
+        let percent = totalTarget > 0 ? ((totalDone / totalTarget) * 100).toFixed(1) : 0;
+        document.getElementById('statPercent').innerText = `%${percent}`;
+
+        // Insight Text
+        const insightEl = document.getElementById('statInsight');
+        if (totalDone === 0) insightEl.innerText = "Henüz veri girişi yapılmamış. Bismillah deyip başlayalım!";
+        else if (totalDone >= totalTarget) insightEl.innerText = "Maşallah! Tüm borçlar ödenmiş. Allah kabul etsin.";
+        else insightEl.innerHTML = `En çok borcunuz <strong>${maxName}</strong> namazında. En az borcunuz ise <strong>${minName}</strong> namazında.`;
+
+        // Chart 1: Pie
+        const ctx1 = document.getElementById('completionChart').getContext('2d');
+        if (chartCompletion) chartCompletion.destroy();
+        const isDark = document.body.classList.contains('dark-mode');
+        const lc = isDark ? '#fff' : '#666';
+        chartCompletion = new Chart(ctx1, { 
+            type: 'doughnut', 
+            data: { 
+                labels: ['Kılınan', 'Kalan'], 
+                datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 1 }] 
+            }, 
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc } }, datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } 
+        });
+
+        // Chart 2: Bar
+        const ctx2 = document.getElementById('barChart').getContext('2d');
+        if (barChart) barChart.destroy();
+        barChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Kalan Borç',
+                    data: remainingData,
+                    backgroundColor: '#ffc107',
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, datalabels: { color: isDark ? '#fff':'#000', anchor: 'end', align: 'top' } },
+                scales: { y: { beginAtZero: true, grid: { color: isDark?'#444':'#ddd' }, ticks:{ color: lc } }, x: { ticks: { color: lc } } }
+            }
+        });
+    }
+
+    // ... (Diğer render fonksiyonları aynı kalır) ...
+    function renderCharts(d, r) { /* Dashboard grafiği için boş tuttum, yeni fonksiyon yukarıda */ }
 
     function renderTesbihat() {
         const c = document.getElementById('tesbihatContainer'); c.innerHTML = "";
