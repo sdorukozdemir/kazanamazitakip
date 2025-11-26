@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <!-- DÜZELTME: Zoom ve ölçek kısıtlamaları tamamen kaldırıldı. Bu en doğal dönme ayarıdır. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- EKRAN AYARI: Dönme ve ölçekleme sorunsuz -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kaza ve İbadet Takip</title>
     
     <meta name="theme-color" content="#198754">
@@ -44,7 +44,6 @@
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
         }
         
-        /* DÜZELTME: min-height kullanıldı, fixed height kaldırıldı */
         body { 
             background-color: var(--bg-color); color: var(--text-color); 
             font-family: 'Poppins', sans-serif; transition: 0.3s; 
@@ -98,6 +97,7 @@
         .col-namaz { background-color: #f4a261 !important; color: black; font-weight: 600; text-align: center !important; vertical-align: middle !important; min-width: 80px; }
         body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; }
         
+        /* BUTON STİLİ VE TİTREŞİM EFEKTİ */
         .btn-action { 
             width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; margin: 0 3px; cursor: pointer; 
             transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); 
@@ -133,30 +133,15 @@
 
         /* --- HESAPLAMA SİHİRBAZI --- */
         .calculator-card { padding: 20px; }
-        .calc-row { 
-            background-color: var(--calc-box-bg); 
-            padding: 0; 
-            border-radius: 12px; 
-            margin-bottom: 25px; 
-            border: 1px solid var(--border-color); 
-            overflow: hidden; 
-        }
+        .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; }
         .calc-header { background-color: var(--calc-header-bg); color: var(--calc-header-text); padding: 10px; text-align: center; font-weight: bold; font-size: 1.1rem; }
         .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .calc-item { flex: 1; min-width: 150px; text-align: center; }
         .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
         
         /* Hesaplama Inputları */
-        .date-input { 
-            text-align: center; background-color: var(--input-bg); color: var(--input-text); 
-            border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; 
-            height: 45px; 
-        }
-        .calc-result-input { 
-            font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; 
-            background-color: var(--input-bg); border: 2px solid var(--border-color); 
-            width: 100%;
-        }
+        .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
+        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; }
         body.dark-mode ::placeholder { color: #ccc; opacity: 0.7; }
 
         /* DİĞER */
@@ -184,7 +169,7 @@
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* --- MOBİL ALT MENÜ (Bottom Navigation) --- */
+        /* --- MOBİL ALT MENÜ --- */
         .bottom-nav {
             display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
             background: var(--card-bg); border-top: 1px solid var(--border-color);
@@ -207,24 +192,27 @@
             .btn-success.d-md-none { display: none !important; }
         }
 
-        /* --- YATAY EKRAN DÜZELTMELERİ (LANDSCAPE) --- */
+        /* --- YATAY EKRAN (LANDSCAPE) MODU --- */
         @media (orientation: landscape) and (max-height: 600px) {
             .app-header { display: none; } /* Başlığı gizle */
             .bottom-nav { height: 50px; padding-bottom: 0; } /* Menüyü incelt */
             .nav-item i { font-size: 1.1rem; margin-bottom: 2px; }
             .nav-item span { font-size: 0.6rem; }
-            #content { padding-top: 10px; padding-bottom: 60px; } /* Boşlukları azalt */
+            #content { padding-top: 5px; padding-bottom: 55px; }
             
-            .goal-card { padding: 10px; margin-bottom: 10px; }
-            .goal-content { margin: 5px 0; }
-            .goal-card h4 { font-size: 1rem; margin: 0; }
-            .streak-box { margin-top: 2px; padding: 2px 10px; font-size: 0.7rem; }
-            
+            /* Tablo ve içerik ölçeklendirme */
             .main-table { font-size: 0.7rem; }
-            .btn-action { width: 30px; height: 30px; }
-            .table-input { padding: 4px; height: 30px; }
+            .btn-action { width: 28px; height: 28px; font-size: 1rem; }
+            .table-input { padding: 2px; height: 28px; font-size: 0.8rem; }
+            .col-namaz { min-width: 60px; }
             
-            .chart-container { display: none; } /* Yatayda grafiği gizle (yer yok) */
+            /* Kartları küçült */
+            .goal-card { padding: 8px; margin-bottom: 8px; }
+            .goal-content { margin: 2px 0; }
+            .goal-card h4 { font-size: 0.9rem; margin: 0; }
+            
+            /* Grafiği gizle (Alan yetmez) */
+            .chart-container { display: none; }
         }
     </style>
 </head>
@@ -303,11 +291,11 @@
                     <thead>
                         <tr>
                             <th>Namaz</th>
-                            <th class="col-input-area">Kılınacak</th>
-                            <th class="col-input-area">Kılınan</th>
+                            <th class="col-input-area">Kılınacak<br>Namaz</th>
+                            <th class="col-input-area">Kılınan<br>Namaz</th>
                             <th class="col-action">İşlem</th>
-                            <th>Ort.</th>
-                            <th>Kalan</th>
+                            <th>Günlük<br>Ortalama</th>
+                            <th>Ortalama<br>Kalan Süre</th>
                         </tr>
                     </thead>
                     <tbody id="prayerTableBody"></tbody>
@@ -350,20 +338,21 @@
                     <div class="calculator-card">
                         <div class="alert alert-info small mb-4">
                             <i class="fas fa-info-circle me-2"></i>
-                            Bilgilerinizi girerek kaza borcunuzu hesaplayın.
+                            Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.
+                            Ayrıca hesaplanan gün değerini manuel olarak da değiştirebilirsiniz.
                         </div>
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
-                                <i class="fas fa-copy me-1"></i> Başlangıcı Kopyala
+                                <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
                             </button>
                             <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">
-                                <i class="fas fa-copy me-1"></i> Bitişi Kopyala
+                                <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala
                             </button>
                         </div>
                         <div id="calcRowsContainer"></div>
                         <hr class="my-4">
                         <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()">
-                            <i class="fas fa-check-circle me-2"></i> Onayla ve Aktar
+                            <i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar
                         </button>
                     </div>
                 </div>
@@ -421,12 +410,12 @@
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
-    // Manifest içinde display: "browser" yapılarak dönme kilidi kaldırıldı
+    // MANIFEST: minimal-ui ayarı dönme kilitlerini açar
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v2", // Versiyon değişimi önbelleği kırmak için
+        "name": "İbadet Takip", 
         "short_name": "İbadet", 
         "start_url": ".", 
-        "display": "browser",  // DÜZELTME: Standalone yerine Browser. Bu, dönme kilidini açar.
+        "display": "minimal-ui",  
         "orientation": "any", 
         "background_color": "#f8f9fa", 
         "theme_color": "#198754", 
@@ -514,6 +503,7 @@
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         document.getElementById('menu-' + id).classList.add('active');
         
+        // Doğrudan stil ile gizle/göster
         document.getElementById('section-dashboard').style.display = 'none';
         document.getElementById('section-tesbihat').style.display = 'none';
         document.getElementById('section-calculator').style.display = 'none';
