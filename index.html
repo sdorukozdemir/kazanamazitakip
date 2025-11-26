@@ -26,9 +26,16 @@
         /* --- TEMA AYARLARI --- */
         :root { 
             --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
-            --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
-            --border-color: #ced4da; --modal-bg: #ffffff;
+            --input-bg: #ffffff; --input-text: #000000; 
+            --border-color: #e9ecef; --modal-bg: #ffffff;
             --calc-box-bg: #f8f9fa; --calc-header-bg: #198754; --calc-header-text: #fff;
+            
+            /* TABLO RENKLERİ (SOFT ZEBRA - GÜNDÜZ) */
+            --zebra-odd: #ffffff;
+            --zebra-even: #f1f3f5; /* Çok hafif gri */
+            --table-head-bg: #198754; /* Yeşil Başlık */
+            --col-namaz-bg: #198754; /* Yeşil İsim Alanı */
+            --table-foot-bg: #343a40; /* Antrasit Footer */
             
             /* ZİKİR BUTON RENKLERİ */
             --z-btn-minus-bg: #dee2e6; --z-btn-minus-text: #212529;
@@ -36,26 +43,29 @@
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
             
             --heatmap-empty: #e9ecef; --heatmap-fill: #198754;
-            /* Heatmap bugün vurgusu (Sarı/Altın) */
+            --heatmap-text-empty: #adb5bd; --heatmap-text-fill: #fff;
             --heatmap-today-border: #ffc107; 
             --heatmap-today-shadow: rgba(255, 193, 7, 0.6);
 
             --scroll-track: #e9ecef; --scroll-thumb: #ced4da;
             
-            /* KUTU RENKLERİ (GÜNDÜZ) */
+            /* KUTU RENKLERİ */
             --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724;
             --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe;
             --stat-avg-color: #6610f2;
-            
-            /* TABLO KENARLIKLARI */
-            --table-outer-border: #157347; /* Ana çerçeve rengi */
-            --table-inner-border: #dee2e6;
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
-            --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
+            --input-bg: #2d2d2d; --input-text: #ffffff; 
             --border-color: #444; --modal-bg: #2d2d2d;
             --calc-box-bg: #2d2d2d; --calc-header-bg: #0f5132; --calc-header-text: #ddd;
+            
+            /* TABLO RENKLERİ (SOFT ZEBRA - GECE) */
+            --zebra-odd: #1e1e1e;
+            --zebra-even: #252525; /* Hafif açık siyah */
+            --table-head-bg: #0f5132; 
+            --col-namaz-bg: #0f5132; /* Koyu Yeşil */
+            --table-foot-bg: #000000; /* Tam Siyah Footer */
             
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
@@ -67,14 +77,9 @@
 
             --scroll-track: #2d2d2d; --scroll-thumb: #555;
             
-            /* KUTU RENKLERİ (GECE) */
             --box-target-bg: #0f2e1c; --box-target-border: #146c43; --box-target-text: #75b798;
             --box-add-bg: #052c65; --box-add-border: #084298;
             --stat-avg-color: #d63384; 
-            
-            /* TABLO KENARLIKLARI */
-            --table-outer-border: #20c997; 
-            --table-inner-border: #444;
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
@@ -120,70 +125,74 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- TABLO & KARTLAR (GÜNCELLENDİ) --- */
-        /* Tabloyu belirginleştirme */
+        /* --- TABLO: SOFT ZEBRA TASARIMI --- */
         .table-responsive { 
-            border-radius: 16px; /* Köşeler daha oval */
+            border-radius: 16px; 
             overflow: hidden; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08); /* Gölge arttırıldı */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
             margin-bottom: 20px; 
-            overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; 
-            width: 100%; 
-            display: block; 
-            border: 2px solid var(--table-outer-border); /* Dış çerçeve kalınlaştırıldı */
+            overflow-x: auto; -webkit-overflow-scrolling: touch; 
+            width: 100%; display: block; 
+            border: none; /* Dış kenarlık yok */
         }
         
         .main-table { 
             color: var(--text-color); font-size: 0.85rem; 
             width: 100%; 
-            border-collapse: separate; /* Köşeleri oval yapabilmek için separate */
-            border-spacing: 0; /* Hücreler arası boşluğu sıfırla */
+            border-collapse: collapse; 
             min-width: 650px; 
         }
         
+        /* Header: Sadece alt çizgi yok, renkli zemin */
         .main-table thead th { 
-            background-color: var(--table-head); color: white; 
+            background-color: var(--table-head-bg); color: white; 
             text-align: center; vertical-align: middle; 
-            padding: 12px 5px; line-height: 1.2; 
-            border-bottom: 2px solid rgba(0,0,0,0.1); /* Header alt çizgisi */
-            border-right: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 5px; line-height: 1.2; 
+            border: none; 
+            font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem;
         }
-        .main-table thead th:last-child { border-right: none; }
-
+        
+        /* Zebra Satırlar */
+        .main-table tbody tr:nth-of-type(odd) { background-color: var(--zebra-odd); }
+        .main-table tbody tr:nth-of-type(even) { background-color: var(--zebra-even); }
+        
         .main-table tbody td { 
-            background-color: var(--table-row-bg); 
-            color: var(--text-color); 
-            border-bottom: 1px solid var(--table-inner-border); /* Satır çizgileri */
-            border-right: 1px solid var(--table-inner-border); /* Sütun çizgileri */
+            border: none; /* Dikey çizgileri kaldır */
             text-align: center; 
             vertical-align: middle !important; 
             padding: 12px 5px; 
         }
-        .main-table tbody td:last-child { border-right: none; }
-        .main-table tbody tr:last-child td { border-bottom: none; }
-
+        
+        /* Footer: Seçenek B (Koyu Gri) */
         .main-table tfoot td { 
-            background-color: #d9534f; color: white; 
-            font-weight: bold; text-align: center; padding: 10px; 
-            border-top: 2px solid #c9302c; 
-            vertical-align: middle; 
+            background-color: var(--table-foot-bg); color: white; 
+            font-weight: bold; text-align: center; padding: 15px; 
+            border: none; vertical-align: middle; 
         }
         
-        .table-input { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; outline: none; margin-bottom: 5px; }
+        /* Input Kutuları */
+        .table-input { 
+            text-align: center; font-weight: bold; 
+            background-color: var(--input-bg); color: var(--input-text); 
+            border: 1px solid var(--border-color); 
+            width: 100%; padding: 8px; border-radius: 8px; outline: none; 
+            margin-bottom: 5px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        }
         
-        /* Namaz isim sütunu stil güncellemesi */
+        /* Namaz İsmi Sütunu: Seçenek B (Yeşil) */
         .col-namaz { 
-            background-color: #f4a261 !important; color: black; 
-            font-weight: 700; /* Daha kalın font */
+            background-color: var(--col-namaz-bg) !important; 
+            color: white !important; 
+            font-weight: 600; 
             text-align: center !important; vertical-align: middle !important; 
             min-width: 80px; 
-            border-right: 2px solid rgba(0,0,0,0.1) !important; /* Sağ çizgi belirgin */
+            border: none !important;
         }
-        body.dark-mode .col-namaz { background-color: #2f4f4f !important; color: white !important; border-right: 2px solid rgba(255,255,255,0.1) !important; }
         
-        .btn-action { width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; margin: 0 3px; cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); touch-action: manipulation; -webkit-tap-highlight-color: transparent; font-size: 1.2rem; }
-        .btn-action:active { transform: scale(0.85); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
+        /* Butonlar */
+        .col-action { display: flex !important; justify-content: center; align-items: center; gap: 10px; height: 100%; }
+        .btn-action { width: 36px; height: 36px; border-radius: 10px; border: none; color: white; font-weight: bold; cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; box-shadow: 0 2px 5px rgba(0,0,0,0.15); font-size: 1.2rem; margin: 0; }
+        .btn-action:active { transform: scale(0.85); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
@@ -323,18 +332,19 @@
             max-width: 350px;
         }
         .heatmap-box {
-            width: 24px; height: 24px; border-radius: 3px; /* Köşeler hafif kavisli */
+            width: 30px; height: 30px; border-radius: 3px; /* Hafif büyütüldü */
             background-color: var(--heatmap-empty);
             transition: transform 0.2s; cursor: pointer;
-            /* Sayılar kaldırıldı, içini ortalama */
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: bold; color: var(--heatmap-text-empty);
         }
         .heatmap-box:hover { transform: scale(1.2); }
-        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
+        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); color: var(--heatmap-text-fill); }
         
-        /* Bugün kutusu için özel stil */
+        /* Bugün kutusu */
         .heatmap-box.today-box {
             border: 2px solid var(--heatmap-today-border);
-            transform: scale(1.15);
+            transform: scale(1.1);
             z-index: 10;
             box-shadow: 0 0 8px var(--heatmap-today-shadow);
         }
@@ -1034,7 +1044,7 @@
         }
     }
 
-    // HEATMAP GÜNCELLENDİ (Sayı yok, Bugün vurgulu)
+    // HEATMAP GÜNCELLENDİ (Sayı yok, Dün/Bugün yazısı, 1'den 30'a)
     function renderHeatmap() {
         const container = document.getElementById('heatmapContainer');
         if(!container) return;
@@ -1049,9 +1059,13 @@
             const box = document.createElement('div');
             box.className = 'heatmap-box';
             
-            // Bugün kutusunu işaretle
-            if (i === 0) {
-                box.classList.add('today-box');
+            // Metin Ekleme
+            if (i === 1) box.innerText = "Dün";
+            else if (i === 0) {
+                box.innerText = "Bugün";
+                box.classList.add('today-box'); // Bugün vurgusu
+            } else {
+                box.innerText = "";
             }
 
             if (localData.calendar && localData.calendar[isoDate]) {
