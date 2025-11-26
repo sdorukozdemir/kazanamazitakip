@@ -43,7 +43,7 @@
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
             
             --heatmap-empty: #e9ecef; --heatmap-fill: #198754;
-            --heatmap-text-empty: #adb5bd; --heatmap-text-fill: #fff;
+            --heatmap-text-hover: #333;
             --heatmap-today-border: #ffc107; 
             --heatmap-today-shadow: rgba(255, 193, 7, 0.6);
 
@@ -72,6 +72,7 @@
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
             
             --heatmap-empty: #333; --heatmap-fill: #20c997;
+            --heatmap-text-hover: #fff;
             --heatmap-today-border: #ffc107;
             --heatmap-today-shadow: rgba(255, 193, 7, 0.4);
 
@@ -125,7 +126,7 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- TABLO: SOFT ZEBRA TASARIMI --- */
+        /* --- TABLO: SOFT ZEBRA & TEMİZ --- */
         .table-responsive { 
             border-radius: 16px; 
             overflow: hidden; 
@@ -155,10 +156,10 @@
         .main-table tbody tr:nth-of-type(even) { background-color: var(--zebra-even); }
         
         .main-table tbody td { 
-            border: none; 
+            border: none; /* Dikey çizgileri kaldırdık */
             text-align: center; 
             vertical-align: middle !important; 
-            padding: 12px 8px; /* Padding biraz arttırıldı */
+            padding: 12px 8px; 
         }
         
         .main-table tfoot td { 
@@ -167,28 +168,34 @@
             border: none; vertical-align: middle; 
         }
         
-        /* INPUT VE VALUE KUTULARI (ORTAK STİL) */
-        .table-input, .table-value-box { 
+        /* INPUT KUTULARI */
+        .table-input { 
             text-align: center; font-weight: bold; 
             background-color: var(--input-bg); color: var(--input-text); 
             border: 1px solid var(--border-color); 
             width: 100%; 
-            padding: 10px 5px; /* İçerik ortalama */
+            height: 40px; /* Sabit Yükseklik */
+            padding: 0; /* İçerik ortalama */
             border-radius: 8px; 
             outline: none; 
-            margin-bottom: 5px; 
+            margin: 0 auto 5px auto; /* Ortalı */
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-            display: block; /* Blok olarak davran */
-            min-height: 42px; /* Sabit yükseklik */
-            line-height: 1.2;
+            display: block;
         }
-        
-        /* .table-value-box sadece gösterim için */
+
+        /* STATİK DEĞER KUTULARI (Hizalama için div) */
         .table-value-box {
+            text-align: center; font-weight: bold; 
+            background-color: var(--input-bg); color: var(--input-text); 
+            border: 1px solid var(--border-color); 
+            width: 100%; 
+            height: 40px; /* Sabit Yükseklik - Inputla aynı */
             display: flex; 
             align-items: center; 
             justify-content: center;
-            margin-bottom: 0; /* Hizalama için */
+            border-radius: 8px; 
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            margin: 0 auto;
         }
         
         /* Namaz İsmi Sütunu */
@@ -201,7 +208,7 @@
             border: none !important;
         }
         
-        /* Butonlar Alanı Düzeltme */
+        /* Butonlar Alanı - Temizlendi */
         .col-action { 
             display: flex !important; 
             justify-content: center; 
@@ -209,9 +216,10 @@
             gap: 12px; 
             height: 100%; 
             min-width: 100px;
+            background: transparent !important; /* Gri blok sorunu çözümü */
         }
         .btn-action { 
-            width: 40px; height: 40px; /* Biraz büyütüldü */
+            width: 40px; height: 40px; 
             border-radius: 10px; border: none; color: white; font-weight: bold; 
             cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; 
             box-shadow: 0 3px 6px rgba(0,0,0,0.15); font-size: 1.2rem; 
@@ -362,10 +370,11 @@
             background-color: var(--heatmap-empty);
             transition: transform 0.2s; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 9px; font-weight: bold; color: var(--heatmap-text-empty);
+            font-size: 9px; font-weight: bold; color: transparent; /* Varsayılan yazı gizli */
+            position: relative;
         }
-        .heatmap-box:hover { transform: scale(1.2); }
-        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); color: var(--heatmap-text-fill); }
+        .heatmap-box:hover { transform: scale(1.2); color: var(--heatmap-text-hover); }
+        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
         
         /* Bugün kutusu */
         .heatmap-box.today-box {
@@ -966,7 +975,7 @@
             const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0);
             let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
             
-            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="progress" style="height: 10px; opacity: 0;"><div class="progress-bar" style="width: 100%"></div></div><div style="font-size:10px; margin-top:2px; opacity: 0;">%100</div></td><td class="col-input-area"><input type="number" class="table-input mb-2" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress" style="height: 10px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div style="font-size:10px; margin-top:2px;">%${pp.toFixed(1)}</div></td><td class="col-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td><div class="table-value-box">${avg}</div></td><td><div class="table-value-box">${estText}</div></td></tr>`;
+            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"></td><td class="col-input-area"><input type="number" class="table-input mb-2" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress" style="height: 10px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div style="font-size:10px; margin-top:2px;">%${pp.toFixed(1)}</div></td><td class="col-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td><div class="table-value-box">${avg}</div></td><td><div class="table-value-box">${estText}</div></td></tr>`;
         });
         const oa = (td/days).toFixed(2);
         tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
