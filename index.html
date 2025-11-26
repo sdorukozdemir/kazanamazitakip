@@ -2,7 +2,6 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <!-- EKRAN AYARI: Dönme ve ölçekleme sorunsuz -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kaza ve İbadet Takip</title>
     
@@ -33,6 +32,7 @@
             --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057;
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
+            --heatmap-empty: #e9ecef; --heatmap-fill: #198754;
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
@@ -42,7 +42,11 @@
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
+            --heatmap-empty: #333; --heatmap-fill: #20c997;
         }
+        
+        /* DÜZELTME: Gece modunda okunmayan gri yazılar için */
+        body.dark-mode .text-muted { color: #ced4da !important; }
         
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
@@ -146,6 +150,20 @@
         .prediction-icon { font-size: 2.5rem; color: #198754; margin-bottom: 10px; }
         .prediction-date { font-size: 1.5rem; font-weight: bold; color: #198754; margin: 5px 0; }
         .prediction-days { font-size: 0.9rem; color: #6c757d; font-weight: 600; }
+
+        /* --- ZİNCİR TAKVİMİ (HEATMAP) --- */
+        .heatmap-container {
+            display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; 
+            margin: 15px 0; padding: 10px; border-radius: 10px; 
+            background-color: var(--input-bg); border: 1px solid var(--border-color);
+        }
+        .heatmap-box {
+            width: 22px; height: 22px; border-radius: 4px; background-color: var(--heatmap-empty);
+            transition: transform 0.2s; cursor: pointer;
+        }
+        .heatmap-box:hover { transform: scale(1.2); }
+        .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
+        .heatmap-label { text-align: center; font-size: 0.7rem; color: var(--text-color); margin-bottom: 5px; opacity: 0.8; }
 
         /* DİĞER */
         .history-row-up td { background-color: #d1e7dd !important; color: #0f5132 !important; }
@@ -285,7 +303,7 @@
                     </div>
                 </div>
                 
-                <!-- YENİ: TAHMİNİ BİTİŞ KARTI -->
+                <!-- TAHMİNİ BİTİŞ KARTI -->
                 <div class="col-md-6 mb-4">
                     <div class="prediction-card h-100">
                         <i class="fas fa-hourglass-half prediction-icon"></i>
@@ -299,6 +317,11 @@
                         <div id="prediction-success" class="text-success fw-bold mt-2" style="display:none;">
                             🎉 Borcunuz bulunmamaktadır!
                         </div>
+                        
+                        <hr class="my-3" style="opacity:0.2">
+                        
+                        <h6 class="text-muted small fw-bold mb-2">SON 30 GÜN ZİNCİRİ</h6>
+                        <div id="heatmapContainer" class="heatmap-container"></div>
                     </div>
                 </div>
             </div>
@@ -487,11 +510,13 @@
 
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     function getYesterdayDateSimple() { const d = new Date(); d.setDate(d.getDate() - 1); return d.toLocaleDateString('tr-TR'); }
+    function getIsoDate(date) { return date.toISOString().split('T')[0]; }
 
     const defaultData = {
         startDate: new Date().toISOString().split('T')[0],
         daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 },
         streak: { current: 0, lastAchievedDate: "" },
+        calendar: {}, // YENİ: Takvim verisi
         counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
         tesbihat: [
             { name: "Sübhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
@@ -509,6 +534,7 @@
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
+            
             dbRef = db.ref('users/' + user.uid + '/namazData');
             dbRef.on('value', (s) => {
                 const d = s.val();
@@ -536,6 +562,7 @@
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
+        if (!localData.calendar) localData.calendar = {}; // YENİ
         const t = new Date().toLocaleDateString('tr-TR');
         if (!localData.daily || localData.daily.date !== t) { localData.daily = { date: t, counts: [0,0,0,0,0], target: localData.daily?.target || 10 }; saveToCloud(); }
         if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
@@ -585,10 +612,20 @@
             localData.counts[i].done = n; 
             if (d > 0) {
                 localData.daily.counts[i]++;
+                
+                // GÜNLÜK HEDEF KONTROL VE TAKVİM GÜNCELLEME
                 const ct = localData.daily.counts.reduce((a, b) => a + b, 0);
-                if (ct === localData.daily.target) jsConfetti.addConfetti();
+                const todayISO = getIsoDate(new Date());
+                
+                if (ct >= localData.daily.target) {
+                    localData.calendar[todayISO] = true; // Takvime yeşil at
+                    if (ct === localData.daily.target) jsConfetti.addConfetti();
+                } else {
+                    delete localData.calendar[todayISO]; // Hedefin altındaysa sil
+                }
+
                 const today = getCurrentDateSimple(), yesterday = getYesterdayDateSimple();
-                if (localData.streak.lastAchievedDate !== today && localData.daily.counts.reduce((a, b) => a + b, 0) >= localData.daily.target) {
+                if (localData.streak.lastAchievedDate !== today && ct >= localData.daily.target) {
                     if (localData.streak.lastAchievedDate === yesterday) localData.streak.current++; else localData.streak.current = 1;
                     localData.streak.lastAchievedDate = today;
                 }
@@ -628,6 +665,29 @@
         }
     }
 
+    // --- ZİNCİR TAKVİMİ (HEATMAP) ÇİZİMİ ---
+    function renderHeatmap() {
+        const container = document.getElementById('heatmapContainer');
+        container.innerHTML = '';
+        const today = new Date();
+        // Son 30 günü göster
+        for (let i = 29; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(today.getDate() - i);
+            const isoDate = getIsoDate(d);
+            
+            const box = document.createElement('div');
+            box.className = 'heatmap-box';
+            if (localData.calendar && localData.calendar[isoDate]) {
+                box.classList.add('active');
+                box.title = `${d.toLocaleDateString('tr-TR')}: Hedef Tamamlandı`;
+            } else {
+                box.title = `${d.toLocaleDateString('tr-TR')}: Tamamlanmadı`;
+            }
+            container.appendChild(box);
+        }
+    }
+
     const BADGES = [{id:1000,title:"Başlangıç",icon:"🎗️", desc:"1.000 Namaz"},{id:5000,title:"İstikrar",icon:"🎖️", desc:"5.000 Namaz"},{id:10000,title:"Yıldız",icon:"⭐", desc:"10.000 Namaz"},{id:25000,title:"Şampiyon",icon:"🏆", desc:"25.000 Namaz"},{id:50000,title:"Efsane",icon:"👑", desc:"50.000 Namaz"}];
     function renderApp() {
         if(!localData.counts) return;
@@ -657,7 +717,8 @@
         const oa = (td/days).toFixed(2);
         tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
         renderBadges(td); renderHistory(); renderCharts(td, tr);
-        calculateEstFinish(); // TAHMİNİ BİTİŞİ HESAPLA
+        calculateEstFinish(); 
+        renderHeatmap(); // TAKVİMİ ÇİZ
     }
     
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
