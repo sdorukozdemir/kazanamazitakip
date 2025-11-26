@@ -5,24 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kaza ve İbadet Takip</title>
     
+    <!-- PWA AYARLARI -->
     <meta name="theme-color" content="#198754">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
+    <!-- MANIFEST (Otomatik Oluşturulur) -->
     <link rel="manifest" id="my-manifest">
 
+    <!-- CSS KÜTÜPHANELERİ -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:wght@700&display=swap" rel="stylesheet">
     
-    <!-- FIREBASE -->
+    <!-- JS KÜTÜPHANELERİ -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-    <!-- CHART.JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <!-- Konfeti Kütüphanesi KALDIRILDI -->
 
     <style>
         /* --- TEMA AYARLARI --- */
@@ -54,35 +56,26 @@
         
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
-        /* --- LOADING SPINNER --- */
-        #loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-color); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease, visibility 0.5s;
-        }
-        .spinner {
-            width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2);
-            border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite;
-        }
+        /* LOADING */
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2); border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
 
-        /* --- LAYOUT --- */
+        /* LAYOUT */
         .wrapper { display: flex; width: 100%; justify-content: center; }
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
-
+        
         @media (min-width: 769px) {
             #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; }
             #sidebar.active { margin-left: -260px; }
             #overlay { display: none !important; }
             #content { width: calc(100% - 260px); margin-left: 0; }
         }
-        @media (max-width: 768px) { #content { width: 100%; } }
-
+        
         #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
 
         #sidebar ul li { padding: 15px; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
@@ -154,18 +147,21 @@
         
         .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
         .analysis-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .analysis-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .analysis-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; }
         .icon-good { background: #d1e7dd; color: #0f5132; } .icon-bad { background: #f8d7da; color: #842029; }
         .analysis-text { flex: 1; } .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; } .analysis-value { font-size: 1.1rem; font-weight: bold; }
         
         .prediction-card { padding: 20px; height: 100%; }
         .prediction-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        .prediction-row:last-child { border-bottom: none; }
         .pred-label { font-size: 0.85rem; opacity: 0.8; }
         .pred-value { font-weight: bold; color: #198754; text-align: right; }
         .pred-sub { font-size: 0.75rem; color: #6c757d; display: block; text-align: right; }
         
         .heatmap-container { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin: 15px auto; padding: 15px; border-radius: 10px; background-color: var(--input-bg); border: 1px solid var(--border-color); max-width: 350px; }
         .heatmap-box { width: 24px; height: 24px; border-radius: 4px; background-color: var(--heatmap-empty); transition: transform 0.2s; cursor: pointer; }
+        .heatmap-box:hover { transform: scale(1.2); }
         .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
         
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 20px auto; }
@@ -424,7 +420,6 @@
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
     function logout() { auth.signOut(); }
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
-    
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
