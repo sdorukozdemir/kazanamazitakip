@@ -37,13 +37,9 @@
             --col-namaz-bg: #198754; 
             --table-foot-bg: #343a40; 
             
-            /* ZİKİR BUTON RENKLERİ */
-            --z-btn-minus-bg: #dee2e6; --z-btn-minus-text: #212529;
-            --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
-            --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
-            
+            /* HEATMAP */
             --heatmap-empty: #e9ecef; --heatmap-fill: #198754;
-            --heatmap-text-hover: #333;
+            --heatmap-text-hover: #333; /* Üzerine gelince çıkacak yazı rengi */
             --heatmap-today-border: #ffc107; 
             --heatmap-today-shadow: rgba(255, 193, 7, 0.6);
 
@@ -66,10 +62,6 @@
             --table-head-bg: #0f5132; 
             --col-namaz-bg: #0f5132; 
             --table-foot-bg: #000000; 
-            
-            --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
-            --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
-            --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
             
             --heatmap-empty: #333; --heatmap-fill: #20c997;
             --heatmap-text-hover: #fff;
@@ -126,13 +118,13 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- TABLO: SOFT ZEBRA & TEMİZ --- */
+        /* --- TABLO DÜZENİ (REVISED) --- */
         .table-responsive { 
             border-radius: 16px; 
             overflow: hidden; 
             box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
             margin-bottom: 20px; 
-            overflow-x: auto; -webkit-overflow-scrolling: touch; 
+            overflow-x: auto; 
             width: 100%; display: block; 
             border: none; 
         }
@@ -147,7 +139,7 @@
         .main-table thead th { 
             background-color: var(--table-head-bg); color: white; 
             text-align: center; vertical-align: middle; 
-            padding: 15px 5px; line-height: 1.2; 
+            padding: 15px 5px; 
             border: none; 
             font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.75rem;
         }
@@ -155,11 +147,12 @@
         .main-table tbody tr:nth-of-type(odd) { background-color: var(--zebra-odd); }
         .main-table tbody tr:nth-of-type(even) { background-color: var(--zebra-even); }
         
+        /* HÜCRE HİZALAMALARI */
         .main-table tbody td { 
-            border: none; /* Dikey çizgileri kaldırdık */
+            border: none; 
             text-align: center; 
             vertical-align: middle !important; 
-            padding: 12px 8px; 
+            padding: 8px 5px; /* Padding düşürüldü, hizalama kolaylaşsın */
         }
         
         .main-table tfoot td { 
@@ -168,36 +161,59 @@
             border: none; vertical-align: middle; 
         }
         
-        /* INPUT KUTULARI */
+        /* ORTAK KUTU STİLİ (INPUT, STATIC BOX, BUTONLAR) - HEPSİ AYNI YÜKSEKLİK */
+        .common-box-height {
+            height: 38px; /* Sabit Yükseklik */
+            margin: 0; /* Margin Sıfırla */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .table-input { 
             text-align: center; font-weight: bold; 
             background-color: var(--input-bg); color: var(--input-text); 
             border: 1px solid var(--border-color); 
             width: 100%; 
-            height: 40px; /* Sabit Yükseklik */
-            padding: 0; /* İçerik ortalama */
             border-radius: 8px; 
             outline: none; 
-            margin: 0 auto 5px auto; /* Ortalı */
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-            display: block;
+            padding: 0;
+            height: 38px; /* Sabit Yükseklik */
         }
 
-        /* STATİK DEĞER KUTULARI (Hizalama için div) */
         .table-value-box {
             text-align: center; font-weight: bold; 
             background-color: var(--input-bg); color: var(--input-text); 
             border: 1px solid var(--border-color); 
             width: 100%; 
-            height: 40px; /* Sabit Yükseklik - Inputla aynı */
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
             border-radius: 8px; 
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-            margin: 0 auto;
+            height: 38px; /* Sabit Yükseklik */
+            display: flex; align-items: center; justify-content: center;
         }
         
+        /* İŞLEM BUTONLARI */
+        .col-action {
+            /* Flexbox hizalama */
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            background: transparent !important; /* Gri blok engelleme */
+        }
+
+        .btn-action { 
+            width: 38px; height: 38px; /* Sabit Yükseklik */
+            border-radius: 8px; border: none; color: white; font-weight: bold; 
+            cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15); font-size: 1.2rem; 
+            margin: 0; 
+            display: flex; justify-content: center; align-items: center;
+        }
+        .btn-action:active { transform: scale(0.90); }
+        .btn-plus { background-color: #198754; } 
+        .btn-minus { background-color: #6c757d; }
+
         /* Namaz İsmi Sütunu */
         .col-namaz { 
             background-color: var(--col-namaz-bg) !important; 
@@ -207,27 +223,13 @@
             min-width: 80px; 
             border: none !important;
         }
-        
-        /* Butonlar Alanı - Temizlendi */
-        .col-action { 
-            display: flex !important; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 12px; 
-            height: 100%; 
-            min-width: 100px;
-            background: transparent !important; /* Gri blok sorunu çözümü */
+
+        /* Progress Bar Alanı */
+        .progress-wrapper {
+            margin-top: 4px;
+            height: 10px;
+            margin-bottom: 2px;
         }
-        .btn-action { 
-            width: 40px; height: 40px; 
-            border-radius: 10px; border: none; color: white; font-weight: bold; 
-            cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; 
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15); font-size: 1.2rem; 
-            margin: 0; 
-            display: flex; justify-content: center; align-items: center;
-        }
-        .btn-action:active { transform: scale(0.85); }
-        .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
@@ -358,7 +360,7 @@
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
 
-        /* --- ZİNCİR TAKVİMİ (HEATMAP) - GÜNCELLENDİ --- */
+        /* --- ZİNCİR TAKVİMİ (HEATMAP) --- */
         .heatmap-container {
             display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; 
             margin: 15px auto; padding: 15px; border-radius: 10px; 
@@ -370,10 +372,13 @@
             background-color: var(--heatmap-empty);
             transition: transform 0.2s; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 9px; font-weight: bold; color: transparent; /* Varsayılan yazı gizli */
+            font-size: 9px; font-weight: bold; 
+            color: transparent; /* Varsayılan: Yazı Gizli */
             position: relative;
         }
+        /* Hover olunca yazı görünsün */
         .heatmap-box:hover { transform: scale(1.2); color: var(--heatmap-text-hover); }
+        
         .heatmap-box.active { background-color: var(--heatmap-fill); box-shadow: 0 2px 5px rgba(25, 135, 84, 0.4); }
         
         /* Bugün kutusu */
@@ -975,7 +980,7 @@
             const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0);
             let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
             
-            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"></td><td class="col-input-area"><input type="number" class="table-input mb-2" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress" style="height: 10px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div style="font-size:10px; margin-top:2px;">%${pp.toFixed(1)}</div></td><td class="col-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td><div class="table-value-box">${avg}</div></td><td><div class="table-value-box">${estText}</div></td></tr>`;
+            tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"></td><td class="col-input-area"><input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress-wrapper"><div class="progress" style="height: 10px;"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div style="font-size:10px;">%${pp.toFixed(1)}</div></div></td><td class="col-action"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></td><td><div class="table-value-box">${avg}</div></td><td><div class="table-value-box">${estText}</div></td></tr>`;
         });
         const oa = (td/days).toFixed(2);
         tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
