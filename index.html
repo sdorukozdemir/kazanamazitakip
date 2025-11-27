@@ -1429,12 +1429,11 @@
     function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    // --- NAMAZ VAKİTLERİ JS ---
+    // --- NAMAZ VAKİTLERİ JS (DÜZELTİLMİŞ) ---
     let prayerTimesData = null;
     let countdownInterval = null;
-    let currentCity = localStorage.getItem('selectedCity') || "Ankara"; // Şehir hafızada tutulur
+    let currentCity = localStorage.getItem('selectedCity') || "Ankara"; 
 
-    // Şehir seçicisini ayarla
     document.addEventListener('DOMContentLoaded', () => {
         const sel = document.getElementById('citySelector');
         if(sel) sel.value = currentCity;
@@ -1446,20 +1445,35 @@
             localStorage.setItem('selectedCity', city);
         }
         
+        // --- TARİH FORMATI DÜZELTMESİ ---
+        // toLocaleDateString yerine manuel formatlama kullanıyoruz
+        // çünkü bazı tarayıcılar / bazıları - atıyor. API ise - istiyor.
         const date = new Date();
-        const strDate = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }); // DD-MM-YYYY formatı
-        
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const strDate = `${day}-${month}-${year}`; // Format: 27-11-2025
+
+        console.log("İstek URL:", `https://api.aladhan.com/v1/timingsByCity/${strDate}?city=${currentCity}&country=Turkey&method=13`);
+
         // Aladhan API (Method 13 = Diyanet İşleri)
         const apiUrl = `https://api.aladhan.com/v1/timingsByCity/${strDate}?city=${currentCity}&country=Turkey&method=13`;
 
         fetch(apiUrl)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) { throw new Error('Network response was not ok'); }
+                return response.json();
+            })
             .then(data => {
+                console.log("Data Geldi:", data);
                 prayerTimesData = data.data;
                 updatePrayerUI();
                 startCountdown();
             })
-            .catch(err => console.error("Vakitler alınamadı:", err));
+            .catch(err => {
+                console.error("Vakitler alınamadı:", err);
+                document.getElementById('hijriDateDisplay').innerText = "Bağlantı Hatası!";
+            });
     }
 
     function updatePrayerUI() {
@@ -1483,7 +1497,7 @@
 
     function startCountdown() {
         if(countdownInterval) clearInterval(countdownInterval);
-        updateTimerLogic(); // Hemen bir kere çalıştır
+        updateTimerLogic(); 
         countdownInterval = setInterval(updateTimerLogic, 1000);
     }
 
@@ -1494,7 +1508,6 @@
         const times = prayerTimesData.timings;
         const prayerNames = { 'Fajr': 'İmsak', 'Sunrise': 'Güneş', 'Dhuhr': 'Öğle', 'Asr': 'İkindi', 'Maghrib': 'Akşam', 'Isha': 'Yatsı' };
         
-        // Vakitleri Date objesine çevir
         let nextTime = null;
         let nextName = "";
         let currentActive = "";
@@ -1508,7 +1521,6 @@
             { key: 'Isha', val: times.Isha }
         ];
 
-        // Sıradaki vakti bul
         for (let i = 0; i < timeList.length; i++) {
             const pTime = new Date();
             const [h, m] = timeList[i].val.split(':');
@@ -1522,7 +1534,6 @@
             }
         }
 
-        // Eğer bugün vakit kalmadıysa (Yatsıdan sonra), sonraki günün İmsak vaktini hedefle
         if (!nextTime) {
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
@@ -1533,14 +1544,12 @@
             currentActive = 'Isha';
         }
 
-        // UI Güncelle - Aktif Kutuyu Boya
         document.querySelectorAll('.vakit-item').forEach(el => el.classList.remove('active'));
         const activeBoxId = `box-${currentActive}`;
         if(document.getElementById(activeBoxId)) {
             document.getElementById(activeBoxId).classList.add('active');
         }
 
-        // Sayacı Yaz
         const diff = nextTime - now;
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
