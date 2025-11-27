@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -165,6 +164,7 @@
             outline: none; 
             margin: 0;
             display: flex; align-items: center; justify-content: center;
+            max-width: 120px !important; margin: 0 auto !important; font-size: 1rem;
         }
         
         /* YENİ RENKLİ KOLON */
@@ -392,6 +392,78 @@
             .stat-card-scroll { padding: 8px; width: 130px; }
             .analysis-box { padding: 10px; margin-bottom: 10px; }
         }
+
+        /* --- NAMAZ VAKİTLERİ WIDGET TASARIMI --- */
+        .prayer-widget-card {
+            background: linear-gradient(135deg, #2b2b36 0%, #1e1e24 100%);
+            border-radius: 25px;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            border: 1px solid #3a3a45;
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .location-info h4 { margin: 0; font-weight: 700; letter-spacing: 1px; font-size: 1.1rem; }
+        .date-info { font-size: 0.8rem; opacity: 0.7; margin-top: 3px; }
+
+        .main-timer-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .next-vakit-label { font-size: 1.2rem; font-weight: bold; text-transform: uppercase; color: #fff; display: block;}
+        .timer-countdown { font-size: 3.5rem; font-weight: 700; line-height: 1; margin: 10px 0; font-family: 'Courier New', Courier, monospace; letter-spacing: -2px;}
+        .timer-subtext { font-size: 0.9rem; opacity: 0.7; }
+
+        .vakit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .vakit-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+
+        .vakit-item.active {
+            background: linear-gradient(135deg, #fd7e14, #d35400); /* Turuncu tema */
+            border-color: #fd7e14;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(253, 126, 20, 0.3);
+        }
+
+        .vakit-name { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; display: block; margin-bottom: 5px; font-weight: 600; }
+        .vakit-time { font-size: 1.1rem; font-weight: bold; }
+
+        /* Şehir Seçimi */
+        .city-select {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: right;
+        }
+        .city-select option { color: black; }
     </style>
 </head>
 <body>
@@ -428,6 +500,7 @@
         </div>
         <ul class="list-unstyled components p-2">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
+            <li id="menu-vakitler" onclick="showSection('vakitler')"><i class="fas fa-clock me-3"></i> Namaz Vakitleri</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
@@ -524,6 +597,81 @@
                     <thead><tr class="table-light"><th>Namaz</th><th>Önceki</th><th>Son</th><th>Zaman</th></tr></thead>
                     <tbody id="historyTableBody"></tbody>
                 </table>
+            </div>
+        </div>
+
+        <!-- NAMAZ VAKİTLERİ BÖLÜMÜ -->
+        <div id="section-vakitler" style="display: none;">
+            <h3 class="app-header">Namaz Vakitleri</h3>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    
+                    <div class="prayer-widget-card">
+                        <!-- Üst Bilgi -->
+                        <div class="widget-header">
+                            <div class="location-info">
+                                <i class="fas fa-map-marker-alt text-warning me-2"></i>
+                                <select id="citySelector" class="city-select" onchange="fetchPrayerTimes(this.value)">
+                                    <option value="Ankara">ANKARA</option>
+                                    <option value="Istanbul">İSTANBUL</option>
+                                    <option value="Izmir">İZMİR</option>
+                                    <option value="Bursa">BURSA</option>
+                                    <option value="Konya">KONYA</option>
+                                    <option value="Antalya">ANTALYA</option>
+                                    <option value="Adana">ADANA</option>
+                                    <option value="Gaziantep">GAZİANTEP</option>
+                                    <option value="Sanliurfa">ŞANLIURFA</option>
+                                    <option value="Kayseri">KAYSERİ</option>
+                                </select>
+                                <div class="date-info" id="hijriDateDisplay">Hicri Tarih Yükleniyor...</div>
+                            </div>
+                            <div class="text-end">
+                                <div id="gregorianDateDisplay" style="font-weight: 600;">...</div>
+                            </div>
+                        </div>
+
+                        <!-- Büyük Sayaç -->
+                        <div class="main-timer-box">
+                            <span class="next-vakit-label" id="nextPrayerName">VAKİT</span>
+                            <div class="timer-countdown" id="countdownDisplay">--:--:--</div>
+                            <div class="timer-subtext">Vaktine Kalan Süre</div>
+                        </div>
+
+                        <!-- Vakitler Izgarası -->
+                        <div class="vakit-grid">
+                            <div class="vakit-item" id="box-Imsak">
+                                <span class="vakit-name">İMSAK</span>
+                                <span class="vakit-time" id="time-Imsak">--:--</span>
+                            </div>
+                            <div class="vakit-item" id="box-Sunrise">
+                                <span class="vakit-name">GÜNEŞ</span>
+                                <span class="vakit-time" id="time-Sunrise">--:--</span>
+                            </div>
+                            <div class="vakit-item" id="box-Dhuhr">
+                                <span class="vakit-name">ÖĞLE</span>
+                                <span class="vakit-time" id="time-Dhuhr">--:--</span>
+                            </div>
+                            <div class="vakit-item" id="box-Asr">
+                                <span class="vakit-name">İKİNDİ</span>
+                                <span class="vakit-time" id="time-Asr">--:--</span>
+                            </div>
+                            <div class="vakit-item" id="box-Maghrib">
+                                <span class="vakit-name">AKŞAM</span>
+                                <span class="vakit-time" id="time-Maghrib">--:--</span>
+                            </div>
+                            <div class="vakit-item" id="box-Isha">
+                                <span class="vakit-name">YATSI</span>
+                                <span class="vakit-time" id="time-Isha">--:--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-secondary text-center small mt-3">
+                        <i class="fas fa-info-circle me-1"></i> Vakitler Diyanet İşleri Başkanlığı hesaplama yöntemine (Method 13) göre alınmaktadır.
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -686,6 +834,7 @@
 
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
+    <div class="nav-item" onclick="showSection('vakitler'); activateNav(this)"><i class="fas fa-clock"></i><span>Vakitler</span></div>
     <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>İstatistik</span></div>
     <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
     <div class="nav-item" onclick="showSection('calculator'); activateNav(this)"><i class="fas fa-calculator"></i><span>Hesap</span></div>
@@ -808,7 +957,7 @@
         const menuItem = document.getElementById('menu-' + id);
         if(menuItem) menuItem.classList.add('active');
         
-        const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings'];
+        const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings', 'vakitler'];
         sections.forEach(sec => { const el = document.getElementById('section-' + sec); if(el) el.style.display = 'none'; });
         
         const activeSec = document.getElementById('section-' + id);
@@ -820,13 +969,15 @@
         }
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        const navMap = { 'dashboard': 0, 'stats': 1, 'tesbihat': 2, 'calculator': 3 };
+        const navMap = { 'dashboard': 0, 'vakitler': 1, 'stats': 2, 'tesbihat': 3, 'calculator': 4 };
         const navIndex = navMap[id];
         if (navIndex !== undefined) {
              const navItems = document.querySelectorAll('.nav-item');
              if(navItems[navIndex]) navItems[navIndex].classList.add('active');
         }
         
+        if(id === 'vakitler') fetchPrayerTimes();
+
         try {
             if(id === 'dashboard') renderApp();
             if(id === 'stats') renderStats();
@@ -1277,6 +1428,128 @@
     function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); if (localData.history.length > 20) localData.history.pop(); saveToCloud(); }
     function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
+
+    // --- NAMAZ VAKİTLERİ JS ---
+    let prayerTimesData = null;
+    let countdownInterval = null;
+    let currentCity = localStorage.getItem('selectedCity') || "Ankara"; // Şehir hafızada tutulur
+
+    // Şehir seçicisini ayarla
+    document.addEventListener('DOMContentLoaded', () => {
+        const sel = document.getElementById('citySelector');
+        if(sel) sel.value = currentCity;
+    });
+
+    function fetchPrayerTimes(city) {
+        if(city) {
+            currentCity = city;
+            localStorage.setItem('selectedCity', city);
+        }
+        
+        const date = new Date();
+        const strDate = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }); // DD-MM-YYYY formatı
+        
+        // Aladhan API (Method 13 = Diyanet İşleri)
+        const apiUrl = `https://api.aladhan.com/v1/timingsByCity/${strDate}?city=${currentCity}&country=Turkey&method=13`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                prayerTimesData = data.data;
+                updatePrayerUI();
+                startCountdown();
+            })
+            .catch(err => console.error("Vakitler alınamadı:", err));
+    }
+
+    function updatePrayerUI() {
+        if(!prayerTimesData) return;
+        
+        const t = prayerTimesData.timings;
+        const d = prayerTimesData.date;
+
+        // Tarihleri Yaz
+        document.getElementById('gregorianDateDisplay').innerText = d.readable;
+        document.getElementById('hijriDateDisplay').innerText = `${d.hijri.day} ${d.hijri.month.tr || d.hijri.month.en} ${d.hijri.year}`;
+
+        // Saatleri Yaz
+        document.getElementById('time-Imsak').innerText = t.Fajr;
+        document.getElementById('time-Sunrise').innerText = t.Sunrise;
+        document.getElementById('time-Dhuhr').innerText = t.Dhuhr;
+        document.getElementById('time-Asr').innerText = t.Asr;
+        document.getElementById('time-Maghrib').innerText = t.Maghrib;
+        document.getElementById('time-Isha').innerText = t.Isha;
+    }
+
+    function startCountdown() {
+        if(countdownInterval) clearInterval(countdownInterval);
+        updateTimerLogic(); // Hemen bir kere çalıştır
+        countdownInterval = setInterval(updateTimerLogic, 1000);
+    }
+
+    function updateTimerLogic() {
+        if(!prayerTimesData) return;
+
+        const now = new Date();
+        const times = prayerTimesData.timings;
+        const prayerNames = { 'Fajr': 'İmsak', 'Sunrise': 'Güneş', 'Dhuhr': 'Öğle', 'Asr': 'İkindi', 'Maghrib': 'Akşam', 'Isha': 'Yatsı' };
+        
+        // Vakitleri Date objesine çevir
+        let nextTime = null;
+        let nextName = "";
+        let currentActive = "";
+
+        const timeList = [
+            { key: 'Fajr', val: times.Fajr },
+            { key: 'Sunrise', val: times.Sunrise },
+            { key: 'Dhuhr', val: times.Dhuhr },
+            { key: 'Asr', val: times.Asr },
+            { key: 'Maghrib', val: times.Maghrib },
+            { key: 'Isha', val: times.Isha }
+        ];
+
+        // Sıradaki vakti bul
+        for (let i = 0; i < timeList.length; i++) {
+            const pTime = new Date();
+            const [h, m] = timeList[i].val.split(':');
+            pTime.setHours(h, m, 0);
+
+            if (pTime > now) {
+                nextTime = pTime;
+                nextName = prayerNames[timeList[i].key];
+                currentActive = i > 0 ? timeList[i-1].key : 'Isha'; 
+                break;
+            }
+        }
+
+        // Eğer bugün vakit kalmadıysa (Yatsıdan sonra), sonraki günün İmsak vaktini hedefle
+        if (!nextTime) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const [h, m] = times.Fajr.split(':');
+            tomorrow.setHours(h, m, 0);
+            nextTime = tomorrow;
+            nextName = "İmsak";
+            currentActive = 'Isha';
+        }
+
+        // UI Güncelle - Aktif Kutuyu Boya
+        document.querySelectorAll('.vakit-item').forEach(el => el.classList.remove('active'));
+        const activeBoxId = `box-${currentActive}`;
+        if(document.getElementById(activeBoxId)) {
+            document.getElementById(activeBoxId).classList.add('active');
+        }
+
+        // Sayacı Yaz
+        const diff = nextTime - now;
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('nextPrayerName').innerText = nextName;
+        document.getElementById('countdownDisplay').innerText = 
+            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
 </script>
 </body>
 </html>
