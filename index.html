@@ -1457,7 +1457,7 @@
         // Bu sayede tarayıcı "CORS" hatası vermez.
         // Ubilisim API'si Diyanet verisini anlık çeker.
         const targetUrl = `https://api.ubilisim.com/namazvakti?sehir=${currentCity}`;
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
 
         fetch(proxyUrl)
             .then(response => {
@@ -1465,16 +1465,15 @@
                 return response.json();
             })
             .then(data => {
-                // AllOrigins veriyi "contents" içinde string olarak döndürür.
-                // Onu tekrar JSON'a çevirmemiz lazım.
-                const realData = JSON.parse(data.contents);
+                // AllOrigins Raw modu direkt JSON döndürür.
+                // Veri yapısı: { namazvakti: { ... } }
                 
-                if(realData.namazvakti) {
-                    prayerTimesData = realData.namazvakti;
+                if(data.namazvakti) {
+                    prayerTimesData = data.namazvakti;
                     updatePrayerUI();
                     startCountdown();
                 } else {
-                    console.error("Veri formatı hatalı", realData);
+                    console.error("Veri formatı hatalı", data);
                 }
             })
             .catch(err => {
