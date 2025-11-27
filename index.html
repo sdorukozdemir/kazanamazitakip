@@ -23,7 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <style>
-        /* --- ORİJİNAL TEMA AYARLARI --- */
+        /* --- TEMA AYARLARI --- */
         :root { 
             --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
             --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
@@ -556,17 +556,27 @@
                     const d = s.val();
                     if (d) {
                         localData = d;
-                        // Eski verilerde şehir bilgisi yoksa varsayılan ekle
+                        // VERİ ONARIM MODU: Eğer eski veride eksik alan varsa tamamla
+                        if(!localData.daily) localData.daily = defaultData.daily;
+                        if(!localData.streak) localData.streak = defaultData.streak;
+                        if(!localData.history) localData.history = [];
+                        if(!localData.earnedBadges) localData.earnedBadges = [];
+                        if(!localData.logs) localData.logs = {};
+                        if(!localData.calendar) localData.calendar = {};
                         if(!localData.city) { localData.city = "ISTANBUL"; localData.cityNameDisplay = "İSTANBUL"; }
+                    } else {
+                        // Hiç veri yoksa varsayılanı kullan
+                        localData = JSON.parse(JSON.stringify(defaultData));
                     }
-                    ensureDataStructure(); 
+                    
                     checkDailyReset();
-                    if (!d) saveToCloud();
+                    if (!d) saveToCloud(); // Veri yoksa oluştur
+                    
                     renderCalculatorRows();
                     const activeId = document.querySelector('.components li.active') ? document.querySelector('.components li.active').id.replace('menu-', '') : 'dashboard';
                     showSection(activeId); 
                     populateCities(); // Şehir listesini doldur
-                } catch (err) { console.error(err); } 
+                } catch (err) { console.error("Veri yükleme hatası:", err); } 
                 finally { hideLoader(); }
             });
         } else { document.getElementById('loading-overlay').style.display = 'none'; document.getElementById('login-screen').style.display = 'flex'; document.getElementById('app-wrapper').style.display = 'none'; }
@@ -576,18 +586,14 @@
     function logout() { auth.signOut(); }
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
     
-    function ensureDataStructure() {
-        if (!localData.city) { localData.city = "ISTANBUL"; localData.cityNameDisplay = "İSTANBUL"; }
-        if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
-        if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
-        if (!localData.calendar) localData.calendar = {};
-        if (!localData.logs) localData.logs = {}; 
-        const t = new Date().toLocaleDateString('tr-TR');
-        if (!localData.daily || localData.daily.date !== t) { localData.daily = { date: t, counts: [0,0,0,0,0], target: localData.daily?.target || 10 }; saveToCloud(); }
-        if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
-        if (!localData.history) localData.history = [];
-        if (!localData.earnedBadges) localData.earnedBadges = [];
-        if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
+    function checkDailyReset() {
+        const t = getCurrentDateSimple();
+        // Eğer günlük sayaç yoksa veya tarih eskiyse sıfırla
+        if (!localData.daily || localData.daily.date !== t) {
+            const oldTarget = localData.daily ? localData.daily.target : 10;
+            localData.daily = { date: t, counts: [0,0,0,0,0], target: oldTarget };
+            saveToCloud();
+        }
     }
 
     // --- NAVIGATION ---
@@ -665,7 +671,9 @@
     window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
 
     function renderApp() {
-        if(!localData.counts) return;
+        // Güvenlik kontrolü
+        if(!localData || !localData.counts || !localData.daily) return;
+
         recalculateStreak();
         document.getElementById('startDate').value = localData.startDate;
         const c = localData.daily.counts.reduce((a,b)=>a+b,0);
@@ -674,7 +682,7 @@
         let p = (c / localData.daily.target) * 100; if(p>100) p=100;
         document.getElementById('dailyProgressBar').style.width = p + "%";
         if(c >= localData.daily.target) { document.getElementById('goalCard').classList.add('success-mode'); document.getElementById('goalSuccessMessage').style.display='block'; } else { document.getElementById('goalCard').classList.remove('success-mode'); document.getElementById('goalSuccessMessage').style.display='none'; }
-        document.getElementById('streakValue').innerText = localData.streak.current;
+        document.getElementById('streakValue').innerText = localData.streak ? localData.streak.current : 0;
         const tbody = document.getElementById('prayerTableBody'); const tfoot = document.getElementById('prayerTableFoot'); tbody.innerHTML = ""; let tt=0, td=0, tr=0;
         const days = getElapsedDays(); document.getElementById('elapsedDays').value = days; 
         localData.counts.forEach((item, i) => {
@@ -857,6 +865,13 @@
         prayerTimerInterval = setInterval(update, 1000);
     }
 
+    // --- YARDIMCI VE HESAPLAMALAR ---
+    function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
+    function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
+    function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); if (localData.history.length > 20) localData.history.pop(); saveToCloud(); }
+    function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
+    function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
+
     // --- DİĞER (TESBİHAT, STATS, AYARLAR) ---
     function renderTesbihat() {
         const c=document.getElementById('tesbihatContainer'); c.innerHTML="";
@@ -878,7 +893,16 @@
     }
 
     window.toggleDarkMode = () => { document.body.classList.toggle('dark-mode'); };
-    window.downloadBackup = () => { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(localData)],{type:'application/json'})); a.download='yedek.json'; a.click(); };
+    window.downloadBackupJSON = function() { const jsonStr = JSON.stringify(localData); const blob = new Blob([jsonStr], { type: 'application/json' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "ibadet_yedek_" + new Date().toISOString().split('T')[0] + ".json"; link.click(); };
+    window.importBackupJSON = function(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const newData = JSON.parse(e.target.result); if (newData.counts && newData.tesbihat) { showModal("Yedek Bulundu", "Veriler geri yüklensin mi? Mevcut veriler silinecektir.", () => { localData = newData; saveToCloud(); renderApp(); renderTesbihat(); showModal("Başarılı", "Yedek başarıyla yüklendi."); }); } else { showModal("Hata", "Geçersiz yedek dosyası."); } } catch (err) { showModal("Hata", "Dosya okunamadı: " + err); } }; reader.readAsText(file); input.value = ""; };
+    window.downloadDataAsCSV = function() { let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; localData.counts.forEach(c => { csv += `${c.name};${c.target};${c.done}\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kaza_takip.csv"; link.click(); };
+
+    // --- HESAPLAMA SİHİRBAZI ---
+    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><small class="calc-label-small">Sorumluluk Başlangıcı</small><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Düzenli Başlama Tarihi</small><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Hesaplanan Gün</small><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div>`; }); };
+    window.calcRow = function(i) { const r=document.getElementById(`row-${i}`); const inputs=r.querySelectorAll('input'); const s=inputs[0].value; const e=inputs[1].value; if(s&&e) document.getElementById(`res-${i}`).value = Math.max(0, Math.ceil((new Date(e)-new Date(s))/(86400000))); };
+    window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
+    window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
+    window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
 
 </script>
 </body>
