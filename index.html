@@ -623,6 +623,9 @@
                                     <option value="Gaziantep">GAZİANTEP</option>
                                     <option value="Sanliurfa">ŞANLIURFA</option>
                                     <option value="Kayseri">KAYSERİ</option>
+                                    <option value="Trabzon">TRABZON</option>
+                                    <option value="Samsun">SAMSUN</option>
+                                    <option value="Eskisehir">ESKİŞEHİR</option>
                                 </select>
                                 <div class="date-info" id="hijriDateDisplay">Hicri Tarih Yükleniyor...</div>
                             </div>
@@ -668,7 +671,7 @@
                     </div>
 
                     <div class="alert alert-secondary text-center small mt-3">
-                        <i class="fas fa-info-circle me-1"></i> Vakitler Diyanet İşleri Başkanlığı ile birebir uyumlu kaynaktan alınmaktadır.
+                        <i class="fas fa-info-circle me-1"></i> Vakitler Diyanet İşleri Başkanlığı hesaplama yöntemine (Method 13) göre alınmaktadır.
                     </div>
 
                 </div>
@@ -1429,25 +1432,28 @@
     function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    // --- NAMAZ VAKİTLERİ JS (DÜZELTİLMİŞ - UBILISIM) ---
+    // --- NAMAZ VAKİTLERİ JS (ALADHAN - METHOD 13) ---
     let prayerTimesData = null;
     let countdownInterval = null;
-    let currentCity = localStorage.getItem('selectedCity') || "ankara"; 
+    let currentCity = localStorage.getItem('selectedCity') || "Ankara"; 
 
     document.addEventListener('DOMContentLoaded', () => {
         const sel = document.getElementById('citySelector');
-        if(sel) sel.value = currentCity.charAt(0).toUpperCase() + currentCity.slice(1);
+        if(sel) sel.value = currentCity;
     });
 
     function fetchPrayerTimes(city) {
         if(city) {
-            // API lowercase istiyor
-            currentCity = city.toLowerCase(); 
-            localStorage.setItem('selectedCity', currentCity);
+            currentCity = city;
+            localStorage.setItem('selectedCity', city);
         }
         
-        // Ubilisim API - Diyanet Scraper
-        const apiUrl = `https://api.ubilisim.com/namazvakti?sehir=${currentCity}`;
+        // API Tarih Formatı Zorunluluğu (DD-MM-YYYY)
+        const date = new Date();
+        const strDate = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'); 
+        
+        // Aladhan API (Method 13 = Diyanet İşleri)
+        const apiUrl = `https://api.aladhan.com/v1/timingsByCity/${strDate}?city=${currentCity}&country=Turkey&method=13`;
 
         fetch(apiUrl)
             .then(response => {
@@ -1455,8 +1461,7 @@
                 return response.json();
             })
             .then(data => {
-                // Veri yapısı: { namazvakti: { imsak: "...", ... } }
-                prayerTimesData = data.namazvakti;
+                prayerTimesData = data.data;
                 updatePrayerUI();
                 startCountdown();
             })
@@ -1469,19 +1474,20 @@
     function updatePrayerUI() {
         if(!prayerTimesData) return;
         
-        const t = prayerTimesData;
-        
-        // Tarih
-        document.getElementById('gregorianDateDisplay').innerText = t.tarih;
-        document.getElementById('hijriDateDisplay').innerText = "Hicri Takvim (Veri Yok)"; 
+        const t = prayerTimesData.timings;
+        const d = prayerTimesData.date;
+
+        // Tarihleri Yaz
+        document.getElementById('gregorianDateDisplay').innerText = d.readable;
+        document.getElementById('hijriDateDisplay').innerText = `${d.hijri.day} ${d.hijri.month.tr || d.hijri.month.en} ${d.hijri.year}`;
 
         // Saatleri Yaz
-        document.getElementById('time-Imsak').innerText = t.imsak;
-        document.getElementById('time-Sunrise').innerText = t.gunes;
-        document.getElementById('time-Dhuhr').innerText = t.ogle;
-        document.getElementById('time-Asr').innerText = t.ikindi;
-        document.getElementById('time-Maghrib').innerText = t.aksam;
-        document.getElementById('time-Isha').innerText = t.yatsi;
+        document.getElementById('time-Imsak').innerText = t.Fajr;
+        document.getElementById('time-Sunrise').innerText = t.Sunrise;
+        document.getElementById('time-Dhuhr').innerText = t.Dhuhr;
+        document.getElementById('time-Asr').innerText = t.Asr;
+        document.getElementById('time-Maghrib').innerText = t.Maghrib;
+        document.getElementById('time-Isha').innerText = t.Isha;
     }
 
     function startCountdown() {
@@ -1494,20 +1500,20 @@
         if(!prayerTimesData) return;
 
         const now = new Date();
-        const times = prayerTimesData;
-        const prayerNames = { 'imsak': 'İmsak', 'gunes': 'Güneş', 'ogle': 'Öğle', 'ikindi': 'İkindi', 'aksam': 'Akşam', 'yatsi': 'Yatsı' };
+        const times = prayerTimesData.timings;
+        const prayerNames = { 'Fajr': 'İmsak', 'Sunrise': 'Güneş', 'Dhuhr': 'Öğle', 'Asr': 'İkindi', 'Maghrib': 'Akşam', 'Isha': 'Yatsı' };
         
         let nextTime = null;
         let nextName = "";
         let currentActive = "";
 
         const timeList = [
-            { key: 'imsak', val: times.imsak },
-            { key: 'gunes', val: times.gunes },
-            { key: 'ogle', val: times.ogle },
-            { key: 'ikindi', val: times.ikindi },
-            { key: 'aksam', val: times.aksam },
-            { key: 'yatsi', val: times.yatsi }
+            { key: 'Fajr', val: times.Fajr },
+            { key: 'Sunrise', val: times.Sunrise },
+            { key: 'Dhuhr', val: times.Dhuhr },
+            { key: 'Asr', val: times.Asr },
+            { key: 'Maghrib', val: times.Maghrib },
+            { key: 'Isha', val: times.Isha }
         ];
 
         for (let i = 0; i < timeList.length; i++) {
@@ -1518,7 +1524,7 @@
             if (pTime > now) {
                 nextTime = pTime;
                 nextName = prayerNames[timeList[i].key];
-                currentActive = i > 0 ? timeList[i-1].key : 'yatsi'; 
+                currentActive = i > 0 ? timeList[i-1].key : 'Isha'; 
                 break;
             }
         }
@@ -1526,29 +1532,17 @@
         if (!nextTime) {
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
-            const [h, m] = times.imsak.split(':');
+            const [h, m] = times.Fajr.split(':');
             tomorrow.setHours(h, m, 0);
             nextTime = tomorrow;
             nextName = "İmsak";
-            currentActive = 'yatsi';
+            currentActive = 'Isha';
         }
 
-        // UI Güncelle - Aktif Kutuyu Boya
-        // ID'ler büyük harfliydi (box-Imsak), API küçük harfli (imsak). Eşleştirelim.
-        // HTML'de ID'ler: box-Imsak, box-Sunrise, box-Dhuhr, box-Asr, box-Maghrib, box-Isha
-        // API keyleri: imsak, gunes, ogle, ikindi, aksam, yatsi
-        const mapping = {
-            'imsak': 'Imsak', 'gunes': 'Sunrise', 'ogle': 'Dhuhr',
-            'ikindi': 'Asr', 'aksam': 'Maghrib', 'yatsi': 'Isha'
-        };
-
         document.querySelectorAll('.vakit-item').forEach(el => el.classList.remove('active'));
-        
-        if(currentActive && mapping[currentActive]) {
-            const activeBoxId = `box-${mapping[currentActive]}`;
-            if(document.getElementById(activeBoxId)) {
-                document.getElementById(activeBoxId).classList.add('active');
-            }
+        const activeBoxId = `box-${currentActive}`;
+        if(document.getElementById(activeBoxId)) {
+            document.getElementById(activeBoxId).classList.add('active');
         }
 
         const diff = nextTime - now;
