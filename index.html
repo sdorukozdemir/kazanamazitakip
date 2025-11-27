@@ -53,13 +53,16 @@
             --stat-avg-color: #d63384; 
         }
         
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; padding-bottom: 80px; }
+        body.dark-mode .text-muted { color: #adb5bd !important; }
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
+        /* LOADING */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2); border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
 
+        /* SIDEBAR */
         .wrapper { display: flex; width: 100%; }
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
@@ -74,6 +77,7 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
+        /* TABLO */
         .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; overflow-x: auto; width: 100%; display: block; }
         .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
         .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); }
@@ -138,7 +142,7 @@
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
 
-        /* İSTATİSTİK KARTLARI */
+        /* İSTATİSTİK */
         .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
         .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
         .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
@@ -153,8 +157,6 @@
         .analysis-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; }
         .icon-good { background: #d1e7dd; color: #0f5132; } .icon-bad { background: #f8d7da; color: #842029; }
         .analysis-text { flex: 1; } .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; } .analysis-value { font-size: 1.1rem; font-weight: bold; }
-
-        /* TAHMİN KARTI */
         .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .prediction-icon { font-size: 2.5rem; color: #198754; margin-bottom: 10px; }
         .prediction-date { font-size: 1.5rem; font-weight: bold; color: #198754; margin: 5px 0; }
@@ -188,7 +190,7 @@
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
 
-        /* --- NAMAZ VAKTİ WIDGET CSS'i (YENİ) --- */
+        /* --- YENİ EKLENEN NAMAZ VAKTİ WIDGET CSS'i --- */
         .prayer-widget-card {
             background: linear-gradient(145deg, #252438, #1e1d2b);
             color: white;
@@ -270,6 +272,7 @@
         </div>
         <ul class="list-unstyled components p-2">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
+            <!-- YENİ MENÜ EKLENDİ -->
             <li id="menu-prayer" onclick="showSection('prayer')"><i class="fas fa-clock me-3"></i> Namaz Vakitleri</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
@@ -364,7 +367,7 @@
             </div>
         </div>
 
-        <!-- BÖLÜM 2: NAMAZ VAKİTLERİ (YENİ VE ÇALIŞAN) -->
+        <!-- YENİ BÖLÜM: NAMAZ VAKİTLERİ (DROPDOWN + HİCRİ TAKVİM) -->
         <div id="section-prayer" style="display: none;">
             <h3 class="app-header">Namaz Vakitleri</h3>
             <div class="row justify-content-center">
@@ -375,8 +378,8 @@
                                 <div class="pw-location">
                                     <i class="fas fa-map-marker-alt"></i> 
                                     <span id="pwCityName">İSTANBUL</span>
-                                    <span style="opacity:0.5; margin:0 5px;">•</span> 
-                                    <span>TR</span>
+                                    <span style="opacity:0.5">•</span>
+                                    <span id="pwCountryName">TR</span>
                                 </div>
                                 <div class="pw-date" id="pwFullDate">Yükleniyor...</div>
                             </div>
@@ -394,7 +397,12 @@
                         </div>
 
                         <div class="pw-grid" id="pwGrid">
-                            <!-- JS Dolduracak -->
+                            <div class="pw-box"><span class="pw-box-label">İMSAK</span><span class="pw-box-time">--:--</span></div>
+                            <div class="pw-box"><span class="pw-box-label">GÜNEŞ</span><span class="pw-box-time">--:--</span></div>
+                            <div class="pw-box active"><span class="pw-box-label">ÖĞLE</span><span class="pw-box-time">--:--</span></div>
+                            <div class="pw-box"><span class="pw-box-label">İKİNDİ</span><span class="pw-box-time">--:--</span></div>
+                            <div class="pw-box"><span class="pw-box-label">AKŞAM</span><span class="pw-box-time">--:--</span></div>
+                            <div class="pw-box"><span class="pw-box-label">YATSI</span><span class="pw-box-time">--:--</span></div>
                         </div>
                     </div>
                 </div>
