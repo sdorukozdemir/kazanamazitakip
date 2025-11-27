@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" id="my-manifest">
 
-    <!-- CSS Kütüphaneleri -->
+    <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
@@ -58,7 +58,6 @@
         
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
-        /* LOADING */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2); border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -194,7 +193,7 @@
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
 
-        /* --- YENİ EKLENEN NAMAZ VAKTİ WIDGET CSS'i --- */
+        /* --- NAMAZ VAKTİ WIDGET CSS'i --- */
         .prayer-widget-card {
             background: linear-gradient(145deg, #252438, #1e1d2b);
             color: white;
@@ -235,12 +234,18 @@
     <div class="loading-text">Veriler Yükleniyor...</div>
 </div>
 
-<!-- ŞEHİR SEÇİM MODALI (YENİ EKLENDİ) -->
+<!-- GÜNCELLENMİŞ ŞEHİR SEÇİM MODALI (DROPDOWN) -->
 <div id="cityModal" class="custom-modal-overlay">
     <div class="custom-modal">
         <h4 style="color:var(--text-color)">Şehir Seçimi</h4>
-        <p style="color:var(--text-color)">Namaz vakitleri için şehrinizi giriniz.</p>
-        <input type="text" id="cityInput" class="form-control text-center mb-3" placeholder="Örn: Istanbul" style="text-transform: capitalize;">
+        <p style="color:var(--text-color)">Lütfen listeden şehrinizi seçin.</p>
+        
+        <!-- Input yerine Select -->
+        <select id="citySelect" class="form-select mb-3 text-center" style="font-weight:bold;">
+            <option value="">-- Şehir Seçiniz --</option>
+            <!-- Şehirler JS ile buraya dolacak -->
+        </select>
+
         <div class="modal-btn-group">
             <button class="modal-btn btn-cancel" onclick="document.getElementById('cityModal').style.display='none'">İptal</button>
             <button class="modal-btn btn-ok" onclick="saveCity()">Kaydet</button>
@@ -274,7 +279,6 @@
         </div>
         <ul class="list-unstyled components p-2">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
-            <!-- YENİ MENÜ EKLENDİ -->
             <li id="menu-prayer" onclick="showSection('prayer')"><i class="fas fa-clock me-3"></i> Namaz Vakitleri</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
@@ -369,7 +373,7 @@
             </div>
         </div>
 
-        <!-- YENİ BÖLÜM: NAMAZ VAKİTLERİ -->
+        <!-- NAMAZ VAKİTLERİ -->
         <div id="section-prayer" style="display: none;">
             <h3 class="app-header">Namaz Vakitleri</h3>
             <div class="row justify-content-center">
@@ -379,7 +383,7 @@
                             <div>
                                 <div class="pw-location">
                                     <i class="fas fa-map-marker-alt"></i> 
-                                    <span id="pwCityName">ŞEHİR SEÇİLMEDİ</span>
+                                    <span id="pwCityName">ANKARA</span>
                                     <span style="opacity:0.5">•</span>
                                     <span id="pwCountryName">TR</span>
                                 </div>
@@ -399,7 +403,6 @@
                         </div>
 
                         <div class="pw-grid" id="pwGrid">
-                            <!-- JS ile doldurulacak -->
                             <div class="pw-box"><span class="pw-box-label">İMSAK</span><span class="pw-box-time">--:--</span></div>
                             <div class="pw-box"><span class="pw-box-label">GÜNEŞ</span><span class="pw-box-time">--:--</span></div>
                             <div class="pw-box active"><span class="pw-box-label">ÖĞLE</span><span class="pw-box-time">--:--</span></div>
@@ -511,7 +514,6 @@
 
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
-    <!-- YENİ ALT MENÜ İKONU -->
     <div class="nav-item" onclick="showSection('prayer'); activateNav(this)"><i class="fas fa-clock"></i><span>Vakit</span></div>
     <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>İstatistik</span></div>
     <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
@@ -539,7 +541,7 @@
     function getIsoDate(date) { return date.toISOString().split('T')[0]; }
 
     const defaultData = {
-        city: "Ankara", 
+        city: "ISTANBUL", // Varsayılan Şehir (İngilizce Format)
         startDate: new Date().toISOString().split('T')[0],
         daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 },
         streak: { current: 0, lastAchievedDate: "" },
@@ -569,6 +571,7 @@
                     renderCalculatorRows();
                     const activeId = document.querySelector('.components li.active') ? document.querySelector('.components li.active').id.replace('menu-', '') : 'dashboard';
                     showSection(activeId); 
+                    populateCities(); // Şehir listesini doldur
                 } catch (err) { console.error(err); } 
                 finally { hideLoader(); }
             });
@@ -580,7 +583,7 @@
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
     
     function ensureDataStructure() {
-        if (!localData.city) localData.city = "Ankara"; 
+        if (!localData.city) localData.city = "ISTANBUL"; 
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
         if (!localData.calendar) localData.calendar = {};
@@ -593,7 +596,7 @@
         if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
     }
 
-    // --- NAVIGATION GÜNCELLENDİ ---
+    // --- NAVIGATION ---
     window.showSection = function(id) {
         if(!id) id = 'dashboard';
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
@@ -744,55 +747,72 @@
     function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    /* --- NAMAZ VAKTİ WIDGET MANTIĞI (GÜNCELLENDİ: HİCRİ TARİH + TÜRKÇE KARAKTER FIX) --- */
+    /* --- GÜNCELLENMİŞ NAMAZ VAKTİ WIDGET MANTIĞI (DROPDOWN + GARANTİ API) --- */
+    
+    // TÜRKİYE'NİN 81 İLİ (API İÇİN UYGUN İNGİLİZCE FORMATTA)
+    const citiesOfTurkey = [
+        "ADANA", "ADIYAMAN", "AFYONKARAHISAR", "AGRI", "AKSARAY", "AMASYA", "ANKARA", "ANTALYA", "ARDAHAN", "ARTVIN", "AYDIN",
+        "BALIKESIR", "BARTIN", "BATMAN", "BAYBURT", "BILECIK", "BINGOL", "BITLIS", "BOLU", "BURDUR", "BURSA",
+        "CANAKKALE", "CANKIRI", "CORUM", "DENIZLI", "DIYARBAKIR", "DUZCE", "EDIRNE", "ELAZIG", "ERZINCAN", "ERZURUM", "ESKISEHIR",
+        "GAZIANTEP", "GIRESUN", "GUMUSHANE", "HAKKARI", "HATAY", "IGDIR", "ISPARTA", "ISTANBUL", "IZMIR",
+        "KAHRAMANMARAS", "KARABUK", "KARAMAN", "KARS", "KASTAMONU", "KAYSERI", "KILIS", "KIRIKKALE", "KIRKLARELI", "KIRSEHIR", "KOCAELI", "KONYA", "KUTAHYA",
+        "MALATYA", "MANISA", "MARDIN", "MERSIN", "MUGLA", "MUS", "NEVSEHIR", "NIGDE", "ORDU", "OSMANIYE",
+        "RIZE", "SAKARYA", "SAMSUN", "SANLIURFA", "SIIRT", "SINOP", "SIRNAK", "SIVAS",
+        "TEKIRDAG", "TOKAT", "TRABZON", "TUNCELI", "USAK", "VAN", "YALOVA", "YOZGAT", "ZONGULDAK"
+    ];
+
     let prayerTimesData = null;
     let prayerTimerInterval = null;
 
+    function populateCities() {
+        const select = document.getElementById('citySelect');
+        // Eğer zaten doluysa tekrar doldurma
+        if(select.options.length > 1) return; 
+
+        citiesOfTurkey.forEach(city => {
+            const opt = document.createElement('option');
+            opt.value = city;
+            // Ekranda güzel gözüksün diye Türkçe karakterleri simüle edebiliriz ama basit tutalım
+            opt.text = city; 
+            select.appendChild(opt);
+        });
+    }
+
     function openCityModal() {
-        document.getElementById('cityInput').value = localData.city || "";
+        populateCities();
+        const currentCity = localData.city || "ISTANBUL";
+        document.getElementById('citySelect').value = currentCity;
         document.getElementById('cityModal').style.display = 'flex';
     }
 
-    // --- YENİ EKLENEN: TÜRKÇE -> İNGİLİZCE DÖNÜŞTÜRÜCÜ ---
-    function convertToEnglish(text) {
-        return text
-            .replace(/Ğ/g, "G").replace(/ğ/g, "g")
-            .replace(/Ü/g, "U").replace(/ü/g, "u")
-            .replace(/Ş/g, "S").replace(/ş/g, "s")
-            .replace(/İ/g, "I").replace(/ı/g, "i")
-            .replace(/Ö/g, "O").replace(/ö/g, "o")
-            .replace(/Ç/g, "C").replace(/ç/g, "c");
-    }
-
     function saveCity() {
-        let rawCity = document.getElementById('cityInput').value.trim();
-        if(rawCity) {
-            // Ekranda güzel gözüksün diye Baş harfi büyüt
-            const displayCity = rawCity.toLocaleUpperCase('tr-TR');
-            localData.city = displayCity;
+        const selectedCity = document.getElementById('citySelect').value;
+        if(selectedCity) {
+            localData.city = selectedCity;
             saveToCloud();
             document.getElementById('cityModal').style.display = 'none';
             initPrayerWidget(); 
+        } else {
+            alert("Lütfen bir şehir seçiniz.");
         }
     }
 
     function initPrayerWidget() {
-        if(!localData.city) localData.city = "ANKARA";
-        document.getElementById('pwCityName').innerText = localData.city.toLocaleUpperCase('tr-TR');
+        if(!localData.city) localData.city = "ISTANBUL";
+        document.getElementById('pwCityName').innerText = localData.city; // Zaten büyük harf ve İngilizce karakterli
         
         // Tarihleri Yazdır
         const date = new Date();
         const strDate = date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
         
-        // --- DÜZELTME: HİCRİ TAKVİM ---
-        // 'islamic-uma' bazı tarayıcılarda çalışmaz, 'islamic-civil' daha güvenlidir.
+        // Hicri Takvim Desteği
         let hijriDate = "";
         try {
             hijriDate = new Intl.DateTimeFormat('tr-TR-u-ca-islamic-civil', {
                 day: 'numeric', month: 'long', year: 'numeric'
             }).format(date).replace('Hicri', '').trim();
         } catch (e) {
-            hijriDate = ""; // Desteklemiyorsa boş kalsın
+            hijriDate = "";
         }
 
         document.getElementById('pwFullDate').innerText = `${strDate} • ${hijriDate}`;
@@ -801,34 +821,34 @@
     }
 
     function fetchPrayerTimes(city) {
-        // --- DÜZELTME: KARAKTER ÇEVİRİMİ ---
-        // API genellikle İngilizce karakter bekler (Örn: Istanbul, Sanliurfa, Igdir)
-        const englishCity = convertToEnglish(city);
+        // Artık 'city' değişkeni dropdown'dan geldiği için kesinlikle "ISTANBUL" gibi doğru formattadır.
+        // Yine de garanti olsun diye trim yapalım.
+        const safeCity = city.trim();
         
-        // API Parametreleri
         const d = new Date();
         const yyyy = d.getFullYear();
         const mm = String(d.getMonth() + 1).padStart(2, '0');
         const dd = String(d.getDate()).padStart(2, '0');
         const dateStr = `${yyyy}-${mm}-${dd}`;
 
-        // Önce temizlenmiş (İngilizce karakterli) şehir ismiyle dene
-        fetch(`https://vakit.vercel.app/api/timesFromPlace?country=Turkey&region=${englishCity}&city=${englishCity}&date=${dateStr}&days=1&timezoneOffset=180`)
+        // Vakit API
+        fetch(`https://vakit.vercel.app/api/timesFromPlace?country=Turkey&region=${safeCity}&city=${safeCity}&date=${dateStr}&days=1&timezoneOffset=180`)
             .then(res => res.json())
             .then(data => {
                 if(data && data.times && data.times[dateStr]) {
                     processPrayerData(data.times[dateStr]);
                 } else {
-                    // Veri gelmezse, URL encode edilmiş Türkçe halini dene (Fallback)
-                    const encodedCity = encodeURIComponent(city);
-                     fetch(`https://vakit.vercel.app/api/timesFromPlace?country=Turkey&region=${encodedCity}&city=${encodedCity}&date=${dateStr}&days=1&timezoneOffset=180`)
+                    // Fallback (Alternatif API)
+                    fetch(`https://namaz-vakti.vercel.app/api/timesFromPlace?country=Turkey&region=${safeCity}&city=${safeCity}`)
                         .then(res2 => res2.json())
                         .then(data2 => {
-                            if(data2 && data2.times && data2.times[dateStr]) {
-                                processPrayerData(data2.times[dateStr]);
+                            if(data2 && data2.times) {
+                                // Bu API'nin formatı { Imsak: "...", Gunes: "..." } şeklindedir
+                                const t = data2.times;
+                                const arr = [t.Imsak, t.Gunes, t.Ogle, t.Ikindi, t.Aksam, t.Yatsi];
+                                processPrayerData(arr);
                             } else {
-                                // Yine başarısız olursa kullanıcıya bilgi ver
-                                showModal("Uyarı", "Namaz vakitleri için bu şehir bulunamadı. Lütfen yazımı kontrol edin veya en yakın büyük şehri deneyin.");
+                                console.error("Yedek API de başarısız.");
                             }
                         });
                 }
@@ -837,6 +857,7 @@
     }
 
     function processPrayerData(timesArr) {
+        // timesArr formatı: ["05:00", "06:30", ...]
         const timesObj = {
             Imsak: timesArr[0], Gunes: timesArr[1], Ogle: timesArr[2],
             Ikindi: timesArr[3], Aksam: timesArr[4], Yatsi: timesArr[5]
@@ -870,6 +891,7 @@
             if(!prayerTimesData) return;
             const now = new Date();
             const timeStr = (t) => {
+                if(!t) return new Date();
                 const [h, m] = t.split(':').map(Number);
                 const d = new Date(); d.setHours(h, m, 0, 0);
                 return d;
