@@ -23,7 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <style>
-        /* --- TEMA AYARLARI (ORİJİNAL) --- */
+        /* --- ORİJİNAL TEMA AYARLARI --- */
         :root { 
             --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
             --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
@@ -74,14 +74,13 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* TABLO */
         .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; overflow-x: auto; width: 100%; display: block; }
         .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
         .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); }
         .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: middle !important; padding: 10px 5px; height: 1px; }
         .main-table tfoot td { background-color: var(--table-foot-bg); color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid var(--table-foot-border); vertical-align: middle; }
         .table-input, .table-value-box { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; height: 38px; border-radius: 8px; outline: none; margin: 0; display: flex; align-items: center; justify-content: center; }
-        .col-namaz { background-color: var(--col-namaz-bg) !important; color: var(--col-namaz-text) !important; font-weight: 600; text-align: center !important; vertical-align: middle !important; min-width: 80px; }
+        .col-namaz { background-color: var(--col-namaz-bg) !important; color: var(--col-namaz-text) !important; font-weight: 600; min-width: 80px; text-align: center !important; vertical-align: middle !important; }
         .col-action { padding: 5px !important; }
         .action-wrapper { display: flex; justify-content: center; align-items: center; gap: 5px; height: 38px; margin: 0; }
         .btn-action { width: 38px; height: 38px; border-radius: 8px; border: none; color: white; font-weight: bold; cursor: pointer; transition: transform 0.05s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); font-size: 1.2rem; margin: 0; display: flex; justify-content: center; align-items: center; }
@@ -92,7 +91,6 @@
         .progress-text { font-size: 10px; margin-top: 1px; line-height: 1; font-weight: bold; }
         .spacer-box { height: 20px; margin-top: 6px; width: 100%; visibility: hidden; }
 
-        /* KARTLAR */
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
@@ -366,7 +364,7 @@
             </div>
         </div>
 
-        <!-- BÖLÜM 2: NAMAZ VAKİTLERİ -->
+        <!-- BÖLÜM 2: NAMAZ VAKİTLERİ (YENİ VE ÇALIŞAN) -->
         <div id="section-prayer" style="display: none;">
             <h3 class="app-header">Namaz Vakitleri</h3>
             <div class="row justify-content-center">
@@ -377,8 +375,8 @@
                                 <div class="pw-location">
                                     <i class="fas fa-map-marker-alt"></i> 
                                     <span id="pwCityName">İSTANBUL</span>
-                                    <span style="opacity:0.5">•</span>
-                                    <span id="pwCountryName">TR</span>
+                                    <span style="opacity:0.5; margin:0 5px;">•</span> 
+                                    <span>TR</span>
                                 </div>
                                 <div class="pw-date" id="pwFullDate">Yükleniyor...</div>
                             </div>
@@ -396,13 +394,7 @@
                         </div>
 
                         <div class="pw-grid" id="pwGrid">
-                            <!-- JS ile doldurulacak -->
-                            <div class="pw-box"><span class="pw-box-label">İMSAK</span><span class="pw-box-time">--:--</span></div>
-                            <div class="pw-box"><span class="pw-box-label">GÜNEŞ</span><span class="pw-box-time">--:--</span></div>
-                            <div class="pw-box active"><span class="pw-box-label">ÖĞLE</span><span class="pw-box-time">--:--</span></div>
-                            <div class="pw-box"><span class="pw-box-label">İKİNDİ</span><span class="pw-box-time">--:--</span></div>
-                            <div class="pw-box"><span class="pw-box-label">AKŞAM</span><span class="pw-box-time">--:--</span></div>
-                            <div class="pw-box"><span class="pw-box-label">YATSI</span><span class="pw-box-time">--:--</span></div>
+                            <!-- JS Dolduracak -->
                         </div>
                     </div>
                 </div>
@@ -751,9 +743,12 @@
             hijriDate = new Intl.DateTimeFormat('tr-TR-u-ca-islamic-civil', {
                 day: 'numeric', month: 'long', year: 'numeric'
             }).format(date).replace('Hicri', '').trim();
-        } catch (e) { hijriDate = ""; }
+        } catch (e) {
+            hijriDate = "";
+        }
 
         document.getElementById('pwFullDate').innerText = `${strDate} • ${hijriDate}`;
+
         fetchPrayerTimes(localData.city);
     }
 
