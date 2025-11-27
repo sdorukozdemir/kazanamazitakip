@@ -3,40 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Kaza ve İbadet Takip</title>
+    <title>İbadet Takip & Namaz Vakti</title>
     
     <meta name="theme-color" content="#198754">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" id="my-manifest">
 
-    <!-- STİLLER -->
+    <!-- CSS Kütüphaneleri -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
     
-    <!-- FIREBASE -->
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
-    <!-- CHART & EFEKT -->
+    <!-- Grafikler ve Efektler -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <style>
-        :root { --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; --border-color: #ced4da; --modal-bg: #ffffff; --col-namaz-bg: #5a826e; --col-namaz-text: #ffffff; --table-foot-bg: #1f3b2f; --table-foot-border: #142921; --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997); --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724; --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe; --stat-avg-color: #6610f2; }
-        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; --border-color: #444; --modal-bg: #2d2d2d; --col-namaz-bg: #1e3b2e; --col-namaz-text: #e0e0e0; --table-foot-bg: #0b1a15; --table-foot-border: #050d0a; --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43); --box-target-bg: #0f2e1c; --box-target-border: #146c43; --box-target-text: #75b798; --box-add-bg: #052c65; --box-add-border: #084298; --stat-avg-color: #d63384; }
+        /* --- GENEL AYARLAR --- */
+        :root { 
+            --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
+            --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
+            --border-color: #ced4da; --modal-bg: #ffffff;
+            
+            --col-namaz-bg: #5a826e; --col-namaz-text: #ffffff;
+            --table-foot-bg: #1f3b2f; --table-foot-border: #142921;
+            
+            --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057;
+            --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
+            --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
+            
+            --scroll-track: #e9ecef; --scroll-thumb: #ced4da;
+            --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724;
+            --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe;
+            --stat-avg-color: #6610f2;
+        }
+        body.dark-mode { 
+            --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
+            --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
+            --border-color: #444; --modal-bg: #2d2d2d;
+            
+            --col-namaz-bg: #1e3b2e; --col-namaz-text: #e0e0e0;
+            --table-foot-bg: #0b1a15; --table-foot-border: #050d0a;
+            
+            --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
+            --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
+            --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
+            
+            --scroll-track: #2d2d2d; --scroll-thumb: #555;
+            --box-target-bg: #0f2e1c; --box-target-border: #146c43; --box-target-text: #75b798;
+            --box-add-bg: #052c65; --box-add-border: #084298;
+            --stat-avg-color: #d63384; 
+        }
         
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
         
-        /* LOADING */
-        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
+        /* --- NAMAZ VAKTİ WIDGET TASARIMI --- */
+        .prayer-widget-card {
+            background: linear-gradient(145deg, #252438, #1e1d2b);
+            color: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            font-family: 'Poppins', sans-serif;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pw-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .pw-location { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        .pw-date { font-size: 0.8rem; opacity: 0.7; margin-top: 4px; font-weight: 400; color: #a9a8b6; }
+        .btn-change-city { background: rgba(255,255,255,0.1); border: none; color: white; border-radius: 8px; padding: 4px 10px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
+        .btn-change-city:hover { background: rgba(255,255,255,0.2); }
+
+        .pw-timer-area {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .pw-next-name { font-size: 1.8rem; font-weight: 700; line-height: 1; text-transform: uppercase; margin-bottom: 3px; }
+        .pw-label { font-size: 0.85rem; opacity: 0.8; color: #a9a8b6; }
+        .pw-countdown { font-size: 2.5rem; font-weight: 400; letter-spacing: 2px; font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
+
+        .pw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .pw-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        .pw-box-label { font-size: 0.65rem; text-transform: uppercase; opacity: 0.6; font-weight: 600; margin-bottom: 2px; }
+        .pw-box-time { font-size: 1.2rem; font-weight: 600; }
+        .pw-box-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.3; }
+        
+        /* Aktif Kutu (Turuncu) */
+        .pw-box.active {
+            background: #e67e22;
+            color: white;
+            border-color: #e67e22;
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+        }
+        .pw-box.active .pw-box-label { opacity: 0.9; }
+        .pw-box.active .pw-box-icon { opacity: 0.8; }
+
+        @media (max-width: 400px) {
+            .pw-next-name { font-size: 1.4rem; }
+            .pw-countdown { font-size: 1.8rem; }
+            .pw-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* --- DİĞER CSS --- */
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2); border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { margin-top: 15px; font-weight: 600; color: #198754; }
 
-        /* LAYOUT */
         .wrapper { display: flex; width: 100%; }
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
@@ -47,43 +147,50 @@
         #sidebar ul li { padding: 15px; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
-        #content { padding: 20px; min-height: 100vh; width: 100%; max-width: 900px; margin: 0 auto; padding-bottom: 90px; }
+        #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* NAMAZ WIDGET (DIYANET STYLE) */
-        .prayer-widget-card { background: linear-gradient(135deg, #2b2b36 0%, #1e1e24 100%); border-radius: 25px; padding: 25px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 20px; border: 1px solid #3a3a45; }
-        .diyanet-select { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; padding: 10px; width: 100%; margin-bottom: 10px; }
-        .diyanet-select option { color: #000; }
-        .main-timer-box { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .next-vakit-label { font-size: 1.3rem; font-weight: bold; text-transform: uppercase; display: block; }
-        .timer-countdown { font-size: 3.5rem; font-weight: 700; font-family: monospace; letter-spacing: -2px; line-height: 1; margin: 10px 0; }
-        .vakit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .vakit-item { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .vakit-item.active { background: linear-gradient(135deg, #fd7e14, #d35400); border-color: #fd7e14; transform: scale(1.05); box-shadow: 0 5px 15px rgba(253, 126, 20, 0.3); }
-        .vakit-name { font-size: 0.75rem; opacity: 0.8; display: block; font-weight: 600; text-transform: uppercase; }
-        .vakit-time { font-size: 1.2rem; font-weight: bold; }
+        /* TABLO */
+        .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; width: 100%; display: block; overflow-x: auto;}
+        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
+        .main-table thead th { background-color: var(--table-head); color: white; text-align: center; padding: 12px 5px; border: 1px solid var(--border-color); }
+        .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: middle !important; padding: 10px 5px; height: 1px; }
+        .main-table tfoot td { background-color: var(--table-foot-bg); color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid var(--table-foot-border); }
+        .table-input, .table-value-box { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; height: 38px; border-radius: 8px; outline: none; margin: 0; display: flex; align-items: center; justify-content: center; }
+        .col-namaz { background-color: var(--col-namaz-bg) !important; color: var(--col-namaz-text) !important; font-weight: 600; min-width: 80px; }
+        .btn-action { width: 38px; height: 38px; border-radius: 8px; border: none; color: white; font-weight: bold; cursor: pointer; transition: transform 0.05s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); font-size: 1.2rem; display: flex; justify-content: center; align-items: center; }
+        .btn-action:active { transform: scale(0.85); }
+        .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
+        .action-wrapper { display: flex; justify-content: center; gap: 5px; height: 38px; }
+        .progress-container { height: 20px; display: flex; flex-direction: column; justify-content: flex-end; margin-top: 6px; }
+        .progress { height: 12px; border-radius: 6px; background-color: #e9ecef; width: 100%; }
+        .spacer-box { height: 20px; margin-top: 6px; width: 100%; visibility: hidden; }
 
-        /* GENEL UI */
-        .card-custom { border-radius: 16px; background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.05); padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); }
-        .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; background: var(--card-bg); }
-        .main-table { width: 100%; border-collapse: collapse; min-width: 600px; font-size: 0.85rem; }
-        .main-table th { background: var(--table-head); color: white; padding: 12px; text-align: center; }
-        .main-table td { background: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 8px; text-align: center; vertical-align: middle; }
-        .table-input { width: 100%; max-width: 100px; text-align: center; border: 1px solid var(--border-color); border-radius: 5px; padding: 5px; background: var(--input-bg); color: var(--input-text); margin: 0 auto; display: block; font-weight: bold; }
-        .btn-action { width: 35px; height: 35px; border-radius: 8px; border: none; color: white; font-weight: bold; margin: 0 2px; }
-        .btn-plus { background: #198754; } .btn-minus { background: #6c757d; }
+        .card-shadow { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .login-card { @extend .card-shadow; } 
+        #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
+        .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; border-radius: 16px; }
+        .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
         
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
+        .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
+        .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
+
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
         .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        @media (max-width: 768px) { .bottom-nav { display: flex; } }
-
-        /* DİĞERLERİ */
-        .login-card { max-width: 400px; margin: auto; margin-top: 10vh; padding: 40px; text-align: center; background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; }
-        .goal-card.success-mode { border: 3px solid #ffc107; }
+        @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } }
+        
+        /* Tesbihat vb. stilleri (özet) */
+        .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; background: var(--card-bg); border-radius: 16px; margin-bottom: 10px; }
+        .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 10px 0; }
+        .zikr-count { font-size: 2.8rem; font-weight: bold; color: var(--text-color); }
+        .zikr-btn { border: none; cursor: pointer; } .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; }
     </style>
 </head>
 <body>
@@ -91,12 +198,34 @@
 <!-- LOADING -->
 <div id="loading-overlay">
     <div class="spinner"></div>
-    <div style="margin-top:15px; font-weight:600; color:#198754;">Yükleniyor...</div>
+    <div class="loading-text">Yükleniyor...</div>
 </div>
 
-<!-- GİRİŞ -->
+<!-- ŞEHİR SEÇİM MODALI -->
+<div id="cityModal" class="custom-modal-overlay">
+    <div class="custom-modal">
+        <h4 style="color:var(--text-color)">Şehir Seçimi</h4>
+        <p style="color:var(--text-color)">Namaz vakitleri için şehrinizi giriniz.</p>
+        <input type="text" id="cityInput" class="form-control text-center mb-3" placeholder="Örn: Istanbul" style="text-transform: capitalize;">
+        <div class="modal-btn-group">
+            <button class="modal-btn btn-cancel" onclick="document.getElementById('cityModal').style.display='none'">İptal</button>
+            <button class="modal-btn btn-ok" onclick="saveCity()">Kaydet</button>
+        </div>
+    </div>
+</div>
+
+<div id="customModal" class="custom-modal-overlay">
+    <div class="custom-modal">
+        <h4 id="modalTitle" style="color:var(--text-color)">Başlık</h4>
+        <p id="modalMessage" style="color:var(--text-color)">Mesaj.</p>
+        <div class="modal-btn-group" id="modalButtons"></div>
+    </div>
+</div>
+<div id="overlay" onclick="toggleSidebar()"></div>
+
+<!-- LOGIN -->
 <div id="login-screen">
-    <div class="login-card">
+    <div class="login-card p-5 text-center" style="max-width: 400px; border-radius:16px; background:var(--card-bg); box-shadow:0 10px 30px rgba(0,0,0,0.1);">
         <h3 class="text-success fw-bold mb-4">İbadet Takip</h3>
         <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="loginWithGoogle()">
             <i class="fab fa-google me-2"></i> Google ile Giriş
@@ -104,7 +233,6 @@
     </div>
 </div>
 
-<!-- UYGULAMA -->
 <div id="app-wrapper" class="wrapper" style="display:none;">
     <nav id="sidebar">
         <div class="p-4 text-center" style="background: rgba(0,0,0,0.1);">
@@ -113,101 +241,172 @@
         </div>
         <ul class="list-unstyled components p-2">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
-            <li id="menu-vakitler" onclick="showSection('vakitler')"><i class="fas fa-clock me-3"></i> Namaz Vakitleri</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
-            <li onclick="toggleDarkMode()"><i class="fas fa-moon me-3"></i> Mod Değiştir</li>
-            <li onclick="logout()"><i class="fas fa-sign-out-alt me-3"></i> Çıkış</li>
+            <li id="menu-settings" onclick="showSection('settings')"><i class="fas fa-cog me-3"></i> Ayarlar</li>
+            <li onclick="toggleDarkMode()"><i class="fas fa-moon me-3"></i> <span id="darkModeText">Gece Modu</span></li>
+            <li onclick="logout()"><i class="fas fa-sign-out-alt me-3"></i> Çıkış Yap</li>
         </ul>
     </nav>
 
     <div id="content">
         <!-- DASHBOARD -->
         <div id="section-dashboard" style="display: block;">
+            
+            <!-- NAMAZ VAKTİ WIDGET -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8 col-lg-6">
+                    <div class="prayer-widget-card">
+                        <div class="pw-header">
+                            <div>
+                                <div class="pw-location">
+                                    <i class="fas fa-map-marker-alt"></i> 
+                                    <span id="pwCityName">ŞEHİR SEÇİLMEDİ</span>
+                                    <span style="opacity:0.5">•</span>
+                                    <span id="pwCountryName">TR</span>
+                                </div>
+                                <div class="pw-date" id="pwFullDate">Yükleniyor...</div>
+                            </div>
+                            <button class="btn-change-city" onclick="openCityModal()">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                        </div>
+
+                        <div class="pw-timer-area">
+                            <div>
+                                <div class="pw-next-name" id="pwActiveName">...</div>
+                                <div class="pw-label">Vaktine Kalan Süre</div>
+                            </div>
+                            <div class="pw-countdown" id="pwCountdown">--:--:--</div>
+                        </div>
+
+                        <div class="pw-grid" id="pwGrid">
+                            <!-- JS ile doldurulacak -->
+                            <div class="pw-box"><span class="pw-box-label">İMSAK</span><span class="pw-box-time">--:--</span><i class="fas fa-cloud-sun pw-box-icon"></i></div>
+                            <div class="pw-box"><span class="pw-box-label">GÜNEŞ</span><span class="pw-box-time">--:--</span><i class="fas fa-sun pw-box-icon"></i></div>
+                            <div class="pw-box active"><span class="pw-box-label">ÖĞLE</span><span class="pw-box-time">--:--</span><i class="fas fa-clock pw-box-icon"></i></div>
+                            <div class="pw-box"><span class="pw-box-label">İKİNDİ</span><span class="pw-box-time">--:--</span><i class="fas fa-cloud-sun-rain pw-box-icon"></i></div>
+                            <div class="pw-box"><span class="pw-box-label">AKŞAM</span><span class="pw-box-time">--:--</span><i class="fas fa-moon pw-box-icon"></i></div>
+                            <div class="pw-box"><span class="pw-box-label">YATSI</span><span class="pw-box-time">--:--</span><i class="fas fa-stars pw-box-icon"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HEDEF KARTI -->
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
                     <div id="goalCard" class="goal-card">
                         <h4>🎯 Günlük Hedef</h4>
-                        <div class="d-flex justify-content-center align-items-center gap-2 my-3">
-                            <span>Bugün</span>
+                        <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mt-3 mb-2">
+                            <span class="fs-5">Bugün</span>
                             <strong class="fs-1" id="dailyCountDisplay">0</strong>
-                            <span>/</span>
-                            <input type="number" id="dailyGoalInput" class="form-control text-center fw-bold" style="width:70px;" value="10" onchange="updateDailyGoal(this.value)">
+                            <span class="fs-5">/</span>
+                            <input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)">
+                            <span class="fs-5">Kaza</span>
                         </div>
-                        <div class="progress" style="height: 8px;"><div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
-                        <div id="goalSuccessMessage" class="mt-2 fw-bold" style="display: none;">🎉 Hedefe Ulaşıldı!</div>
+                        <div class="progress mt-2" style="height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px;">
+                            <div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div>
+                        </div>
+                        <div id="goalSuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🎉 Harika! Hedefe Ulaşıldı!</div>
                     </div>
                 </div>
             </div>
 
-            <div class="table-responsive">
+            <!-- KAZA TABLOSU -->
+            <div class="table-responsive mb-4">
                 <table class="table main-table">
-                    <thead><tr><th>Namaz</th><th>Kılınacak</th><th>Kılınan</th><th>İşlem</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Namaz</th>
+                            <th class="col-input-area">Kılınacak<br>Namaz</th>
+                            <th class="col-input-area">Kılınan<br>Namaz</th>
+                            <th class="col-action">İşlem</th>
+                            <th>Günlük<br>Ort.</th>
+                            <th>Tahmini<br>Bitiş</th>
+                        </tr>
+                    </thead>
                     <tbody id="prayerTableBody"></tbody>
+                    <tfoot id="prayerTableFoot"></tfoot>
                 </table>
             </div>
+
+            <div class="text-center mt-4"><h5 class="fw-bold text-secondary"><i class="fas fa-trophy text-warning me-2"></i>Rozetler</h5></div>
+            <div id="badgeContainer" class="d-flex justify-content-center gap-3 flex-wrap mb-4"></div>
         </div>
 
-        <!-- NAMAZ VAKİTLERİ (DİYANET API) -->
-        <div id="section-vakitler" style="display: none;">
-            <h3 class="app-header">Namaz Vakitleri (Diyanet)</h3>
-            <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6">
-                    <div class="prayer-widget-card">
-                        <!-- Şehir / İlçe Seçimi -->
-                        <div class="widget-header">
-                            <select id="citySelect" class="diyanet-select">
-                                <option value="">Şehir Yükleniyor...</option>
-                            </select>
-                            <select id="districtSelect" class="diyanet-select">
-                                <option value="">Önce Şehir Seçin</option>
-                            </select>
-                            <div class="date-info text-center text-white-50" id="diyanetDate">Tarih Bekleniyor...</div>
-                        </div>
-
-                        <!-- Sayaç -->
-                        <div class="main-timer-box">
-                            <span class="next-vakit-label" id="nextPrayerName">VAKİT</span>
-                            <div class="timer-countdown" id="countdownDisplay">--:--:--</div>
-                            <div class="timer-subtext">Vaktine Kalan Süre</div>
-                        </div>
-
-                        <!-- Tablo -->
-                        <div class="vakit-grid">
-                            <div class="vakit-item" id="box-fajr"><span class="vakit-name">İMSAK</span><span class="vakit-time" id="t-fajr">--:--</span></div>
-                            <div class="vakit-item" id="box-sunrise"><span class="vakit-name">GÜNEŞ</span><span class="vakit-time" id="t-sunrise">--:--</span></div>
-                            <div class="vakit-item" id="box-dhuhr"><span class="vakit-name">ÖĞLE</span><span class="vakit-time" id="t-dhuhr">--:--</span></div>
-                            <div class="vakit-item" id="box-asr"><span class="vakit-name">İKİNDİ</span><span class="vakit-time" id="t-asr">--:--</span></div>
-                            <div class="vakit-item" id="box-maghrib"><span class="vakit-name">AKŞAM</span><span class="vakit-time" id="t-maghrib">--:--</span></div>
-                            <div class="vakit-item" id="box-isha"><span class="vakit-name">YATSI</span><span class="vakit-time" id="t-isha">--:--</span></div>
-                        </div>
+        <!-- İSTATİSTİKLER -->
+        <div id="section-stats" style="display: none;">
+            <h3 class="app-header">İstatistikler</h3>
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="card-shadow p-3">
+                        <canvas id="barChart" style="max-height: 300px;"></canvas>
                     </div>
-                    <div class="alert alert-dark text-center small mt-3">
-                        <i class="fas fa-check-circle text-success me-1"></i> Veriler <strong>namazvakitleri.diyanet.gov.tr</strong> adresinden canlı çekilmektedir.
+                </div>
+                <div class="col-md-6">
+                    <div class="card-shadow p-3">
+                        <h6 class="text-center">Doluluk Oranı</h6>
+                        <canvas id="completionChart" style="max-height: 250px;"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- DİĞER BÖLÜMLER (Özet) -->
-        <div id="section-stats" style="display: none;"><h3 class="app-header">İstatistikler</h3><div class="card-custom text-center"><p>Grafikler hazırlanıyor...</p></div></div>
-        <div id="section-tesbihat" style="display: none;"><h3 class="app-header">Tesbihat</h3><div id="tesbihatContainer" class="row g-3"></div></div>
-        <div id="section-calculator" style="display: none;"><h3 class="app-header">Hesaplama</h3><div class="card-custom">Hesaplama araçları burada olacak.</div></div>
-        <div id="section-settings" style="display: none;"><h3 class="app-header">Ayarlar</h3><div class="card-custom">Ayarlar burada olacak.</div></div>
+        <!-- TESBİHAT -->
+        <div id="section-tesbihat" style="display: none;">
+            <h3 class="app-header">Tesbihat</h3>
+            <div class="row g-4" id="tesbihatContainer"></div>
+        </div>
 
+        <!-- HESAP SİHİRBAZI (Basit Görünüm) -->
+        <div id="section-calculator" style="display: none;">
+            <h3 class="app-header">Kaza Hesaplama</h3>
+            <div class="card-shadow p-4">
+                <p>Doğum tarihi ve buluğ çağına göre otomatik hesaplama yapılabilir.</p>
+                <div id="calcRowsContainer"></div>
+                <button class="btn btn-primary w-100 mt-3" onclick="applyAdvancedCalculation()">Hesapla ve Kaydet</button>
+            </div>
+        </div>
+
+        <!-- AYARLAR -->
+        <div id="section-settings" style="display: none;">
+            <h3 class="app-header">Ayarlar</h3>
+            <div class="row g-4">
+                <div class="col-md-6"><button class="btn btn-outline-success w-100 p-4" onclick="downloadBackupJSON()">Yedek İndir</button></div>
+                <div class="col-md-6">
+                    <button class="btn btn-outline-primary w-100 p-4" onclick="document.getElementById('importFile').click()">Yedek Yükle</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupJSON(this)">
+                </div>
+                <div class="col-12"><button class="btn btn-danger w-100 p-3" onclick="confirmResetData()">Verileri Sıfırla</button></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="bottom-nav">
-    <div class="nav-item active" onclick="showSection('dashboard');"><i class="fas fa-mosque"></i><span>Kaza</span></div>
-    <div class="nav-item" onclick="showSection('vakitler');"><i class="fas fa-clock"></i><span>Vakitler</span></div>
-    <div class="nav-item" onclick="showSection('tesbihat');"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
+    <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
+    <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>İstatistik</span></div>
+    <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
 </div>
 
 <script>
-    // --- AYARLAR ---
+    // --- KONFETİ BAŞLATMA ---
+    const jsConfetti = new JSConfetti();
+
+    // --- YARDIMCI FONKSİYONLAR ---
+    function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
+    function hideLoader() { const l=document.getElementById('loading-overlay'); if(l){l.style.opacity='0'; setTimeout(()=>{l.style.visibility='hidden';},500);} }
+    setTimeout(hideLoader, 5000); // Fallback
+
+    // --- MANIFEST ---
+    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
+    const manifestBlob = new Blob([JSON.stringify({ "name": "İbadet Takip", "short_name": "İbadet", "start_url": ".", "display": "standalone", "background_color": "#f8f9fa", "theme_color": "#198754", "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] })], {type: 'application/json'});
+    document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
+
+    // --- FIREBASE AYARLARI ---
     const firebaseConfig = {
         apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
         authDomain: "kazanamazi-ser.firebaseapp.com",
@@ -218,388 +417,321 @@
         appId: "1:951730390034:web:639f96ee859c10b0e944cb",
         measurementId: "G-5WGCDTL1RX"
     };
-    
-    // Firebase Başlat
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
     const provider = new firebase.auth.GoogleAuthProvider();
-    const jsConfetti = new JSConfetti();
-    let localData = {};
     let dbRef = null;
 
-    // --- GÜVENLİ YÜKLEME (LOADING KİLİDİ) ---
-    // Eğer 3 saniye içinde veri gelmezse veya hata olursa loading ekranını zorla kapat
-    setTimeout(() => {
-        document.getElementById('loading-overlay').style.opacity = '0';
-        setTimeout(() => { document.getElementById('loading-overlay').style.visibility = 'hidden'; }, 500);
-    }, 3000);
+    // --- VERİ MODELİ ---
+    const defaultData = {
+        city: "Ankara",
+        startDate: new Date().toISOString().split('T')[0],
+        daily: { date: new Date().toLocaleDateString('tr-TR'), counts: [0,0,0,0,0], target: 10 },
+        counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
+        tesbihat: [
+            { name: "Sübhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
+            { name: "Elhamdülillah", arabic: "ٱلْحَمْدُ لِلَّٰهِ", current: 0, target: 33 },
+            { name: "Allahu Ekber", arabic: "ٱللَّٰهُ أَكْبَرُ", current: 0, target: 33 }
+        ],
+        earnedBadges: [], history: []
+    };
+    let localData = JSON.parse(JSON.stringify(defaultData));
+    let chartCompletion = null, barChart = null;
 
-    // --- AUTH LOGIC ---
+    // --- AUTH ---
     auth.onAuthStateChanged((user) => {
         if (user) {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
-            
             dbRef = db.ref('users/' + user.uid + '/namazData');
             dbRef.on('value', (s) => {
-                const val = s.val();
-                if(val) { localData = val; } 
-                else { 
-                    // Varsayılan Veri
-                    localData = { counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}], daily: {target:10, counts:[0,0,0,0,0], date: new Date().toLocaleDateString('tr-TR')}, tesbihat: [{name:"Sübhanallah",current:0,target:33},{name:"Elhamdülillah",current:0,target:33},{name:"Allahu Ekber",current:0,target:33}] };
-                    dbRef.set(localData);
-                }
+                const d = s.val();
+                if (d) localData = d;
+                if (!localData.city) localData.city = "Ankara"; // Varsayılan
+                if (!d) saveToCloud();
                 renderApp();
-                renderTesbihat();
+                hideLoader();
             });
-        } else {
-            document.getElementById('app-wrapper').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'flex';
+        } else { 
+            hideLoader();
+            document.getElementById('login-screen').style.display = 'flex'; 
+            document.getElementById('app-wrapper').style.display = 'none'; 
         }
     });
 
-    function loginWithGoogle() { auth.signInWithPopup(provider).catch(alert); }
+    function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
     function logout() { auth.signOut(); }
-    function save() { if(dbRef) dbRef.set(localData); }
+    function saveToCloud() { if(dbRef) dbRef.set(localData); }
 
-    // --- KAZA NAMAZI MANTIĞI ---
+    // --- UI NAVIGATION ---
+    window.showSection = function(id) {
+        document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
+        const m = document.getElementById('menu-' + id); if(m) m.classList.add('active');
+        ['dashboard','stats','tesbihat','calculator','settings'].forEach(s => document.getElementById('section-'+s).style.display='none');
+        document.getElementById('section-'+id).style.display='block';
+        if(window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
+        if(id==='stats') renderStats();
+        if(id==='tesbihat') renderTesbihat();
+        if(id==='calculator') renderCalculatorRows();
+    };
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
+    function activateNav(el) { document.querySelectorAll('.nav-item').forEach(e=>e.classList.remove('active')); if(el) el.classList.add('active'); }
+
+    // --- RENDER APP ---
     function renderApp() {
         if(!localData.counts) return;
+        
+        // Namaz Vakti Widget'ı Başlat
+        initPrayerWidget();
+
+        // Günlük Hedef
+        const c = localData.daily.counts ? localData.daily.counts.reduce((a,b)=>a+b,0) : 0;
+        document.getElementById('dailyCountDisplay').innerText = c;
+        document.getElementById('dailyGoalInput').value = localData.daily.target || 10;
+        let p = (c / (localData.daily.target||10)) * 100; if(p>100) p=100;
+        document.getElementById('dailyProgressBar').style.width = p + "%";
+        document.getElementById('goalSuccessMessage').style.display = c >= localData.daily.target ? 'block' : 'none';
+
+        // Tablo
         const tbody = document.getElementById('prayerTableBody');
         tbody.innerHTML = "";
-        let totalDone = 0;
+        let tt=0, td=0;
+        const days = Math.ceil(Math.abs(new Date() - new Date(localData.startDate)) / (1000 * 60 * 60 * 24)) || 1;
         
         localData.counts.forEach((item, i) => {
-            totalDone += item.done;
-            const percent = item.target > 0 ? (item.done / item.target) * 100 : 0;
-            tbody.innerHTML += `
-            <tr>
+            tt += parseInt(item.target); td += parseInt(item.done);
+            const rem = item.target - item.done;
+            const avg = (item.done / days).toFixed(2);
+            const est = avg > 0 ? Math.ceil(rem/avg) + " Gün" : "Belirsiz";
+            let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
+            
+            tbody.innerHTML += `<tr>
                 <td class="col-namaz">${item.name}</td>
-                <td><input type="number" class="table-input" value="${item.target}" onchange="upT(${i},this.value)"></td>
-                <td>
-                    <input type="number" class="table-input" value="${item.done}" onchange="upD(${i},this.value)">
-                    <div class="progress-container"><div class="progress"><div class="progress-bar bg-success" style="width:${percent}%"></div></div></div>
+                <td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"></td>
+                <td class="col-input-area">
+                    <input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)">
+                    <div class="progress-container"><div class="progress"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div></div>
                 </td>
                 <td class="col-action">
                     <div class="action-wrapper">
-                        <button class="btn-action btn-plus" onclick="chC(${i},1)">+</button>
-                        <button class="btn-action btn-minus" onclick="chC(${i},-1)">-</button>
+                        <button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button>
+                        <button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button>
                     </div>
                 </td>
+                <td><div class="table-value-box">${avg}</div></td>
+                <td><div class="table-value-box">${est}</div></td>
             </tr>`;
         });
-
-        // Günlük Hedef
-        const dailyTotal = localData.daily.counts.reduce((a,b)=>a+b, 0);
-        document.getElementById('dailyCountDisplay').innerText = dailyTotal;
-        document.getElementById('dailyGoalInput').value = localData.daily.target;
-        let p = (dailyTotal / localData.daily.target) * 100;
-        document.getElementById('dailyProgressBar').style.width = Math.min(p, 100) + "%";
+        document.getElementById('prayerTableFoot').innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td colspan="3"></td></tr>`;
         
-        if(dailyTotal >= localData.daily.target) {
-            document.getElementById('goalCard').classList.add('success-mode');
-            document.getElementById('goalSuccessMessage').style.display = 'block';
-        } else {
-            document.getElementById('goalCard').classList.remove('success-mode');
-            document.getElementById('goalSuccessMessage').style.display = 'none';
+        // Rozetler
+        const bc = document.getElementById('badgeContainer'); bc.innerHTML = "";
+        if(td >= 100) bc.innerHTML += `<span class="badge bg-success p-2">🎉 100 Namaz</span>`;
+        if(td >= 1000) bc.innerHTML += `<span class="badge bg-warning text-dark p-2">🏔️ 1000 Namaz</span>`;
+    }
+
+    // --- NAMAZ VAKTİ WIDGET MANTIĞI ---
+    let prayerTimesData = null;
+    let prayerTimerInterval = null;
+
+    function openCityModal() {
+        document.getElementById('cityInput').value = localData.city || "";
+        document.getElementById('cityModal').style.display = 'flex';
+    }
+
+    function saveCity() {
+        const c = document.getElementById('cityInput').value.trim();
+        if(c) {
+            const formattedCity = c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+            localData.city = formattedCity;
+            saveToCloud();
+            document.getElementById('cityModal').style.display = 'none';
+            initPrayerWidget(); 
         }
     }
 
-    window.upT = function(i,v) { localData.counts[i].target = parseInt(v)||0; save(); renderApp(); };
-    window.upD = function(i,v) { localData.counts[i].done = parseInt(v)||0; save(); renderApp(); };
-    window.chC = function(i,d) { 
-        if(navigator.vibrate) navigator.vibrate(10);
-        localData.counts[i].done += d; 
-        if(d>0) {
-            localData.daily.counts[i]++;
-            const dt = localData.daily.counts.reduce((a,b)=>a+b,0);
-            if(dt === localData.daily.target) jsConfetti.addConfetti();
-        } else if(localData.daily.counts[i] > 0) {
-            localData.daily.counts[i]--;
-        }
-        save(); renderApp(); 
-    };
-    window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; save(); renderApp(); };
+    function initPrayerWidget() {
+        if(!localData.city) localData.city = "Ankara";
+        document.getElementById('pwCityName').innerText = localData.city.toUpperCase();
+        
+        const date = new Date();
+        const strDate = date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        // Hicri Tarih (Native)
+        const hijriDate = new Intl.DateTimeFormat('tr-TR-u-ca-islamic-uma', {day: 'numeric', month: 'long', year: 'numeric'}).format(date).replace('Hicri', '').trim();
+        document.getElementById('pwFullDate').innerText = `${strDate} • ${hijriDate}`;
 
-    // --- TESBİHAT MANTIĞI ---
-    function renderTesbihat() {
-        const c = document.getElementById('tesbihatContainer');
-        c.innerHTML = "";
-        if(!localData.tesbihat) return;
-        localData.tesbihat.forEach((item, i) => {
-            c.innerHTML += `
-            <div class="col-md-6">
-                <div class="zikr-card">
-                    <h5>${item.name}</h5>
-                    <div class="zikr-count">${item.current}</div>
-                    <div class="zikr-btn-group">
-                        <button class="btn-action btn-minus" onclick="tesUp(${i},-1)">-</button>
-                        <button class="btn-action btn-plus" style="width:60px; height:60px; font-size:1.5rem;" onclick="tesUp(${i},1)">+</button>
-                        <button class="btn-action bg-warning text-dark" onclick="tesRes(${i})">R</button>
-                    </div>
-                </div>
-            </div>`;
+        fetchPrayerTimes(localData.city);
+    }
+
+    function fetchPrayerTimes(city) {
+        // vakit.vercel.app kullanarak veri çekimi
+        // Türkçe karakter temizleme
+        const cleanCity = city.replace(/ı/g, 'i').replace(/İ/g, 'I').replace(/ş/g, 's').replace(/Ş/g, 'S').replace(/ğ/g, 'g').replace(/Ğ/g, 'G').replace(/ü/g, 'u').replace(/Ü/g, 'U').replace(/ö/g, 'o').replace(/Ö/g, 'O').replace(/ç/g, 'c').replace(/Ç/g, 'C');
+        
+        // API Tarih Formatı YYYY-MM-DD
+        const d = new Date();
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const dateStr = `${yyyy}-${mm}-${dd}`;
+
+        // Diyanet Verisi Çeken Endpoint
+        fetch(`https://vakit.vercel.app/api/timesFromPlace?country=Turkey&region=${cleanCity}&city=${cleanCity}&date=${dateStr}&days=1&timezoneOffset=180`)
+            .then(res => res.json())
+            .then(data => {
+                // API yapısı: { times: { "2025-11-27": ["06:11", "07:40", ...] } }
+                if(data && data.times && data.times[dateStr]) {
+                    const timesArr = data.times[dateStr];
+                    // Sıra: İmsak, Güneş, Öğle, İkindi, Akşam, Yatsı
+                    const timesObj = {
+                        Imsak: timesArr[0], Gunes: timesArr[1], Ogle: timesArr[2],
+                        Ikindi: timesArr[3], Aksam: timesArr[4], Yatsi: timesArr[5]
+                    };
+                    prayerTimesData = timesObj;
+                    renderPrayerGrid(timesObj);
+                    startPrayerTimer();
+                } else {
+                    console.log("Veri çekilemedi, yedek API deneniyor...");
+                    // Yedek API (Alternatif)
+                    fetch(`https://namaz-vakti.vercel.app/api/timesFromPlace?country=Turkey&region=${cleanCity}&city=${cleanCity}`)
+                    .then(res2 => res2.json())
+                    .then(data2 => {
+                        if(data2 && data2.times) {
+                            prayerTimesData = data2.times;
+                            renderPrayerGrid(data2.times);
+                            startPrayerTimer();
+                        }
+                    });
+                }
+            })
+            .catch(err => console.error("API hatası:", err));
+    }
+
+    function renderPrayerGrid(times) {
+        const map = [
+            { key: 'Imsak', label: 'İMSAK', icon: 'fa-cloud-sun' },
+            { key: 'Gunes', label: 'GÜNEŞ', icon: 'fa-sun' },
+            { key: 'Ogle', label: 'ÖĞLE', icon: 'fa-clock' },
+            { key: 'Ikindi', label: 'İKİNDİ', icon: 'fa-cloud-sun-rain' },
+            { key: 'Aksam', label: 'AKŞAM', icon: 'fa-moon' },
+            { key: 'Yatsi', label: 'YATSI', icon: 'fa-stars' }
+        ];
+        const grid = document.getElementById('pwGrid');
+        grid.innerHTML = '';
+        map.forEach(item => {
+            const t = times[item.key];
+            grid.innerHTML += `<div class="pw-box" id="pbox-${item.key}"><span class="pw-box-label">${item.label}</span><span class="pw-box-time">${t}</span><i class="fas ${item.icon} pw-box-icon"></i></div>`;
         });
     }
-    window.tesUp = function(i,d) { localData.tesbihat[i].current += d; if(localData.tesbihat[i].current<0) localData.tesbihat[i].current=0; save(); renderTesbihat(); };
-    window.tesRes = function(i) { localData.tesbihat[i].current = 0; save(); renderTesbihat(); };
 
-    // --- NAVİGASYON ---
-    window.showSection = function(id) {
-        document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
-        const activeMenu = document.getElementById('menu-' + id);
-        if(activeMenu) activeMenu.classList.add('active');
+    function startPrayerTimer() {
+        if(prayerTimerInterval) clearInterval(prayerTimerInterval);
+        const update = () => {
+            if(!prayerTimesData) return;
+            const now = new Date();
+            const timeStr = (t) => { const [h,m] = t.split(':').map(Number); const d = new Date(); d.setHours(h,m,0,0); return d; };
+            const schedule = {
+                'Imsak': timeStr(prayerTimesData.Imsak), 'Gunes': timeStr(prayerTimesData.Gunes),
+                'Ogle': timeStr(prayerTimesData.Ogle), 'Ikindi': timeStr(prayerTimesData.Ikindi),
+                'Aksam': timeStr(prayerTimesData.Aksam), 'Yatsi': timeStr(prayerTimesData.Yatsi)
+            };
 
-        const pages = ['dashboard', 'vakitler', 'stats', 'tesbihat', 'calculator', 'settings'];
-        pages.forEach(p => document.getElementById('section-'+p).style.display = 'none');
-        document.getElementById('section-'+id).style.display = 'block';
-        
-        if(window.innerWidth < 768) {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
-        }
+            let nextKey = 'Imsak', nextTime = schedule.Imsak, activeBoxKey = 'Yatsi';
+            const keys = ['Imsak', 'Gunes', 'Ogle', 'Ikindi', 'Aksam', 'Yatsi'];
 
-        // Eğer Vakitler sekmesi açıldıysa verileri yüklemeyi dene
-        if(id === 'vakitler' && document.getElementById('citySelect').options.length <= 1) {
-            loadDiyanetCities();
-        }
-    };
-
-    window.toggleSidebar = function() {
-        document.getElementById('sidebar').classList.toggle('active');
-        document.getElementById('overlay').classList.toggle('active');
-    };
-    
-    window.toggleDarkMode = function() {
-        document.body.classList.toggle('dark-mode');
-    };
-
-    /* 
-       ================================================================
-       NAMAZ VAKİTLERİ (RESMİ DİYANET API + PROXY)
-       ================================================================
-       Not: Diyanet'in sunucusu dışardan erişime kapalı olduğu için
-       "corsproxy.io" aracısı kullanılıyor. Bu veriyi bozmaz, sadece taşır.
-    */
-
-    const PROXY_URL = "https://corsproxy.io/?url=";
-    const API_BASE = "https://namazvakitleri.diyanet.gov.tr/api";
-
-    // 1. ŞEHİRLERİ ÇEK
-    function loadDiyanetCities() {
-        fetch(PROXY_URL + encodeURIComponent(`${API_BASE}/regions`))
-            .then(res => res.json())
-            .then(data => {
-                // Sadece Türkiye şehirlerini al (RegionType = 1, CountryId = 2 varsayımıyla)
-                // Diyanet API'sinde Türkiye şehirlerinin parent'ı genelde 2'dir (Turkey)
-                // Ama veride direk şehirler regionType=1 olarak geliyor.
-                
-                // Türkiye'nin ID'sini bulalım (Genelde 2)
-                const turkey = data.find(d => d.regionName === "TÜRKİYE");
-                const countryId = turkey ? turkey.regionId : 2;
-
-                // Ülkesi Türkiye olan şehirleri filtrele
-                const cities = data.filter(r => r.regionType === 1 && r.parentRegionId === countryId);
-                
-                // Alfabeye göre sırala
-                cities.sort((a, b) => a.regionName.localeCompare(b.regionName));
-
-                const sel = document.getElementById('citySelect');
-                sel.innerHTML = "<option value=''>Şehir Seçiniz...</option>";
-                
-                cities.forEach(city => {
-                    const opt = document.createElement('option');
-                    opt.value = city.regionId;
-                    opt.innerText = city.regionName;
-                    sel.appendChild(opt);
-                });
-
-                // Kayıtlı şehir varsa seç
-                const savedCity = localStorage.getItem('diyanetCityId');
-                if(savedCity) {
-                    sel.value = savedCity;
-                    loadDistricts(savedCity);
+            // Gece Yarısı Kontrolü
+            if (now > schedule.Yatsi) {
+                nextKey = 'Imsak';
+                nextTime = new Date(schedule.Imsak);
+                nextTime.setDate(nextTime.getDate() + 1);
+                activeBoxKey = 'Yatsi';
+            } else {
+                for(let i=0; i<keys.length; i++) {
+                    if(now < schedule[keys[i]]) {
+                        nextKey = keys[i];
+                        nextTime = schedule[keys[i]];
+                        // Aktif kutu bir önceki vakittir (Şu an içinde bulunulan)
+                        if (i === 0) activeBoxKey = 'Yatsi'; // İmsak öncesi gece
+                        else activeBoxKey = keys[i-1];
+                        break;
+                    }
                 }
-            })
-            .catch(err => console.error("Şehirler alınamadı", err));
-    }
-
-    // 2. İLÇELERİ ÇEK
-    window.loadDistricts = function(cityId) {
-        if(!cityId) return;
-        localStorage.setItem('diyanetCityId', cityId);
-
-        // Diyanet API'de ilçeleri çekmek için regionType=2 ve parent=cityId kullanılır.
-        // Ancak /regions endpointi tüm dünyayı döndüğü için client-side filtrelemek yerine
-        // Diyanet'in web mantığında sub-region çekmek daha iyi olabilir.
-        // Ama /regions endpointi cached ise hızlıdır.
-        // Doğru yöntem: /regions endpointini tekrar sorgulamak yerine ilk veriden süzmek zordur (çok veri).
-        // Diyanet genelde dinamik endpoint sunar: /regions?parentRegionId=...
-        
-        fetch(PROXY_URL + encodeURIComponent(`${API_BASE}/regions?parentRegionId=${cityId}`))
-            .then(res => res.json())
-            .then(data => {
-                const sel = document.getElementById('districtSelect');
-                sel.innerHTML = "<option value=''>İlçe Seçiniz...</option>";
-                
-                data.forEach(dist => {
-                    const opt = document.createElement('option');
-                    opt.value = dist.regionId;
-                    opt.innerText = dist.regionName;
-                    sel.appendChild(opt);
-                });
-
-                const savedDist = localStorage.getItem('diyanetDistId');
-                if(savedDist) {
-                    sel.value = savedDist;
-                    loadTimes(savedDist);
-                }
-            });
-    };
-
-    // Event Listenerlar
-    document.getElementById('citySelect').addEventListener('change', function() {
-        loadDistricts(this.value);
-    });
-    
-    document.getElementById('districtSelect').addEventListener('change', function() {
-        localStorage.setItem('diyanetDistId', this.value);
-        loadTimes(this.value);
-    });
-
-    // 3. VAKİTLERİ ÇEK
-    function loadTimes(districtId) {
-        if(!districtId) return;
-        
-        // Diyanet API: /PrayerTimes?regionId=...
-        const year = new Date().getFullYear();
-        const url = `${API_BASE}/PrayerTimes?regionId=${districtId}`;
-        
-        fetch(PROXY_URL + encodeURIComponent(url))
-            .then(res => res.json())
-            .then(data => {
-                // Diyanet tüm yılı veya ayı dönebilir. Biz bugünü bulacağız.
-                // Diyanet Date Format: "2025-11-27 00:00:00"
-                const d = new Date();
-                const y = d.getFullYear();
-                const m = String(d.getMonth()+1).padStart(2,'0');
-                const day = String(d.getDate()).padStart(2,'0');
-                const todayStr = `${y}-${m}-${day}`; // 2025-11-27
-
-                // Veri formatına göre bul (Diyanet bazen "27.11.2025" bazen "YYYY-MM-DD" döner)
-                // Genelde JSON'da: data[i].gregorianDateShortISO ("2025-11-27")
-                
-                // Gelen veriyi kontrol edelim, liste mi obje mi? Genelde liste.
-                let todayData = null;
-                if(Array.isArray(data)) {
-                    todayData = data.find(item => item.gregorianDateShortISO === todayStr || item.date.startsWith(todayStr));
-                } else if(data.data) {
-                    todayData = data.data.find(item => item.date.startsWith(todayStr));
-                }
-
-                if(todayData) {
-                    updatePrayerUI(todayData);
-                } else {
-                    alert("Bugünün verisi bulunamadı.");
-                }
-            })
-            .catch(err => {
-                console.error("Vakit hatası", err);
-                document.getElementById('diyanetDate').innerText = "Bağlantı Hatası!";
-            });
-    }
-
-    let timerInterval = null;
-
-    function updatePrayerUI(data) {
-        // Tarih
-        document.getElementById('diyanetDate').innerText = data.dateLong || data.date; // "27 Kasım 2025 Perşembe"
-
-        // Saatler (Diyanet verisindeki keyler: fajr, sunrise, dhuhr, asr, maghrib, isha)
-        const times = {
-            imsak: data.fajr,
-            gunes: data.sunrise,
-            ogle: data.dhuhr,
-            ikindi: data.asr,
-            aksam: data.maghrib,
-            yatsi: data.isha
-        };
-
-        document.getElementById('t-fajr').innerText = times.imsak;
-        document.getElementById('t-sunrise').innerText = times.gunes;
-        document.getElementById('t-dhuhr').innerText = times.ogle;
-        document.getElementById('t-asr').innerText = times.ikindi;
-        document.getElementById('t-maghrib').innerText = times.aksam;
-        document.getElementById('t-isha').innerText = times.yatsi;
-
-        // Sayacı Başlat
-        if(timerInterval) clearInterval(timerInterval);
-        startCountdown(times);
-        timerInterval = setInterval(() => startCountdown(times), 1000);
-    }
-
-    function startCountdown(times) {
-        const now = new Date();
-        const names = { imsak:"İmsak", gunes:"Güneş", ogle:"Öğle", ikindi:"İkindi", aksam:"Akşam", yatsi:"Yatsı" };
-        
-        // Zamanları Date objesine çevir
-        let nextTime = null;
-        let nextName = "";
-        let activeKey = "";
-
-        // Sırayla kontrol et
-        const order = ['imsak', 'gunes', 'ogle', 'ikindi', 'aksam', 'yatsi'];
-        
-        for(let key of order) {
-            const tStr = times[key];
-            const [h, m] = tStr.split(':');
-            const tDate = new Date();
-            tDate.setHours(h, m, 0, 0);
-            
-            if(tDate > now) {
-                nextTime = tDate;
-                nextName = names[key];
-                // Aktif olan bir önceki
-                const idx = order.indexOf(key);
-                const prevIdx = idx === 0 ? 5 : idx - 1;
-                activeKey = order[prevIdx];
-                break;
             }
-        }
+            
+            // Eğer İmsak ile Güneş arasındaysak
+            if (now >= schedule.Imsak && now < schedule.Gunes) activeBoxKey = 'Imsak';
+            
+            const labelMap = { 'Imsak': 'İMSAK', 'Gunes': 'GÜNEŞ', 'Ogle': 'ÖĞLE', 'Ikindi': 'İKİNDİ', 'Aksam': 'AKŞAM', 'Yatsi': 'YATSI' };
+            document.getElementById('pwActiveName').innerText = labelMap[nextKey];
 
-        if(!nextTime) {
-            // Yarına kaldı (İmsak)
-            const [h, m] = times.imsak.split(':');
-            nextTime = new Date();
-            nextTime.setDate(nextTime.getDate() + 1);
-            nextTime.setHours(h, m, 0, 0);
-            nextName = "İmsak";
-            activeKey = "yatsi";
-        }
+            document.querySelectorAll('.pw-box').forEach(b => b.classList.remove('active'));
+            const activeEl = document.getElementById(`pbox-${activeBoxKey}`);
+            if(activeEl) activeEl.classList.add('active');
 
-        // UI Boyama
-        // ID'ler: box-fajr, box-sunrise... (keyler ile eşleşmeli)
-        // order dizisi: imsak, gunes...
-        // HTML ID map
-        const idMap = { imsak:'box-fajr', gunes:'box-sunrise', ogle:'box-dhuhr', ikindi:'box-asr', aksam:'box-maghrib', yatsi:'box-isha' };
-        
-        document.querySelectorAll('.vakit-item').forEach(el => el.classList.remove('active'));
-        if(activeKey) {
-            document.getElementById(idMap[activeKey]).classList.add('active');
-        }
+            let diff = nextTime - now;
+            if(diff < 0) diff = 0;
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('pwCountdown').innerText = `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        };
+        update();
+        prayerTimerInterval = setInterval(update, 1000);
+    }
 
-        // Yazı
-        document.getElementById('nextPrayerName').innerText = nextName;
-        
-        const diff = nextTime - now;
-        const h = Math.floor(diff / 3600000);
-        const m = Math.floor((diff % 3600000) / 60000);
-        const s = Math.floor((diff % 60000) / 1000);
-        
-        document.getElementById('countdownDisplay').innerText = 
-            `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    // --- İŞLEMLER ---
+    window.upT = function(i,v){localData.counts[i].target=parseInt(v)||0; saveToCloud(); renderApp();}
+    window.upD = function(i,v){localData.counts[i].done=parseInt(v)||0; saveToCloud(); renderApp();}
+    window.chC = function(i,d){
+        triggerHaptic();
+        const n = localData.counts[i].done + d;
+        if(n>=0) {
+            localData.counts[i].done = n;
+            if(d>0) { localData.daily.counts[i]++; if(localData.daily.counts.reduce((a,b)=>a+b,0) === localData.daily.target) jsConfetti.addConfetti(); }
+            else if(localData.daily.counts[i]>0) localData.daily.counts[i]--;
+            saveToCloud(); renderApp();
+        }
+    }
+    window.updateDailyGoal = function(v){localData.daily.target=parseInt(v); saveToCloud(); renderApp();}
+    
+    // --- TESBİHAT RENDER ---
+    function renderTesbihat() {
+        const c = document.getElementById('tesbihatContainer'); c.innerHTML="";
+        localData.tesbihat.forEach((t,i) => {
+            c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${t.name}</h5><div class="arabic-text">${t.arabic}</div><div class="zikr-count">${t.current}</div><div class="d-flex justify-content-center gap-3 mt-3"><button class="zikr-btn z-plus" onclick="incTes(${i})">+</button></div></div></div>`;
+        });
+    }
+    window.incTes = function(i){ localData.tesbihat[i].current++; saveToCloud(); renderTesbihat(); triggerHaptic(); }
+    
+    // --- GRAFİKLER ---
+    function renderStats() {
+        const ctx = document.getElementById('barChart').getContext('2d');
+        if(barChart) barChart.destroy();
+        barChart = new Chart(ctx, { type: 'bar', data: { labels: localData.counts.map(c=>c.name), datasets: [{ label:'Kılınan', data: localData.counts.map(c=>c.done), backgroundColor: '#198754' }] } });
+    }
+    
+    // --- AYARLAR ---
+    window.downloadBackupJSON = function(){ const b=new Blob([JSON.stringify(localData)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='yedek.json'; a.click(); }
+    window.importBackupJSON = function(e){ const f=e.files[0]; if(!f)return; const r=new FileReader(); r.onload=(ev)=>{ try{ localData=JSON.parse(ev.target.result); saveToCloud(); renderApp(); showModal("Başarılı","Yedek yüklendi"); }catch(err){ showModal("Hata","Dosya bozuk"); } }; r.readAsText(f); }
+    window.toggleDarkMode = function(){ document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark':'light'); }
+    if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark-mode');
+    window.confirmResetData = function(){ if(confirm("Her şey silinecek?")) { localData=defaultData; saveToCloud(); location.reload(); } }
+    
+    function showModal(t,m){document.getElementById('modalTitle').innerText=t;document.getElementById('modalMessage').innerText=m;document.getElementById('modalButtons').innerHTML='<button class="modal-btn btn-ok" onclick="document.getElementById(\'customModal\').style.display=\'none\'">Tamam</button>';document.getElementById('customModal').style.display='flex';}
+
+    // --- HESAP SİHİRBAZI ---
+    window.renderCalculatorRows = function() {
+        const c = document.getElementById('calcRowsContainer'); 
+        if(c.innerHTML.trim()) return;
+        ["Sabah","Öğle","İkindi","Akşam","Yatsı"].forEach((p,i)=>{
+            c.innerHTML += `<div class="mb-2"><label>${p}</label><input type="text" class="form-control" placeholder="Başlangıç Tarihi" onfocus="(this.type='date')" id="calc-start-${i}"></div>`;
+        });
+    }
+    window.applyAdvancedCalculation = function() {
+        // Basit Demo
+        alert("Hesaplama özelliği bu demo sürümde basitleştirilmiştir.");
     }
 
 </script>
