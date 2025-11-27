@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Kaza ve İbadet Takip</title>
+    <title>İbadet Takip & Namaz Vakti</title>
     
     <meta name="theme-color" content="#198754">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" id="my-manifest">
 
+    <!-- CSS Kütüphaneleri -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
     
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
+    <!-- Grafikler -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
@@ -53,7 +56,6 @@
             --stat-avg-color: #d63384; 
         }
         
-        body.dark-mode .text-muted { color: #adb5bd !important; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
         /* LOADING */
@@ -537,7 +539,7 @@
     function getIsoDate(date) { return date.toISOString().split('T')[0]; }
 
     const defaultData = {
-        city: "Ankara", // EKLENDİ
+        city: "Ankara", 
         startDate: new Date().toISOString().split('T')[0],
         daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 },
         streak: { current: 0, lastAchievedDate: "" },
@@ -578,7 +580,7 @@
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
     
     function ensureDataStructure() {
-        if (!localData.city) localData.city = "Ankara"; // EKLENDİ
+        if (!localData.city) localData.city = "Ankara"; 
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
         if (!localData.calendar) localData.calendar = {};
@@ -598,7 +600,6 @@
         const menuItem = document.getElementById('menu-' + id);
         if(menuItem) menuItem.classList.add('active');
         
-        // prayer eklendi
         const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings', 'prayer'];
         sections.forEach(sec => { const el = document.getElementById('section-' + sec); if(el) el.style.display = 'none'; });
         
@@ -608,7 +609,6 @@
         if(window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        // prayer eklendi
         const navMap = { 'dashboard': 0, 'prayer': 1, 'stats': 2, 'tesbihat': 3, 'calculator': 4 };
         const navIndex = navMap[id];
         if (navIndex !== undefined) { const navItems = document.querySelectorAll('.nav-item'); if(navItems[navIndex]) navItems[navIndex].classList.add('active'); }
@@ -618,7 +618,7 @@
             if(id === 'stats') renderStats();
             if(id === 'tesbihat') renderTesbihat();
             if(id === 'calculator') renderCalculatorRows(); 
-            if(id === 'prayer') initPrayerWidget(); // EKLENDİ
+            if(id === 'prayer') initPrayerWidget(); 
         } catch(e) { console.log("Render error:", e); }
     };
 
@@ -744,7 +744,7 @@
     function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    /* --- NAMAZ VAKTİ WIDGET MANTIĞI (YENİ EKLENDİ) --- */
+    /* --- NAMAZ VAKTİ WIDGET MANTIĞI (GÜNCELLENDİ: HİCRİ TARİH + TÜRKÇE KARAKTER FIX) --- */
     let prayerTimesData = null;
     let prayerTimerInterval = null;
 
@@ -753,29 +753,47 @@
         document.getElementById('cityModal').style.display = 'flex';
     }
 
+    // --- YENİ EKLENEN: TÜRKÇE -> İNGİLİZCE DÖNÜŞTÜRÜCÜ ---
+    function convertToEnglish(text) {
+        return text
+            .replace(/Ğ/g, "G").replace(/ğ/g, "g")
+            .replace(/Ü/g, "U").replace(/ü/g, "u")
+            .replace(/Ş/g, "S").replace(/ş/g, "s")
+            .replace(/İ/g, "I").replace(/ı/g, "i")
+            .replace(/Ö/g, "O").replace(/ö/g, "o")
+            .replace(/Ç/g, "C").replace(/ç/g, "c");
+    }
+
     function saveCity() {
-        const c = document.getElementById('cityInput').value.trim();
-        if(c) {
-            const formattedCity = c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
-            localData.city = formattedCity;
+        let rawCity = document.getElementById('cityInput').value.trim();
+        if(rawCity) {
+            // Ekranda güzel gözüksün diye Baş harfi büyüt
+            const displayCity = rawCity.toLocaleUpperCase('tr-TR');
+            localData.city = displayCity;
             saveToCloud();
             document.getElementById('cityModal').style.display = 'none';
-            initPrayerWidget(); // Yeniden yükle
+            initPrayerWidget(); 
         }
     }
 
     function initPrayerWidget() {
-        if(!localData.city) localData.city = "Ankara";
-        document.getElementById('pwCityName').innerText = localData.city.toUpperCase();
+        if(!localData.city) localData.city = "ANKARA";
+        document.getElementById('pwCityName').innerText = localData.city.toLocaleUpperCase('tr-TR');
         
         // Tarihleri Yazdır
         const date = new Date();
         const strDate = date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
         
-        // Hicri Tarih
-        const hijriDate = new Intl.DateTimeFormat('tr-TR-u-ca-islamic-uma', {
-            day: 'numeric', month: 'long', year: 'numeric'
-        }).format(date).replace('Hicri', '').trim();
+        // --- DÜZELTME: HİCRİ TAKVİM ---
+        // 'islamic-uma' bazı tarayıcılarda çalışmaz, 'islamic-civil' daha güvenlidir.
+        let hijriDate = "";
+        try {
+            hijriDate = new Intl.DateTimeFormat('tr-TR-u-ca-islamic-civil', {
+                day: 'numeric', month: 'long', year: 'numeric'
+            }).format(date).replace('Hicri', '').trim();
+        } catch (e) {
+            hijriDate = ""; // Desteklemiyorsa boş kalsın
+        }
 
         document.getElementById('pwFullDate').innerText = `${strDate} • ${hijriDate}`;
 
@@ -783,43 +801,49 @@
     }
 
     function fetchPrayerTimes(city) {
-        const cleanCity = city.replace(/ı/g, 'i').replace(/İ/g, 'I').replace(/ş/g, 's').replace(/Ş/g, 'S').replace(/ğ/g, 'g').replace(/Ğ/g, 'G').replace(/ü/g, 'u').replace(/Ü/g, 'U').replace(/ö/g, 'o').replace(/Ö/g, 'O').replace(/ç/g, 'c').replace(/Ç/g, 'C');
+        // --- DÜZELTME: KARAKTER ÇEVİRİMİ ---
+        // API genellikle İngilizce karakter bekler (Örn: Istanbul, Sanliurfa, Igdir)
+        const englishCity = convertToEnglish(city);
         
-        // Bugünün tarihi YYYY-MM-DD
+        // API Parametreleri
         const d = new Date();
         const yyyy = d.getFullYear();
         const mm = String(d.getMonth() + 1).padStart(2, '0');
         const dd = String(d.getDate()).padStart(2, '0');
         const dateStr = `${yyyy}-${mm}-${dd}`;
 
-        // vakit.vercel.app API
-        fetch(`https://vakit.vercel.app/api/timesFromPlace?country=Turkey&region=${cleanCity}&city=${cleanCity}&date=${dateStr}&days=1&timezoneOffset=180`)
+        // Önce temizlenmiş (İngilizce karakterli) şehir ismiyle dene
+        fetch(`https://vakit.vercel.app/api/timesFromPlace?country=Turkey&region=${englishCity}&city=${englishCity}&date=${dateStr}&days=1&timezoneOffset=180`)
             .then(res => res.json())
             .then(data => {
                 if(data && data.times && data.times[dateStr]) {
-                    const timesArr = data.times[dateStr];
-                    // API Sırası: İmsak, Güneş, Öğle, İkindi, Akşam, Yatsı
-                    const timesObj = {
-                        Imsak: timesArr[0], Gunes: timesArr[1], Ogle: timesArr[2],
-                        Ikindi: timesArr[3], Aksam: timesArr[4], Yatsi: timesArr[5]
-                    };
-                    prayerTimesData = timesObj;
-                    renderPrayerGrid(timesObj);
-                    startPrayerTimer();
+                    processPrayerData(data.times[dateStr]);
                 } else {
-                     // Alternatif API denemesi (Fallback)
-                    fetch(`https://namaz-vakti.vercel.app/api/timesFromPlace?country=Turkey&region=${cleanCity}&city=${cleanCity}`)
-                    .then(res2 => res2.json())
-                    .then(data2 => {
-                         if(data2 && data2.times) {
-                            prayerTimesData = data2.times;
-                            renderPrayerGrid(data2.times);
-                            startPrayerTimer();
-                        }
-                    });
+                    // Veri gelmezse, URL encode edilmiş Türkçe halini dene (Fallback)
+                    const encodedCity = encodeURIComponent(city);
+                     fetch(`https://vakit.vercel.app/api/timesFromPlace?country=Turkey&region=${encodedCity}&city=${encodedCity}&date=${dateStr}&days=1&timezoneOffset=180`)
+                        .then(res2 => res2.json())
+                        .then(data2 => {
+                            if(data2 && data2.times && data2.times[dateStr]) {
+                                processPrayerData(data2.times[dateStr]);
+                            } else {
+                                // Yine başarısız olursa kullanıcıya bilgi ver
+                                showModal("Uyarı", "Namaz vakitleri için bu şehir bulunamadı. Lütfen yazımı kontrol edin veya en yakın büyük şehri deneyin.");
+                            }
+                        });
                 }
             })
-            .catch(err => { console.error("Namaz vakti çekilemedi:", err); });
+            .catch(err => { console.error("API Hatası:", err); });
+    }
+
+    function processPrayerData(timesArr) {
+        const timesObj = {
+            Imsak: timesArr[0], Gunes: timesArr[1], Ogle: timesArr[2],
+            Ikindi: timesArr[3], Aksam: timesArr[4], Yatsi: timesArr[5]
+        };
+        prayerTimesData = timesObj;
+        renderPrayerGrid(timesObj);
+        startPrayerTimer();
     }
 
     function renderPrayerGrid(times) {
