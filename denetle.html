@@ -3,45 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detaylı Veri Denetleyicisi</title>
+    <title>Veri Düzenleme Paneli</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-    <style>
-        body { background: #f8f9fa; padding: 20px; font-family: monospace; }
-        .log-box { background: #000; color: #0f0; padding: 15px; border-radius: 8px; min-height: 200px; white-space: pre-wrap; font-size: 14px; }
-        .highlight { color: #ffc107; font-weight: bold; }
-        .found { color: #0d6efd; font-weight: bold; font-size: 1.1rem; }
-        .missing { color: #dc3545; }
-    </style>
 </head>
-<body>
+<body class="bg-light p-4">
 
-<div class="container" style="max-width: 800px;">
-    <h4 class="mb-3">🔍 Veritabanı Derin Tarama (25-28 Kasım)</h4>
+<div class="container bg-white p-4 rounded shadow" style="max-width: 600px;">
+    <h4 class="mb-4 text-primary">🛠️ Geçmiş Günleri Düzenle</h4>
     
-    <div id="auth-ui" class="text-center my-4">
-        <button class="btn btn-primary" onclick="login()">Google ile Giriş Yap ve Tara</button>
+    <div id="auth-section" class="text-center">
+        <button class="btn btn-dark" onclick="login()">Google ile Giriş Yap</button>
     </div>
 
-    <div id="status-area">Durum: Bekleniyor...</div>
-    
-    <div class="card mb-3">
-        <div class="card-header fw-bold">Hedef Tarihler (2025)</div>
-        <ul class="list-group list-group-flush" id="target-dates-list">
-            <!-- Buraya sonuçlar gelecek -->
-        </ul>
-    </div>
+    <div id="editor-section" style="display:none;">
+        <div class="alert alert-warning small">
+            Buradan geçmiş günlerdeki hatalı veya eksik kayıtları düzeltebilirsiniz.
+            Değişiklik anında veritabanına yansır.
+        </div>
 
-    <label>Tüm Ham Veri (Raw JSON):</label>
-    <div id="console-log" class="log-box">Giriş yapılmadı...</div>
+        <h5 class="mt-3">Son 7 Gün</h5>
+        <div id="days-list" class="list-group">
+            Yükleniyor...
+        </div>
+    </div>
 </div>
 
 <script>
-    // --- FIREBASE AYARLARI ---
+    // FIREBASE AYARLARI
     const firebaseConfig = {
         apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
         authDomain: "kazanamazi-ser.firebaseapp.com",
@@ -53,103 +44,75 @@
         measurementId: "G-5WGCDTL1RX"
     };
 
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
     const provider = new firebase.auth.GoogleAuthProvider();
+    let currentUserUid = null;
 
-    const logBox = document.getElementById('console-log');
-    const statusArea = document.getElementById('status-area');
-
-    function log(msg) {
-        logBox.innerText += msg + "\n";
-    }
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            currentUserUid = user.uid;
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('editor-section').style.display = 'block';
+            loadLast7Days();
+        }
+    });
 
     function login() {
-        auth.signInWithPopup(provider)
-            .then((result) => {
-                statusArea.innerHTML = "<span class='text-success'>Giriş Başarılı. Veri Çekiliyor...</span>";
-                const user = result.user;
-                log(`Kullanıcı: ${user.displayName} (${user.uid})`);
-                log("Veritabanına bağlanılıyor...");
-                scanDatabase(user.uid);
-            })
-            .catch((error) => {
-                statusArea.innerHTML = "<span class='text-danger'>Hata: " + error.message + "</span>";
-                log("HATA: " + error.message);
-            });
+        auth.signInWithPopup(provider).catch(e => alert(e.message));
     }
 
-    function scanDatabase(uid) {
-        // Doğrudan logs klasörüne değil, bir üst klasöre (namazData) bakıyoruz
-        // Hatta en garanti olsun diye direkt User ID köküne bakıyoruz.
-        const rootRef = db.ref('users/' + uid);
-
-        rootRef.once('value')
-            .then((snapshot) => {
-                const val = snapshot.val();
-
-                if (!val) {
-                    log("⚠️ BU KULLANICI İÇİN HİÇBİR VERİ BULUNAMADI!");
-                    statusArea.innerHTML = "<span class='text-danger'>Veritabanı bu kullanıcı için tamamen boş.</span>";
-                    return;
-                }
-
-                log("✅ Veri paketi alındı. Analiz ediliyor...");
-                log("Veri Yapısı Anahtarları: " + Object.keys(val).join(", "));
-
-                // Veri yolunu bulmaya çalışalım
-                let logsData = null;
-                if (val.namazData && val.namazData.logs) {
-                    logsData = val.namazData.logs;
-                    log("Kanal: users -> namazData -> logs (BULUNDU)");
-                } else if (val.logs) {
-                    logsData = val.logs;
-                    log("Kanal: users -> logs (BULUNDU)");
-                } else {
-                    log("❌ 'logs' klasörü bulunamadı. Veriler farklı bir yerde olabilir.");
-                    log("Mevcut veri dökümü aşağıdadır:");
-                    log(JSON.stringify(val, null, 2));
-                    return;
-                }
-
-                // HEDEF TARİHLERİ KONTROL ET
-                checkSpecificDates(logsData);
-
-                // TÜM VERİYİ YAZDIR
-                log("\n--- TÜM LOG KAYITLARI (Ham Hali) ---");
-                log(JSON.stringify(logsData, null, 2));
-
-            })
-            .catch((err) => {
-                log("Veri okuma hatası: " + err);
-            });
+    function getIsoDate(d) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
     }
 
-    function checkSpecificDates(logs) {
-        const targets = ["2025-11-25", "2025-11-26", "2025-11-27", "2025-11-28", "2025-11-29"];
-        const list = document.getElementById('target-dates-list');
+    function loadLast7Days() {
+        const list = document.getElementById('days-list');
         list.innerHTML = "";
+        
+        // Son 7 günü oluştur
+        const dates = [];
+        for(let i=0; i<7; i++) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            dates.push(getIsoDate(d));
+        }
 
-        targets.forEach(date => {
-            const count = logs[date];
-            let itemHtml = "";
+        // Veritabanından verileri çek
+        db.ref('users/' + currentUserUid + '/namazData/logs').once('value', s => {
+            const data = s.val() || {};
             
-            if (count !== undefined) {
-                itemHtml = `<li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span class="found">${date}</span>
-                    <span class="badge bg-success rounded-pill fs-6">${count} Namaz</span>
-                </li>`;
-                log(`BULUNDU: ${date} -> ${count}`);
-            } else {
-                itemHtml = `<li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span class="text-muted">${date}</span>
-                    <span class="badge bg-danger rounded-pill">Veri Yok</span>
-                </li>`;
-                log(`YOK: ${date} tarihinde kayıt yok.`);
-            }
-            list.innerHTML += itemHtml;
+            dates.forEach(date => {
+                const val = data[date] !== undefined ? data[date] : 0;
+                
+                const html = `
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">${date}</span>
+                    <div class="d-flex gap-2">
+                        <input type="number" id="inp-${date}" class="form-control form-control-sm text-center fw-bold" style="width:70px;" value="${val}">
+                        <button class="btn btn-sm btn-success" onclick="saveDate('${date}')">Kaydet</button>
+                    </div>
+                </div>`;
+                list.innerHTML += html;
+            });
         });
+    }
+
+    window.saveDate = function(date) {
+        const newVal = parseInt(document.getElementById('inp-' + date).value);
+        if(isNaN(newVal)) return alert("Lütfen sayı girin");
+
+        db.ref('users/' + currentUserUid + '/namazData/logs/' + date).set(newVal)
+            .then(() => {
+                alert(date + " tarihi " + newVal + " olarak güncellendi! ✅");
+                // Efekt olsun diye yeşil yakalım
+                document.getElementById('inp-' + date).style.backgroundColor = "#d1e7dd";
+            })
+            .catch(e => alert("Hata: " + e.message));
     }
 </script>
 
