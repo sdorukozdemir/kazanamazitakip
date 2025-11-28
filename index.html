@@ -156,11 +156,11 @@
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
-        /* NEW USER INFO BOX STYLE */
+        /* GÜNCELLENEN KULLANICI KUTUSU STİLİ (İsim Sığdırma Çözüldü) */
         .user-info-box {
             margin: 10px auto;
             width: 90%;
-            padding: 12px;
+            padding: 15px 10px;
             border-radius: 12px;
             color: var(--user-box-text);
             box-shadow: var(--user-box-shadow);
@@ -174,8 +174,14 @@
         }
         .user-info-male { background: var(--user-box-bg-male); }
         .user-info-female { background: var(--user-box-bg-female); }
-        .user-info-box i { font-size: 1.2rem; }
-        .user-info-text { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+        .user-info-box i { font-size: 1.5rem; flex-shrink: 0; }
+        .user-info-text { 
+            font-size: 0.9rem; 
+            white-space: normal; /* Alt satıra geçmeye izin ver */
+            word-break: break-word; 
+            text-align: left;
+            line-height: 1.2;
+        }
 
         #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
 
@@ -1079,6 +1085,20 @@
 
     function renderApp() {
         if(!localData.counts) return;
+        
+        // SENKRONİZASYON: Günlük hedef verisi (Inputlar) ile Log verisini eşitle
+        const todayISO = getIsoDate(new Date());
+        const todayTotal = localData.daily.counts.reduce((a, b) => a + b, 0);
+        
+        // Log'u her zaman günlük hedefe eşitle (Source of Truth: Günlük Hedef)
+        if (localData.logs[todayISO] !== todayTotal) {
+            localData.logs[todayISO] = todayTotal;
+            // Kaydetme işlemi kullanıcı deneyimini bozmaması için sessizce yapılabilir
+            // veya bir sonraki işlemde zaten kaydedileceği için hafızada tutulur.
+            // Ancak veri tutarlılığı için burada DB'ye yazmak en garantisidir.
+            dbRef.child('logs').update({ [todayISO]: todayTotal });
+        }
+
         recalculateStreak();
         
         const dateInput = document.getElementById('startDate');
