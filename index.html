@@ -29,10 +29,10 @@
             --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
             --border-color: #ced4da; --modal-bg: #ffffff;
             
-            /* YENİ RENKLER (Gündüz) */
-            --col-namaz-bg: #5a826e; /* Eski turuncu yerine Mat Yeşil */
+            /* RENKLER (Gündüz) */
+            --col-namaz-bg: #5a826e; 
             --col-namaz-text: #ffffff;
-            --table-foot-bg: #1f3b2f; /* Eski kırmızı yerine Koyu Yeşil-Gri */
+            --table-foot-bg: #1f3b2f; 
             --table-foot-border: #142921;
             
             /* ZİKİR BUTON RENKLERİ */
@@ -52,10 +52,10 @@
             --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
             --border-color: #444; --modal-bg: #2d2d2d;
             
-            /* YENİ RENKLER (Gece) */
-            --col-namaz-bg: #1e3b2e; /* Koyu Mat Yeşil */
+            /* RENKLER (Gece) */
+            --col-namaz-bg: #1e3b2e; 
             --col-namaz-text: #e0e0e0;
-            --table-foot-bg: #0b1a15; /* Çok Koyu Yeşil */
+            --table-foot-bg: #0b1a15; 
             --table-foot-border: #050d0a;
             
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
@@ -166,7 +166,6 @@
             display: flex; align-items: center; justify-content: center;
         }
         
-        /* YENİ RENKLİ KOLON */
         .col-namaz { 
             background-color: var(--col-namaz-bg) !important; 
             color: var(--col-namaz-text) !important; 
@@ -196,23 +195,31 @@
         .btn-action:active { transform: scale(0.85); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
-        /* PROGRESS BAR & SPACER */
+        /* --- GÜNCELLENEN PROGRESS BAR YAPISI --- */
         .progress-container {
-            height: 20px; 
+            /* Hem bar kalınlaştı hem yazı aşağı indiği için kapsayıcıyı büyüttük */
+            height: 28px; 
             display: flex; flex-direction: column; justify-content: flex-end;
             margin-top: 6px;
         }
         .progress { 
-            height: 12px;
-            border-radius: 6px; 
+            /* Bar biraz daha kalınlaştırıldı */
+            height: 15px;
+            border-radius: 7px; 
             background-color: #e9ecef; 
             width: 100%; 
         }
-        .progress-text { font-size: 10px; margin-top: 1px; line-height: 1; font-weight: bold; }
+        .progress-text { 
+            font-size: 10px; 
+            /* Yazı bardan aşağı uzaklaştırıldı */
+            margin-top: 4px; 
+            line-height: 1; 
+            font-weight: bold; 
+        }
 
-        /* HİZALAMA İÇİN HAYALET KUTU */
+        /* HİZALAMA İÇİN HAYALET KUTU (Yüksekliği progress-container ile eşitlendi) */
         .spacer-box {
-            height: 20px; 
+            height: 28px; 
             margin-top: 6px;
             width: 100%;
             visibility: hidden; 
