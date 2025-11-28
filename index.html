@@ -913,7 +913,7 @@
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v14", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v15", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -983,7 +983,6 @@
                     if (d) {
                         localData = d;
                     } else {
-                        // Yeni kullanıcı ise hafızayı sıfırla
                         localData = JSON.parse(JSON.stringify(defaultData));
                     }
                     ensureDataStructure(); 
@@ -1003,16 +1002,22 @@
                 finally { hideLoader(); }
             });
         } else { 
-            // Çıkış yapıldığında
             document.getElementById('loading-overlay').style.display = 'none';
             document.getElementById('login-screen').style.display = 'flex'; 
             document.getElementById('app-wrapper').style.display = 'none'; 
-            localData = JSON.parse(JSON.stringify(defaultData)); // Hafızayı temizle
+            localData = JSON.parse(JSON.stringify(defaultData)); 
         }
     });
 
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
-    function logout() { auth.signOut(); }
+    
+    // YENİ ÇIKIŞ FONKSİYONU: Sayfayı yenileyerek hafızayı temizler
+    function logout() { 
+        auth.signOut().then(() => {
+            window.location.reload(); 
+        });
+    }
+    
     function saveToCloud() { if(dbRef) dbRef.set(localData); }
     
     function ensureDataStructure() {
@@ -1097,7 +1102,7 @@
         const todayISO = getIsoDate(new Date());
         const todayTotal = localData.daily.counts.reduce((a, b) => a + b, 0);
         
-        // Eğer günlük toplam ile logdaki kayıt tutmuyorsa, Log'u güncelle (Source of Truth: Dashboard)
+        // Eğer günlük toplam ile logdaki kayıt tutmuyorsa, Log'u güncelle
         if (localData.logs[todayISO] !== todayTotal) {
             localData.logs[todayISO] = todayTotal;
             if(dbRef) dbRef.child('logs').update({ [todayISO]: todayTotal });
@@ -1116,8 +1121,7 @@
 
         if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); mainTable.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); mainTable.classList.remove('paused-mode-overlay'); }
 
-        // Dashboard Verilerini Güncelle
-        document.getElementById('dailyCountDisplay').innerText = todayTotal; // Zaten c idi
+        document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
         let p = (todayTotal / localData.daily.target) * 100; if(p>100) p=100;
         document.getElementById('dailyProgressBar').style.width = p + "%";
