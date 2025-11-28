@@ -54,7 +54,7 @@
             --calc-header-shadow: rgba(25, 135, 84, 0.3);
             --placeholder-color: #6c757d;
 
-            /* YENİ: Muayyen Modu Renkleri */
+            /* MUAYYEN MODU RENKLERİ */
             --period-color: #d63384;
             --period-bg: #fce4ec;
         }
@@ -85,7 +85,7 @@
             --calc-header-shadow: rgba(0, 0, 0, 0.5);
             --placeholder-color: #bbbbbb;
 
-            /* YENİ: Muayyen Modu Renkleri (Gece) */
+            /* MUAYYEN MODU RENKLERİ (Gece) */
             --period-bg: #2d0b16;
         }
         
@@ -108,7 +108,7 @@
         .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* YENİ: CİNSİYET SEÇİM MODALI */
+        /* CİNSİYET SEÇİM MODALI */
         #gender-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 9000; display: none; justify-content: center; align-items: center; flex-direction: column; }
         .gender-card { background: var(--card-bg); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%; border: 1px solid var(--border-color); }
         .gender-btn { width: 120px; height: 120px; border-radius: 20px; border: 2px solid var(--border-color); background: var(--input-bg); margin: 10px; cursor: pointer; transition: 0.2s; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; color: var(--text-color); }
@@ -116,11 +116,58 @@
         .gender-btn i { font-size: 3rem; margin-bottom: 10px; }
         .gender-btn.female:hover { border-color: #d63384; background: #fce4ec; color: #a21b5b; }
 
-        /* YENİ: MUAYYEN MODU GÖRSELLERİ */
+        /* MUAYYEN MODU GÖRSELLERİ - GÜNCELLENDİ */
         .period-active .btn-plus, .period-active .btn-minus, .period-active .table-input { filter: grayscale(100%); opacity: 0.5; pointer-events: none; }
-        .period-banner { background-color: var(--period-bg); border: 2px solid var(--period-color); color: var(--period-color); padding: 10px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; display: none; }
-        .form-switch .form-check-input { width: 3em; height: 1.5em; cursor: pointer; }
-        .form-switch .form-check-input:checked { background-color: var(--period-color); border-color: var(--period-color); }
+        
+        .period-banner { 
+            background-color: var(--period-bg); 
+            border: 2px solid var(--period-color); 
+            color: var(--period-color); 
+            padding: 12px 15px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            display: none; 
+        }
+        
+        .period-left-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .period-text-stack {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        /* Toggle Switch Düzenlemeleri */
+        .period-switch-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .form-switch .form-check-input { 
+            width: 3.5em; 
+            height: 1.8em; 
+            cursor: pointer; 
+            margin-top: 0;
+        }
+        .form-switch .form-check-input:checked { 
+            background-color: var(--period-color); 
+            border-color: var(--period-color); 
+        }
+        .form-switch .form-check-label {
+            margin-left: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            padding-top: 2px; /* Dikey hizalama için */
+        }
 
         /* --- SIDEBAR --- */
         .wrapper { display: flex; width: 100%; }
@@ -477,7 +524,7 @@
     <div class="loading-text">Veriler Yükleniyor...</div>
 </div>
 
-<!-- YENİ: CİNSİYET SEÇİM EKRANI -->
+<!-- CİNSİYET SEÇİM EKRANI -->
 <div id="gender-overlay">
     <div class="gender-card">
         <h3>Hoş Geldiniz</h3>
@@ -535,14 +582,20 @@
         <!-- DASHBOARD -->
         <div id="section-dashboard" style="display: block;">
             
-            <!-- YENİ: MUAYYEN GÜN PANELİ (SADECE KADINLARDA GÖRÜNÜR) -->
+            <!-- MUAYYEN GÜN PANELİ (SADECE KADINLARDA GÖRÜNÜR) -->
             <div id="periodControlArea" style="display: none;">
                 <div class="period-banner" id="periodBanner">
-                    <div><i class="fas fa-heart me-2"></i> <strong>Muayyen Gün Modu Aktif</strong></div>
-                    <div class="small">Hedefler ve Zincir etkilenmez.</div>
+                    <div class="period-left-content">
+                        <i class="fas fa-heart fa-2x"></i>
+                        <div class="period-text-stack">
+                            <strong>Muayyen Gün</strong>
+                            <strong>Modu Aktif</strong>
+                        </div>
+                    </div>
+                    <div class="small text-end" style="max-width: 50%;">Hedefler ve Zincir etkilenmez.</div>
                 </div>
-                <div class="d-flex justify-content-center align-items-center mb-3">
-                    <div class="form-check form-switch">
+                <div class="period-switch-wrapper">
+                    <div class="form-check form-switch d-flex align-items-center">
                         <input class="form-check-input" type="checkbox" id="periodSwitch" onchange="togglePeriodMode(this.checked)">
                         <label class="form-check-label fw-bold" for="periodSwitch" style="color:var(--period-color)">Muayyen Günümdeyim</label>
                     </div>
@@ -753,7 +806,7 @@
                             Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.
                         </div>
 
-                        <!-- YENİ: KADIN KULLANICILAR İÇİN EK ALAN -->
+                        <!-- KADIN KULLANICILAR İÇİN EK ALAN -->
                         <div id="femaleCalcArea" class="mb-4 p-3 rounded" style="background-color: var(--period-bg); border: 1px solid var(--period-color); display:none;">
                              <label class="fw-bold" style="color: var(--period-color)">Ortalama Adet (Muayyen) Günü (Ayda)</label>
                              <input type="number" id="avgPeriodDays" class="form-control text-center fw-bold mt-2" value="7" onchange="window.calcRow(0); window.calcRow(1); window.calcRow(2); window.calcRow(3); window.calcRow(4);">
@@ -813,14 +866,19 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-12">
-                     <div class="settings-card text-center">
-                        <i class="fas fa-venus-mars settings-icon text-info"></i>
+                
+                <!-- GÜNCELLENEN PROFİL KARTI -->
+                <div class="col-md-6 col-lg-4">
+                     <div class="settings-card text-center h-100" style="border-color: #0dcaf0;">
+                        <i class="fas fa-user-circle settings-icon text-info"></i>
                         <div class="settings-title">Profil</div>
                         <div class="settings-desc">Seçili Cinsiyet: <strong id="settingsGenderDisp">-</strong></div>
-                        <button class="btn btn-outline-info btn-sm" onclick="resetGender()">Cinsiyeti Değiştir</button>
+                        <button class="btn btn-outline-info w-100" onclick="resetGender()">
+                            <i class="fas fa-venus-mars me-2"></i> Cinsiyeti Değiştir
+                        </button>
                     </div>
                 </div>
+                
                 <div class="col-12">
                     <div class="settings-card text-center border-danger">
                         <i class="fas fa-exclamation-triangle settings-icon text-danger"></i>
@@ -849,7 +907,7 @@
     const jsConfetti = new JSConfetti();
     
     // Global değişken grafik periyodu için
-    let currentChartPeriod = 'weekly'; // 'weekly' veya 'monthly'
+    let currentChartPeriod = 'weekly'; 
 
     // --- YARDIMCI FONKSİYONLAR ---
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
@@ -886,19 +944,20 @@
     let dbRef = null;
 
     // --- VERİ MODELİ ---
-    function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
-    function getYesterdayDateSimple() { const d = new Date(); d.setDate(d.getDate() - 1); return d.toLocaleDateString('tr-TR'); }
     function getIsoDate(date) { return date.toISOString().split('T')[0]; }
+    
+    // GÜNCELLENEN TARİH FONKSİYONU: Sıfırlanma sorununu çözmek için ISO formatını standart olarak kullanıyoruz.
+    function getCurrentDateISO() { return getIsoDate(new Date()); }
 
     const defaultData = {
-        gender: null, // 'male' or 'female'
+        gender: null, 
         startDate: new Date().toISOString().split('T')[0],
-        isOnPeriod: false, // Kadınlar için muayyen modu
-        daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 },
+        isOnPeriod: false, 
+        daily: { date: getCurrentDateISO(), counts: [0,0,0,0,0], target: 10 },
         weeklyTarget: 50,
         streak: { current: 0, lastAchievedDate: "" },
         calendar: {}, logs: {},
-        periodLogs: {}, // Muayyen günler { "2023-11-28": true }
+        periodLogs: {}, 
         counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
         tesbihat: [
             { name: "Sübhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
@@ -963,17 +1022,27 @@
         
         if (localData.weeklyTarget === undefined) localData.weeklyTarget = 50;
         
-        const t = new Date().toLocaleDateString('tr-TR');
-        if (!localData.daily || localData.daily.date !== t) { localData.daily = { date: t, counts: [0,0,0,0,0], target: localData.daily?.target || 10 }; saveToCloud(); }
+        const t = getCurrentDateISO();
+        if (!localData.daily) { 
+            localData.daily = { date: t, counts: [0,0,0,0,0], target: 10 }; 
+            saveToCloud(); 
+        }
+        
         if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
         if (!localData.history) localData.history = [];
         if (!localData.earnedBadges) localData.earnedBadges = [];
         if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
     }
 
-    // --- YENİ: CİNSİYET VE MUAYYEN FONKSİYONLARI ---
+    // --- CİNSİYET VE MUAYYEN FONKSİYONLARI ---
     window.selectGender = function(g) {
         localData.gender = g;
+        
+        // GÜNCELLEME: Erkek seçilirse Muayyen Modu otomatik kapat
+        if (g === 'male') {
+            localData.isOnPeriod = false;
+        }
+
         saveToCloud();
         document.getElementById('gender-overlay').style.display = 'none';
         applyGenderSettings();
@@ -982,16 +1051,9 @@
     function applyGenderSettings() {
         const isFemale = localData.gender === 'female';
         
-        // Dashboard'da Muayyen butonu göster/gizle
         document.getElementById('periodControlArea').style.display = isFemale ? 'block' : 'none';
-        
-        // Hesap makinesinde kadın özel alanı
         document.getElementById('femaleCalcArea').style.display = isFemale ? 'block' : 'none';
-        
-        // Ayarlar kısmında göster
         document.getElementById('settingsGenderDisp').innerText = isFemale ? "Kadın" : "Erkek";
-
-        // Switch durumunu güncelle
         document.getElementById('periodSwitch').checked = localData.isOnPeriod || false;
         
         applyPeriodVisuals();
@@ -1002,7 +1064,7 @@
         
         if (isActive) {
             const today = getIsoDate(new Date());
-            localData.periodLogs[today] = true; // Bugünü muayyen olarak işaretle
+            localData.periodLogs[today] = true; 
             jsConfetti.addConfetti({ emojis: ['🌸', '💖'], confettiNumber: 30 });
             showModal("Muayyen Modu", "İbadet takibi duraklatıldı. Zinciriniz bozulmayacak.");
         }
@@ -1015,14 +1077,17 @@
         const tableContainer = document.getElementById('prayerTableContainer');
         const banner = document.getElementById('periodBanner');
         
-        if (localData.isOnPeriod) {
-            tableContainer.classList.add('period-active'); // Butonları pasifleştir
+        // Cinsiyet Kontrolü Ekledik: Sadece Kadınsa ve Mod Aktifse çalışır
+        const isActive = localData.gender === 'female' && localData.isOnPeriod;
+
+        if (isActive) {
+            tableContainer.classList.add('period-active');
             banner.style.display = 'flex';
         } else {
             tableContainer.classList.remove('period-active');
             banner.style.display = 'none';
         }
-        recalculateStreak(); // Zinciri yeniden hesapla (görsel güncelleme için)
+        recalculateStreak();
     }
 
     window.resetGender = function() {
@@ -1085,8 +1150,7 @@
     window.chC = function(i, d) { 
         triggerHaptic(); 
         
-        // YENİ: Muayyen moddaysa işlem yapma
-        if(localData.isOnPeriod) {
+        if(localData.gender === 'female' && localData.isOnPeriod) {
             showModal("Muayyen Modu", "Muayyen gün modundasınız. İbadet girişi kapalıdır.");
             return;
         }
@@ -1123,13 +1187,11 @@
         } 
     };
     
-    // YENİ: GÜNCELLENMİŞ ZİNCİR MANTIĞI
     function recalculateStreak() {
         let currentStreak = 0;
         const today = new Date();
         
         const isoToday = getIsoDate(today);
-        // Bugün işlem var mı VEYA bugün muayyen gün mü?
         if ((localData.calendar && localData.calendar[isoToday]) || (localData.periodLogs && localData.periodLogs[isoToday])) {
             currentStreak++;
         }
@@ -1139,12 +1201,10 @@
             d.setDate(today.getDate() - i);
             const iso = getIsoDate(d);
             
-            // O gün işlem var mı VEYA o gün muayyen gün müydü?
             if ((localData.calendar && localData.calendar[iso]) || (localData.periodLogs && localData.periodLogs[iso])) {
                 currentStreak++;
             } else {
                 if (i === 1 && currentStreak === 0) {
-                    // Dün boş, bugün de boş -> Zincir 0
                 } else {
                     break; 
                 }
@@ -1156,12 +1216,10 @@
     window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
     window.updateWeeklyGoal = function(v) { localData.weeklyTarget = parseInt(v)||50; saveToCloud(); renderApp(); };
 
-    // YENİ: Haftalık İlerleme Hesaplama
     function getWeeklyProgress() {
         if (!localData.logs) return 0;
         const today = new Date();
-        const day = today.getDay(); // 0(Pazar) - 6(Cumartesi)
-        // Pazartesi'yi haftanın başı kabul ediyoruz
+        const day = today.getDay();
         const diff = today.getDate() - day + (day == 0 ? -6 : 1);
         const monday = new Date(today.setDate(diff));
         monday.setHours(0,0,0,0);
@@ -1169,7 +1227,6 @@
         let weeklyTotal = 0;
         Object.keys(localData.logs).forEach(dateKey => {
             const logDate = new Date(dateKey);
-            // Sadece log tarihi >= Pazartesi ise topla
             if (logDate >= monday) {
                 weeklyTotal += localData.logs[dateKey];
             }
@@ -1180,8 +1237,13 @@
     // --- RENDER FONKSİYONLARI ---
     function renderApp() {
         if(!localData.counts) return;
+        
+        // Veri Güvenliği Kontrolü: Eğer counts undefined ise boş array ata
+        if(!localData.daily.counts) localData.daily.counts = [0,0,0,0,0];
+
         recalculateStreak();
         document.getElementById('startDate').value = localData.startDate;
+        
         const c = localData.daily.counts.reduce((a,b)=>a+b,0);
         document.getElementById('dailyCountDisplay').innerText = c;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
@@ -1197,7 +1259,6 @@
         }
         document.getElementById('streakValue').innerText = localData.streak.current;
 
-        // --- HAFTALIK KART RENDER ---
         const weeklyTotal = getWeeklyProgress();
         const weeklyTarget = localData.weeklyTarget || 50;
         document.getElementById('weeklyCountDisplay').innerText = weeklyTotal;
@@ -1268,7 +1329,7 @@
         renderBadges(td); 
         renderHistory(); 
         calculateEstFinish(td, days); 
-        applyPeriodVisuals(); // Tabloyu güncelle
+        applyPeriodVisuals(); 
     }
 
     function renderTesbihat() {
@@ -1435,13 +1496,11 @@
     window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
     
-    // --- GRAFİK PERİYOT SEÇİMİ ---
     window.switchChartPeriod = function(period) {
         currentChartPeriod = period;
-        updatePerformanceChart(); // Sadece çizgi grafiği güncelleyen özel fonksiyon
+        updatePerformanceChart();
     }
 
-    // YENİ FONKSİYON: Sadece performans grafiğini günceller (Smooth Transition)
     function updatePerformanceChart() {
         const periodStats = calculatePeriodStats();
         let chartLabels = [];
@@ -1463,7 +1522,7 @@
             lineChart.data.datasets[0].data = chartData;
             lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)';
             lineChart.data.datasets[0].pointRadius = pointRadiusVal;
-            lineChart.update(); // Bu yöntem animasyonlu güncelleme sağlar
+            lineChart.update();
         }
     }
 
@@ -1530,14 +1589,12 @@
             }
         });
 
-        // Çizgi Grafik (Line Chart) İLK YÜKLEME
         const ctx3 = document.getElementById('lineChart').getContext('2d');
         if (lineChart) lineChart.destroy();
         
         const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200);
         gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)');
         
-        // İlk yüklemede hangi periyod seçiliyse onu çiz
         let chartLabels = [];
         let chartData = [];
         let pointRadiusVal = 3;
@@ -1584,19 +1641,16 @@
         let last7Data = [], last7Labels = [];
         let last30Data = [], last30Labels = [];
         
-        // Son 7 Gün Hesabı
         for(let i=6; i>=0; i--) {
             const d = new Date(); d.setDate(today.getDate() - i);
             const iso = getIsoDate(d); const val = localData.logs[iso] || 0;
             weeklyTotal += val; last7Data.push(val); last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'}));
         }
 
-        // Son 30 Gün Hesabı (Grafik için)
         for(let i=29; i>=0; i--) {
             const d = new Date(); d.setDate(today.getDate() - i);
             const iso = getIsoDate(d); const val = localData.logs[iso] || 0;
             last30Data.push(val); 
-            // Aylık görünümde sadece gün ve ay ismi
             last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'}));
         }
 
@@ -1623,7 +1677,6 @@
         }); 
     };
 
-    // YENİ: GÜNCELLENMİŞ HESAPLAMA MANTIĞI (Adet Günlerini Düşer)
     window.calcRow = function(i) { 
         const r=document.getElementById(`row-${i}`); 
         const inputs=r.querySelectorAll('input'); 
@@ -1634,7 +1687,6 @@
             const diffTime = Math.abs(new Date(e) - new Date(s));
             let totalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             
-            // Eğer Kadın seçiliyse, ortalama adet gününü düş
             if(localData.gender === 'female') {
                 const avgPeriod = parseInt(document.getElementById('avgPeriodDays').value) || 0;
                 if(avgPeriod > 0) {
@@ -1661,17 +1713,16 @@
     document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
     const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; }; dInput.placeholder = 'gg.aa.yyyy';
     
+    // GÜNCELLENEN TARİH KONTROLÜ
     function checkDailyReset() { 
-        const t = getCurrentDateSimple(); 
-        const t_iso = getIsoDate(new Date());
-
+        const t = getCurrentDateISO(); 
+        
         if (localData.daily.date !== t) { 
             localData.daily.date = t; 
             localData.daily.counts = [0,0,0,0,0]; 
             
-            // Eğer hala muayyen moddaysa, yeni günü de işaretle ki kullanıcı tekrar açmak zorunda kalmasın
             if (localData.isOnPeriod) {
-                localData.periodLogs[t_iso] = true;
+                localData.periodLogs[t] = true;
             }
 
             saveToCloud(); 
