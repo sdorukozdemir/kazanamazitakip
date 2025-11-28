@@ -68,6 +68,12 @@
             /* HESAPLAMA KARTLARI */
             --calc-item-bg: #ffffff;
             --calc-item-border: #e9ecef;
+            
+            /* USER BADGE COLORS */
+            --badge-male-bg: rgba(13, 110, 253, 0.2);
+            --badge-male-text: #e7f1ff;
+            --badge-female-bg: rgba(214, 51, 132, 0.2);
+            --badge-female-text: #fce4ec;
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
@@ -146,6 +152,19 @@
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
+        /* SIDEBAR USER INFO STYLE */
+        .user-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .user-badge-male { background: rgba(13, 110, 253, 0.3); color: #e7f1ff; border: 1px solid rgba(13, 110, 253, 0.5); }
+        .user-badge-female { background: rgba(214, 51, 132, 0.3); color: #fce4ec; border: 1px solid rgba(214, 51, 132, 0.5); }
+
         #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
@@ -323,6 +342,20 @@
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
 
+        /* GENDER SETTINGS STYLES */
+        .settings-gender-male {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 1px solid #90caf9;
+            color: #0d47a1;
+        }
+        .settings-gender-female {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            border: 1px solid #f48fb1;
+            color: #880e4f;
+        }
+        body.dark-mode .settings-gender-male { background: linear-gradient(135deg, #0d2b4a, #1a3e66); border-color: #1a3e66; color: #bbdefb; }
+        body.dark-mode .settings-gender-female { background: linear-gradient(135deg, #4a1b2d, #661a36); border-color: #661a36; color: #f8bbd0; }
+
         /* --- İSTATİSTİK KARTLARI --- */
         .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
         .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
@@ -436,6 +469,16 @@
         }
         .custom-alert-box strong { color: #17a2b8; }
         
+        /* Neutral/Info Tip Box */
+        .custom-alert-tip {
+            border-left-color: #ffc107;
+            background: #fff9db;
+            color: #856404;
+        }
+        .custom-alert-tip strong { color: #856404; }
+        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
+        body.dark-mode .custom-alert-tip strong { color: #ffc107; }
+
         .custom-alert-female {
             border-left-color: var(--pink-accent);
             background: var(--pink-bg-light);
@@ -507,7 +550,7 @@
     <nav id="sidebar">
         <div class="p-4 text-center" style="background: rgba(0,0,0,0.1);">
             <h4 class="fw-bold"><i class="fas fa-kaaba me-2"></i>Takip</h4>
-            <small id="sidebarUserInfo" class="text-white-50">...</small>
+            <div id="sidebarUserInfo" class="user-badge">...</div>
         </div>
         <ul class="list-unstyled components p-2">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
@@ -710,16 +753,17 @@
                             </div>
                         </div>
 
-                        <div class="custom-alert-box">
-                            <i class="fas fa-info-circle me-2"></i>
+                        <!-- Neutral/Orange Tip Box -->
+                        <div class="custom-alert-box custom-alert-tip">
+                            <i class="fas fa-lightbulb me-2"></i>
                             Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.
                         </div>
 
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
-                            <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()">
                                 <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
                             </button>
-                            <button class="btn btn-sm btn-outline-primary" onclick="copyEndDate()">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="copyEndDate()">
                                 <i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala
                             </button>
                         </div>
@@ -740,15 +784,15 @@
                 
                 <!-- Cinsiyet Değiştirme -->
                 <div class="col-12">
-                     <div class="settings-card d-flex align-items-center justify-content-between">
+                     <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
                          <div class="d-flex align-items-center">
-                            <i class="fas fa-venus-mars fs-2 me-3 text-secondary"></i>
+                            <i class="fas fa-venus-mars fs-2 me-3" style="opacity: 0.8;"></i>
                             <div>
                                 <div class="settings-title mb-0">Cinsiyet Ayarı</div>
                                 <div class="settings-desc mb-0" id="currentGenderDisplay">Seçilmedi</div>
                             </div>
                          </div>
-                         <button class="btn btn-outline-secondary btn-sm" onclick="openGenderModal(true)">Değiştir</button>
+                         <button class="btn btn-light btn-sm fw-bold shadow-sm" onclick="openGenderModal(true)">Değiştir</button>
                      </div>
                 </div>
 
@@ -820,7 +864,7 @@
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v11", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v12", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -850,7 +894,11 @@
     // Tarih Formatlama Fonksiyonu (TR Formatı İçin)
     function formatDateTR(isoDate) {
         if(!isoDate) return "";
-        const [y, m, d] = isoDate.split('-');
+        // Eğer zaten gg.aa.yyyy formatındaysa dokunma
+        if(isoDate.includes('.') && isoDate.split('.')[0].length <= 2) return isoDate; 
+        const parts = isoDate.split('-');
+        if(parts.length !== 3) return isoDate;
+        const [y, m, d] = parts;
         return `${d}.${m}.${y}`;
     }
 
@@ -960,9 +1008,16 @@
         const calcInfo = document.getElementById('femaleCalcInfo');
         const genderText = document.getElementById('currentGenderDisplay');
         const userInfo = document.getElementById('sidebarUserInfo');
+        const settingsCard = document.getElementById('genderSettingsCard');
         
         // Reset Selected Styles
         document.querySelectorAll('.gender-option').forEach(el => el.classList.remove('selected'));
+        if(settingsCard) {
+            settingsCard.classList.remove('settings-gender-male', 'settings-gender-female');
+        }
+        if(userInfo) {
+            userInfo.classList.remove('user-badge-male', 'user-badge-female');
+        }
 
         if (localData.gender === 'female') {
             toggleArea.style.display = 'flex';
@@ -972,7 +1027,8 @@
             document.getElementById('menstrualDaysInput').value = localData.menstrualDaysPerMonth;
             
             // Sidebar Rengi ve Seçili Kutu
-            if(userInfo) userInfo.style.color = 'var(--pink-accent)';
+            if(userInfo) userInfo.classList.add('user-badge-female');
+            if(settingsCard) settingsCard.classList.add('settings-gender-female');
             document.getElementById('genderOptFemale').classList.add('selected');
         } else {
             toggleArea.style.display = 'none';
@@ -980,7 +1036,8 @@
             genderText.innerText = "Erkek";
             
             // Sidebar Rengi ve Seçili Kutu
-            if(userInfo) userInfo.style.color = '#87ceeb'; // Açık mavi
+            if(userInfo) userInfo.classList.add('user-badge-male');
+            if(settingsCard) settingsCard.classList.add('settings-gender-male');
             document.getElementById('genderOptMale').classList.add('selected');
         }
     }
@@ -994,6 +1051,10 @@
     window.updateMenstrualDays = function(val) {
         localData.menstrualDaysPerMonth = parseInt(val) || 0;
         saveToCloud();
+        // Tüm satırları yeniden hesapla
+        for(let i=0; i<5; i++) {
+            window.calcRow(i);
+        }
     }
 
     // --- UI & NAVIGATION ---
@@ -1132,13 +1193,13 @@
                     <div class="calc-item">
                         <div class="calc-group-box">
                             <span class="calc-label-small">Sorumluluk Başlangıcı</span>
-                            <input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})">
+                            <input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})">
                         </div>
                     </div>
                     <div class="calc-item">
                         <div class="calc-group-box">
                             <span class="calc-label-small">Düzenli Başlama Tarihi</span>
-                            <input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})">
+                            <input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})">
                         </div>
                     </div>
                     <div class="calc-item">
@@ -1155,22 +1216,35 @@
     window.calcRow = function(i) { 
         const r = document.getElementById(`row-${i}`); 
         const inputs = r.querySelectorAll('input'); 
-        const s = inputs[0].value; 
-        const e = inputs[1].value; 
+        let s = inputs[0].value; 
+        let e = inputs[1].value; 
+
+        // Eğer tarih TR formatındaysa (gg.aa.yyyy), Date objesi için çevir (yyyy-mm-dd)
+        function parseDateTR(val) {
+            if(!val) return null;
+            if(val.includes('.')) {
+                const parts = val.split('.');
+                if(parts.length === 3) return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+            }
+            return new Date(val); // Zaten yyyy-mm-dd olabilir
+        }
         
         if(s && e) { 
-            const startDate = new Date(s);
-            const endDate = new Date(e);
-            let totalDays = Math.ceil((endDate - startDate)/(86400000));
+            const startDate = parseDateTR(s);
+            const endDate = parseDateTR(e);
             
-            // KADIN İÇİN MUAYYEN GÜN DÜŞÜMÜ
-            if(localData.gender === 'female') {
-                const totalMonths = totalDays / 30.44; // Ortalama ay uzunluğu
-                const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6));
-                totalDays = totalDays - menstrualDeduction;
-            }
+            if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+                let totalDays = Math.ceil((endDate - startDate)/(86400000));
+                
+                // KADIN İÇİN MUAYYEN GÜN DÜŞÜMÜ
+                if(localData.gender === 'female') {
+                    const totalMonths = totalDays / 30.44; // Ortalama ay uzunluğu
+                    const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6));
+                    totalDays = totalDays - menstrualDeduction;
+                }
 
-            document.getElementById(`res-${i}`).value = Math.max(0, totalDays); 
+                document.getElementById(`res-${i}`).value = Math.max(0, totalDays); 
+            }
         } 
     };
 
