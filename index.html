@@ -54,9 +54,20 @@
             --calc-header-shadow: rgba(25, 135, 84, 0.3);
             --placeholder-color: #6c757d;
 
-            /* KADIN MODU ÖZEL RENKLER */
+            /* KADIN/ERKEK MODU ÖZEL RENKLER */
             --pink-accent: #d63384;
             --pink-bg-light: #fce4ec;
+            --blue-accent: #0d6efd;
+            --blue-bg-light: #e7f1ff;
+            
+            /* YENİ EKLENEN FADE BOX */
+            --fade-box-bg: rgba(255, 255, 255, 0.6);
+            --fade-box-border: rgba(0,0,0,0.05);
+            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            
+            /* HESAPLAMA KARTLARI */
+            --calc-item-bg: #ffffff;
+            --calc-item-border: #e9ecef;
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
@@ -87,6 +98,14 @@
             --placeholder-color: #bbbbbb;
             
             --pink-bg-light: #4a1b2d;
+            --blue-bg-light: #0d2b4a;
+            
+            --fade-box-bg: rgba(255, 255, 255, 0.05);
+            --fade-box-border: rgba(255,255,255,0.05);
+            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            
+            --calc-item-bg: #262626;
+            --calc-item-border: #333;
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
@@ -140,6 +159,7 @@
             margin-bottom: 20px; 
             overflow-x: auto; 
             width: 100%; display: block; 
+            transition: opacity 0.3s, filter 0.3s;
         }
         
         .main-table { 
@@ -278,10 +298,23 @@
         .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
         .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .calc-item { flex: 1; min-width: 150px; text-align: center; }
-        .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
+        .calc-label-small { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-color); opacity: 0.7; margin-bottom: 5px; display: block; }
         .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
         .date-input::placeholder { color: var(--placeholder-color); opacity: 1; }
-        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; }
+        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; border-radius: 8px; }
+
+        /* HESAPLAMA YENİ KUTU STİLİ */
+        .calc-group-box {
+            background: var(--calc-item-bg);
+            border: 1px solid var(--calc-item-border);
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
 
         /* --- YEDEKLEME & AYARLAR --- */
         .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
@@ -348,13 +381,67 @@
         /* --- CİNSİYET SEÇİM EKRANI --- */
         #gender-selection-modal { display: none; z-index: 2005; }
         .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
-        .gender-option:hover, .gender-option.selected { border-color: #198754; background: rgba(25, 135, 84, 0.1); }
+        .gender-option:hover { border-color: #198754; }
+        
+        /* Cinsiyet Seçili Durumları */
+        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
+        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
         
         /* --- MUAYYEN GÜN MODU STİLLERİ --- */
-        .menstrual-toggle-container { margin-bottom: 15px; padding: 10px; background: var(--pink-bg-light); border-radius: 15px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; }
-        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; }
-        .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); }
-        .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; }
+        .menstrual-toggle-container { 
+            margin-bottom: 15px; padding: 15px 20px; 
+            background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); 
+            border-radius: 50px; border: 1px solid var(--pink-accent); 
+            display: flex; align-items: center; justify-content: space-between; 
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15);
+        }
+        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
+
+        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
+        
+        .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
+        .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
+
+        /* YENİ FADE BOX (Tarih ve Süre İçin) */
+        .fade-box {
+            background: var(--fade-box-bg);
+            border: 1px solid var(--fade-box-border);
+            border-radius: 12px;
+            padding: 8px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            box-shadow: var(--fade-box-shadow);
+            height: 100%;
+            min-height: 70px;
+        }
+        .fade-box input {
+            background: transparent; border: none; text-align: center;
+            font-weight: bold; color: var(--text-color); width: 100%;
+            outline: none; padding: 0; margin: 0;
+        }
+        .fade-box label { margin-bottom: 2px; opacity: 0.7; }
+
+        /* CUSTOM ALERT BOX (Hesaplama Sihirbazı) */
+        .custom-alert-box {
+            background: var(--card-bg);
+            border-left: 5px solid #17a2b8;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        .custom-alert-box strong { color: #17a2b8; }
+        
+        .custom-alert-female {
+            border-left-color: var(--pink-accent);
+            background: var(--pink-bg-light);
+            border: 1px solid var(--pink-accent);
+            border-left-width: 5px;
+        }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { 
@@ -383,14 +470,14 @@
         <p class="mb-4 text-muted">Hesaplamaları daha doğru yapabilmemiz için lütfen cinsiyetinizi seçiniz.</p>
         <div class="row g-3">
             <div class="col-6">
-                <div class="gender-option" onclick="selectGender('female')">
-                    <i class="fas fa-female fa-3x mb-2 text-danger"></i>
+                <div id="genderOptFemale" class="gender-option" data-type="female" onclick="selectGender('female')">
+                    <i class="fas fa-female fa-3x mb-2"></i>
                     <div class="fw-bold">Kadın</div>
                 </div>
             </div>
             <div class="col-6">
-                <div class="gender-option" onclick="selectGender('male')">
-                    <i class="fas fa-male fa-3x mb-2 text-primary"></i>
+                <div id="genderOptMale" class="gender-option" data-type="male" onclick="selectGender('male')">
+                    <i class="fas fa-male fa-3x mb-2"></i>
                     <div class="fw-bold">Erkek</div>
                 </div>
             </div>
@@ -440,10 +527,10 @@
             <!-- KADIN KULLANICILAR İÇİN MUAYYEN GÜN TOGGLE -->
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                 <div class="menstrual-label">
-                    <i class="fas fa-flower text-danger"></i> Muayyen Günümdeyim
+                    <i class="fas fa-flower"></i> Muayyen Günümdeyim
                 </div>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="menstrualSwitch" onchange="toggleMenstrualState(this.checked)">
+                    <input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)">
                 </div>
             </div>
 
@@ -492,14 +579,22 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap align-items-center">
-                <div><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> 
-                    <input type="text" id="startDate" class="form-control text-center" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')">
+            <div class="row g-3 mb-4 justify-content-center">
+                <div class="col-6 col-md-4">
+                    <div class="fade-box">
+                        <label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> 
+                        <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')">
+                    </div>
                 </div>
-                <div><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="form-control text-center fw-bold" readonly></div>
+                <div class="col-6 col-md-4">
+                    <div class="fade-box">
+                        <label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> 
+                        <input type="text" id="elapsedDays" class="fs-5" readonly>
+                    </div>
+                </div>
             </div>
 
-            <div class="table-responsive mb-4">
+            <div id="mainTableWrapper" class="table-responsive mb-4">
                 <table class="table main-table">
                     <thead>
                         <tr>
@@ -604,18 +699,22 @@
                     <div class="calculator-card">
                         
                         <!-- KADIN MODU İÇİN EK BİLGİ -->
-                        <div id="femaleCalcInfo" class="alert alert-danger small mb-3" style="display:none;">
-                            <i class="fas fa-female me-2"></i> Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan <strong>Muayyen Günler</strong> düşülecektir.
-                            <div class="mt-2">
-                                <label class="fw-bold">Aylık Ortalama Muayyen Gün Sayısı:</label>
-                                <input type="number" id="menstrualDaysInput" class="form-control d-inline-block text-center fw-bold text-danger mt-1" style="width: 80px;" value="6" onchange="updateMenstrualDays(this.value)">
+                        <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-female fa-lg me-2 text-danger"></i>
+                                <span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 mt-2">
+                                <span>Aylık Ortalama Muayyen Gün Sayısı:</span>
+                                <input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)">
                             </div>
                         </div>
 
-                        <div class="alert alert-info small mb-4">
+                        <div class="custom-alert-box">
                             <i class="fas fa-info-circle me-2"></i>
                             Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.
                         </div>
+
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-info" onclick="copyStartDate()">
                                 <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
@@ -721,7 +820,7 @@
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v10", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v11", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -747,6 +846,13 @@
     // --- VERİ MODELİ ---
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     function getIsoDate(date) { return date.toISOString().split('T')[0]; }
+    
+    // Tarih Formatlama Fonksiyonu (TR Formatı İçin)
+    function formatDateTR(isoDate) {
+        if(!isoDate) return "";
+        const [y, m, d] = isoDate.split('-');
+        return `${d}.${m}.${y}`;
+    }
 
     const defaultData = {
         startDate: new Date().toISOString().split('T')[0],
@@ -831,7 +937,6 @@
     // --- CİNSİYET & MUAYYEN GÜN MANTIĞI ---
     function openGenderModal(force) {
         document.getElementById('gender-selection-modal').style.display = 'flex';
-        // Eğer zorunlu değilse ve zaten varsa kapatılabilir (ama burada seçim zorunlu kılıyoruz)
     }
 
     function selectGender(g) {
@@ -854,17 +959,29 @@
         const toggleArea = document.getElementById('menstrualToggleArea');
         const calcInfo = document.getElementById('femaleCalcInfo');
         const genderText = document.getElementById('currentGenderDisplay');
+        const userInfo = document.getElementById('sidebarUserInfo');
         
+        // Reset Selected Styles
+        document.querySelectorAll('.gender-option').forEach(el => el.classList.remove('selected'));
+
         if (localData.gender === 'female') {
             toggleArea.style.display = 'flex';
             calcInfo.style.display = 'block';
             genderText.innerText = "Kadın";
             document.getElementById('menstrualSwitch').checked = localData.isMenstrualState;
             document.getElementById('menstrualDaysInput').value = localData.menstrualDaysPerMonth;
+            
+            // Sidebar Rengi ve Seçili Kutu
+            if(userInfo) userInfo.style.color = 'var(--pink-accent)';
+            document.getElementById('genderOptFemale').classList.add('selected');
         } else {
             toggleArea.style.display = 'none';
             calcInfo.style.display = 'none';
             genderText.innerText = "Erkek";
+            
+            // Sidebar Rengi ve Seçili Kutu
+            if(userInfo) userInfo.style.color = '#87ceeb'; // Açık mavi
+            document.getElementById('genderOptMale').classList.add('selected');
         }
     }
 
@@ -877,7 +994,6 @@
     window.updateMenstrualDays = function(val) {
         localData.menstrualDaysPerMonth = parseInt(val) || 0;
         saveToCloud();
-        // Hesaplamayı anında güncellemek için renderCalculatorRows çağrılabilir ama input kaybetmemek için bırakıyoruz
     }
 
     // --- UI & NAVIGATION ---
@@ -909,22 +1025,32 @@
     function renderApp() {
         if(!localData.counts) return;
         recalculateStreak();
-        document.getElementById('startDate').value = localData.startDate;
+        
+        // Tarih Gösterimi (gg.aa.yyyy olarak)
+        const dateInput = document.getElementById('startDate');
+        if(dateInput.type !== 'date') {
+            dateInput.value = formatDateTR(localData.startDate);
+        } else {
+            dateInput.value = localData.startDate;
+        }
         
         // Muayyen Gün Kontrolü
         const isPaused = localData.gender === 'female' && localData.isMenstrualState;
         const pausedBadge = document.getElementById('pausedBadge');
         const goalCard = document.getElementById('goalCard');
         const weeklyCard = document.getElementById('weeklyCard');
+        const mainTable = document.getElementById('mainTableWrapper');
 
         if (isPaused) {
             pausedBadge.style.display = 'block';
             goalCard.classList.add('paused-mode-overlay');
             weeklyCard.classList.add('paused-mode-overlay');
+            mainTable.classList.add('paused-mode-overlay');
         } else {
             pausedBadge.style.display = 'none';
             goalCard.classList.remove('paused-mode-overlay');
             weeklyCard.classList.remove('paused-mode-overlay');
+            mainTable.classList.remove('paused-mode-overlay');
         }
 
         const c = localData.daily.counts.reduce((a,b)=>a+b,0);
@@ -993,13 +1119,36 @@
         renderBadges(td); renderHistory(); calculateEstFinish(td, days); 
     }
     
-    // --- HESAPLAMA SİHİRBAZI MANTIĞI (KADIN İÇİN GÜNCELLENDİ) ---
+    // --- HESAPLAMA SİHİRBAZI MANTIĞI (GÜNCELLENEN TASARIM) ---
     window.renderCalculatorRows = function() { 
         const c = document.getElementById('calcRowsContainer'); 
         if(!c || c.innerHTML.trim()) return; 
         const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; 
         prayerTypes.forEach((p, i) => { 
-            c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><small class="calc-label-small">Sorumluluk Başlangıcı</small><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Düzenli Başlama Tarihi</small><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})"></div><div class="calc-item"><small class="calc-label-small">Hesaplanan Gün</small><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div>`; 
+            c.innerHTML += `
+            <div class="calc-row" id="row-${i}">
+                <div class="calc-header">${p}</div>
+                <div class="calc-body">
+                    <div class="calc-item">
+                        <div class="calc-group-box">
+                            <span class="calc-label-small">Sorumluluk Başlangıcı</span>
+                            <input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})">
+                        </div>
+                    </div>
+                    <div class="calc-item">
+                        <div class="calc-group-box">
+                            <span class="calc-label-small">Düzenli Başlama Tarihi</span>
+                            <input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="window.calcRow(${i})">
+                        </div>
+                    </div>
+                    <div class="calc-item">
+                         <div class="calc-group-box" style="justify-content:center;">
+                            <span class="calc-label-small">Hesaplanan Gün</span>
+                            <input type="number" class="form-control calc-result-input" id="res-${i}" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>`; 
         }); 
     };
 
@@ -1070,7 +1219,7 @@
     window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode'); localStorage.setItem('theme', isDark ? 'dark' : 'light'); document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu"; renderApp(); };
     if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
     document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
-    const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; }; dInput.placeholder = 'gg.aa.yyyy';
+    const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; this.value = formatDateTR(this.value); }; dInput.placeholder = 'gg.aa.yyyy';
     function checkDailyReset() { const t = getCurrentDateSimple(); if (localData.daily.date !== t) { localData.daily.date = t; localData.daily.counts = [0,0,0,0,0]; saveToCloud(); } }
     function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
