@@ -978,7 +978,13 @@
 
     // --- VERİ MODELİ ---
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
-    function getIsoDate(date) { return date.toISOString().split('T')[0]; }
+    function getIsoDate(date) { 
+        // UTC Sorunu Çözümü: Yerel saati manuel ISO formatına çevir
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
     
     function formatDateTR(isoDate) {
         if(!isoDate) return "";
@@ -1090,13 +1096,8 @@
         const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-circle"></i>';
         
         toast.innerHTML = `${icon}<span>${message}</span>`;
-        
         container.appendChild(toast);
         
-        // Ses efekti (isteğe bağlı)
-        // const audio = new Audio('path/to/sound.mp3'); audio.play();
-
-        // 3 saniye sonra kaldır
         setTimeout(() => {
             toast.style.animation = 'toastFadeOut 0.4s forwards';
             setTimeout(() => {
@@ -1343,7 +1344,7 @@
         renderApp();
         renderStats();
         renderCalculatorRows();
-        applyGenderSettings(); // Cinsiyet ayarlarını tekrar uygula (renkler vs)
+        applyGenderSettings(); 
 
         showToast("Verileriniz başarıyla sıfırlandı ve yenilendi! ✨", "success");
     }
