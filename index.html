@@ -538,7 +538,7 @@
             <h3 class="app-header">İstatistikler & Analiz</h3>
             
             <div class="scrolling-wrapper mb-4">
-                <!-- Günlük Ortalama (Rengi düzeltildi) -->
+                <!-- Günlük Ortalama -->
                 <div class="stat-card-scroll">
                     <div class="stat-number" id="statAverage">0</div>
                     <div class="stat-label">Günlük Ortalama</div>
@@ -1172,7 +1172,34 @@
     // --- GRAFİK PERİYOT SEÇİMİ ---
     window.switchChartPeriod = function(period) {
         currentChartPeriod = period;
-        renderStats(); // Grafiği yeniden çiz
+        // renderStats(); // ARTIK ÇAĞIRMIYORUZ (SAYFAYI TİTRETMESİN)
+        updatePerformanceChart(); // Sadece çizgi grafiği güncelleyen özel fonksiyon
+    }
+
+    // YENİ FONKSİYON: Sadece performans grafiğini günceller (Smooth Transition)
+    function updatePerformanceChart() {
+        const periodStats = calculatePeriodStats();
+        let chartLabels = [];
+        let chartData = [];
+        let pointRadiusVal = 3;
+        
+        if(currentChartPeriod === 'weekly') {
+            chartLabels = periodStats.last7Labels;
+            chartData = periodStats.last7Data;
+            pointRadiusVal = 3;
+        } else {
+            chartLabels = periodStats.last30Labels;
+            chartData = periodStats.last30Data;
+            pointRadiusVal = 2;
+        }
+
+        if (lineChart) {
+            lineChart.data.labels = chartLabels;
+            lineChart.data.datasets[0].data = chartData;
+            lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)';
+            lineChart.data.datasets[0].pointRadius = pointRadiusVal;
+            lineChart.update(); // Bu yöntem animasyonlu güncelleme sağlar
+        }
     }
 
     // --- İSTATİSTİK FONKSİYONLARI ---
@@ -1238,14 +1265,14 @@
             }
         });
 
-        // Çizgi Grafik (Line Chart) Güncellemesi - Haftalık/Aylık
+        // Çizgi Grafik (Line Chart) İLK YÜKLEME
         const ctx3 = document.getElementById('lineChart').getContext('2d');
         if (lineChart) lineChart.destroy();
         
         const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200);
         gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)');
         
-        // Seçilen periyoda göre veriyi ayarla
+        // İlk yüklemede hangi periyod seçiliyse onu çiz
         let chartLabels = [];
         let chartData = [];
         let pointRadiusVal = 3;
@@ -1257,7 +1284,7 @@
         } else {
             chartLabels = periodStats.last30Labels;
             chartData = periodStats.last30Data;
-            pointRadiusVal = 2; // Aylıkta noktalar çok sıkışmasın diye küçültüyoruz
+            pointRadiusVal = 2;
         }
 
         lineChart = new Chart(ctx3, {
