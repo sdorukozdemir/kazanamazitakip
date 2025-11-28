@@ -156,7 +156,7 @@
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
-        /* GÜNCELLENEN KULLANICI KUTUSU STİLİ (İsim Sığdırma Çözüldü) */
+        /* GÜNCELLENEN KULLANICI KUTUSU STİLİ */
         .user-info-box {
             margin: 10px auto;
             width: 90%;
@@ -177,7 +177,7 @@
         .user-info-box i { font-size: 1.5rem; flex-shrink: 0; }
         .user-info-text { 
             font-size: 0.9rem; 
-            white-space: normal; /* Alt satıra geçmeye izin ver */
+            white-space: normal;
             word-break: break-word; 
             text-align: left;
             line-height: 1.2;
@@ -504,6 +504,43 @@
             border-left-width: 5px;
         }
 
+        /* --- TOAST BİLDİRİM STİLLERİ --- */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .custom-toast {
+            pointer-events: auto;
+            min-width: 300px;
+            max-width: 90vw;
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 5px solid;
+            font-weight: 500;
+        }
+        @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
+        
+        .toast-success { border-color: #198754; }
+        .toast-success i { color: #198754; font-size: 1.2rem; }
+        
+        .toast-error { border-color: #dc3545; }
+        .toast-error i { color: #dc3545; font-size: 1.2rem; }
+
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { 
             .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } 
@@ -523,6 +560,9 @@
     <div class="spinner"></div>
     <div class="loading-text">Veriler Yükleniyor...</div>
 </div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
 
 <!-- GENDER SELECTION MODAL -->
 <div id="gender-selection-modal" class="custom-modal-overlay">
@@ -913,7 +953,7 @@
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v15", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v16", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -1002,6 +1042,7 @@
                 finally { hideLoader(); }
             });
         } else { 
+            // Çıkış yapıldığında
             document.getElementById('loading-overlay').style.display = 'none';
             document.getElementById('login-screen').style.display = 'flex'; 
             document.getElementById('app-wrapper').style.display = 'none'; 
@@ -1011,7 +1052,7 @@
 
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
     
-    // YENİ ÇIKIŞ FONKSİYONU: Sayfayı yenileyerek hafızayı temizler
+    // ÇIKIŞ FONKSİYONU
     function logout() { 
         auth.signOut().then(() => {
             window.location.reload(); 
@@ -1038,6 +1079,30 @@
         if (!localData.history) localData.history = [];
         if (!localData.earnedBadges) localData.earnedBadges = [];
         if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
+    }
+
+    // --- YENİ TOAST NOTIFICATION FONKSİYONU ---
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `custom-toast toast-${type}`;
+        
+        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-circle"></i>';
+        
+        toast.innerHTML = `${icon}<span>${message}</span>`;
+        
+        container.appendChild(toast);
+        
+        // Ses efekti (isteğe bağlı)
+        // const audio = new Audio('path/to/sound.mp3'); audio.play();
+
+        // 3 saniye sonra kaldır
+        setTimeout(() => {
+            toast.style.animation = 'toastFadeOut 0.4s forwards';
+            setTimeout(() => {
+                if(toast.parentElement) toast.parentElement.removeChild(toast);
+            }, 400);
+        }, 3000);
     }
 
     function openGenderModal(force) { document.getElementById('gender-selection-modal').style.display = 'flex'; }
@@ -1098,11 +1163,9 @@
     function renderApp() {
         if(!localData.counts) return;
         
-        // SENKRONİZASYON: Log verisini (İstatistikler) Günlük Hedef (Dashboard) ile eşitle
         const todayISO = getIsoDate(new Date());
         const todayTotal = localData.daily.counts.reduce((a, b) => a + b, 0);
         
-        // Eğer günlük toplam ile logdaki kayıt tutmuyorsa, Log'u güncelle
         if (localData.logs[todayISO] !== todayTotal) {
             localData.logs[todayISO] = todayTotal;
             if(dbRef) dbRef.child('logs').update({ [todayISO]: todayTotal });
@@ -1225,7 +1288,29 @@
     window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
     window.downloadDataAsCSV = function() { let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; localData.counts.forEach(c => { csv += `${c.name};${c.target};${c.done}\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kaza_takip.csv"; link.click(); };
     window.downloadBackupJSON = function() { const jsonStr = JSON.stringify(localData); const blob = new Blob([jsonStr], { type: 'application/json' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "ibadet_yedek_" + new Date().toISOString().split('T')[0] + ".json"; link.click(); };
-    window.importBackupJSON = function(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const newData = JSON.parse(e.target.result); if (newData.counts && newData.tesbihat) { showModal("Yedek Bulundu", "Veriler geri yüklensin mi? Mevcut veriler silinecektir.", () => { localData = newData; saveToCloud(); renderApp(); renderTesbihat(); showModal("Başarılı", "Yedek başarıyla yüklendi."); }); } else { showModal("Hata", "Geçersiz yedek dosyası."); } } catch (err) { showModal("Hata", "Dosya okunamadı: " + err); } }; reader.readAsText(file); input.value = ""; };
+    window.importBackupJSON = function(input) { 
+        const file = input.files[0]; 
+        if (!file) return; 
+        const reader = new FileReader(); 
+        reader.onload = function(e) { 
+            try { 
+                const newData = JSON.parse(e.target.result); 
+                if (newData.counts && newData.tesbihat) { 
+                    localData = newData; 
+                    saveToCloud(); 
+                    renderApp(); 
+                    renderTesbihat(); 
+                    showToast("Yedek dosyası başarıyla yüklendi! 🚀", "success");
+                } else { 
+                    showToast("Geçersiz yedek dosyası.", "error"); 
+                } 
+            } catch (err) { 
+                showToast("Dosya okunamadı: " + err, "error"); 
+            } 
+        }; 
+        reader.readAsText(file); 
+        input.value = ""; 
+    };
     window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode'); localStorage.setItem('theme', isDark ? 'dark' : 'light'); document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu"; renderApp(); };
     if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
     document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
@@ -1234,7 +1319,35 @@
     function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
     function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); if (localData.history.length > 20) localData.history.pop(); saveToCloud(); }
-    function forceResetData() { localData=JSON.parse(JSON.stringify(defaultData)); saveToCloud(); showModal("Başarılı", "Tüm veriler sıfırlandı ve onarıldı."); setTimeout(() => location.reload(), 1500); }
+    
+    // GÜNCELLENEN SIFIRLAMA FONKSİYONU (Cinsiyet Hatırlar)
+    function forceResetData() { 
+        // 1. Cinsiyet ve Muayyen Ayarlarını Sakla
+        const savedGender = localData.gender;
+        const savedMenstrualDays = localData.menstrualDaysPerMonth;
+        const savedMenstrualState = localData.isMenstrualState;
+
+        // 2. Veriyi Sıfırla
+        localData = JSON.parse(JSON.stringify(defaultData)); 
+        
+        // 3. Ayarları Geri Yükle
+        if(savedGender) {
+            localData.gender = savedGender;
+            localData.menstrualDaysPerMonth = savedMenstrualDays;
+            localData.isMenstrualState = savedMenstrualState;
+        }
+
+        saveToCloud(); 
+        
+        // Arayüzü Güncelle
+        renderApp();
+        renderStats();
+        renderCalculatorRows();
+        applyGenderSettings(); // Cinsiyet ayarlarını tekrar uygula (renkler vs)
+
+        showToast("Verileriniz başarıyla sıfırlandı ve yenilendi! ✨", "success");
+    }
+    
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 </script>
 </body>
