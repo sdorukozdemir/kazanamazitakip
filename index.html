@@ -46,6 +46,13 @@
             --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724;
             --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe;
             --stat-avg-color: #6610f2;
+
+            /* HESAPLAMA SİHİRBAZI RENKLERİ (GÜNDÜZ) */
+            --calc-box-bg: #f8f9fa;
+            --calc-header-bg: linear-gradient(135deg, #198754, #20c997);
+            --calc-header-text: #ffffff;
+            --calc-header-shadow: rgba(25, 135, 84, 0.3);
+            --placeholder-color: #6c757d;
         }
         body.dark-mode { 
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
@@ -67,6 +74,13 @@
             --box-target-bg: #0f2e1c; --box-target-border: #146c43; --box-target-text: #75b798;
             --box-add-bg: #052c65; --box-add-border: #084298;
             --stat-avg-color: #d63384; 
+
+            /* HESAPLAMA SİHİRBAZI RENKLERİ (GECE) */
+            --calc-box-bg: #2d2d2d;
+            --calc-header-bg: linear-gradient(135deg, #0f5132, #146c43);
+            --calc-header-text: #e0e0e0;
+            --calc-header-shadow: rgba(0, 0, 0, 0.5);
+            --placeholder-color: #bbbbbb; /* Gece modunda daha görünür placeholder */
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
@@ -297,14 +311,49 @@
         .btn-add-clean:hover { background: #0b5ed7; }
         body.dark-mode .btn-add-clean { background: #3d8bfd; color: #121212; }
 
-        /* --- HESAPLAMA SİHİRBAZI --- */
+        /* --- HESAPLAMA SİHİRBAZI TASARIM GÜNCELLEMESİ --- */
         .calculator-card { padding: 20px; }
-        .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; }
-        .calc-header { background-color: var(--calc-header-bg); color: var(--calc-header-text); padding: 10px; text-align: center; font-weight: bold; font-size: 1.1rem; }
+        .calc-row { 
+            background-color: var(--calc-box-bg); 
+            padding: 0; 
+            border-radius: 12px; 
+            margin-bottom: 25px; 
+            border: 1px solid var(--border-color); 
+            overflow: hidden; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .calc-header { 
+            background: var(--calc-header-bg); 
+            color: var(--calc-header-text); 
+            padding: 8px 20px; 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            
+            /* KUTU STİLİ EKLEMELERİ */
+            margin: 12px auto 5px auto;
+            width: fit-content;
+            min-width: 120px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px var(--calc-header-shadow);
+            letter-spacing: 0.5px;
+        }
         .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .calc-item { flex: 1; min-width: 150px; text-align: center; }
         .calc-label-small { font-size: 0.85rem; opacity: 0.8; display: block; margin-bottom: 5px; color: var(--text-color); }
-        .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
+        .date-input { 
+            text-align: center; 
+            background-color: var(--input-bg); 
+            color: var(--input-text); 
+            border: 1px solid var(--border-color); 
+            width: 100%; padding: 8px; border-radius: 8px; height: 45px; 
+        }
+        /* PLACEHOLDER GÖRÜNÜRLÜĞÜ AYARI */
+        .date-input::placeholder {
+            color: var(--placeholder-color);
+            opacity: 1;
+        }
+        
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; }
 
         /* --- YEDEKLEME & AYARLAR --- */
@@ -1172,7 +1221,6 @@
     // --- GRAFİK PERİYOT SEÇİMİ ---
     window.switchChartPeriod = function(period) {
         currentChartPeriod = period;
-        // renderStats(); // ARTIK ÇAĞIRMIYORUZ (SAYFAYI TİTRETMESİN)
         updatePerformanceChart(); // Sadece çizgi grafiği güncelleyen özel fonksiyon
     }
 
