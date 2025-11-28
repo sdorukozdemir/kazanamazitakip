@@ -592,7 +592,17 @@
                 
                 <div class="col-md-6">
                     <div class="chart-container">
-                        <h5 class="text-center mb-3 fw-bold">Son 7 Gün Performansı</h5>
+                        <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
+                        <!-- Haftalık/Aylık Geçiş Düğmeleri -->
+                        <div class="d-flex justify-content-center mb-2">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Zaman Aralığı Seçimi">
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked onclick="switchChartPeriod('weekly')">
+                                <label class="btn btn-outline-success" for="btnradio1">Haftalık</label>
+
+                                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onclick="switchChartPeriod('monthly')">
+                                <label class="btn btn-outline-success" for="btnradio2">Aylık</label>
+                            </div>
+                        </div>
                         <canvas id="lineChart" style="max-height: 250px;"></canvas>
                     </div>
                 </div>
@@ -701,6 +711,9 @@
 <script>
     // --- KONFETİ BAŞLATMA ---
     const jsConfetti = new JSConfetti();
+    
+    // Global değişken grafik periyodu için
+    let currentChartPeriod = 'weekly'; // 'weekly' veya 'monthly'
 
     // --- YARDIMCI FONKSİYONLAR ---
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
@@ -952,7 +965,6 @@
             const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0);
             let pp = item.target > 0 ? (item.done / item.target) * 100 : 0;
             
-            // "spacer-box" sınıfları eklendi
             tbody.innerHTML += `<tr>
                 <td class="col-namaz">${item.name}</td>
                 <td class="col-input-area">
@@ -991,7 +1003,6 @@
         renderBadges(td); 
         renderHistory(); 
         calculateEstFinish(td, days); 
-        // renderHeatmap() ÇAĞRISI KALDIRILDI
     }
 
     function renderTesbihat() {
@@ -1087,8 +1098,6 @@
         }
     }
 
-    // renderHeatmap FONKSİYONU KALDIRILDI
-
     function showModal(title, message, onConfirm) {
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalMessage').innerText = message;
@@ -1159,6 +1168,12 @@
     
     window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
+    
+    // --- GRAFİK PERİYOT SEÇİMİ ---
+    window.switchChartPeriod = function(period) {
+        currentChartPeriod = period;
+        renderStats(); // Grafiği yeniden çiz
+    }
 
     // --- İSTATİSTİK FONKSİYONLARI ---
     function renderStats() {
@@ -1223,43 +1238,87 @@
             }
         });
 
+        // Çizgi Grafik (Line Chart) Güncellemesi - Haftalık/Aylık
         const ctx3 = document.getElementById('lineChart').getContext('2d');
         if (lineChart) lineChart.destroy();
+        
         const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200);
         gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)');
+        
+        // Seçilen periyoda göre veriyi ayarla
+        let chartLabels = [];
+        let chartData = [];
+        let pointRadiusVal = 3;
+
+        if(currentChartPeriod === 'weekly') {
+            chartLabels = periodStats.last7Labels;
+            chartData = periodStats.last7Data;
+            pointRadiusVal = 3;
+        } else {
+            chartLabels = periodStats.last30Labels;
+            chartData = periodStats.last30Data;
+            pointRadiusVal = 2; // Aylıkta noktalar çok sıkışmasın diye küçültüyoruz
+        }
+
         lineChart = new Chart(ctx3, {
             type: 'line',
             data: {
-                labels: periodStats.last7Labels,
-                datasets: [{ label: 'Günlük Kılınan', data: periodStats.last7Data, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: 3 }]
+                labels: chartLabels,
+                datasets: [{ 
+                    label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', 
+                    data: chartData, 
+                    borderColor: '#198754', 
+                    backgroundColor: gradientLine, 
+                    tension: 0.4, 
+                    fill: true, 
+                    pointRadius: pointRadiusVal 
+                }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false }, datalabels: { display: false } },
-                scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } }
+                scales: { 
+                    y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, 
+                    x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } 
+                }
             }
         });
     }
 
     function calculatePeriodStats() {
-        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [] };
+        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [] };
         const today = new Date();
         let weeklyTotal = 0, monthlyTotal = 0, m3 = 0, m6 = 0, y1 = 0;
         let last7Data = [], last7Labels = [];
+        let last30Data = [], last30Labels = [];
+        
+        // Son 7 Gün Hesabı
         for(let i=6; i>=0; i--) {
             const d = new Date(); d.setDate(today.getDate() - i);
             const iso = getIsoDate(d); const val = localData.logs[iso] || 0;
             weeklyTotal += val; last7Data.push(val); last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'}));
         }
+
+        // Son 30 Gün Hesabı (Grafik için)
+        for(let i=29; i>=0; i--) {
+            const d = new Date(); d.setDate(today.getDate() - i);
+            const iso = getIsoDate(d); const val = localData.logs[iso] || 0;
+            last30Data.push(val); 
+            // Aylık görünümde sadece gün ve ay ismi
+            last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'}));
+        }
+
         const oneMonthAgo = new Date(); oneMonthAgo.setMonth(today.getMonth() - 1);
         const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3);
         const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6);
         const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1);
+        
         Object.keys(localData.logs).forEach(dateKey => {
             const d = new Date(dateKey); const val = localData.logs[dateKey];
             if(d >= oneMonthAgo) monthlyTotal += val; if(d >= threeMonthsAgo) m3 += val; if(d >= sixMonthsAgo) m6 += val; if(d >= oneYearAgo) y1 += val;
         });
-        return { weekly: weeklyTotal, monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels };
+        
+        return { weekly: weeklyTotal, monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels };
     }
 
     // --- HESAPLAMA SİHİRBAZI ---
