@@ -156,7 +156,7 @@
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
-        /* GÜNCELLENEN KULLANICI KUTUSU STİLİ */
+        /* GÜNCELLENEN KULLANICI KUTUSU STİLİ (İsim Sığdırma Çözüldü) */
         .user-info-box {
             margin: 10px auto;
             width: 90%;
@@ -177,7 +177,7 @@
         .user-info-box i { font-size: 1.5rem; flex-shrink: 0; }
         .user-info-text { 
             font-size: 0.9rem; 
-            white-space: normal;
+            white-space: normal; /* Alt satıra geçmeye izin ver */
             word-break: break-word; 
             text-align: left;
             line-height: 1.2;
@@ -743,14 +743,7 @@
             
             <div class="text-center mt-4"><h5 class="fw-bold text-secondary"><i class="fas fa-trophy text-warning me-2"></i>Rozet Müzesi</h5></div>
             <div id="badgeContainer" class="badge-container"></div>
-
-            <h5 class="text-center fw-bold mt-4 text-secondary">Son İşlemler</h5>
-            <div class="table-responsive">
-                <table class="table table-bordered text-center" style="font-size: 0.8rem;">
-                    <thead><tr class="table-light"><th>Namaz</th><th>Önceki</th><th>Son</th><th>Zaman</th></tr></thead>
-                    <tbody id="historyTableBody"></tbody>
-                </table>
-            </div>
+            <!-- Son İşlemler (History) buradan kaldırıldı -->
         </div>
 
         <!-- İSTATİSTİKLER -->
@@ -815,6 +808,16 @@
                 </div>
                 <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
             </div>
+
+            <!-- Son Değişiklikler Buraya Taşındı -->
+            <h5 class="text-center fw-bold mt-5 text-secondary">Son Değişiklikler</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered text-center" style="font-size: 0.8rem;">
+                    <thead><tr class="table-light"><th>Namaz</th><th>Önceki</th><th>Son</th><th>Zaman</th></tr></thead>
+                    <tbody id="historyTableBody"></tbody>
+                </table>
+            </div>
+
         </div>
 
         <!-- TESBİHAT -->
@@ -1207,7 +1210,8 @@
         tbody.innerHTML = ""; let tt=0, td=0, tr=0; const days = getElapsedDays(); document.getElementById('elapsedDays').value = days; 
         localData.counts.forEach((item, i) => { tt += parseInt(item.target); td += parseInt(item.done); const rem = item.target - item.done; tr += rem; const avg = (item.done / days).toFixed(2); const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0); let pp = item.target > 0 ? (item.done / item.target) * 100 : 0; tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="spacer-box"></div></td><td class="col-input-area"><input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress-container"><div class="progress"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div class="progress-text text-center">%${pp.toFixed(1)}</div></div></td><td class="col-action"><div class="action-wrapper"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></div><div class="spacer-box"></div></td><td><div class="table-value-box">${avg}</div><div class="spacer-box"></div></td><td><div class="table-value-box">${estText}</div><div class="spacer-box"></div></td></tr>`; });
         const oa = (td/days).toFixed(2); tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
-        renderBadges(td); renderHistory(); calculateEstFinish(td, days); 
+        renderBadges(td); calculateEstFinish(td, days); 
+        // renderHistory() buradan kaldırıldı çünkü artık istatistik sayfasında
     }
     
     window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
@@ -1249,7 +1253,11 @@
     document.getElementById('statYearly').innerText = periodStats.yearly;
     document.getElementById('statAverage').innerText = avg;
     
-    document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); }
+    document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
+    
+    // YENİ EKLENEN: History Tablosunu Güncelle (İstatistik sayfası açıldığında çalışır)
+    renderHistory();
+    }
     
     function calculatePeriodStats() { 
         if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [] }; 
