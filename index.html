@@ -504,6 +504,31 @@
             border-left-width: 5px;
         }
 
+        /* STATS TABS */
+        .stats-tab-container {
+            display: flex;
+            background: var(--input-bg);
+            padding: 5px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .stats-tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .stats-tab-btn.active {
+            background-color: #198754;
+            color: white;
+            box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
+        }
+
         /* --- TOAST BİLDİRİM STİLLERİ --- */
         #toast-container {
             position: fixed;
@@ -743,79 +768,90 @@
             
             <div class="text-center mt-4"><h5 class="fw-bold text-secondary"><i class="fas fa-trophy text-warning me-2"></i>Rozet Müzesi</h5></div>
             <div id="badgeContainer" class="badge-container"></div>
-            <!-- Son İşlemler (History) buradan kaldırıldı -->
         </div>
 
         <!-- İSTATİSTİKLER -->
         <div id="section-stats" style="display: none;">
-            <h3 class="app-header">İstatistikler & Analiz</h3>
-            <div class="scrolling-wrapper mb-4">
-                <!-- Günlük Hedefteki Sayı ile Senkronize -->
-                <div class="stat-card-scroll">
-                    <div class="stat-number text-primary" id="statToday">0</div>
-                    <div class="stat-label">Bugün</div>
-                </div>
-                <!-- Haftalık Meydan Okuma ile Senkronize -->
-                <div class="stat-card-scroll">
-                    <div class="stat-number text-success" id="statWeekly">0</div>
-                    <div class="stat-label">Bu Hafta</div>
-                </div>
-                <!-- Ay Takvimine Göre -->
-                <div class="stat-card-scroll">
-                    <div class="stat-number text-info" id="statMonthly">0</div>
-                    <div class="stat-label">Bu Ay</div>
-                </div>
-                <div class="stat-card-scroll">
-                    <div class="stat-number text-warning" id="stat3Months">0</div>
-                    <div class="stat-label">Son 3 Ay</div>
-                </div>
-                <div class="stat-card-scroll">
-                    <div class="stat-number text-danger" id="stat6Months">0</div>
-                    <div class="stat-label">Son 6 Ay</div>
-                </div>
-                <div class="stat-card-scroll">
-                    <div class="stat-number text-secondary" id="statYearly">0</div>
-                    <div class="stat-label">Son 1 Yıl</div>
-                </div>
-                 <div class="stat-card-scroll">
-                    <div class="stat-number" id="statAverage">0</div>
-                    <div class="stat-label">Günlük Ort.</div>
-                </div>
-            </div>
-            <div class="analysis-box">
-                <div class="analysis-row">
-                    <div class="analysis-icon icon-good"><i class="fas fa-check"></i></div>
-                    <div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div>
-                </div>
-                <div class="analysis-row">
-                    <div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div>
-                    <div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
-                <div class="col-md-6">
-                    <div class="chart-container">
-                        <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
-                        <div class="d-flex justify-content-center mb-2">
-                            <div class="btn-group btn-group-sm" role="group">
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')"><label class="btn btn-outline-success" for="btnradio1">Haftalık</label>
-                                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')"><label class="btn btn-outline-success" for="btnradio2">Aylık</label>
-                            </div>
-                        </div>
-                        <canvas id="lineChart" style="max-height: 250px;"></canvas>
-                    </div>
-                </div>
-                <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
+            <h3 class="app-header">İstatistikler</h3>
+            
+            <!-- STATS TABS NAVIGATION -->
+            <div class="stats-tab-container">
+                <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
+                <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
             </div>
 
-            <!-- Son Değişiklikler Buraya Taşındı -->
-            <h5 class="text-center fw-bold mt-5 text-secondary">Son Değişiklikler</h5>
-            <div class="table-responsive">
-                <table class="table table-bordered text-center" style="font-size: 0.8rem;">
-                    <thead><tr class="table-light"><th>Namaz</th><th>Önceki</th><th>Son</th><th>Zaman</th></tr></thead>
-                    <tbody id="historyTableBody"></tbody>
-                </table>
+            <!-- TAB 1: ANALİZ -->
+            <div id="stats-view-analysis">
+                <div class="scrolling-wrapper mb-4">
+                    <!-- Günlük Hedefteki Sayı ile Senkronize -->
+                    <div class="stat-card-scroll">
+                        <div class="stat-number text-primary" id="statToday">0</div>
+                        <div class="stat-label">Bugün</div>
+                    </div>
+                    <!-- Haftalık Meydan Okuma ile Senkronize -->
+                    <div class="stat-card-scroll">
+                        <div class="stat-number text-success" id="statWeekly">0</div>
+                        <div class="stat-label">Bu Hafta</div>
+                    </div>
+                    <!-- Ay Takvimine Göre -->
+                    <div class="stat-card-scroll">
+                        <div class="stat-number text-info" id="statMonthly">0</div>
+                        <div class="stat-label">Bu Ay</div>
+                    </div>
+                    <div class="stat-card-scroll">
+                        <div class="stat-number text-warning" id="stat3Months">0</div>
+                        <div class="stat-label">Son 3 Ay</div>
+                    </div>
+                    <div class="stat-card-scroll">
+                        <div class="stat-number text-danger" id="stat6Months">0</div>
+                        <div class="stat-label">Son 6 Ay</div>
+                    </div>
+                    <div class="stat-card-scroll">
+                        <div class="stat-number text-secondary" id="statYearly">0</div>
+                        <div class="stat-label">Son 1 Yıl</div>
+                    </div>
+                     <div class="stat-card-scroll">
+                        <div class="stat-number" id="statAverage">0</div>
+                        <div class="stat-label">Günlük Ort.</div>
+                    </div>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-row">
+                        <div class="analysis-icon icon-good"><i class="fas fa-check"></i></div>
+                        <div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div>
+                    </div>
+                    <div class="analysis-row">
+                        <div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div>
+                        <div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')"><label class="btn btn-outline-success" for="btnradio1">Haftalık</label>
+                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')"><label class="btn btn-outline-success" for="btnradio2">Aylık</label>
+                                </div>
+                            </div>
+                            <canvas id="lineChart" style="max-height: 250px;"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
+                </div>
+            </div>
+
+            <!-- TAB 2: SON DEĞİŞİKLİKLER (History) -->
+            <div id="stats-view-history" style="display: none;">
+                <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center" style="font-size: 0.8rem;">
+                        <thead><tr class="table-light"><th>Namaz</th><th>Önceki</th><th>Son</th><th>Zaman</th></tr></thead>
+                        <tbody id="historyTableBody"></tbody>
+                    </table>
+                </div>
             </div>
 
         </div>
@@ -1237,17 +1273,33 @@
     window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
     window.switchChartPeriod = function(period) { currentChartPeriod = period; updatePerformanceChart(); }
+    
+    // YENİ SEKME DEĞİŞTİRME FONKSİYONU
+    window.switchStatsTab = function(tab) {
+        // Buton stilleri
+        document.querySelectorAll('.stats-tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tabBtn-' + tab).classList.add('active');
+
+        // Görünüm değiştirme
+        document.getElementById('stats-view-analysis').style.display = 'none';
+        document.getElementById('stats-view-history').style.display = 'none';
+        document.getElementById('stats-view-' + tab).style.display = 'block';
+
+        if(tab === 'history') {
+            renderHistory();
+        }
+    }
+
     function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
     
     function renderStats() { let totalTarget = 0, totalDone = 0; let labels = [], remainingData = [], doneData = []; let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; localData.counts.forEach(c => { totalTarget += c.target; totalDone += c.done; const remaining = Math.max(0, c.target - c.done); labels.push(c.name); remainingData.push(remaining); doneData.push(c.done); if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } if (c.done > maxDone) { maxDone = c.done; bestName = c.name; } }); const periodStats = calculatePeriodStats(); const days = getElapsedDays(); const avg = (totalDone / days).toFixed(2); 
     
-    // GÜNCELLENEN İSTATİSTİK LOGIC
-    const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); // BUGÜN (Dashboard ile aynı)
-    const weeklyDone = getWeeklyProgress(); // BU HAFTA (Dashboard ile aynı)
+    const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
+    const weeklyDone = getWeeklyProgress(); 
     
-    document.getElementById('statToday').innerText = dailyDone; // Bugün
-    document.getElementById('statWeekly').innerText = weeklyDone; // Bu Hafta
-    document.getElementById('statMonthly').innerText = periodStats.monthly; // Bu Ay (Takvim)
+    document.getElementById('statToday').innerText = dailyDone; 
+    document.getElementById('statWeekly').innerText = weeklyDone; 
+    document.getElementById('statMonthly').innerText = periodStats.monthly; 
     document.getElementById('stat3Months').innerText = periodStats.months3;
     document.getElementById('stat6Months').innerText = periodStats.months6;
     document.getElementById('statYearly').innerText = periodStats.yearly;
@@ -1255,7 +1307,6 @@
     
     document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
     
-    // YENİ EKLENEN: History Tablosunu Güncelle (İstatistik sayfası açıldığında çalışır)
     renderHistory();
     }
     
