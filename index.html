@@ -261,6 +261,8 @@
     </nav>
 
     <div id="content">
+        <!-- Dashboard, Stats, Tesbihat content remains the same... -->
+        <!-- Just ensuring the containers are here for JS to fill -->
         <div id="section-dashboard" style="display: block;">
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                 <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
@@ -474,22 +476,15 @@
         earnedBadges: [], history: []
     };
     
-    // --- ÖNEMLİ DEĞİŞİKLİK: Veriyi sayfa yüklenir yüklenmez al ---
-    let localData;
+    // --- ÇÖZÜM: Sayfa Yüklenir Yüklenmez Veriyi Al (Sıfır Sorununu Engelle) ---
+    let localData = JSON.parse(JSON.stringify(defaultData));
     const saved = localStorage.getItem('offlineBackup');
-    if (saved) {
-        try {
-            localData = JSON.parse(saved);
-        } catch(e) {
-            localData = JSON.parse(JSON.stringify(defaultData));
-        }
-    } else {
-        localData = JSON.parse(JSON.stringify(defaultData));
-    }
     
-    // Sayfa yüklenince hemen çizmeye çalış
-    document.addEventListener("DOMContentLoaded", () => {
-        if(saved) {
+    if(saved) {
+        // Eğer yerel veri varsa hemen yükle ve UI'yı hazırla
+        localData = JSON.parse(saved);
+        // DOM hazırsa veya değilse de Login ekranını gizle
+        document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             if (localData.gender) applyGenderSettings();
@@ -497,48 +492,55 @@
             renderApp();
             renderStats();
             hideLoader();
-        }
-    });
+        });
+    }
 
     let chartCompletion = null, barChart = null, lineChart = null;
 
     auth.onAuthStateChanged((user) => {
         if (user) {
+            // Kullanıcı online ise Login ekranını gizle (Zaten gizli olabilir ama garanti olsun)
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
             
             dbRef = db.ref('users/' + user.uid + '/namazData');
             dbRef.on('value', (s) => {
-                try {
-                    const d = s.val();
-                    if (d) {
-                        localData = d;
-                        localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                    } else if(!saved) { // Sadece elimizde yedek de yoksa default kullan
+                const d = s.val();
+                if (d) {
+                    // Firebase'den veri gelirse yerel veriyi güncelle
+                    localData = d;
+                    localStorage.setItem('offlineBackup', JSON.stringify(localData));
+                } else {
+                    // Firebase boşsa (yeni kullanıcı) ve elimizde yerel veri de yoksa sıfırla
+                    // Ama elimizde yerel veri varsa DOKUNMA!
+                    if(!saved) {
                         localData = JSON.parse(JSON.stringify(defaultData));
                     }
-                    
-                    ensureDataStructure(); 
-                    checkDailyReset();
-                    if (!d && !saved) saveToCloud();
-                    
-                    if (!localData.gender) {
-                        if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
-                    } else {
-                        applyGenderSettings();
-                    }
+                }
+                
+                // Verileri ekrana bas
+                ensureDataStructure(); 
+                checkDailyReset();
+                
+                // Eğer yeni kullanıcıysa ve hiç veri yoksa kaydet
+                if (!d && !saved) saveToCloud();
+                
+                if (!localData.gender) {
+                    if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
+                } else {
+                    applyGenderSettings();
+                }
 
-                    renderCalculatorRows();
-                    const activeId = document.querySelector('.components li.active') ? document.querySelector('.components li.active').id.replace('menu-', '') : 'dashboard';
-                    showSection(activeId); 
-                    renderApp(); // Veri gelince tekrar çiz
-                } catch (err) { console.error(err); } 
-                finally { hideLoader(); }
+                renderCalculatorRows();
+                renderApp();
+                renderStats();
+                hideLoader();
             });
         } else { 
-            // Çıkış yapıldığında
-            if(!saved) { // Eğer offline veri yoksa login göster
+            // Kullanıcı çıkış yapmışsa veya ilk girişse
+            if(!saved) { 
+                // Sadece offline veri de yoksa login ekranını göster
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex'; 
                 document.getElementById('app-wrapper').style.display = 'none'; 
