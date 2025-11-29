@@ -405,7 +405,6 @@
 </div>
 
 <script>
-    // --- KONFETİ BAŞLATMA ---
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
 
@@ -418,13 +417,12 @@
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v17", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v17", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
     document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
 
-    // --- FIREBASE AYARLARI ---
     const firebaseConfig = {
         apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
         authDomain: "kazanamazi-ser.firebaseapp.com",
@@ -441,7 +439,6 @@
     const provider = new firebase.auth.GoogleAuthProvider();
     let dbRef = null;
 
-    // --- VERİ MODELİ ---
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     function getIsoDate(date) { 
         const y = date.getFullYear();
@@ -449,7 +446,6 @@
         const d = String(date.getDate()).padStart(2, '0');
         return `${y}-${m}-${d}`;
     }
-    
     function formatDateTR(isoDate) {
         if(!isoDate) return "";
         if(isoDate.includes('.') && isoDate.split('.')[0].length <= 2) return isoDate; 
@@ -480,27 +476,23 @@
     let localData = JSON.parse(JSON.stringify(defaultData));
     let chartCompletion = null, barChart = null, lineChart = null;
 
-    // --- LOCAL STORAGE'DAN VERİ YÜKLEME (OFFLINE İÇİN) ---
-    // 1. Sayfa açılır açılmaz veriyi okumayı dene
+    // --- BURASI DÜZELTİLDİ: Sayfa açılır açılmaz veriyi yükle (Auth bekleme) ---
     const savedData = localStorage.getItem('offlineBackup');
-    if (savedData) {
+    if(savedData) {
         try {
             localData = JSON.parse(savedData);
-            // DOM Yüklendikten sonra çiz
-            if (document.readyState === 'loading') {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+            if(document.readyState !== 'loading') {
+                renderApp();
+                hideLoader();
+            } else {
                 document.addEventListener('DOMContentLoaded', () => {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('app-wrapper').style.display = 'flex';
                     renderApp();
                     hideLoader();
                 });
-            } else {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-wrapper').style.display = 'flex';
-                renderApp();
-                hideLoader();
             }
-        } catch(e) { console.error("Veri yüklenemedi", e); }
+        } catch(e) { console.log(e); }
     }
 
     auth.onAuthStateChanged((user) => {
@@ -516,12 +508,14 @@
                     if (d) {
                         localData = d;
                         localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                    } else {
-                        // Eğer DB boşsa ve elimizde yerel veri de yoksa (Yeni Kullanıcı)
-                        if(!savedData) localData = JSON.parse(JSON.stringify(defaultData));
+                    } else if (!savedData) { 
+                        // Sadece elimizde yedek yoksa default'a dön
+                        localData = JSON.parse(JSON.stringify(defaultData));
                     }
+                    
                     ensureDataStructure(); 
                     checkDailyReset();
+                    // Yeni kullanıcıysa veya online veri yoksa kaydet
                     if (!d && !savedData) saveToCloud();
                     
                     if (!localData.gender) {
@@ -538,7 +532,7 @@
             });
         } else { 
             // Çıkış yapıldığında
-            if (!savedData) {
+            if(!savedData) {
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex'; 
                 document.getElementById('app-wrapper').style.display = 'none'; 
@@ -548,8 +542,6 @@
     });
 
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
-    
-    // ÇIKIŞ FONKSİYONU
     function logout() { 
         auth.signOut().then(() => {
             localStorage.removeItem('offlineBackup');
@@ -582,17 +574,13 @@
         if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
     }
 
-    // --- YENİ TOAST NOTIFICATION FONKSİYONU ---
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         toast.className = `custom-toast toast-${type}`;
-        
-        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-circle"></i>';
-        
+        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : (type === 'warning' ? '<i class="fas fa-wifi"></i>' : '<i class="fas fa-exclamation-circle"></i>');
         toast.innerHTML = `${icon}<span>${message}</span>`;
         container.appendChild(toast);
-        
         setTimeout(() => {
             toast.style.animation = 'toastFadeOut 0.4s forwards';
             setTimeout(() => {
@@ -658,17 +646,12 @@
 
     function renderApp() {
         if(!localData.counts) return;
-        
-        // SENKRONİZASYON: Log verisini (İstatistikler) Günlük Hedef (Dashboard) ile eşitle
         const todayISO = getIsoDate(new Date());
         const todayTotal = localData.daily.counts.reduce((a, b) => a + b, 0);
-        
-        // Eğer günlük toplam ile logdaki kayıt tutmuyorsa, Log'u güncelle
         if (localData.logs[todayISO] !== todayTotal) {
             localData.logs[todayISO] = todayTotal;
             if(dbRef) dbRef.child('logs').update({ [todayISO]: todayTotal });
         }
-
         recalculateStreak();
         
         const dateInput = document.getElementById('startDate');
@@ -703,7 +686,6 @@
         localData.counts.forEach((item, i) => { tt += parseInt(item.target); td += parseInt(item.done); const rem = item.target - item.done; tr += rem; const avg = (item.done / days).toFixed(2); const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0); let pp = item.target > 0 ? (item.done / item.target) * 100 : 0; tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="spacer-box"></div></td><td class="col-input-area"><input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress-container"><div class="progress"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div class="progress-text text-center">%${pp.toFixed(1)}</div></div></td><td class="col-action"><div class="action-wrapper"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></div><div class="spacer-box"></div></td><td><div class="table-value-box">${avg}</div><div class="spacer-box"></div></td><td><div class="table-value-box">${estText}</div><div class="spacer-box"></div></td></tr>`; });
         const oa = (td/days).toFixed(2); tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
         renderBadges(td); calculateEstFinish(td, days); 
-        // renderHistory() buradan kaldırıldı çünkü artık istatistik sayfasında
     }
     
     window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
@@ -721,50 +703,38 @@
     const BADGES = [ {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, {id:500,title:"Gayret",icon:"🏃", desc:"500 Namaz"}, {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} ];
     function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } c.innerHTML += `<div class="badge-item"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
     
-    // GÜNCELLENEN RENDER HISTORY (Filtreleme Özelliği + Limitsiz Görünüm)
     function renderHistory(filterDate = null) { 
         const hb = document.getElementById('historyTableBody'); 
         hb.innerHTML = ""; 
-        
         if (!localData.history || localData.history.length === 0) {
             hb.innerHTML = '<tr><td colspan="4" class="text-muted small py-3">Henüz işlem geçmişi yok.</td></tr>';
             return;
         }
-        
         let displayData = [];
-
-        // Filtre varsa tüm veriyi ara, yoksa sadece son 50 taneyi göster
         if (filterDate) {
-            const parts = filterDate.split('-'); // [2025, 11, 29]
+            const parts = filterDate.split('-'); 
             if(parts.length === 3) {
-                const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; // 29.11.2025 formatına çevir
+                const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
             }
         } else {
-            // Varsayılan görünüm: Son 50 işlem (Sayfa donmasın diye)
             displayData = localData.history.slice(0, 50);
         }
-
         if(displayData.length === 0) {
              hb.innerHTML = '<tr><td colspan="4" class="text-muted small py-3">Bu tarihte işlem bulunamadı.</td></tr>';
              return;
         }
-
         displayData.forEach(r => { 
             const o = parseFloat(r.oldVal); 
             const n = parseFloat(r.newVal); 
             let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); 
-            
             hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td class="small">${r.time}</td></tr>`; 
         }); 
-        
-        // Eğer filtre yoksa ve veri sayısı 50'den fazlaysa altına not düş
         if(!filterDate && localData.history.length > 50) {
              hb.innerHTML += '<tr><td colspan="4" class="text-muted small py-2" style="background:#f8f9fa;">Daha eski kayıtlar için tarih filtresini kullanınız...</td></tr>';
         }
     }
 
-    // FİLTRELEME EVENTLERİ
     window.filterHistoryByDate = function() {
         const val = document.getElementById('historyFilterDate').value;
         renderHistory(val);
@@ -784,19 +754,13 @@
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
     window.switchChartPeriod = function(period) { currentChartPeriod = period; updatePerformanceChart(); }
     
-    // YENİ SEKME DEĞİŞTİRME FONKSİYONU
     window.switchStatsTab = function(tab) {
-        // Buton stilleri
         document.querySelectorAll('.stats-tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('tabBtn-' + tab).classList.add('active');
-
-        // Görünüm değiştirme
         document.getElementById('stats-view-analysis').style.display = 'none';
         document.getElementById('stats-view-history').style.display = 'none';
         document.getElementById('stats-view-' + tab).style.display = 'block';
-
         if(tab === 'history') {
-            // Filtreyi sıfırla veya mevcut filtreyle göster
             renderHistory(document.getElementById('historyFilterDate').value);
         }
     }
@@ -825,7 +789,6 @@
         if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [] }; 
         const today = new Date(); 
         
-        // Bu Ay Hesabı (Ayın 1'inden Bugüne)
         const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
         let monthlyTotal = 0;
 
@@ -833,21 +796,17 @@
         let last7Data = [], last7Labels = []; 
         let last30Data = [], last30Labels = []; 
         
-        // Son 7 Gün Grafiği
         for(let i=6; i>=0; i--) { 
             const d = new Date(); 
             d.setDate(today.getDate() - i); 
-            // UTC SORUNU ÇÖZÜMÜ: YEREL SAATİ KULLAN
             const iso = getIsoDate(d); 
             const val = localData.logs[iso] || 0; 
             last7Data.push(val); 
             last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'})); 
         } 
-        // Son 30 Gün Grafiği
         for(let i=29; i>=0; i--) { 
             const d = new Date(); 
             d.setDate(today.getDate() - i); 
-            // UTC SORUNU ÇÖZÜMÜ: YEREL SAATİ KULLAN
             const iso = getIsoDate(d); 
             const val = localData.logs[iso] || 0; 
             last30Data.push(val); 
@@ -861,10 +820,7 @@
         Object.keys(localData.logs).forEach(dateKey => { 
             const d = new Date(dateKey); 
             const val = localData.logs[dateKey]; 
-            
-            // Bu Ay Hesabı (Takvim Ayı)
             if(d >= currentMonthStart) monthlyTotal += val;
-
             if(d >= threeMonthsAgo) m3 += val; 
             if(d >= sixMonthsAgo) m6 += val; 
             if(d >= oneYearAgo) y1 += val; 
@@ -908,34 +864,23 @@
     function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
     function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); 
-    // GÜNCELLEME: Sınır kaldırıldı, artık veri silinmiyor.
     saveToCloud(); }
     
-    // GÜNCELLENEN SIFIRLAMA FONKSİYONU (Cinsiyet Hatırlar)
     function forceResetData() { 
-        // 1. Cinsiyet ve Muayyen Ayarlarını Sakla
         const savedGender = localData.gender;
         const savedMenstrualDays = localData.menstrualDaysPerMonth;
         const savedMenstrualState = localData.isMenstrualState;
-
-        // 2. Veriyi Sıfırla
         localData = JSON.parse(JSON.stringify(defaultData)); 
-        
-        // 3. Ayarları Geri Yükle
         if(savedGender) {
             localData.gender = savedGender;
             localData.menstrualDaysPerMonth = savedMenstrualDays;
             localData.isMenstrualState = savedMenstrualState;
         }
-
         saveToCloud(); 
-        
-        // Arayüzü Güncelle
         renderApp();
         renderStats();
         renderCalculatorRows();
         applyGenderSettings(); 
-
         showToast("Verileriniz başarıyla sıfırlandı ve yenilendi! ✨", "success");
     }
     
