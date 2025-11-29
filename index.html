@@ -201,6 +201,7 @@
 
 <div id="toast-container"></div>
 
+<!-- ... (Modal ve diğer HTML elementleri aynı kalacak) ... -->
 <div id="gender-selection-modal" class="custom-modal-overlay">
     <div class="custom-modal" style="max-width: 450px;">
         <h4 class="mb-3 fw-bold">Hoş Geldiniz</h4>
@@ -261,8 +262,6 @@
     </nav>
 
     <div id="content">
-        <!-- Dashboard, Stats, Tesbihat content remains the same... -->
-        <!-- Just ensuring the containers are here for JS to fill -->
         <div id="section-dashboard" style="display: block;">
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                 <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
@@ -318,6 +317,7 @@
         </div>
 
         <div id="section-stats" style="display: none;">
+            <!-- Stats content -->
             <h3 class="app-header">İstatistikler</h3>
             <div class="stats-tab-container">
                 <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
@@ -441,13 +441,22 @@
     const provider = new firebase.auth.GoogleAuthProvider();
     let dbRef = null;
 
-    function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
-    function getIsoDate(date) { 
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
+    // --- TARIH FORMATI SABITLENDI ---
+    function getCurrentDateSimple() { 
+        const d = new Date();
+        // UTC Sorunu yaşamamak için yerel saat dilimini kullan ama formatı elle yap
+        // YYYY-MM-DD formatı en güvenlisidir.
+        const offset = d.getTimezoneOffset();
+        const localDate = new Date(d.getTime() - (offset*60*1000));
+        return localDate.toISOString().split('T')[0];
     }
+    
+    function getIsoDate(date) { 
+        const offset = date.getTimezoneOffset();
+        const localDate = new Date(date.getTime() - (offset*60*1000));
+        return localDate.toISOString().split('T')[0];
+    }
+    
     function formatDateTR(isoDate) {
         if(!isoDate) return "";
         if(isoDate.includes('.') && isoDate.split('.')[0].length <= 2) return isoDate; 
@@ -458,7 +467,7 @@
     }
 
     const defaultData = {
-        startDate: new Date().toISOString().split('T')[0],
+        startDate: getCurrentDateSimple(), // Default tarih de güncellendi
         gender: null, 
         menstrualDaysPerMonth: 6,
         isMenstrualState: false, 
@@ -476,54 +485,55 @@
         earnedBadges: [], history: []
     };
     
-    // --- ÇÖZÜM: Sayfa Yüklenir Yüklenmez Veriyi Al (Sıfır Sorununu Engelle) ---
+    // --- BAŞLANGIÇTA VERİYİ YÜKLE ---
     let localData = JSON.parse(JSON.stringify(defaultData));
     const saved = localStorage.getItem('offlineBackup');
     
     if(saved) {
-        // Eğer yerel veri varsa hemen yükle ve UI'yı hazırla
-        localData = JSON.parse(saved);
-        // DOM hazırsa veya değilse de Login ekranını gizle
-        document.addEventListener('DOMContentLoaded', () => {
+        try {
+            localData = JSON.parse(saved);
+            // Hemen UI'ı gizle
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
+        } catch(e) { console.log("Parse error", e); }
+    }
+
+    // Sayfa hazır olduğunda çizimi yap (Firebase'i beklemeden)
+    document.addEventListener("DOMContentLoaded", () => {
+        if(saved) {
             if (localData.gender) applyGenderSettings();
             renderCalculatorRows();
             renderApp();
             renderStats();
             hideLoader();
-        });
-    }
+        }
+    });
 
     let chartCompletion = null, barChart = null, lineChart = null;
 
     auth.onAuthStateChanged((user) => {
         if (user) {
-            // Kullanıcı online ise Login ekranını gizle (Zaten gizli olabilir ama garanti olsun)
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
             
             dbRef = db.ref('users/' + user.uid + '/namazData');
+            
+            // Firebase'den veri gelince çalışır
             dbRef.on('value', (s) => {
                 const d = s.val();
                 if (d) {
-                    // Firebase'den veri gelirse yerel veriyi güncelle
                     localData = d;
                     localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                } else {
-                    // Firebase boşsa (yeni kullanıcı) ve elimizde yerel veri de yoksa sıfırla
-                    // Ama elimizde yerel veri varsa DOKUNMA!
-                    if(!saved) {
-                        localData = JSON.parse(JSON.stringify(defaultData));
-                    }
+                } else if(!saved) { 
+                    // Sadece elimizde hiç veri yoksa sıfırla
+                    localData = JSON.parse(JSON.stringify(defaultData));
                 }
                 
-                // Verileri ekrana bas
                 ensureDataStructure(); 
                 checkDailyReset();
                 
-                // Eğer yeni kullanıcıysa ve hiç veri yoksa kaydet
+                // Yeni kullanıcıysa kaydet
                 if (!d && !saved) saveToCloud();
                 
                 if (!localData.gender) {
@@ -538,9 +548,8 @@
                 hideLoader();
             });
         } else { 
-            // Kullanıcı çıkış yapmışsa veya ilk girişse
-            if(!saved) { 
-                // Sadece offline veri de yoksa login ekranını göster
+            // Kullanıcı çıkış yapmışsa
+            if(!saved) {
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex'; 
                 document.getElementById('app-wrapper').style.display = 'none'; 
@@ -571,15 +580,37 @@
         if (localData.menstrualDaysPerMonth === undefined) localData.menstrualDaysPerMonth = 6;
         if (localData.isMenstrualState === undefined) localData.isMenstrualState = false;
         
-        const t = new Date().toLocaleDateString('tr-TR');
+        // Tarih formatını kontrol et, eskiyse yenile
+        const t = getCurrentDateSimple();
         if (!localData.daily || localData.daily.date !== t) { 
-            localData.daily = { date: t, counts: [0,0,0,0,0], target: localData.daily?.target || 10 }; 
-            saveToCloud(); 
+             // Eğer daily objesi yoksa veya tarih eskiyse (ama format farklıysa)
+             if(!localData.daily) {
+                 localData.daily = { date: t, counts: [0,0,0,0,0], target: 10 };
+             }
         }
+        
         if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
         if (!localData.history) localData.history = [];
         if (!localData.earnedBadges) localData.earnedBadges = [];
-        if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
+        if (!localData.startDate) localData.startDate = getCurrentDateSimple();
+    }
+
+    function checkDailyReset() {
+        const t = getCurrentDateSimple();
+        
+        if (!localData.daily) {
+            localData.daily = { date: t, counts: [0,0,0,0,0], target: 10 };
+            return;
+        }
+
+        // Eğer tarih bugünden farklıysa ve stored data geçerliyse sıfırla
+        // ÖNEMLİ: Eğer localData.daily.date "29.11.2023" formatındaysa ve t "2023-11-29" ise
+        // eşit olmadığı için sıfırlar. Bunu önlemek için formatı yukarıda sabitledik.
+        if (localData.daily.date !== t) {
+            localData.daily.date = t;
+            localData.daily.counts = [0,0,0,0,0];
+            saveToCloud(); 
+        }
     }
 
     function showToast(message, type = 'success') {
