@@ -52,4 +52,184 @@
                 <div id="days-list" class="list-group"></div>
             </div>
 
-            <!-- GÜNLÜK HEDEF DÜZENLEME (ANA EKRAN
+            <!-- GÜNLÜK HEDEF DÜZENLEME (ANA EKRAN İÇİN) -->
+            <div class="tab-pane fade" id="pills-profile">
+                <div class="alert alert-warning small">
+                    Buradan <b>Bugünkü (Ana Ekran)</b> namaz sayılarını manuel olarak düzeltebilirsiniz. 
+                    <br>Örn: Sabah'ı yanlışlıkla 0 gördüyseniz buradan artırın.
+                </div>
+                
+                <div class="card p-4">
+                    <h5 class="text-center mb-3">Bugünün Sayaçları</h5>
+                    <div id="daily-loader" class="loader"></div>
+                    <div id="daily-inputs" style="display:none;">
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-4 fw-bold">Sabah</div>
+                            <div class="col-8"><input type="number" id="dc-0" class="form-control text-center"></div>
+                        </div>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-4 fw-bold">Öğle</div>
+                            <div class="col-8"><input type="number" id="dc-1" class="form-control text-center"></div>
+                        </div>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-4 fw-bold">İkindi</div>
+                            <div class="col-8"><input type="number" id="dc-2" class="form-control text-center"></div>
+                        </div>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-4 fw-bold">Akşam</div>
+                            <div class="col-8"><input type="number" id="dc-3" class="form-control text-center"></div>
+                        </div>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-4 fw-bold">Yatsı</div>
+                            <div class="col-8"><input type="number" id="dc-4" class="form-control text-center"></div>
+                        </div>
+                        <hr>
+                        <button class="btn btn-success w-100 fw-bold" onclick="saveDailyCounts()">💾 Bugünü Kaydet ve Düzelt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
+        authDomain: "kazanamazi-ser.firebaseapp.com",
+        databaseURL: "https://kazanamazi-ser-default-rtdb.firebaseio.com",
+        projectId: "kazanamazi-ser",
+        storageBucket: "kazanamazi-ser.firebasestorage.app",
+        messagingSenderId: "951730390034",
+        appId: "1:951730390034:web:639f96ee859c10b0e944cb",
+        measurementId: "G-5WGCDTL1RX"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    let currentUserUid = null;
+    let currentDailyData = null;
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            currentUserUid = user.uid;
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('editor-section').style.display = 'block';
+            document.getElementById('user-display').innerText = user.email;
+            loadLast7Days();
+            loadDailyData();
+        } else {
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('editor-section').style.display = 'none';
+        }
+    });
+
+    function login() { auth.signInWithPopup(provider).catch(e => alert(e.message)); }
+    function logout() { auth.signOut().then(() => window.location.reload()); }
+
+    function getIsoDate(d) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    // --- LOGLARI YÜKLE ---
+    function loadLast7Days() {
+        const list = document.getElementById('days-list');
+        list.innerHTML = "<div class='text-center'>Veriler çekiliyor...</div>";
+        
+        const dates = [];
+        for(let i=0; i<7; i++) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            dates.push(getIsoDate(d));
+        }
+
+        db.ref('users/' + currentUserUid + '/namazData/logs').once('value', s => {
+            const data = s.val() || {};
+            list.innerHTML = "";
+            dates.forEach(date => {
+                const val = data[date] !== undefined ? data[date] : 0;
+                list.innerHTML += `
+                <div class="list-group-item d-flex justify-content-between align-items-center mb-2 shadow-sm border">
+                    <span class="fw-bold text-secondary">${date}</span>
+                    <div class="input-group" style="width: 140px;">
+                        <input type="number" id="inp-${date}" class="form-control text-center fw-bold" value="${val}">
+                        <button class="btn btn-primary" onclick="saveLog('${date}')">💾</button>
+                    </div>
+                </div>`;
+            });
+        });
+    }
+
+    window.saveLog = function(date) {
+        const newVal = parseInt(document.getElementById('inp-' + date).value);
+        if(isNaN(newVal)) return alert("Sayı girin");
+        
+        db.ref('users/' + currentUserUid + '/namazData/logs/' + date).set(newVal)
+            .then(() => {
+                const btn = document.querySelector(`#inp-${date}`).nextElementSibling;
+                btn.className = "btn btn-success";
+                btn.innerHTML = "✓";
+                setTimeout(() => { btn.className = "btn btn-primary"; btn.innerHTML = "💾"; }, 2000);
+            })
+            .catch(e => alert(e.message));
+    }
+
+    // --- GÜNLÜK SAYACI YÜKLE ---
+    function loadDailyData() {
+        const loader = document.getElementById('daily-loader');
+        const inputs = document.getElementById('daily-inputs');
+        loader.style.display = 'block';
+        inputs.style.display = 'none';
+
+        db.ref('users/' + currentUserUid + '/namazData/daily').once('value', s => {
+            currentDailyData = s.val();
+            if(currentDailyData && currentDailyData.counts) {
+                for(let i=0; i<5; i++) {
+                    document.getElementById(`dc-${i}`).value = currentDailyData.counts[i] || 0;
+                }
+            } else {
+                // Veri yoksa 0 bas
+                for(let i=0; i<5; i++) document.getElementById(`dc-${i}`).value = 0;
+            }
+            loader.style.display = 'none';
+            inputs.style.display = 'block';
+        });
+    }
+
+    window.saveDailyCounts = function() {
+        if(!currentDailyData) currentDailyData = {};
+        
+        // Yeni değerleri al
+        const newCounts = [
+            parseInt(document.getElementById('dc-0').value) || 0,
+            parseInt(document.getElementById('dc-1').value) || 0,
+            parseInt(document.getElementById('dc-2').value) || 0,
+            parseInt(document.getElementById('dc-3').value) || 0,
+            parseInt(document.getElementById('dc-4').value) || 0
+        ];
+
+        // Tarih formatı (Ana uygulamayla aynı olmalı: DD.MM.YYYY)
+        const d = new Date();
+        const dateStr = d.toLocaleDateString('tr-TR'); // Örn: 29.11.2025
+
+        const updateData = {
+            date: dateStr,
+            counts: newCounts,
+            target: currentDailyData.target || 10
+        };
+
+        db.ref('users/' + currentUserUid + '/namazData/daily').set(updateData)
+            .then(() => {
+                alert("Bugünün sayaçları başarıyla güncellendi! Ana uygulamayı yenileyip kontrol edin.");
+            })
+            .catch(e => alert("Hata: " + e.message));
+    }
+</script>
+
+</body>
+</html>
