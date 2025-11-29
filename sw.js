@@ -1,5 +1,5 @@
 /* Dosya Adı: sw.js */
-const CACHE_NAME = 'ibadet-takip-v25'; // Versiyonu yükselttim (Cache temizlensin diye)
+const CACHE_NAME = 'ibadet-takip-v26'; // Versiyonu v25'ten v26'ya güncelledim
 
 const STATIC_ASSETS = [
   './',
@@ -71,3 +71,4 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
