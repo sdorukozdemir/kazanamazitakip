@@ -32,10 +32,6 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        
-        /* Layout Sabitleme (Zıplamayı Önler) */
-        .chart-container { min-height: 300px; padding: 20px; margin-bottom: 20px; text-align: center; }
-        
         .wrapper { display: flex; width: 100%; }
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
@@ -70,8 +66,9 @@
         .progress { height: 15px; border-radius: 7px; background-color: #e9ecef; width: 100%; }
         .progress-text { font-size: 10px; margin-top: 4px; line-height: 1; font-weight: bold; }
         .spacer-box { height: 28px; margin-top: 6px; width: 100%; visibility: hidden; }
-        .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
+        .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
         .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
@@ -264,6 +261,8 @@
     </nav>
 
     <div id="content">
+        <!-- Dashboard, Stats, Tesbihat content remains the same... -->
+        <!-- Just ensuring the containers are here for JS to fill -->
         <div id="section-dashboard" style="display: block;">
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                 <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
@@ -477,34 +476,30 @@
         earnedBadges: [], history: []
     };
     
-    // --- BAŞLANGIÇTA VERİYİ YÜKLE ---
+    // --- ÇÖZÜM: Sayfa Yüklenir Yüklenmez Veriyi Al (Sıfır Sorununu Engelle) ---
     let localData = JSON.parse(JSON.stringify(defaultData));
     const saved = localStorage.getItem('offlineBackup');
     
     if(saved) {
-        try {
-            localData = JSON.parse(saved);
-            // DOM hazırsa hemen çiz
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('app-wrapper').style.display = 'flex';
-                    renderApp();
-                    hideLoader();
-                });
-            } else {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-wrapper').style.display = 'flex';
-                renderApp();
-                hideLoader();
-            }
-        } catch(e) { console.log("Parse error", e); }
+        // Eğer yerel veri varsa hemen yükle ve UI'yı hazırla
+        localData = JSON.parse(saved);
+        // DOM hazırsa veya değilse de Login ekranını gizle
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+            if (localData.gender) applyGenderSettings();
+            renderCalculatorRows();
+            renderApp();
+            renderStats();
+            hideLoader();
+        });
     }
 
     let chartCompletion = null, barChart = null, lineChart = null;
 
     auth.onAuthStateChanged((user) => {
         if (user) {
+            // Kullanıcı online ise Login ekranını gizle (Zaten gizli olabilir ama garanti olsun)
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
@@ -513,15 +508,22 @@
             dbRef.on('value', (s) => {
                 const d = s.val();
                 if (d) {
+                    // Firebase'den veri gelirse yerel veriyi güncelle
                     localData = d;
                     localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                } else if (!saved) { 
-                    localData = JSON.parse(JSON.stringify(defaultData));
+                } else {
+                    // Firebase boşsa (yeni kullanıcı) ve elimizde yerel veri de yoksa sıfırla
+                    // Ama elimizde yerel veri varsa DOKUNMA!
+                    if(!saved) {
+                        localData = JSON.parse(JSON.stringify(defaultData));
+                    }
                 }
                 
+                // Verileri ekrana bas
                 ensureDataStructure(); 
                 checkDailyReset();
                 
+                // Eğer yeni kullanıcıysa ve hiç veri yoksa kaydet
                 if (!d && !saved) saveToCloud();
                 
                 if (!localData.gender) {
@@ -531,14 +533,14 @@
                 }
 
                 renderCalculatorRows();
-                const activeId = document.querySelector('.components li.active') ? document.querySelector('.components li.active').id.replace('menu-', '') : 'dashboard';
-                showSection(activeId); 
                 renderApp();
-                renderStats(); // Buradaki titreme fixlendi
+                renderStats();
                 hideLoader();
             });
         } else { 
-            if(!saved) {
+            // Kullanıcı çıkış yapmışsa veya ilk girişse
+            if(!saved) { 
+                // Sadece offline veri de yoksa login ekranını göster
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex'; 
                 document.getElementById('app-wrapper').style.display = 'none'; 
@@ -569,32 +571,15 @@
         if (localData.menstrualDaysPerMonth === undefined) localData.menstrualDaysPerMonth = 6;
         if (localData.isMenstrualState === undefined) localData.isMenstrualState = false;
         
-        const t = getCurrentDateSimple();
+        const t = new Date().toLocaleDateString('tr-TR');
         if (!localData.daily || localData.daily.date !== t) { 
-             // Daily yoksa veya tarih eskiyse resetle ama kontrol et
-             if(!localData.daily) {
-                 localData.daily = { date: t, counts: [0,0,0,0,0], target: 10 };
-             }
+            localData.daily = { date: t, counts: [0,0,0,0,0], target: localData.daily?.target || 10 }; 
+            saveToCloud(); 
         }
-        
         if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
         if (!localData.history) localData.history = [];
         if (!localData.earnedBadges) localData.earnedBadges = [];
         if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
-    }
-
-    function checkDailyReset() {
-        const t = getCurrentDateSimple();
-        if (!localData.daily) {
-            localData.daily = { date: t, counts: [0,0,0,0,0], target: 10 };
-            return;
-        }
-        // Tarih kontrolünde esneklik (Farklı formatları kabul et veya bugüne eşitle)
-        if (localData.daily.date !== t) {
-            localData.daily.date = t;
-            localData.daily.counts = [0,0,0,0,0];
-            saveToCloud(); 
-        }
     }
 
     function showToast(message, type = 'success') {
