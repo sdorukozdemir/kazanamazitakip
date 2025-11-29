@@ -53,7 +53,7 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- YENİ AKORDEON (DRAWER) KART TASARIMI --- */
+        /* --- AKORDEON (DRAWER) KART TASARIMI --- */
         .prayer-list-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
         .prayer-row { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.3s; }
         
@@ -66,8 +66,6 @@
         .ph-text { display: flex; flex-direction: column; }
         .ph-title { font-weight: 700; font-size: 1.1rem; line-height: 1.2; }
         .ph-subtitle { font-size: 0.75rem; opacity: 0.7; font-weight: 500; margin-top: 2px; }
-        .ph-badge { background: #e9ecef; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; color: #495057; }
-        body.dark-mode .ph-badge { background: #343a40; color: #e9ecef; }
         
         /* Renkli İkonlar */
         .icon-sabah { background: linear-gradient(135deg, #0dcaf0, #0d6efd); }
@@ -473,6 +471,7 @@
 <script>
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
+    let activeRowIndex = null; // YENİ EKLENEN DEĞİŞKEN (Açık olan satırı hafızada tutar)
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     function hideLoader() {
@@ -723,7 +722,7 @@
         const pausedBadge = document.getElementById('pausedBadge');
         const goalCard = document.getElementById('goalCard');
         const weeklyCard = document.getElementById('weeklyCard');
-        const listContainer = document.getElementById('prayerListContainer'); // Yeni Container ID
+        const listContainer = document.getElementById('prayerListContainer'); 
 
         if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); listContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); listContainer.classList.remove('paused-mode-overlay'); }
 
@@ -749,11 +748,10 @@
         const days = getElapsedDays(); 
         document.getElementById('elapsedDays').value = days; 
         
-        // Simge ve Sınıf Tanımları
         const iconMap = [
             { icon: "fa-cloud-sun", class: "icon-sabah", badge: "Sabah" },
             { icon: "fa-sun", class: "icon-ogle", badge: "Öğle" },
-            { icon: "fa-clock", class: "icon-ikindi", badge: "İkindi" }, // Clock daha uygun olabilir
+            { icon: "fa-clock", class: "icon-ikindi", badge: "İkindi" }, 
             { icon: "fa-moon", class: "icon-aksam", badge: "Akşam" },
             { icon: "fa-star", class: "icon-yatsi", badge: "Yatsı" }
         ];
@@ -763,9 +761,12 @@
             td += parseInt(item.done); 
             const remaining = Math.max(0, item.target - item.done);
             const meta = iconMap[i] || { icon: "fa-mosque", class: "icon-sabah", badge: "Namaz" };
+            
+            // DÜZELTME: Açık/Kapalı sınıfını kontrol et ve ekle
+            const openClass = (i === activeRowIndex) ? 'open' : '';
 
             listContainer.innerHTML += `
-            <div class="prayer-row" id="p-row-${i}">
+            <div class="prayer-row ${openClass}" id="p-row-${i}">
                 <div class="prayer-header" onclick="togglePrayerRow(${i})">
                     <div class="ph-info">
                         <div class="ph-icon-box ${meta.class}"><i class="fas ${meta.icon}"></i></div>
@@ -813,16 +814,28 @@
         renderBadges(td); calculateEstFinish(td, days); 
     }
     
-    // Akordeon Açma/Kapama Fonksiyonu
+    // GÜNCELLENEN AKORDEON FONKSİYONU
     window.togglePrayerRow = function(index) {
-        // Tüm açık olanları kapat (Opsiyonel - Tek tek açık kalsın isterseniz bu bloğu silebilirsiniz)
+        // Durumu güncelle
+        if (activeRowIndex === index) {
+            activeRowIndex = null; // Kapat
+        } else {
+            activeRowIndex = index; // Aç
+        }
+
+        // Tüm açık olanları kapat (CSS class olarak)
         document.querySelectorAll('.prayer-row').forEach((row, i) => {
             if(i !== index) row.classList.remove('open');
         });
 
-        // Seçili olanı aç/kapat
+        // Seçili olanın sınıfını güncelle
         const row = document.getElementById(`p-row-${index}`);
-        row.classList.toggle('open');
+        if(activeRowIndex === index) {
+            row.classList.add('open');
+        } else {
+            row.classList.remove('open');
+        }
+        
         triggerHaptic();
     }
     
