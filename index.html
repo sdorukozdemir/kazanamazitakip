@@ -1506,6 +1506,30 @@
     }
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
+
+    // --- SERVICE WORKER KAYDI (OFFLINE MOD İÇİN) ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('Service Worker başarıyla kaydedildi:', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('Service Worker kaydı başarısız:', error);
+                });
+        });
+    }
+
+    // Kullanıcı offline olduğunda uyarı verelim
+    window.addEventListener('offline', () => {
+        showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "error");
+        document.body.style.filter = "grayscale(100%)";
+    });
+
+    window.addEventListener('online', () => {
+        showToast("Tekrar çevrimiçi oldunuz!", "success");
+        document.body.style.filter = "none";
+    });
 </script>
 </body>
 </html>
