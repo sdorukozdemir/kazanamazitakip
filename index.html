@@ -159,6 +159,7 @@
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
+        /* GÜNCELLENEN KULLANICI KUTUSU STİLİ (İsim Sığdırma Çözüldü) */
         .user-info-box {
             margin: 10px auto;
             width: 90%;
@@ -179,7 +180,7 @@
         .user-info-box i { font-size: 1.5rem; flex-shrink: 0; }
         .user-info-text { 
             font-size: 0.9rem; 
-            white-space: normal;
+            white-space: normal; /* Alt satıra geçmeye izin ver */
             word-break: break-word; 
             text-align: left;
             line-height: 1.2;
@@ -232,6 +233,7 @@
             border: 1px solid var(--table-foot-border); vertical-align: middle;
         }
         
+        /* KUTULAR VE HİZALAMA */
         .table-input, .table-value-box { 
             text-align: center; font-weight: bold; 
             background-color: var(--input-bg); color: var(--input-text); 
@@ -252,6 +254,7 @@
             min-width: 80px; 
         }
         
+        /* BUTONLAR */
         .col-action { padding: 5px !important; }
         .action-wrapper {
             display: flex;
@@ -272,6 +275,7 @@
         .btn-action:active { transform: scale(0.85); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
+        /* --- GÜNCELLENEN PROGRESS BAR YAPISI --- */
         .progress-container {
             height: 28px; 
             display: flex; flex-direction: column; justify-content: flex-end;
@@ -301,6 +305,7 @@
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
 
+        /* --- ZİKİR KARTLARI --- */
         .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 10px 0; line-height: 1.3; }
         body.dark-mode .arabic-text { color: #20c997; }
@@ -313,10 +318,12 @@
         .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
         .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
         
+        /* HEDEF KUTUSU */
         .tesbihat-target-box { background: var(--box-target-bg); border: 1px solid var(--box-target-border); border-radius: 25px; padding: 8px 25px; display: inline-flex; align-items: center; gap: 15px; margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); min-width: 150px; justify-content: space-between; }
         .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 1px; color: var(--box-target-text); }
         .tesbihat-target-input { border: none; background: transparent; width: 90px; text-align: center; font-weight: bold; font-size: 1.2rem; color: var(--text-color); outline: none; }
 
+        /* MANUEL EKLEME KUTUSU */
         .manual-zikr-container { position: relative; background-color: var(--box-add-bg); border: 1px solid var(--box-add-border); border-radius: 50px; padding: 4px 5px 4px 15px; display: flex; align-items: center; justify-content: space-between; width: 45%; min-width: 130px; margin: 15px auto 0 auto; box-shadow: 0 3px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
         .manual-zikr-container:focus-within { transform: scale(1.02); }
         .manual-zikr-input-clean { border: none; background: transparent; font-weight: bold; color: var(--text-color); width: 100%; outline: none; font-size: 0.95rem; text-align: center; }
@@ -325,6 +332,7 @@
         .btn-add-clean:hover { background: #0b5ed7; }
         body.dark-mode .btn-add-clean { background: #3d8bfd; color: #121212; }
 
+        /* --- HESAPLAMA SİHİRBAZI --- */
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
@@ -335,6 +343,7 @@
         .date-input::placeholder { color: var(--placeholder-color); opacity: 1; }
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; border-radius: 8px; }
 
+        /* HESAPLAMA YENİ KUTU STİLİ */
         .calc-group-box {
             background: var(--calc-item-bg);
             border: 1px solid var(--calc-item-border);
@@ -347,12 +356,14 @@
             justify-content: flex-end;
         }
 
+        /* --- YEDEKLEME & AYARLAR --- */
         .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
         .settings-card:hover { transform: translateY(-3px); }
         .settings-icon { font-size: 2rem; margin-bottom: 10px; color: #198754; }
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
 
+        /* GENDER SETTINGS STYLES */
         .settings-gender-male {
             background: linear-gradient(135deg, #e3f2fd, #bbdefb);
             border: 1px solid #90caf9;
@@ -366,6 +377,7 @@
         body.dark-mode .settings-gender-male { background: linear-gradient(135deg, #0d2b4a, #1a3e66); border-color: #1a3e66; color: #bbdefb; }
         body.dark-mode .settings-gender-female { background: linear-gradient(135deg, #4a1b2d, #661a36); border-color: #661a36; color: #f8bbd0; }
 
+        /* --- İSTATİSTİK KARTLARI --- */
         .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
         .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
         .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
@@ -384,6 +396,7 @@
         .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
         .analysis-value { font-size: 1.1rem; font-weight: bold; }
 
+        /* --- TAHMİN KARTI --- */
         .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .prediction-icon { font-size: 2.5rem; color: #198754; margin-bottom: 10px; }
         .prediction-date { font-size: 1.5rem; font-weight: bold; color: #198754; margin: 5px 0; }
@@ -392,6 +405,7 @@
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
 
+        /* DİĞER */
         .history-row-up td { background-color: #d1e7dd !important; color: #0f5132 !important; }
         .history-row-down td { background-color: #f8d7da !important; color: #842029 !important; }
         body.dark-mode .history-row-up td { background-color: #052c18 !important; color: #75b798 !important; }
@@ -405,6 +419,7 @@
         .badge-desc { font-size: 0.6rem; color: var(--text-color); margin-top: 3px; opacity: 0.7; }
         body.dark-mode .badge-title { color: #20c997; }
 
+        /* MODAL */
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -417,13 +432,16 @@
         .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
 
+        /* --- CİNSİYET SEÇİM EKRANI --- */
         #gender-selection-modal { display: none; z-index: 2005; }
         .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
         .gender-option:hover { border-color: #198754; }
         
+        /* Cinsiyet Seçili Durumları */
         .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
         .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
         
+        /* --- MUAYYEN GÜN MODU STİLLERİ --- */
         .menstrual-toggle-container { 
             margin-bottom: 15px; padding: 15px 20px; 
             background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); 
@@ -438,6 +456,7 @@
         .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
         .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
 
+        /* YENİ FADE BOX (Tarih ve Süre İçin) */
         .fade-box {
             background: var(--fade-box-bg);
             border: 1px solid var(--fade-box-border);
@@ -459,6 +478,7 @@
         }
         .fade-box label { margin-bottom: 2px; opacity: 0.7; }
 
+        /* CUSTOM ALERT BOX (Hesaplama Sihirbazı) */
         .custom-alert-box {
             background: var(--card-bg);
             border-left: 5px solid #17a2b8;
@@ -470,6 +490,7 @@
         }
         .custom-alert-box strong { color: #17a2b8; }
         
+        /* Neutral/Info Tip Box */
         .custom-alert-tip {
             border-left-color: #ffc107;
             background: #fff9db;
@@ -486,6 +507,7 @@
             border-left-width: 5px;
         }
 
+        /* STATS TABS */
         .stats-tab-container {
             display: flex;
             background: var(--input-bg);
@@ -510,6 +532,7 @@
             box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
         }
 
+        /* --- TOAST BİLDİRİM STİLLERİ --- */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -543,6 +566,9 @@
         .toast-success { border-color: #198754; }
         .toast-success i { color: #198754; font-size: 1.2rem; }
         
+        .toast-warning { border-color: #ffc107; }
+        .toast-warning i { color: #ffc107; font-size: 1.2rem; }
+
         .toast-error { border-color: #dc3545; }
         .toast-error i { color: #dc3545; font-size: 1.2rem; }
 
@@ -827,14 +853,19 @@
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
+                <!-- TARİH FİLTRESİ - MOBİL UYUMLU DÜZELTME -->
                 <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
+                     <!-- Fade-box yerine daha belirgin, solid arka planlı bir yapı kullanıldı -->
                      <div class="d-flex flex-row align-items-center gap-2 px-3 py-2" 
                           style="background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        
                         <label for="historyFilterDate" class="small text-muted fw-bold mb-0 me-1">Tarih:</label>
+                        
                         <input type="date" id="historyFilterDate" 
                                class="form-control form-control-sm text-center border-0 p-0" 
                                style="background: transparent; color: var(--text-color); font-weight: bold; max-width: 130px; box-shadow: none;" 
                                onchange="filterHistoryByDate()">
+                        
                         <button class="btn btn-secondary btn-sm rounded-circle d-flex justify-content-center align-items-center" 
                                 style="width: 24px; height: 24px; padding: 0;" 
                                 onclick="clearHistoryFilter()">
@@ -866,6 +897,7 @@
                 <div class="col-lg-10">
                     <div class="calculator-card">
                         
+                        <!-- KADIN MODU İÇİN EK BİLGİ -->
                         <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="fas fa-female fa-lg me-2 text-danger"></i>
@@ -877,6 +909,7 @@
                             </div>
                         </div>
 
+                        <!-- Neutral/Orange Tip Box -->
                         <div class="custom-alert-box custom-alert-tip">
                             <i class="fas fa-lightbulb me-2"></i>
                             Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.
@@ -983,11 +1016,13 @@
         const loader = document.getElementById('loading-overlay');
         if (loader) { loader.style.opacity = '0'; setTimeout(() => { loader.style.visibility = 'hidden'; }, 500); }
     }
+    // Emniyet sübapı: Eğer 5 sn içinde yüklenmezse loader'ı kapat
     setTimeout(() => { hideLoader(); }, 5000); 
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
+    // ÖNEMLİ: Offline açılabilmesi için start_url './index.html' olarak ayarlandı
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v17", "short_name": "İbadet", "start_url": ".", "display": "minimal-ui",  
+        "name": "İbadet Takip v17", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -1004,6 +1039,7 @@
         appId: "1:951730390034:web:639f96ee859c10b0e944cb",
         measurementId: "G-5WGCDTL1RX"
     };
+    // Firebase başlat
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
@@ -1018,7 +1054,6 @@
         const d = String(date.getDate()).padStart(2, '0');
         return `${y}-${m}-${d}`;
     }
-    
     function formatDateTR(isoDate) {
         if(!isoDate) return "";
         if(isoDate.includes('.') && isoDate.split('.')[0].length <= 2) return isoDate; 
@@ -1049,81 +1084,99 @@
     let localData = JSON.parse(JSON.stringify(defaultData));
     let chartCompletion = null, barChart = null, lineChart = null;
 
-    // --- AUTH ve VERİ YÜKLEME ---
-    auth.onAuthStateChanged((user) => {
-        if (user) {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app-wrapper').style.display = 'flex';
-            document.getElementById('sidebarUserInfo').innerText = user.displayName;
-            
-            // --- OFFLINE ÇÖZÜMÜ BAŞLANGIÇ ---
-            // Önce telefondaki yedeği yüklemeyi dene
-            const offlineData = localStorage.getItem('offlineBackup');
-            if (offlineData) {
-                try {
-                    localData = JSON.parse(offlineData);
-                    ensureDataStructure();
-                    // Yedeği yükler yüklemez ekrana bas (İnternet yavaşsa beklemez)
-                    if (localData.gender) applyGenderSettings();
-                    renderCalculatorRows();
-                    const activeId = document.querySelector('.components li.active') ? document.querySelector('.components li.active').id.replace('menu-', '') : 'dashboard';
-                    showSection(activeId);
-                } catch(e) { console.log("Offline veri hatası", e); }
-            }
-            // --- OFFLINE ÇÖZÜMÜ BİTİŞ ---
+    // --- KRİTİK OFFLINE BAŞLANGIÇ KONTROLÜ ---
+    // Sayfa yüklenir yüklenmez çalışır.
+    function initApp() {
+        const offlineData = localStorage.getItem('offlineBackup');
+        const isOffline = !navigator.onLine;
 
-            // Sonra Firebase'e bağlan
-            dbRef = db.ref('users/' + user.uid + '/namazData');
-            dbRef.on('value', (s) => {
-                try {
+        // EĞER İNTERNET YOKSA VE YEDEK VARSA -> LOGİN'İ ATLA
+        if (isOffline && offlineData) {
+            console.log("Offline mod başlatılıyor...");
+            try {
+                localData = JSON.parse(offlineData);
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-wrapper').style.display = 'flex';
+                document.getElementById('sidebarUserInfo').innerText = "Çevrimdışı Mod";
+                
+                ensureDataStructure();
+                if (localData.gender) applyGenderSettings();
+                renderCalculatorRows();
+                renderApp();
+                renderStats();
+                showSection('dashboard');
+                hideLoader();
+                showToast("Çevrimdışı moddasınız. Veriler cihazdan yüklendi.", "warning");
+            } catch(e) { 
+                console.error("Offline veri hatası", e); 
+            }
+        }
+        
+        // EĞER İNTERNET VARSA -> FIREBASE DİNLE
+        // Offline olsak bile listener'ı başlatırız, internet gelince devreye girer.
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Giriş başarılı (veya session cache'den geldi)
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-wrapper').style.display = 'flex';
+                document.getElementById('sidebarUserInfo').innerText = user.displayName || "Kullanıcı";
+                
+                // Önce local veriyi göster (Hız için)
+                if(offlineData && !isOffline) { 
+                    try {
+                        localData = JSON.parse(offlineData);
+                        renderApp();
+                    } catch(e){}
+                }
+
+                // Firebase'den güncel veriyi çek
+                dbRef = db.ref('users/' + user.uid + '/namazData');
+                dbRef.on('value', (s) => {
                     const d = s.val();
                     if (d) {
                         localData = d;
-                        // Firebase'den yeni veri geldikçe locale de yedekle
                         localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                    } else {
-                        if(!offlineData) localData = JSON.parse(JSON.stringify(defaultData));
+                    } else if(!offlineData) {
+                        localData = JSON.parse(JSON.stringify(defaultData));
                     }
-                    ensureDataStructure(); 
+                    ensureDataStructure();
                     checkDailyReset();
-                    if (!d && !offlineData) saveToCloud();
-                    
                     if (!localData.gender) {
-                        // Eğer offline veri yoksa veya cinsiyet seçilmemişse modalı aç
                         if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
                     } else {
                         applyGenderSettings();
                     }
-
                     renderCalculatorRows();
-                    renderApp(); // Ekranı güncelle
-                    renderStats(); 
-                } catch (err) { console.error(err); } 
-                finally { hideLoader(); }
-            });
-        } else { 
-            // Çıkış yapıldığında
-            document.getElementById('loading-overlay').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'flex'; 
-            document.getElementById('app-wrapper').style.display = 'none'; 
-            localData = JSON.parse(JSON.stringify(defaultData)); 
-            localStorage.removeItem('offlineBackup'); // Güvenlik için temizle
-        }
-    });
+                    renderApp();
+                    renderStats();
+                    hideLoader();
+                });
+            } else {
+                // Kullanıcı giriş yapmamış VE internet var
+                // VEYA internet yok ama offline veri de yok
+                if(!isOffline || !offlineData) {
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    document.getElementById('login-screen').style.display = 'flex';
+                    document.getElementById('app-wrapper').style.display = 'none';
+                    localData = JSON.parse(JSON.stringify(defaultData));
+                }
+            }
+        });
+    }
+
+    // Uygulamayı başlat
+    initApp();
 
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
-    
-    // ÇIKIŞ FONKSİYONU
     function logout() { 
         auth.signOut().then(() => {
+            localStorage.removeItem('offlineBackup'); // Çıkışta yedeği sil
             window.location.reload(); 
         });
     }
     
-    // --- GÜNCELLENEN KAYIT FONKSİYONU ---
     function saveToCloud() { 
         if(dbRef) dbRef.set(localData); 
-        // Her kayıtta telefona da yedek al
         localStorage.setItem('offlineBackup', JSON.stringify(localData));
     }
     
@@ -1147,22 +1200,16 @@
         if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
     }
 
-    // --- YENİ TOAST NOTIFICATION FONKSİYONU ---
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         toast.className = `custom-toast toast-${type}`;
-        
-        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-circle"></i>';
-        
+        const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : (type === 'warning' ? '<i class="fas fa-wifi"></i>' : '<i class="fas fa-exclamation-circle"></i>');
         toast.innerHTML = `${icon}<span>${message}</span>`;
         container.appendChild(toast);
-        
         setTimeout(() => {
             toast.style.animation = 'toastFadeOut 0.4s forwards';
-            setTimeout(() => {
-                if(toast.parentElement) toast.parentElement.removeChild(toast);
-            }, 400);
+            setTimeout(() => { if(toast.parentElement) toast.parentElement.removeChild(toast); }, 400);
         }, 3000);
     }
 
@@ -1223,17 +1270,12 @@
 
     function renderApp() {
         if(!localData.counts) return;
-        
-        // SENKRONİZASYON: Log verisini (İstatistikler) Günlük Hedef (Dashboard) ile eşitle
         const todayISO = getIsoDate(new Date());
         const todayTotal = localData.daily.counts.reduce((a, b) => a + b, 0);
-        
-        // Eğer günlük toplam ile logdaki kayıt tutmuyorsa, Log'u güncelle
         if (localData.logs[todayISO] !== todayTotal) {
             localData.logs[todayISO] = todayTotal;
             if(dbRef) dbRef.child('logs').update({ [todayISO]: todayTotal });
         }
-
         recalculateStreak();
         
         const dateInput = document.getElementById('startDate');
@@ -1288,12 +1330,10 @@
     function renderHistory(filterDate = null) { 
         const hb = document.getElementById('historyTableBody'); 
         hb.innerHTML = ""; 
-        
         if (!localData.history || localData.history.length === 0) {
             hb.innerHTML = '<tr><td colspan="4" class="text-muted small py-3">Henüz işlem geçmişi yok.</td></tr>';
             return;
         }
-        
         let displayData = [];
         if (filterDate) {
             const parts = filterDate.split('-'); 
@@ -1304,19 +1344,16 @@
         } else {
             displayData = localData.history.slice(0, 50);
         }
-
         if(displayData.length === 0) {
              hb.innerHTML = '<tr><td colspan="4" class="text-muted small py-3">Bu tarihte işlem bulunamadı.</td></tr>';
              return;
         }
-
         displayData.forEach(r => { 
             const o = parseFloat(r.oldVal); 
             const n = parseFloat(r.newVal); 
             let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); 
             hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td class="small">${r.time}</td></tr>`; 
         }); 
-        
         if(!filterDate && localData.history.length > 50) {
              hb.innerHTML += '<tr><td colspan="4" class="text-muted small py-2" style="background:#f8f9fa;">Daha eski kayıtlar için tarih filtresini kullanınız...</td></tr>';
         }
@@ -1473,6 +1510,7 @@
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
+    // --- SERVICE WORKER KAYDI (OFFLINE MOD İÇİN) ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -1485,14 +1523,16 @@
         });
     }
 
+    // Kullanıcı offline olduğunda uyarı verelim
     window.addEventListener('offline', () => {
-        showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "error");
+        showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "warning");
         document.body.style.filter = "grayscale(100%)";
     });
 
     window.addEventListener('online', () => {
         showToast("Tekrar çevrimiçi oldunuz!", "success");
         document.body.style.filter = "none";
+        // Tekrar online olunca auth listener zaten devreye girer
     });
 </script>
 </body>
