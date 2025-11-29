@@ -847,11 +847,24 @@
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
-                <!-- TARİH FİLTRESİ -->
+                <!-- TARİH FİLTRESİ - MOBİL UYUMLU DÜZELTME -->
                 <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
-                     <div class="fade-box p-1 d-flex flex-row align-items-center gap-2" style="min-height: auto; width: auto;">
-                        <input type="date" id="historyFilterDate" class="form-control form-control-sm text-center" style="max-width: 140px; font-weight:normal;" onchange="filterHistoryByDate()">
-                        <button class="btn btn-secondary btn-sm rounded-circle" style="width: 30px; height: 30px; padding: 0;" onclick="clearHistoryFilter()"><i class="fas fa-times"></i></button>
+                     <!-- Fade-box yerine daha belirgin, solid arka planlı bir yapı kullanıldı -->
+                     <div class="d-flex flex-row align-items-center gap-2 px-3 py-2" 
+                          style="background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        
+                        <label for="historyFilterDate" class="small text-muted fw-bold mb-0 me-1">Tarih:</label>
+                        
+                        <input type="date" id="historyFilterDate" 
+                               class="form-control form-control-sm text-center border-0 p-0" 
+                               style="background: transparent; color: var(--text-color); font-weight: bold; max-width: 130px; box-shadow: none;" 
+                               onchange="filterHistoryByDate()">
+                        
+                        <button class="btn btn-secondary btn-sm rounded-circle d-flex justify-content-center align-items-center" 
+                                style="width: 24px; height: 24px; padding: 0;" 
+                                onclick="clearHistoryFilter()">
+                            <i class="fas fa-times" style="font-size: 0.7rem;"></i>
+                        </button>
                      </div>
                 </div>
 
