@@ -473,27 +473,34 @@
         ],
         earnedBadges: [], history: []
     };
-    let localData = JSON.parse(JSON.stringify(defaultData));
-    let chartCompletion = null, barChart = null, lineChart = null;
-
-    // --- BURASI DÜZELTİLDİ: Sayfa açılır açılmaz veriyi yükle (Auth bekleme) ---
-    const savedData = localStorage.getItem('offlineBackup');
-    if(savedData) {
+    
+    // --- ÖNEMLİ DEĞİŞİKLİK: Veriyi sayfa yüklenir yüklenmez al ---
+    let localData;
+    const saved = localStorage.getItem('offlineBackup');
+    if (saved) {
         try {
-            localData = JSON.parse(savedData);
+            localData = JSON.parse(saved);
+        } catch(e) {
+            localData = JSON.parse(JSON.stringify(defaultData));
+        }
+    } else {
+        localData = JSON.parse(JSON.stringify(defaultData));
+    }
+    
+    // Sayfa yüklenince hemen çizmeye çalış
+    document.addEventListener("DOMContentLoaded", () => {
+        if(saved) {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
-            if(document.readyState !== 'loading') {
-                renderApp();
-                hideLoader();
-            } else {
-                document.addEventListener('DOMContentLoaded', () => {
-                    renderApp();
-                    hideLoader();
-                });
-            }
-        } catch(e) { console.log(e); }
-    }
+            if (localData.gender) applyGenderSettings();
+            renderCalculatorRows();
+            renderApp();
+            renderStats();
+            hideLoader();
+        }
+    });
+
+    let chartCompletion = null, barChart = null, lineChart = null;
 
     auth.onAuthStateChanged((user) => {
         if (user) {
@@ -508,15 +515,13 @@
                     if (d) {
                         localData = d;
                         localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                    } else if (!savedData) { 
-                        // Sadece elimizde yedek yoksa default'a dön
+                    } else if(!saved) { // Sadece elimizde yedek de yoksa default kullan
                         localData = JSON.parse(JSON.stringify(defaultData));
                     }
                     
                     ensureDataStructure(); 
                     checkDailyReset();
-                    // Yeni kullanıcıysa veya online veri yoksa kaydet
-                    if (!d && !savedData) saveToCloud();
+                    if (!d && !saved) saveToCloud();
                     
                     if (!localData.gender) {
                         if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
@@ -527,12 +532,13 @@
                     renderCalculatorRows();
                     const activeId = document.querySelector('.components li.active') ? document.querySelector('.components li.active').id.replace('menu-', '') : 'dashboard';
                     showSection(activeId); 
+                    renderApp(); // Veri gelince tekrar çiz
                 } catch (err) { console.error(err); } 
                 finally { hideLoader(); }
             });
         } else { 
             // Çıkış yapıldığında
-            if(!savedData) {
+            if(!saved) { // Eğer offline veri yoksa login göster
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex'; 
                 document.getElementById('app-wrapper').style.display = 'none'; 
@@ -886,7 +892,6 @@
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    // --- SERVICE WORKER KAYDI (OFFLINE MOD İÇİN) ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -899,7 +904,6 @@
         });
     }
 
-    // Kullanıcı offline olduğunda uyarı verelim
     window.addEventListener('offline', () => {
         showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "warning");
         document.body.style.filter = "grayscale(100%)";
