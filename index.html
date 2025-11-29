@@ -33,7 +33,6 @@
         .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
-        /* Layout Stabilizasyonu için Chart Container Yüksekliği */
         .chart-container { min-height: 300px; padding: 20px; margin-bottom: 20px; text-align: center; }
 
         .wrapper { display: flex; width: 100%; }
@@ -55,7 +54,7 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
         .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; overflow-x: auto; width: 100%; display: block; transition: opacity 0.3s, filter 0.3s; }
-        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
+        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 350px; }
         .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); }
         .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: middle !important; padding: 10px 5px; height: 1px; }
         .main-table tfoot td { background-color: var(--table-foot-bg); color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid var(--table-foot-border); vertical-align: middle; }
@@ -191,6 +190,21 @@
         .toast-success { border-color: #198754; } .toast-success i { color: #198754; font-size: 1.2rem; }
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
+        
+        /* Yeni Analiz Kartları Stili */
+        .prayer-stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.03); transition: transform 0.2s; }
+        .prayer-stat-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; background: rgba(25, 135, 84, 0.05); }
+        body.dark-mode .prayer-stat-header { background: rgba(255,255,255,0.03); }
+        .prayer-stat-header:hover { background: rgba(25, 135, 84, 0.1); }
+        .prayer-stat-title { font-weight: 600; color: #198754; display: flex; align-items: center; gap: 10px; }
+        body.dark-mode .prayer-stat-title { color: #20c997; }
+        .prayer-stat-details { display: none; padding: 20px; border-top: 1px solid var(--border-color); animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .stat-detail-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .stat-detail-row:last-child { margin-bottom: 0; }
+        .stat-detail-label { opacity: 0.7; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; }
+        .stat-detail-value { font-weight: bold; font-size: 1.1rem; }
+
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
     </style>
@@ -298,8 +312,17 @@
             </div>
             <div id="mainTableWrapper" class="table-responsive mb-4">
                 <table class="table main-table">
-                    <thead><tr><th>Namaz</th><th class="col-input-area">Kılınacak<br>Namaz</th><th class="col-input-area">Kılınan<br>Namaz</th><th class="col-action">İşlem</th><th>Günlük<br>Ortalama</th><th>Ortalama<br>Kalan Süre</th></tr></thead>
-                    <tbody id="prayerTableBody"></tbody><tfoot id="prayerTableFoot"></tfoot>
+                    <thead>
+                        <tr>
+                            <th>Namaz</th>
+                            <th class="col-input-area">Kılınacak<br>Namaz</th>
+                            <th class="col-input-area">Kılınan<br>Namaz</th>
+                            <th class="col-action">İşlem</th>
+                            <!-- Günlük Ortalama ve Kalan Süre kolonları buradan kaldırıldı -->
+                        </tr>
+                    </thead>
+                    <tbody id="prayerTableBody"></tbody>
+                    <tfoot id="prayerTableFoot"></tfoot>
                 </table>
             </div>
             <div class="row mt-4 justify-content-center">
@@ -334,10 +357,18 @@
                     <div class="stat-card-scroll"><div class="stat-number text-secondary" id="statYearly">0</div><div class="stat-label">Son 1 Yıl</div></div>
                      <div class="stat-card-scroll"><div class="stat-number" id="statAverage">0</div><div class="stat-label">Günlük Ort.</div></div>
                 </div>
-                <div class="analysis-box">
+
+                <div class="analysis-box mb-4">
                     <div class="analysis-row"><div class="analysis-icon icon-good"><i class="fas fa-check"></i></div><div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div></div>
                     <div class="analysis-row"><div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div><div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div></div>
                 </div>
+
+                <!-- Yeni Eklenen Namaz Analiz Grid'i -->
+                <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
+                <div id="prayer-analysis-grid" class="mb-4">
+                    <!-- Javascript ile doldurulacak -->
+                </div>
+
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Performans Analizi</h5><div class="d-flex justify-content-center mb-2"><div class="btn-group btn-group-sm" role="group"><input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')"><label class="btn btn-outline-success" for="btnradio1">Haftalık</label><input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')"><label class="btn btn-outline-success" for="btnradio2">Aylık</label></div></div><canvas id="lineChart" style="max-height: 250px;"></canvas></div></div>
@@ -477,14 +508,11 @@
         earnedBadges: [], history: []
     };
     
-    // --- ÇÖZÜM: Sayfa Yüklenir Yüklenmez Veriyi Al (Sıfır Sorununu Engelle) ---
     let localData = JSON.parse(JSON.stringify(defaultData));
     const saved = localStorage.getItem('offlineBackup');
     
     if(saved) {
-        // Eğer yerel veri varsa hemen yükle ve UI'yı hazırla
         localData = JSON.parse(saved);
-        // DOM hazırsa veya değilse de Login ekranını gizle
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
@@ -500,7 +528,6 @@
 
     auth.onAuthStateChanged((user) => {
         if (user) {
-            // Kullanıcı online ise Login ekranını gizle (Zaten gizli olabilir ama garanti olsun)
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'flex';
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
@@ -509,22 +536,17 @@
             dbRef.on('value', (s) => {
                 const d = s.val();
                 if (d) {
-                    // Firebase'den veri gelirse yerel veriyi güncelle
                     localData = d;
                     localStorage.setItem('offlineBackup', JSON.stringify(localData));
                 } else {
-                    // Firebase boşsa (yeni kullanıcı) ve elimizde yerel veri de yoksa sıfırla
-                    // Ama elimizde yerel veri varsa DOKUNMA!
                     if(!saved) {
                         localData = JSON.parse(JSON.stringify(defaultData));
                     }
                 }
                 
-                // Verileri ekrana bas
                 ensureDataStructure(); 
                 checkDailyReset();
                 
-                // Eğer yeni kullanıcıysa ve hiç veri yoksa kaydet
                 if (!d && !saved) saveToCloud();
                 
                 if (!localData.gender) {
@@ -539,9 +561,7 @@
                 hideLoader();
             });
         } else { 
-            // Kullanıcı çıkış yapmışsa veya ilk girişse
             if(!saved) { 
-                // Sadece offline veri de yoksa login ekranını göster
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex'; 
                 document.getElementById('app-wrapper').style.display = 'none'; 
@@ -653,6 +673,7 @@
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
 
+    // --- TABLO KOLONLARI AZALTILDI ---
     function renderApp() {
         if(!localData.counts) return;
         const todayISO = getIsoDate(new Date());
@@ -691,9 +712,22 @@
         if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
 
         const tbody = document.getElementById('prayerTableBody'); const tfoot = document.getElementById('prayerTableFoot');
-        tbody.innerHTML = ""; let tt=0, td=0, tr=0; const days = getElapsedDays(); document.getElementById('elapsedDays').value = days; 
-        localData.counts.forEach((item, i) => { tt += parseInt(item.target); td += parseInt(item.done); const rem = item.target - item.done; tr += rem; const avg = (item.done / days).toFixed(2); const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0); let pp = item.target > 0 ? (item.done / item.target) * 100 : 0; tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="spacer-box"></div></td><td class="col-input-area"><input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress-container"><div class="progress"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div class="progress-text text-center">%${pp.toFixed(1)}</div></div></td><td class="col-action"><div class="action-wrapper"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></div><div class="spacer-box"></div></td><td><div class="table-value-box">${avg}</div><div class="spacer-box"></div></td><td><div class="table-value-box">${estText}</div><div class="spacer-box"></div></td></tr>`; });
-        const oa = (td/days).toFixed(2); tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td><td>${oa}</td><td>${formatTime(oa > 0 ? Math.ceil(tr/oa) : 0)}</td></tr>`;
+        tbody.innerHTML = ""; let tt=0, td=0; const days = getElapsedDays(); document.getElementById('elapsedDays').value = days; 
+        
+        localData.counts.forEach((item, i) => { 
+            tt += parseInt(item.target); 
+            td += parseInt(item.done); 
+            let pp = item.target > 0 ? (item.done / item.target) * 100 : 0; 
+            tbody.innerHTML += `
+            <tr>
+                <td class="col-namaz">${item.name}</td>
+                <td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="spacer-box"></div></td>
+                <td class="col-input-area"><input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress-container"><div class="progress"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div class="progress-text text-center">%${pp.toFixed(1)}</div></div></td>
+                <td class="col-action"><div class="action-wrapper"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></div><div class="spacer-box"></div></td>
+            </tr>`; 
+        });
+        
+        tfoot.innerHTML = `<tr><td>Toplam</td><td>${tt}</td><td>${td}</td><td></td></tr>`;
         renderBadges(td); calculateEstFinish(td, days); 
     }
     
@@ -776,22 +810,97 @@
 
     function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
     
-    function renderStats() { let totalTarget = 0, totalDone = 0; let labels = [], remainingData = [], doneData = []; let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; localData.counts.forEach(c => { totalTarget += c.target; totalDone += c.done; const remaining = Math.max(0, c.target - c.done); labels.push(c.name); remainingData.push(remaining); doneData.push(c.done); if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } if (c.done > maxDone) { maxDone = c.done; bestName = c.name; } }); const periodStats = calculatePeriodStats(); const days = getElapsedDays(); const avg = (totalDone / days).toFixed(2); 
+    // --- GÜNCELLENEN STATS FONKSİYONU ---
+    function renderStats() { 
+        let totalTarget = 0, totalDone = 0; 
+        let labels = [], remainingData = [], doneData = []; 
+        let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; 
+        const days = getElapsedDays();
+
+        // Namaz Detay Grid'i için HTML hazırlığı
+        const gridContainer = document.getElementById('prayer-analysis-grid');
+        gridContainer.innerHTML = "";
+
+        localData.counts.forEach((c, index) => { 
+            totalTarget += c.target; 
+            totalDone += c.done; 
+            const remaining = Math.max(0, c.target - c.done); 
+            labels.push(c.name); 
+            remainingData.push(remaining); 
+            doneData.push(c.done); 
+            
+            if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } 
+            if (c.done > maxDone) { maxDone = c.done; bestName = c.name; }
+
+            // Detaylı Hesaplamalar
+            const avg = (c.done / days).toFixed(2);
+            const estText = formatTime(avg > 0 ? Math.ceil(remaining/avg) : 0);
+            
+            // Kart HTML'i
+            gridContainer.innerHTML += `
+            <div class="prayer-stat-card">
+                <div class="prayer-stat-header" onclick="toggleStatDetails(${index})">
+                    <div class="prayer-stat-title"><i class="fas fa-mosque"></i> ${c.name}</div>
+                    <i class="fas fa-chevron-down text-muted" id="icon-stat-${index}"></i>
+                </div>
+                <div class="prayer-stat-details" id="detail-stat-${index}">
+                    <div class="stat-detail-row">
+                        <span class="stat-detail-label">Kılınan</span>
+                        <span class="stat-detail-value text-success">${c.done}</span>
+                    </div>
+                    <div class="stat-detail-row">
+                        <span class="stat-detail-label">Kalan</span>
+                        <span class="stat-detail-value text-danger">${remaining}</span>
+                    </div>
+                    <div class="stat-detail-row" style="border-top:1px dashed var(--border-color); padding-top:10px; margin-top:5px;">
+                        <span class="stat-detail-label"><i class="fas fa-chart-line me-1"></i> Günlük Ort.</span>
+                        <span class="stat-detail-value text-primary">${avg}</span>
+                    </div>
+                    <div class="stat-detail-row">
+                        <span class="stat-detail-label"><i class="fas fa-hourglass-half me-1"></i> Tahmini Bitiş</span>
+                        <span class="stat-detail-value text-warning">${estText}</span>
+                    </div>
+                </div>
+            </div>`;
+        }); 
+        
+        const periodStats = calculatePeriodStats(); 
+        const avg = (totalDone / days).toFixed(2); 
     
-    const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
-    const weeklyDone = getWeeklyProgress(); 
+        const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
+        const weeklyDone = getWeeklyProgress(); 
     
-    document.getElementById('statToday').innerText = dailyDone; 
-    document.getElementById('statWeekly').innerText = weeklyDone; 
-    document.getElementById('statMonthly').innerText = periodStats.monthly; 
-    document.getElementById('stat3Months').innerText = periodStats.months3;
-    document.getElementById('stat6Months').innerText = periodStats.months6;
-    document.getElementById('statYearly').innerText = periodStats.yearly;
-    document.getElementById('statAverage').innerText = avg;
-    
-    document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
-    
-    renderHistory();
+        document.getElementById('statToday').innerText = dailyDone; 
+        document.getElementById('statWeekly').innerText = weeklyDone; 
+        document.getElementById('statMonthly').innerText = periodStats.monthly; 
+        document.getElementById('stat3Months').innerText = periodStats.months3;
+        document.getElementById('stat6Months').innerText = periodStats.months6;
+        document.getElementById('statYearly').innerText = periodStats.yearly;
+        document.getElementById('statAverage').innerText = avg;
+        
+        document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
+        document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
+        
+        const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
+        
+        renderHistory();
+    }
+
+    // Kart açıp kapama fonksiyonu
+    window.toggleStatDetails = function(index) {
+        const detail = document.getElementById(`detail-stat-${index}`);
+        const icon = document.getElementById(`icon-stat-${index}`);
+        if(detail.style.display === 'block') {
+            detail.style.display = 'none';
+            icon.className = 'fas fa-chevron-down text-muted';
+        } else {
+            // Diğerlerini kapat (İsteğe bağlı, akordeon efekti için)
+            document.querySelectorAll('.prayer-stat-details').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.prayer-stat-header i.fa-chevron-up').forEach(el => el.className = 'fas fa-chevron-down text-muted');
+
+            detail.style.display = 'block';
+            icon.className = 'fas fa-chevron-up text-primary';
+        }
     }
     
     function calculatePeriodStats() { 
@@ -865,7 +974,7 @@
         reader.readAsText(file); 
         input.value = ""; 
     };
-    window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode'); localStorage.setItem('theme', isDark ? 'dark' : 'light'); document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu"; renderApp(); };
+    window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode'); localStorage.setItem('theme', isDark ? 'dark' : 'light'); document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu"; renderApp(); renderStats(); };
     if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
     document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
     const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; this.value = formatDateTR(this.value); }; dInput.placeholder = 'gg.aa.yyyy';
@@ -873,40 +982,28 @@
     function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
     function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); 
-    // GÜNCELLEME: Sınır kaldırıldı, artık veri silinmiyor.
     saveToCloud(); }
     
-    // GÜNCELLENEN SIFIRLAMA FONKSİYONU (Cinsiyet Hatırlar)
     function forceResetData() { 
-        // 1. Cinsiyet ve Muayyen Ayarlarını Sakla
         const savedGender = localData.gender;
         const savedMenstrualDays = localData.menstrualDaysPerMonth;
         const savedMenstrualState = localData.isMenstrualState;
-
-        // 2. Veriyi Sıfırla
         localData = JSON.parse(JSON.stringify(defaultData)); 
-        
-        // 3. Ayarları Geri Yükle
         if(savedGender) {
             localData.gender = savedGender;
             localData.menstrualDaysPerMonth = savedMenstrualDays;
             localData.isMenstrualState = savedMenstrualState;
         }
-
         saveToCloud(); 
-        
-        // Arayüzü Güncelle
         renderApp();
         renderStats();
         renderCalculatorRows();
         applyGenderSettings(); 
-
         showToast("Verileriniz başarıyla sıfırlandı ve yenilendi! ✨", "success");
     }
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    // --- SERVICE WORKER KAYDI (OFFLINE MOD İÇİN) ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -919,7 +1016,6 @@
         });
     }
 
-    // Kullanıcı offline olduğunda uyarı verelim
     window.addEventListener('offline', () => {
         showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "error");
         document.body.style.filter = "grayscale(100%)";
