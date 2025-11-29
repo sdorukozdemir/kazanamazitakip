@@ -1,5 +1,5 @@
-/* sw.js - GÜNCELLENMİŞ VERSİYON */
-const CACHE_NAME = 'ibadet-takip-v20'; // Versiyonu değiştirdim
+/* Dosya Adı: sw.js */
+const CACHE_NAME = 'ibadet-takip-v25'; // Versiyonu yükselttim (Cache temizlensin diye)
 
 const STATIC_ASSETS = [
   './',
@@ -15,6 +15,7 @@ const STATIC_ASSETS = [
   'https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js'
 ];
 
+// 1. KURULUM
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
@@ -25,12 +26,14 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// 2. AKTİF OLMA (Eski cache'leri sil)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
+            console.log('[SW] Eski cache silindi:', cache);
             return caches.delete(cache);
           }
         })
@@ -40,30 +43,30 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// 3. İSTEKLERİ YÖNETME
 self.addEventListener('fetch', (event) => {
   const reqUrl = new URL(event.request.url);
 
-  // 1. Firebase isteklerini pas geç (Network only)
+  // A) Firebase isteklerini ASLA cacheleme (Network Only)
   if (reqUrl.href.includes('firebase') || reqUrl.href.includes('googleapis')) {
     return; 
   }
 
-  // 2. Sayfa Gezintisi (Navigation) İsteği mi? (Örn: sayfayı yenileme)
+  // B) Sayfa yenileme isteği ise (Navigation)
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => {
-        // İnternet yoksa MUTLAKA index.html döndür
-        return caches.match('./index.html').then(resp => {
-            return resp || caches.match('/'); 
-        });
+        // İnternet yoksa index.html döndür
+        return caches.match('./index.html');
       })
     );
     return;
   }
 
-  // 3. CSS, JS, Resim istekleri
+  // C) Diğer statik dosyalar (CSS, JS, Resim)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
+      // Varsa cache'den ver, yoksa internetten çek
       return cachedResponse || fetch(event.request);
     })
   );
