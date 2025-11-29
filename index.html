@@ -31,48 +31,26 @@
             --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: #157347; 
             --table-head: #157347; --table-row-bg: #ffffff; --input-bg: #f8f9fa; --input-text: #000000; 
             --border-color: #ced4da; --modal-bg: #ffffff;
-            
-            /* RENKLER (Gündüz) */
-            --col-namaz-bg: #5a826e; 
-            --col-namaz-text: #ffffff;
-            --table-foot-bg: #1f3b2f; 
-            --table-foot-border: #142921;
-            
-            /* ZİKİR BUTON RENKLERİ */
+            --col-namaz-bg: #5a826e; --col-namaz-text: #ffffff;
+            --table-foot-bg: #1f3b2f; --table-foot-border: #142921;
             --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057;
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404;
             --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997);
-            
             --scroll-track: #e9ecef; --scroll-thumb: #ced4da;
-            
-            /* KUTU RENKLERİ */
             --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724;
             --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe;
             --stat-avg-color: #6610f2;
-
-            /* HESAPLAMA SİHİRBAZI RENKLERİ (GÜNDÜZ) */
             --calc-box-bg: #f8f9fa;
             --calc-header-bg: linear-gradient(135deg, #198754, #20c997);
             --calc-header-text: #ffffff;
             --calc-header-shadow: rgba(25, 135, 84, 0.3);
             --placeholder-color: #6c757d;
-
-            /* KADIN/ERKEK MODU ÖZEL RENKLER */
-            --pink-accent: #d63384;
-            --pink-bg-light: #fce4ec;
-            --blue-accent: #0d6efd;
-            --blue-bg-light: #e7f1ff;
-            
-            /* YENİ EKLENEN FADE BOX */
+            --pink-accent: #d63384; --pink-bg-light: #fce4ec;
+            --blue-accent: #0d6efd; --blue-bg-light: #e7f1ff;
             --fade-box-bg: rgba(255, 255, 255, 0.6);
             --fade-box-border: rgba(0,0,0,0.05);
             --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            
-            /* HESAPLAMA KARTLARI */
-            --calc-item-bg: #ffffff;
-            --calc-item-border: #e9ecef;
-            
-            /* USER INFO BOX */
+            --calc-item-bg: #ffffff; --calc-item-border: #e9ecef;
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca);
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864);
             --user-box-text: #ffffff;
@@ -82,218 +60,74 @@
             --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: #0f5132; 
             --table-head: #0f5132; --table-row-bg: #2d2d2d; --input-bg: #3a3a3a; --input-text: #ffffff; 
             --border-color: #444; --modal-bg: #2d2d2d;
-            
-            /* RENKLER (Gece) */
-            --col-namaz-bg: #1e3b2e; 
-            --col-namaz-text: #e0e0e0;
-            --table-foot-bg: #0b1a15; 
-            --table-foot-border: #050d0a;
-            
+            --col-namaz-bg: #1e3b2e; --col-namaz-text: #e0e0e0;
+            --table-foot-bg: #0b1a15; --table-foot-border: #050d0a;
             --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da;
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107;
             --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43);
-            
             --scroll-track: #2d2d2d; --scroll-thumb: #555;
-            
             --box-target-bg: #0f2e1c; --box-target-border: #146c43; --box-target-text: #75b798;
             --box-add-bg: #052c65; --box-add-border: #084298;
             --stat-avg-color: #d63384; 
-
-            /* HESAPLAMA SİHİRBAZI RENKLERİ (GECE) */
             --calc-box-bg: #2d2d2d;
             --calc-header-bg: linear-gradient(135deg, #0f5132, #146c43);
             --calc-header-text: #e0e0e0;
             --calc-header-shadow: rgba(0, 0, 0, 0.5);
             --placeholder-color: #bbbbbb;
-            
-            --pink-bg-light: #4a1b2d;
-            --blue-bg-light: #0d2b4a;
-            
+            --pink-bg-light: #4a1b2d; --blue-bg-light: #0d2b4a;
             --fade-box-bg: rgba(255, 255, 255, 0.05);
             --fade-box-border: rgba(255,255,255,0.05);
             --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            
-            --calc-item-bg: #262626;
-            --calc-item-border: #333;
-
-             /* USER INFO BOX DARK */
+            --calc-item-bg: #262626; --calc-item-border: #333;
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c);
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b);
         }
-        
         body.dark-mode .text-muted { color: #adb5bd !important; }
-        
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
 
-        /* --- LOADING --- */
-        #loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-color); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease, visibility 0.5s;
-        }
-        .spinner {
-            width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2);
-            border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite;
-        }
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2); border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* --- SIDEBAR --- */
         .wrapper { display: flex; width: 100%; }
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
-
-        @media (min-width: 769px) {
-            #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; }
-            #sidebar.active { margin-left: -260px; }
-            #overlay { display: none !important; }
-            #content { width: calc(100% - 260px); margin-left: 0; }
-        }
+        @media (min-width: 769px) { #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; } #sidebar.active { margin-left: -260px; } #overlay { display: none !important; } #content { width: calc(100% - 260px); margin-left: 0; } }
         @media (max-width: 768px) { #content { width: 100%; } }
-
         #sidebar ul li { padding: 15px; cursor: pointer; border-left: 5px solid transparent; transition: 0.2s; }
         #sidebar ul li:hover { background: rgba(255,255,255,0.1); }
         #sidebar ul li.active { background: rgba(255,255,255,0.2); border-left-color: #fff; font-weight: 600; }
         
-        /* GÜNCELLENEN KULLANICI KUTUSU STİLİ (İsim Sığdırma Çözüldü) */
-        .user-info-box {
-            margin: 10px auto;
-            width: 90%;
-            padding: 15px 10px;
-            border-radius: 12px;
-            color: var(--user-box-text);
-            box-shadow: var(--user-box-shadow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 600;
-            transition: 0.3s;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
+        .user-info-box { margin: 10px auto; width: 90%; padding: 15px 10px; border-radius: 12px; color: var(--user-box-text); box-shadow: var(--user-box-shadow); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; transition: 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .user-info-male { background: var(--user-box-bg-male); }
         .user-info-female { background: var(--user-box-bg-female); }
         .user-info-box i { font-size: 1.5rem; flex-shrink: 0; }
-        .user-info-text { 
-            font-size: 0.9rem; 
-            white-space: normal; /* Alt satıra geçmeye izin ver */
-            word-break: break-word; 
-            text-align: left;
-            line-height: 1.2;
-        }
+        .user-info-text { font-size: 0.9rem; white-space: normal; word-break: break-word; text-align: left; line-height: 1.2; }
 
         #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
-
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- TABLO DÜZENİ --- */
-        .table-responsive { 
-            border-radius: 12px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            margin-bottom: 20px; 
-            overflow-x: auto; 
-            width: 100%; display: block; 
-            transition: opacity 0.3s, filter 0.3s;
-        }
-        
-        .main-table { 
-            color: var(--text-color); font-size: 0.85rem; 
-            width: 100%; 
-            border-collapse: collapse; 
-            min-width: 650px; 
-        }
-        
-        .main-table thead th { 
-            background-color: var(--table-head); color: white; 
-            text-align: center; vertical-align: middle; 
-            padding: 12px 5px; line-height: 1.2; 
-            border: 1px solid var(--border-color); 
-        }
-        
-        .main-table tbody td { 
-            background-color: var(--table-row-bg); 
-            color: var(--text-color); 
-            border: 1px solid var(--border-color); 
-            text-align: center; 
-            vertical-align: middle !important; 
-            padding: 10px 5px; 
-            height: 1px; 
-        }
-        
-        .main-table tfoot td { 
-            background-color: var(--table-foot-bg); 
-            color: white; 
-            font-weight: bold; text-align: center; padding: 10px; 
-            border: 1px solid var(--table-foot-border); vertical-align: middle;
-        }
-        
-        /* KUTULAR VE HİZALAMA */
-        .table-input, .table-value-box { 
-            text-align: center; font-weight: bold; 
-            background-color: var(--input-bg); color: var(--input-text); 
-            border: 1px solid var(--border-color); 
-            width: 100%; 
-            height: 38px;
-            border-radius: 8px; 
-            outline: none; 
-            margin: 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-        
-        .col-namaz { 
-            background-color: var(--col-namaz-bg) !important; 
-            color: var(--col-namaz-text) !important; 
-            font-weight: 600; 
-            text-align: center !important; vertical-align: middle !important; 
-            min-width: 80px; 
-        }
-        
-        /* BUTONLAR */
+        .table-responsive { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; overflow-x: auto; width: 100%; display: block; transition: opacity 0.3s, filter 0.3s; }
+        .main-table { color: var(--text-color); font-size: 0.85rem; width: 100%; border-collapse: collapse; min-width: 650px; }
+        .main-table thead th { background-color: var(--table-head); color: white; text-align: center; vertical-align: middle; padding: 12px 5px; line-height: 1.2; border: 1px solid var(--border-color); }
+        .main-table tbody td { background-color: var(--table-row-bg); color: var(--text-color); border: 1px solid var(--border-color); text-align: center; vertical-align: middle !important; padding: 10px 5px; height: 1px; }
+        .main-table tfoot td { background-color: var(--table-foot-bg); color: white; font-weight: bold; text-align: center; padding: 10px; border: 1px solid var(--table-foot-border); vertical-align: middle; }
+        .table-input, .table-value-box { text-align: center; font-weight: bold; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; height: 38px; border-radius: 8px; outline: none; margin: 0; display: flex; align-items: center; justify-content: center; }
+        .col-namaz { background-color: var(--col-namaz-bg) !important; color: var(--col-namaz-text) !important; font-weight: 600; text-align: center !important; vertical-align: middle !important; min-width: 80px; }
         .col-action { padding: 5px !important; }
-        .action-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px; 
-            height: 38px; 
-            margin: 0;
-        }
-        .btn-action { 
-            width: 38px; height: 38px; 
-            border-radius: 8px; border: none; color: white; font-weight: bold; 
-            cursor: pointer; transition: transform 0.05s; 
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2); font-size: 1.2rem; 
-            margin: 0;
-            display: flex; justify-content: center; align-items: center;
-        }
+        .action-wrapper { display: flex; justify-content: center; align-items: center; gap: 5px; height: 38px; margin: 0; }
+        .btn-action { width: 38px; height: 38px; border-radius: 8px; border: none; color: white; font-weight: bold; cursor: pointer; transition: transform 0.05s; box-shadow: 0 3px 6px rgba(0,0,0,0.2); font-size: 1.2rem; margin: 0; display: flex; justify-content: center; align-items: center; }
         .btn-action:active { transform: scale(0.85); }
         .btn-plus { background-color: #198754; } .btn-minus { background-color: #6c757d; }
 
-        /* --- GÜNCELLENEN PROGRESS BAR YAPISI --- */
-        .progress-container {
-            height: 28px; 
-            display: flex; flex-direction: column; justify-content: flex-end;
-            margin-top: 6px;
-        }
-        .progress { 
-            height: 15px;
-            border-radius: 7px; 
-            background-color: #e9ecef; 
-            width: 100%; 
-        }
-        .progress-text { 
-            font-size: 10px; 
-            margin-top: 4px; 
-            line-height: 1; 
-            font-weight: bold; 
-        }
-
+        .progress-container { height: 28px; display: flex; flex-direction: column; justify-content: flex-end; margin-top: 6px; }
+        .progress { height: 15px; border-radius: 7px; background-color: #e9ecef; width: 100%; }
+        .progress-text { font-size: 10px; margin-top: 4px; line-height: 1; font-weight: bold; }
         .spacer-box { height: 28px; margin-top: 6px; width: 100%; visibility: hidden; }
 
         .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
@@ -305,7 +139,6 @@
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* --- ZİKİR KARTLARI --- */
         .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 10px 0; line-height: 1.3; }
         body.dark-mode .arabic-text { color: #20c997; }
@@ -313,17 +146,14 @@
         .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; }
         .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.05s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
         .zikr-btn:active { transform: scale(0.9); }
-        
         .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
         .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
         .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
         
-        /* HEDEF KUTUSU */
         .tesbihat-target-box { background: var(--box-target-bg); border: 1px solid var(--box-target-border); border-radius: 25px; padding: 8px 25px; display: inline-flex; align-items: center; gap: 15px; margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); min-width: 150px; justify-content: space-between; }
         .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 1px; color: var(--box-target-text); }
         .tesbihat-target-input { border: none; background: transparent; width: 90px; text-align: center; font-weight: bold; font-size: 1.2rem; color: var(--text-color); outline: none; }
 
-        /* MANUEL EKLEME KUTUSU */
         .manual-zikr-container { position: relative; background-color: var(--box-add-bg); border: 1px solid var(--box-add-border); border-radius: 50px; padding: 4px 5px 4px 15px; display: flex; align-items: center; justify-content: space-between; width: 45%; min-width: 130px; margin: 15px auto 0 auto; box-shadow: 0 3px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
         .manual-zikr-container:focus-within { transform: scale(1.02); }
         .manual-zikr-input-clean { border: none; background: transparent; font-weight: bold; color: var(--text-color); width: 100%; outline: none; font-size: 0.95rem; text-align: center; }
@@ -332,7 +162,6 @@
         .btn-add-clean:hover { background: #0b5ed7; }
         body.dark-mode .btn-add-clean { background: #3d8bfd; color: #121212; }
 
-        /* --- HESAPLAMA SİHİRBAZI --- */
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
@@ -342,42 +171,18 @@
         .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
         .date-input::placeholder { color: var(--placeholder-color); opacity: 1; }
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; border-radius: 8px; }
+        .calc-group-box { background: var(--calc-item-bg); border: 1px solid var(--calc-item-border); border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
 
-        /* HESAPLAMA YENİ KUTU STİLİ */
-        .calc-group-box {
-            background: var(--calc-item-bg);
-            border: 1px solid var(--calc-item-border);
-            border-radius: 12px;
-            padding: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        /* --- YEDEKLEME & AYARLAR --- */
         .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
         .settings-card:hover { transform: translateY(-3px); }
         .settings-icon { font-size: 2rem; margin-bottom: 10px; color: #198754; }
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
-
-        /* GENDER SETTINGS STYLES */
-        .settings-gender-male {
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            border: 1px solid #90caf9;
-            color: #0d47a1;
-        }
-        .settings-gender-female {
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-            border: 1px solid #f48fb1;
-            color: #880e4f;
-        }
+        .settings-gender-male { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #90caf9; color: #0d47a1; }
+        .settings-gender-female { background: linear-gradient(135deg, #fce4ec, #f8bbd0); border: 1px solid #f48fb1; color: #880e4f; }
         body.dark-mode .settings-gender-male { background: linear-gradient(135deg, #0d2b4a, #1a3e66); border-color: #1a3e66; color: #bbdefb; }
         body.dark-mode .settings-gender-female { background: linear-gradient(135deg, #4a1b2d, #661a36); border-color: #661a36; color: #f8bbd0; }
 
-        /* --- İSTATİSTİK KARTLARI --- */
         .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
         .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
         .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
@@ -396,7 +201,6 @@
         .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
         .analysis-value { font-size: 1.1rem; font-weight: bold; }
 
-        /* --- TAHMİN KARTI --- */
         .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .prediction-icon { font-size: 2.5rem; color: #198754; margin-bottom: 10px; }
         .prediction-date { font-size: 1.5rem; font-weight: bold; color: #198754; margin: 5px 0; }
@@ -405,7 +209,6 @@
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
 
-        /* DİĞER */
         .history-row-up td { background-color: #d1e7dd !important; color: #0f5132 !important; }
         .history-row-down td { background-color: #f8d7da !important; color: #842029 !important; }
         body.dark-mode .history-row-up td { background-color: #052c18 !important; color: #75b798 !important; }
@@ -419,7 +222,6 @@
         .badge-desc { font-size: 0.6rem; color: var(--text-color); margin-top: 3px; opacity: 0.7; }
         body.dark-mode .badge-title { color: #20c997; }
 
-        /* MODAL */
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -432,145 +234,42 @@
         .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
 
-        /* --- CİNSİYET SEÇİM EKRANI --- */
         #gender-selection-modal { display: none; z-index: 2005; }
         .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
         .gender-option:hover { border-color: #198754; }
-        
-        /* Cinsiyet Seçili Durumları */
         .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
         .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
         
-        /* --- MUAYYEN GÜN MODU STİLLERİ --- */
-        .menstrual-toggle-container { 
-            margin-bottom: 15px; padding: 15px 20px; 
-            background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); 
-            border-radius: 50px; border: 1px solid var(--pink-accent); 
-            display: flex; align-items: center; justify-content: space-between; 
-            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15);
-        }
+        .menstrual-toggle-container { margin-bottom: 15px; padding: 15px 20px; background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); border-radius: 50px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15); }
         body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
-
         .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
         
         .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
         .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
 
-        /* YENİ FADE BOX (Tarih ve Süre İçin) */
-        .fade-box {
-            background: var(--fade-box-bg);
-            border: 1px solid var(--fade-box-border);
-            border-radius: 12px;
-            padding: 8px 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-            box-shadow: var(--fade-box-shadow);
-            height: 100%;
-            min-height: 70px;
-        }
-        .fade-box input {
-            background: transparent; border: none; text-align: center;
-            font-weight: bold; color: var(--text-color); width: 100%;
-            outline: none; padding: 0; margin: 0;
-        }
+        .fade-box { background: var(--fade-box-bg); border: 1px solid var(--fade-box-border); border-radius: 12px; padding: 8px 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); box-shadow: var(--fade-box-shadow); height: 100%; min-height: 70px; }
+        .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; }
         .fade-box label { margin-bottom: 2px; opacity: 0.7; }
 
-        /* CUSTOM ALERT BOX (Hesaplama Sihirbazı) */
-        .custom-alert-box {
-            background: var(--card-bg);
-            border-left: 5px solid #17a2b8;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
+        .custom-alert-box { background: var(--card-bg); border-left: 5px solid #17a2b8; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 20px; font-size: 0.9rem; }
         .custom-alert-box strong { color: #17a2b8; }
-        
-        /* Neutral/Info Tip Box */
-        .custom-alert-tip {
-            border-left-color: #ffc107;
-            background: #fff9db;
-            color: #856404;
-        }
+        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; }
         .custom-alert-tip strong { color: #856404; }
         body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
         body.dark-mode .custom-alert-tip strong { color: #ffc107; }
+        .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
 
-        .custom-alert-female {
-            border-left-color: var(--pink-accent);
-            background: var(--pink-bg-light);
-            border: 1px solid var(--pink-accent);
-            border-left-width: 5px;
-        }
+        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
+        .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
+        .stats-tab-btn.active { background-color: #198754; color: white; box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3); }
 
-        /* STATS TABS */
-        .stats-tab-container {
-            display: flex;
-            background: var(--input-bg);
-            padding: 5px;
-            border-radius: 50px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border-color);
-        }
-        .stats-tab-btn {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 10px;
-            border-radius: 50px;
-            font-weight: 600;
-            color: var(--text-color);
-            transition: all 0.3s ease;
-        }
-        .stats-tab-btn.active {
-            background-color: #198754;
-            color: white;
-            box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
-        }
-
-        /* --- TOAST BİLDİRİM STİLLERİ --- */
-        #toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
-        }
-        .custom-toast {
-            pointer-events: auto;
-            min-width: 300px;
-            max-width: 90vw;
-            background: var(--card-bg);
-            color: var(--text-color);
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-left: 5px solid;
-            font-weight: 500;
-        }
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
         @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
-        
-        .toast-success { border-color: #198754; }
-        .toast-success i { color: #198754; font-size: 1.2rem; }
-        
-        .toast-warning { border-color: #ffc107; }
-        .toast-warning i { color: #ffc107; font-size: 1.2rem; }
-
-        .toast-error { border-color: #dc3545; }
-        .toast-error i { color: #dc3545; font-size: 1.2rem; }
+        .toast-success { border-color: #198754; } .toast-success i { color: #198754; font-size: 1.2rem; }
+        .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
+        .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { 
@@ -639,13 +338,10 @@
     <nav id="sidebar">
         <div class="p-4 text-center" style="background: rgba(0,0,0,0.1);">
             <h4 class="fw-bold"><i class="fas fa-kaaba me-2"></i>Takip</h4>
-            
-            <!-- GÜNCELLENEN KULLANICI KUTUSU -->
             <div id="sidebarUserInfoBox" class="user-info-box">
                 <i class="fas fa-user-circle"></i>
                 <div id="sidebarUserInfo" class="user-info-text">Kullanıcı</div>
             </div>
-
         </div>
         <ul class="list-unstyled components p-2">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
@@ -662,7 +358,6 @@
         <!-- DASHBOARD -->
         <div id="section-dashboard" style="display: block;">
             
-            <!-- KADIN KULLANICILAR İÇİN MUAYYEN GÜN TOGGLE -->
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                 <div class="menstrual-label">
                     <i class="fas fa-flower"></i> Muayyen Günümdeyim
@@ -674,12 +369,10 @@
 
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
-                    <!-- PAUSED STATE BADGE -->
                     <div id="pausedBadge" class="paused-badge text-center w-100">
                         <i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)
                     </div>
 
-                    <!-- GÜNLÜK HEDEF -->
                     <div id="goalCard" class="goal-card">
                         <h4>🎯 Günlük Hedef</h4>
                         <div class="goal-content">
@@ -699,7 +392,6 @@
                         </div>
                     </div>
 
-                    <!-- HAFTALIK MEYDAN OKUMA -->
                     <div id="weeklyCard" class="goal-card" style="background: linear-gradient(135deg, #0d6efd, #0dcaf0); margin-top: 20px;">
                         <h4>🏆 Haftalık Meydan Okuma</h4>
                         <div class="goal-content">
@@ -749,7 +441,6 @@
                 </table>
             </div>
 
-            <!-- TAHMİNİ BİTİŞ KARTI -->
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="prediction-card h-100">
@@ -780,7 +471,6 @@
         <div id="section-stats" style="display: none;">
             <h3 class="app-header">İstatistikler</h3>
             
-            <!-- STATS TABS NAVIGATION -->
             <div class="stats-tab-container">
                 <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
                 <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
@@ -789,37 +479,13 @@
             <!-- TAB 1: ANALİZ -->
             <div id="stats-view-analysis">
                 <div class="scrolling-wrapper mb-4">
-                    <!-- Günlük Hedefteki Sayı ile Senkronize -->
-                    <div class="stat-card-scroll">
-                        <div class="stat-number text-primary" id="statToday">0</div>
-                        <div class="stat-label">Bugün</div>
-                    </div>
-                    <!-- Haftalık Meydan Okuma ile Senkronize -->
-                    <div class="stat-card-scroll">
-                        <div class="stat-number text-success" id="statWeekly">0</div>
-                        <div class="stat-label">Bu Hafta</div>
-                    </div>
-                    <!-- Ay Takvimine Göre -->
-                    <div class="stat-card-scroll">
-                        <div class="stat-number text-info" id="statMonthly">0</div>
-                        <div class="stat-label">Bu Ay</div>
-                    </div>
-                    <div class="stat-card-scroll">
-                        <div class="stat-number text-warning" id="stat3Months">0</div>
-                        <div class="stat-label">Son 3 Ay</div>
-                    </div>
-                    <div class="stat-card-scroll">
-                        <div class="stat-number text-danger" id="stat6Months">0</div>
-                        <div class="stat-label">Son 6 Ay</div>
-                    </div>
-                    <div class="stat-card-scroll">
-                        <div class="stat-number text-secondary" id="statYearly">0</div>
-                        <div class="stat-label">Son 1 Yıl</div>
-                    </div>
-                     <div class="stat-card-scroll">
-                        <div class="stat-number" id="statAverage">0</div>
-                        <div class="stat-label">Günlük Ort.</div>
-                    </div>
+                    <div class="stat-card-scroll"><div class="stat-number text-primary" id="statToday">0</div><div class="stat-label">Bugün</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-success" id="statWeekly">0</div><div class="stat-label">Bu Hafta</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-info" id="statMonthly">0</div><div class="stat-label">Bu Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-warning" id="stat3Months">0</div><div class="stat-label">Son 3 Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-danger" id="stat6Months">0</div><div class="stat-label">Son 6 Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-secondary" id="statYearly">0</div><div class="stat-label">Son 1 Yıl</div></div>
+                     <div class="stat-card-scroll"><div class="stat-number" id="statAverage">0</div><div class="stat-label">Günlük Ort.</div></div>
                 </div>
                 <div class="analysis-box">
                     <div class="analysis-row">
@@ -852,28 +518,13 @@
             <!-- TAB 2: SON DEĞİŞİKLİKLER (History) -->
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
-                
-                <!-- TARİH FİLTRESİ - MOBİL UYUMLU DÜZELTME -->
                 <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
-                     <!-- Fade-box yerine daha belirgin, solid arka planlı bir yapı kullanıldı -->
-                     <div class="d-flex flex-row align-items-center gap-2 px-3 py-2" 
-                          style="background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                        
+                     <div class="d-flex flex-row align-items-center gap-2 px-3 py-2" style="background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                         <label for="historyFilterDate" class="small text-muted fw-bold mb-0 me-1">Tarih:</label>
-                        
-                        <input type="date" id="historyFilterDate" 
-                               class="form-control form-control-sm text-center border-0 p-0" 
-                               style="background: transparent; color: var(--text-color); font-weight: bold; max-width: 130px; box-shadow: none;" 
-                               onchange="filterHistoryByDate()">
-                        
-                        <button class="btn btn-secondary btn-sm rounded-circle d-flex justify-content-center align-items-center" 
-                                style="width: 24px; height: 24px; padding: 0;" 
-                                onclick="clearHistoryFilter()">
-                            <i class="fas fa-times" style="font-size: 0.7rem;"></i>
-                        </button>
+                        <input type="date" id="historyFilterDate" class="form-control form-control-sm text-center border-0 p-0" style="background: transparent; color: var(--text-color); font-weight: bold; max-width: 130px; box-shadow: none;" onchange="filterHistoryByDate()">
+                        <button class="btn btn-secondary btn-sm rounded-circle d-flex justify-content-center align-items-center" style="width: 24px; height: 24px; padding: 0;" onclick="clearHistoryFilter()"><i class="fas fa-times" style="font-size: 0.7rem;"></i></button>
                      </div>
                 </div>
-
                 <div class="table-responsive">
                     <table class="table table-bordered text-center" style="font-size: 0.8rem;">
                         <thead><tr class="table-light"><th>Namaz</th><th>Önceki</th><th>Son</th><th>Tarih ve Saat</th></tr></thead>
@@ -881,7 +532,6 @@
                     </table>
                 </div>
             </div>
-
         </div>
 
         <!-- TESBİHAT -->
@@ -896,8 +546,6 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="calculator-card">
-                        
-                        <!-- KADIN MODU İÇİN EK BİLGİ -->
                         <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="fas fa-female fa-lg me-2 text-danger"></i>
@@ -908,13 +556,10 @@
                                 <input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)">
                             </div>
                         </div>
-
-                        <!-- Neutral/Orange Tip Box -->
                         <div class="custom-alert-box custom-alert-tip">
                             <i class="fas fa-lightbulb me-2"></i>
                             Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.
                         </div>
-
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
                             <button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()">
                                 <i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala
@@ -937,8 +582,6 @@
         <div id="section-settings" style="display: none;">
             <h3 class="app-header">Yedekleme ve Ayarlar</h3>
             <div class="row justify-content-center g-4">
-                
-                <!-- Cinsiyet Değiştirme -->
                 <div class="col-12">
                      <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
                          <div class="d-flex align-items-center">
@@ -951,7 +594,6 @@
                          <button class="btn btn-light btn-sm fw-bold shadow-sm" onclick="openGenderModal(true)">Değiştir</button>
                      </div>
                 </div>
-
                 <div class="col-md-6 col-lg-4">
                     <div class="settings-card text-center h-100">
                         <i class="fas fa-download settings-icon"></i>
@@ -1016,11 +658,9 @@
         const loader = document.getElementById('loading-overlay');
         if (loader) { loader.style.opacity = '0'; setTimeout(() => { loader.style.visibility = 'hidden'; }, 500); }
     }
-    // Emniyet sübapı: Eğer 5 sn içinde yüklenmezse loader'ı kapat
     setTimeout(() => { hideLoader(); }, 5000); 
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
-    // ÖNEMLİ: Offline açılabilmesi için start_url './index.html' olarak ayarlandı
     const manifestBlob = new Blob([JSON.stringify({ 
         "name": "İbadet Takip v17", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
@@ -1028,7 +668,6 @@
     })], {type: 'application/json'});
     document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
 
-    // --- FIREBASE AYARLARI ---
     const firebaseConfig = {
         apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
         authDomain: "kazanamazi-ser.firebaseapp.com",
@@ -1039,14 +678,12 @@
         appId: "1:951730390034:web:639f96ee859c10b0e944cb",
         measurementId: "G-5WGCDTL1RX"
     };
-    // Firebase başlat
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
     const provider = new firebase.auth.GoogleAuthProvider();
     let dbRef = null;
 
-    // --- VERİ MODELİ ---
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     function getIsoDate(date) { 
         const y = date.getFullYear();
@@ -1081,80 +718,72 @@
         ],
         earnedBadges: [], history: []
     };
+    
+    // --- BURASI KRİTİK: ÖNCE YEREL VERİYİ YÜKLE ---
     let localData = JSON.parse(JSON.stringify(defaultData));
     let chartCompletion = null, barChart = null, lineChart = null;
 
-    // --- KRİTİK OFFLINE BAŞLANGIÇ KONTROLÜ ---
-    // Sayfa yüklenir yüklenmez çalışır.
-    function initApp() {
-        const offlineData = localStorage.getItem('offlineBackup');
-        const isOffline = !navigator.onLine;
+    const savedData = localStorage.getItem('offlineBackup');
+    if (savedData) {
+        try {
+            localData = JSON.parse(savedData);
+            // Veri varsa hemen ekrana bas (Login'i geçip)
+            ensureDataStructure();
+            // Kullanıcı girişi beklemeden UI hazırla (Offline ise direkt gösterir)
+        } catch(e) { console.error("Parse error", e); }
+    }
 
-        // EĞER İNTERNET YOKSA VE YEDEK VARSA -> LOGİN'İ ATLA
-        if (isOffline && offlineData) {
-            console.log("Offline mod başlatılıyor...");
-            try {
-                localData = JSON.parse(offlineData);
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-wrapper').style.display = 'flex';
-                document.getElementById('sidebarUserInfo').innerText = "Çevrimdışı Mod";
-                
-                ensureDataStructure();
-                if (localData.gender) applyGenderSettings();
-                renderCalculatorRows();
-                renderApp();
-                renderStats();
-                showSection('dashboard');
-                hideLoader();
-                showToast("Çevrimdışı moddasınız. Veriler cihazdan yüklendi.", "warning");
-            } catch(e) { 
-                console.error("Offline veri hatası", e); 
-            }
+    // --- UYGULAMAYI BAŞLATMA MANTIĞI ---
+    function initApp() {
+        // Eğer yerel veri varsa, offline durumunda bile login ekranını gizleyip uygulamayı gösterelim
+        if (savedData) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+            if (localData.gender) applyGenderSettings();
+            renderCalculatorRows();
+            renderApp();
+            renderStats();
+            showSection('dashboard');
+            hideLoader();
         }
-        
-        // EĞER İNTERNET VARSA -> FIREBASE DİNLE
-        // Offline olsak bile listener'ı başlatırız, internet gelince devreye girer.
+
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // Giriş başarılı (veya session cache'den geldi)
+                // Giriş yapıldı (Online veya Cache)
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('app-wrapper').style.display = 'flex';
                 document.getElementById('sidebarUserInfo').innerText = user.displayName || "Kullanıcı";
                 
-                // Önce local veriyi göster (Hız için)
-                if(offlineData && !isOffline) { 
-                    try {
-                        localData = JSON.parse(offlineData);
-                        renderApp();
-                    } catch(e){}
-                }
-
-                // Firebase'den güncel veriyi çek
                 dbRef = db.ref('users/' + user.uid + '/namazData');
                 dbRef.on('value', (s) => {
                     const d = s.val();
                     if (d) {
                         localData = d;
                         localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                    } else if(!offlineData) {
-                        localData = JSON.parse(JSON.stringify(defaultData));
+                    } else {
+                        // Eğer DB boşsa ve elimizde yerel veri de yoksa (Yeni Kullanıcı)
+                        if(!savedData) localData = JSON.parse(JSON.stringify(defaultData));
                     }
+                    
                     ensureDataStructure();
                     checkDailyReset();
+                    // Eğer yeni kullanıcıysa veya veri yoksa kaydet
+                    if (!d && !savedData) saveToCloud();
+                    
                     if (!localData.gender) {
                         if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
                     } else {
                         applyGenderSettings();
                     }
+
                     renderCalculatorRows();
                     renderApp();
                     renderStats();
                     hideLoader();
                 });
             } else {
-                // Kullanıcı giriş yapmamış VE internet var
-                // VEYA internet yok ama offline veri de yok
-                if(!isOffline || !offlineData) {
+                // Kullanıcı yok ve yerel veri de yoksa login ekranı göster
+                if(!savedData) {
                     document.getElementById('loading-overlay').style.display = 'none';
                     document.getElementById('login-screen').style.display = 'flex';
                     document.getElementById('app-wrapper').style.display = 'none';
@@ -1164,13 +793,12 @@
         });
     }
 
-    // Uygulamayı başlat
     initApp();
 
     function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
     function logout() { 
         auth.signOut().then(() => {
-            localStorage.removeItem('offlineBackup'); // Çıkışta yedeği sil
+            localStorage.removeItem('offlineBackup'); 
             window.location.reload(); 
         });
     }
@@ -1277,25 +905,20 @@
             if(dbRef) dbRef.child('logs').update({ [todayISO]: todayTotal });
         }
         recalculateStreak();
-        
         const dateInput = document.getElementById('startDate');
         if(dateInput.type !== 'date') { dateInput.value = formatDateTR(localData.startDate); } else { dateInput.value = localData.startDate; }
-        
         const isPaused = localData.gender === 'female' && localData.isMenstrualState;
         const pausedBadge = document.getElementById('pausedBadge');
         const goalCard = document.getElementById('goalCard');
         const weeklyCard = document.getElementById('weeklyCard');
         const mainTable = document.getElementById('mainTableWrapper');
-
         if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); mainTable.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); mainTable.classList.remove('paused-mode-overlay'); }
-
         document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
         let p = (todayTotal / localData.daily.target) * 100; if(p>100) p=100;
         document.getElementById('dailyProgressBar').style.width = p + "%";
         if(todayTotal >= localData.daily.target) { document.getElementById('goalCard').classList.add('success-mode'); document.getElementById('goalSuccessMessage').style.display='block'; } else { document.getElementById('goalCard').classList.remove('success-mode'); document.getElementById('goalSuccessMessage').style.display='none'; }
         document.getElementById('streakValue').innerText = localData.streak.current;
-
         const weeklyTotal = getWeeklyProgress();
         const weeklyTarget = localData.weeklyTarget || 50;
         document.getElementById('weeklyCountDisplay').innerText = weeklyTotal;
@@ -1304,7 +927,6 @@
         document.getElementById('weeklyProgressBar').style.width = wp + "%";
         const wCard = document.getElementById('weeklyCard'); const wMsg = document.getElementById('weeklySuccessMessage');
         if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
-
         const tbody = document.getElementById('prayerTableBody'); const tfoot = document.getElementById('prayerTableFoot');
         tbody.innerHTML = ""; let tt=0, td=0, tr=0; const days = getElapsedDays(); document.getElementById('elapsedDays').value = days; 
         localData.counts.forEach((item, i) => { tt += parseInt(item.target); td += parseInt(item.done); const rem = item.target - item.done; tr += rem; const avg = (item.done / days).toFixed(2); const estText = formatTime(avg > 0 ? Math.ceil(rem/avg) : 0); let pp = item.target > 0 ? (item.done / item.target) * 100 : 0; tbody.innerHTML += `<tr><td class="col-namaz">${item.name}</td><td class="col-input-area"><input type="number" class="table-input" value="${item.target}" onchange="window.upT(${i},this.value)"><div class="spacer-box"></div></td><td class="col-input-area"><input type="number" class="table-input" value="${item.done}" onchange="window.upD(${i},this.value)"><div class="progress-container"><div class="progress"><div class="progress-bar bg-success" style="width: ${pp}%"></div></div><div class="progress-text text-center">%${pp.toFixed(1)}</div></div></td><td class="col-action"><div class="action-wrapper"><button class="btn-action btn-plus" onclick="window.chC(${i},1)">+</button><button class="btn-action btn-minus" onclick="window.chC(${i},-1)">-</button></div><div class="spacer-box"></div></td><td><div class="table-value-box">${avg}</div><div class="spacer-box"></div></td><td><div class="table-value-box">${estText}</div><div class="spacer-box"></div></td></tr>`; });
@@ -1328,46 +950,20 @@
     function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } c.innerHTML += `<div class="badge-item"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
     
     function renderHistory(filterDate = null) { 
-        const hb = document.getElementById('historyTableBody'); 
-        hb.innerHTML = ""; 
-        if (!localData.history || localData.history.length === 0) {
-            hb.innerHTML = '<tr><td colspan="4" class="text-muted small py-3">Henüz işlem geçmişi yok.</td></tr>';
-            return;
-        }
+        const hb = document.getElementById('historyTableBody'); hb.innerHTML = ""; 
+        if (!localData.history || localData.history.length === 0) { hb.innerHTML = '<tr><td colspan="4" class="text-muted small py-3">Henüz işlem geçmişi yok.</td></tr>'; return; }
         let displayData = [];
         if (filterDate) {
             const parts = filterDate.split('-'); 
-            if(parts.length === 3) {
-                const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
-                displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
-            }
-        } else {
-            displayData = localData.history.slice(0, 50);
-        }
-        if(displayData.length === 0) {
-             hb.innerHTML = '<tr><td colspan="4" class="text-muted small py-3">Bu tarihte işlem bulunamadı.</td></tr>';
-             return;
-        }
-        displayData.forEach(r => { 
-            const o = parseFloat(r.oldVal); 
-            const n = parseFloat(r.newVal); 
-            let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); 
-            hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td class="small">${r.time}</td></tr>`; 
-        }); 
-        if(!filterDate && localData.history.length > 50) {
-             hb.innerHTML += '<tr><td colspan="4" class="text-muted small py-2" style="background:#f8f9fa;">Daha eski kayıtlar için tarih filtresini kullanınız...</td></tr>';
-        }
+            if(parts.length === 3) { const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr); }
+        } else { displayData = localData.history.slice(0, 50); }
+        if(displayData.length === 0) { hb.innerHTML = '<tr><td colspan="4" class="text-muted small py-3">Bu tarihte işlem bulunamadı.</td></tr>'; return; }
+        displayData.forEach(r => { const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal); let cls = n > o ? 'history-row-up' : (n < o ? 'history-row-down' : ''); hb.innerHTML += `<tr class="${cls}"><td>${r.namaz}</td><td>${r.oldVal}</td><td>${r.newVal}</td><td class="small">${r.time}</td></tr>`; }); 
+        if(!filterDate && localData.history.length > 50) { hb.innerHTML += '<tr><td colspan="4" class="text-muted small py-2" style="background:#f8f9fa;">Daha eski kayıtlar için tarih filtresini kullanınız...</td></tr>'; }
     }
 
-    window.filterHistoryByDate = function() {
-        const val = document.getElementById('historyFilterDate').value;
-        renderHistory(val);
-    }
-
-    window.clearHistoryFilter = function() {
-        document.getElementById('historyFilterDate').value = "";
-        renderHistory();
-    }
+    window.filterHistoryByDate = function() { const val = document.getElementById('historyFilterDate').value; renderHistory(val); }
+    window.clearHistoryFilter = function() { document.getElementById('historyFilterDate').value = ""; renderHistory(); }
 
     function calculateEstFinish(totalDoneInput, elapsedDaysInput) { const dailyTarget = localData.daily.target || 10; let totalDebt = 0; localData.counts.forEach(c => totalDebt += (c.target - c.done)); const elContainer = document.getElementById('prediction-container'); const elSuccess = document.getElementById('prediction-success'); if (totalDebt <= 0) { elContainer.style.display = 'none'; elSuccess.style.display = 'block'; return; } elContainer.style.display = 'block'; elSuccess.style.display = 'none'; if (dailyTarget > 0) { const daysLeft = Math.ceil(totalDebt / dailyTarget); const today = new Date(); const finishDate = new Date(); finishDate.setDate(today.getDate() + daysLeft); const options = { year: 'numeric', month: 'long', day: 'numeric' }; document.getElementById('estFinishDate').innerText = finishDate.toLocaleDateString('tr-TR', options); document.getElementById('estDaysLeft').innerText = `${daysLeft} Gün Kaldı`; } else { document.getElementById('estFinishDate').innerText = "Belirlenmedi"; document.getElementById('estDaysLeft').innerText = "-"; } const avgDaily = totalDoneInput > 0 ? (totalDoneInput / elapsedDaysInput) : 0; const elDateAvg = document.getElementById('estFinishDateAvg'); const elDaysAvg = document.getElementById('estDaysLeftAvg'); if(avgDaily > 0) { const daysLeftAvg = Math.ceil(totalDebt / avgDaily); const todayAvg = new Date(); const finishDateAvg = new Date(); finishDateAvg.setDate(todayAvg.getDate() + daysLeftAvg); elDateAvg.innerText = finishDateAvg.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }); elDaysAvg.innerText = `(${daysLeftAvg} Gün)`; } else { elDateAvg.innerText = "Veri Yok"; elDaysAvg.innerText = "Henüz kazaya başlanmadı"; } }
     function showModal(title, message, onConfirm) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalMessage').innerText = message; const btnGroup = document.getElementById('modalButtons'); btnGroup.innerHTML = ''; if (onConfirm) { btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`; document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); }; } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; } document.getElementById('customModal').style.display = 'flex'; }
@@ -1384,72 +980,21 @@
         document.getElementById('stats-view-analysis').style.display = 'none';
         document.getElementById('stats-view-history').style.display = 'none';
         document.getElementById('stats-view-' + tab).style.display = 'block';
-        if(tab === 'history') {
-            renderHistory(document.getElementById('historyFilterDate').value);
-        }
+        if(tab === 'history') { renderHistory(document.getElementById('historyFilterDate').value); }
     }
 
     function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
-    
-    function renderStats() { let totalTarget = 0, totalDone = 0; let labels = [], remainingData = [], doneData = []; let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; localData.counts.forEach(c => { totalTarget += c.target; totalDone += c.done; const remaining = Math.max(0, c.target - c.done); labels.push(c.name); remainingData.push(remaining); doneData.push(c.done); if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } if (c.done > maxDone) { maxDone = c.done; bestName = c.name; } }); const periodStats = calculatePeriodStats(); const days = getElapsedDays(); const avg = (totalDone / days).toFixed(2); 
-    
-    const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
-    const weeklyDone = getWeeklyProgress(); 
-    
-    document.getElementById('statToday').innerText = dailyDone; 
-    document.getElementById('statWeekly').innerText = weeklyDone; 
-    document.getElementById('statMonthly').innerText = periodStats.monthly; 
-    document.getElementById('stat3Months').innerText = periodStats.months3;
-    document.getElementById('stat6Months').innerText = periodStats.months6;
-    document.getElementById('statYearly').innerText = periodStats.yearly;
-    document.getElementById('statAverage').innerText = avg;
-    
-    document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
-    
-    renderHistory();
-    }
+    function renderStats() { let totalTarget = 0, totalDone = 0; let labels = [], remainingData = [], doneData = []; let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; localData.counts.forEach(c => { totalTarget += c.target; totalDone += c.done; const remaining = Math.max(0, c.target - c.done); labels.push(c.name); remainingData.push(remaining); doneData.push(c.done); if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } if (c.done > maxDone) { maxDone = c.done; bestName = c.name; } }); const periodStats = calculatePeriodStats(); const days = getElapsedDays(); const avg = (totalDone / days).toFixed(2); const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); const weeklyDone = getWeeklyProgress(); document.getElementById('statToday').innerText = dailyDone; document.getElementById('statWeekly').innerText = weeklyDone; document.getElementById('statMonthly').innerText = periodStats.monthly; document.getElementById('stat3Months').innerText = periodStats.months3; document.getElementById('stat6Months').innerText = periodStats.months6; document.getElementById('statYearly').innerText = periodStats.yearly; document.getElementById('statAverage').innerText = avg; document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); renderHistory(); }
     
     function calculatePeriodStats() { 
         if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [] }; 
         const today = new Date(); 
-        
         const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        let monthlyTotal = 0;
-
-        let weeklyTotal = 0, m3 = 0, m6 = 0, y1 = 0; 
-        let last7Data = [], last7Labels = []; 
-        let last30Data = [], last30Labels = []; 
-        
-        for(let i=6; i>=0; i--) { 
-            const d = new Date(); 
-            d.setDate(today.getDate() - i); 
-            const iso = getIsoDate(d); 
-            const val = localData.logs[iso] || 0; 
-            last7Data.push(val); 
-            last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'})); 
-        } 
-        for(let i=29; i>=0; i--) { 
-            const d = new Date(); 
-            d.setDate(today.getDate() - i); 
-            const iso = getIsoDate(d); 
-            const val = localData.logs[iso] || 0; 
-            last30Data.push(val); 
-            last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
-        } 
-        
-        const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3); 
-        const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6); 
-        const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1); 
-        
-        Object.keys(localData.logs).forEach(dateKey => { 
-            const d = new Date(dateKey); 
-            const val = localData.logs[dateKey]; 
-            if(d >= currentMonthStart) monthlyTotal += val;
-            if(d >= threeMonthsAgo) m3 += val; 
-            if(d >= sixMonthsAgo) m6 += val; 
-            if(d >= oneYearAgo) y1 += val; 
-        }); 
-        
+        let monthlyTotal = 0; let weeklyTotal = 0, m3 = 0, m6 = 0, y1 = 0; let last7Data = [], last7Labels = []; let last30Data = [], last30Labels = []; 
+        for(let i=6; i>=0; i--) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); const val = localData.logs[iso] || 0; last7Data.push(val); last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'})); } 
+        for(let i=29; i>=0; i--) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); const val = localData.logs[iso] || 0; last30Data.push(val); last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); } 
+        const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3); const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6); const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1); 
+        Object.keys(localData.logs).forEach(dateKey => { const d = new Date(dateKey); const val = localData.logs[dateKey]; if(d >= currentMonthStart) monthlyTotal += val; if(d >= threeMonthsAgo) m3 += val; if(d >= sixMonthsAgo) m6 += val; if(d >= oneYearAgo) y1 += val; }); 
         return { monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels }; 
     }
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
@@ -1458,27 +1003,10 @@
     window.downloadDataAsCSV = function() { let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; localData.counts.forEach(c => { csv += `${c.name};${c.target};${c.done}\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kaza_takip.csv"; link.click(); };
     window.downloadBackupJSON = function() { const jsonStr = JSON.stringify(localData); const blob = new Blob([jsonStr], { type: 'application/json' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "ibadet_yedek_" + new Date().toISOString().split('T')[0] + ".json"; link.click(); };
     window.importBackupJSON = function(input) { 
-        const file = input.files[0]; 
-        if (!file) return; 
-        const reader = new FileReader(); 
+        const file = input.files[0]; if (!file) return; const reader = new FileReader(); 
         reader.onload = function(e) { 
-            try { 
-                const newData = JSON.parse(e.target.result); 
-                if (newData.counts && newData.tesbihat) { 
-                    localData = newData; 
-                    saveToCloud(); 
-                    renderApp(); 
-                    renderTesbihat(); 
-                    showToast("Yedek dosyası başarıyla yüklendi! 🚀", "success");
-                } else { 
-                    showToast("Geçersiz yedek dosyası.", "error"); 
-                } 
-            } catch (err) { 
-                showToast("Dosya okunamadı: " + err, "error"); 
-            } 
-        }; 
-        reader.readAsText(file); 
-        input.value = ""; 
+            try { const newData = JSON.parse(e.target.result); if (newData.counts && newData.tesbihat) { localData = newData; saveToCloud(); renderApp(); renderTesbihat(); showToast("Yedek dosyası başarıyla yüklendi! 🚀", "success"); } else { showToast("Geçersiz yedek dosyası.", "error"); } } catch (err) { showToast("Dosya okunamadı: " + err, "error"); } 
+        }; reader.readAsText(file); input.value = ""; 
     };
     window.toggleDarkMode = function() { document.body.classList.toggle('dark-mode'); const isDark = document.body.classList.contains('dark-mode'); localStorage.setItem('theme', isDark ? 'dark' : 'light'); document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu"; renderApp(); };
     if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
@@ -1487,53 +1015,28 @@
     function checkDailyReset() { const t = getCurrentDateSimple(); if (localData.daily.date !== t) { localData.daily.date = t; localData.daily.counts = [0,0,0,0,0]; saveToCloud(); } }
     function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
-    function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); 
-    saveToCloud(); }
+    function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); saveToCloud(); }
     
     function forceResetData() { 
-        const savedGender = localData.gender;
-        const savedMenstrualDays = localData.menstrualDaysPerMonth;
-        const savedMenstrualState = localData.isMenstrualState;
+        const savedGender = localData.gender; const savedMenstrualDays = localData.menstrualDaysPerMonth; const savedMenstrualState = localData.isMenstrualState;
         localData = JSON.parse(JSON.stringify(defaultData)); 
-        if(savedGender) {
-            localData.gender = savedGender;
-            localData.menstrualDaysPerMonth = savedMenstrualDays;
-            localData.isMenstrualState = savedMenstrualState;
-        }
-        saveToCloud(); 
-        renderApp();
-        renderStats();
-        renderCalculatorRows();
-        applyGenderSettings(); 
-        showToast("Verileriniz başarıyla sıfırlandı ve yenilendi! ✨", "success");
+        if(savedGender) { localData.gender = savedGender; localData.menstrualDaysPerMonth = savedMenstrualDays; localData.isMenstrualState = savedMenstrualState; }
+        saveToCloud(); renderApp(); renderStats(); renderCalculatorRows(); applyGenderSettings(); showToast("Verileriniz başarıyla sıfırlandı ve yenilendi! ✨", "success");
     }
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    // --- SERVICE WORKER KAYDI (OFFLINE MOD İÇİN) ---
+    // --- SERVICE WORKER KAYDI ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
-                .then((registration) => {
-                    console.log('Service Worker başarıyla kaydedildi:', registration.scope);
-                })
-                .catch((error) => {
-                    console.log('Service Worker kaydı başarısız:', error);
-                });
+                .then((registration) => { console.log('Service Worker kayıtlı:', registration.scope); })
+                .catch((error) => { console.log('Service Worker hatası:', error); });
         });
     }
 
-    // Kullanıcı offline olduğunda uyarı verelim
-    window.addEventListener('offline', () => {
-        showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "warning");
-        document.body.style.filter = "grayscale(100%)";
-    });
-
-    window.addEventListener('online', () => {
-        showToast("Tekrar çevrimiçi oldunuz!", "success");
-        document.body.style.filter = "none";
-        // Tekrar online olunca auth listener zaten devreye girer
-    });
+    window.addEventListener('offline', () => { showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "warning"); document.body.style.filter = "grayscale(100%)"; });
+    window.addEventListener('online', () => { showToast("Tekrar çevrimiçi oldunuz!", "success"); document.body.style.filter = "none"; });
 </script>
 </body>
 </html>
