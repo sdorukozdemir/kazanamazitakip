@@ -32,6 +32,10 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        /* Layout Sabitleme (Zıplamayı Önler) */
+        .chart-container { min-height: 300px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        
         .wrapper { display: flex; width: 100%; }
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
@@ -66,9 +70,8 @@
         .progress { height: 15px; border-radius: 7px; background-color: #e9ecef; width: 100%; }
         .progress-text { font-size: 10px; margin-top: 4px; line-height: 1; font-weight: bold; }
         .spacer-box { height: 28px; margin-top: 6px; width: 100%; visibility: hidden; }
-        .login-card, .goal-card, .zikr-card, .chart-container, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
-        .chart-container { padding: 20px; margin-bottom: 20px; text-align: center; }
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
         .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
@@ -201,7 +204,6 @@
 
 <div id="toast-container"></div>
 
-<!-- ... (Modal ve diğer HTML elementleri aynı kalacak) ... -->
 <div id="gender-selection-modal" class="custom-modal-overlay">
     <div class="custom-modal" style="max-width: 450px;">
         <h4 class="mb-3 fw-bold">Hoş Geldiniz</h4>
@@ -317,7 +319,6 @@
         </div>
 
         <div id="section-stats" style="display: none;">
-            <!-- Stats content -->
             <h3 class="app-header">İstatistikler</h3>
             <div class="stats-tab-container">
                 <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
@@ -441,22 +442,13 @@
     const provider = new firebase.auth.GoogleAuthProvider();
     let dbRef = null;
 
-    // --- TARIH FORMATI SABITLENDI ---
-    function getCurrentDateSimple() { 
-        const d = new Date();
-        // UTC Sorunu yaşamamak için yerel saat dilimini kullan ama formatı elle yap
-        // YYYY-MM-DD formatı en güvenlisidir.
-        const offset = d.getTimezoneOffset();
-        const localDate = new Date(d.getTime() - (offset*60*1000));
-        return localDate.toISOString().split('T')[0];
-    }
-    
+    function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     function getIsoDate(date) { 
-        const offset = date.getTimezoneOffset();
-        const localDate = new Date(date.getTime() - (offset*60*1000));
-        return localDate.toISOString().split('T')[0];
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
     }
-    
     function formatDateTR(isoDate) {
         if(!isoDate) return "";
         if(isoDate.includes('.') && isoDate.split('.')[0].length <= 2) return isoDate; 
@@ -467,7 +459,7 @@
     }
 
     const defaultData = {
-        startDate: getCurrentDateSimple(), // Default tarih de güncellendi
+        startDate: new Date().toISOString().split('T')[0],
         gender: null, 
         menstrualDaysPerMonth: 6,
         isMenstrualState: false, 
@@ -492,22 +484,22 @@
     if(saved) {
         try {
             localData = JSON.parse(saved);
-            // Hemen UI'ı gizle
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app-wrapper').style.display = 'flex';
+            // DOM hazırsa hemen çiz
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('app-wrapper').style.display = 'flex';
+                    renderApp();
+                    hideLoader();
+                });
+            } else {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-wrapper').style.display = 'flex';
+                renderApp();
+                hideLoader();
+            }
         } catch(e) { console.log("Parse error", e); }
     }
-
-    // Sayfa hazır olduğunda çizimi yap (Firebase'i beklemeden)
-    document.addEventListener("DOMContentLoaded", () => {
-        if(saved) {
-            if (localData.gender) applyGenderSettings();
-            renderCalculatorRows();
-            renderApp();
-            renderStats();
-            hideLoader();
-        }
-    });
 
     let chartCompletion = null, barChart = null, lineChart = null;
 
@@ -518,22 +510,18 @@
             document.getElementById('sidebarUserInfo').innerText = user.displayName;
             
             dbRef = db.ref('users/' + user.uid + '/namazData');
-            
-            // Firebase'den veri gelince çalışır
             dbRef.on('value', (s) => {
                 const d = s.val();
                 if (d) {
                     localData = d;
                     localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                } else if(!saved) { 
-                    // Sadece elimizde hiç veri yoksa sıfırla
+                } else if (!saved) { 
                     localData = JSON.parse(JSON.stringify(defaultData));
                 }
                 
                 ensureDataStructure(); 
                 checkDailyReset();
                 
-                // Yeni kullanıcıysa kaydet
                 if (!d && !saved) saveToCloud();
                 
                 if (!localData.gender) {
@@ -543,12 +531,13 @@
                 }
 
                 renderCalculatorRows();
+                const activeId = document.querySelector('.components li.active') ? document.querySelector('.components li.active').id.replace('menu-', '') : 'dashboard';
+                showSection(activeId); 
                 renderApp();
-                renderStats();
+                renderStats(); // Buradaki titreme fixlendi
                 hideLoader();
             });
         } else { 
-            // Kullanıcı çıkış yapmışsa
             if(!saved) {
                 document.getElementById('loading-overlay').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex'; 
@@ -580,10 +569,9 @@
         if (localData.menstrualDaysPerMonth === undefined) localData.menstrualDaysPerMonth = 6;
         if (localData.isMenstrualState === undefined) localData.isMenstrualState = false;
         
-        // Tarih formatını kontrol et, eskiyse yenile
         const t = getCurrentDateSimple();
         if (!localData.daily || localData.daily.date !== t) { 
-             // Eğer daily objesi yoksa veya tarih eskiyse (ama format farklıysa)
+             // Daily yoksa veya tarih eskiyse resetle ama kontrol et
              if(!localData.daily) {
                  localData.daily = { date: t, counts: [0,0,0,0,0], target: 10 };
              }
@@ -592,20 +580,16 @@
         if (!localData.streak) localData.streak = { current: 0, lastAchievedDate: "" };
         if (!localData.history) localData.history = [];
         if (!localData.earnedBadges) localData.earnedBadges = [];
-        if (!localData.startDate) localData.startDate = getCurrentDateSimple();
+        if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
     }
 
     function checkDailyReset() {
         const t = getCurrentDateSimple();
-        
         if (!localData.daily) {
             localData.daily = { date: t, counts: [0,0,0,0,0], target: 10 };
             return;
         }
-
-        // Eğer tarih bugünden farklıysa ve stored data geçerliyse sıfırla
-        // ÖNEMLİ: Eğer localData.daily.date "29.11.2023" formatındaysa ve t "2023-11-29" ise
-        // eşit olmadığı için sıfırlar. Bunu önlemek için formatı yukarıda sabitledik.
+        // Tarih kontrolünde esneklik (Farklı formatları kabul et veya bugüne eşitle)
         if (localData.daily.date !== t) {
             localData.daily.date = t;
             localData.daily.counts = [0,0,0,0,0];
