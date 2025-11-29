@@ -28,7 +28,6 @@
         body.dark-mode .text-muted { color: #adb5bd !important; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
         
-        /* Spinner & Loading */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2); border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -38,7 +37,6 @@
         .chart-container { min-height: 300px; padding: 20px; margin-bottom: 20px; text-align: center; }
         .wrapper { display: flex; width: 100%; }
         
-        /* Sidebar & Layout */
         #sidebar { min-width: 260px; max-width: 260px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: 0.3s; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -260px; }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
         #overlay.active { display: block; }
@@ -55,41 +53,58 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* YENİ KART TASARIMI (PRAYER CARD) */
-        .prayer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .p-card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.04); overflow: hidden; transition: transform 0.2s; display: flex; flex-direction: column; }
-        .p-card-header { background: linear-gradient(135deg, rgba(25, 135, 84, 0.1), rgba(32, 201, 151, 0.1)); padding: 10px 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-color); }
-        body.dark-mode .p-card-header { background: rgba(255,255,255,0.03); }
-        .p-card-title { font-weight: 700; color: #198754; font-size: 1rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
-        body.dark-mode .p-card-title { color: #20c997; }
-        .p-card-body { padding: 15px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+        /* --- YENİ AKORDEON (DRAWER) KART TASARIMI --- */
+        .prayer-list-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        .prayer-row { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.3s; }
         
-        .p-input-row { display: flex; justify-content: space-between; gap: 15px; }
-        .p-input-group { flex: 1; display: flex; flex-direction: column; align-items: center; background: var(--input-bg); padding: 8px; border-radius: 12px; border: 1px solid var(--border-color); }
-        .p-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 600; opacity: 0.7; margin-bottom: 2px; }
-        .p-input { width: 100%; background: transparent; border: none; text-align: center; font-weight: 800; font-size: 1.2rem; color: var(--text-color); outline: none; padding: 0; }
+        /* Kartın üst kısmı (Her zaman görünen) */
+        .prayer-header { padding: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: transparent; }
+        .prayer-header:active { background-color: rgba(0,0,0,0.02); }
         
-        /* Bar Bölümü */
-        .p-progress-wrapper { margin: 5px 0; }
-        .p-progress-bg { height: 10px; background: #e9ecef; border-radius: 20px; overflow: hidden; position: relative; }
-        body.dark-mode .p-progress-bg { background: #333; }
-        .p-progress-fill { height: 100%; background: linear-gradient(90deg, #198754, #20c997); transition: width 0.5s ease; border-radius: 20px; }
+        .ph-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .ph-icon-box { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .ph-text { display: flex; flex-direction: column; }
+        .ph-title { font-weight: 700; font-size: 1.1rem; line-height: 1.2; }
+        .ph-subtitle { font-size: 0.75rem; opacity: 0.7; font-weight: 500; margin-top: 2px; }
+        .ph-badge { background: #e9ecef; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; color: #495057; }
+        body.dark-mode .ph-badge { background: #343a40; color: #e9ecef; }
         
-        /* Buton Bölümü */
-        .p-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; gap: 10px; }
-        .p-btn { width: 45px; height: 45px; border-radius: 12px; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: transform 0.1s; flex-shrink: 0; }
-        .p-btn:active { transform: scale(0.9); }
-        .p-btn-minus { background: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); }
-        .p-btn-plus { background: #198754; color: white; box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3); }
-        .p-percent-text { font-weight: 800; font-size: 1rem; color: var(--text-color); opacity: 0.8; }
+        /* Renkli İkonlar */
+        .icon-sabah { background: linear-gradient(135deg, #0dcaf0, #0d6efd); }
+        .icon-ogle { background: linear-gradient(135deg, #ffc107, #fd7e14); }
+        .icon-ikindi { background: linear-gradient(135deg, #fd7e14, #d63384); }
+        .icon-aksam { background: linear-gradient(135deg, #6610f2, #0d6efd); }
+        .icon-yatsi { background: linear-gradient(135deg, #212529, #495057); }
+        
+        .ph-arrow { transition: transform 0.3s; font-size: 1.2rem; opacity: 0.5; margin-left: 10px; }
+        .prayer-row.open .ph-arrow { transform: rotate(180deg); opacity: 1; color: #198754; }
+        
+        /* Kartın alt kısmı (Açılan çekmece) */
+        .prayer-body { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1); background-color: rgba(0,0,0,0.015); border-top: 1px solid transparent; }
+        .prayer-row.open .prayer-body { max-height: 400px; border-top-color: var(--border-color); }
+        .pb-content { padding: 20px; }
+        
+        /* 3'lü İstatistik Kutuları */
+        .pb-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .pb-stat-box { background: var(--input-bg); padding: 10px 5px; border-radius: 12px; text-align: center; border: 1px solid var(--border-color); }
+        .pb-label { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; opacity: 0.7; display: block; margin-bottom: 5px; }
+        .pb-input { width: 100%; background: transparent; border: none; text-align: center; font-weight: 800; font-size: 1.1rem; color: var(--text-color); outline: none; padding: 0; }
+        .pb-val-static { font-weight: 800; font-size: 1.1rem; color: #dc3545; }
+        
+        /* Dev Butonlar */
+        .pb-actions { display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .btn-huge { width: 65px; height: 65px; border-radius: 18px; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; transition: transform 0.1s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn-huge:active { transform: scale(0.92); }
+        .btn-h-minus { background: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); }
+        .btn-h-plus { background: #198754; color: white; box-shadow: 0 8px 20px rgba(25, 135, 84, 0.4); }
 
-        /* Toplam Özet Kartı */
+        /* Özet Çubuğu */
         .summary-bar { background: var(--sidebar-bg); color: white; border-radius: 16px; padding: 15px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(21, 115, 71, 0.3); }
         .summary-item { text-align: center; }
         .summary-val { font-size: 1.2rem; font-weight: 800; line-height: 1; }
         .summary-lbl { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
 
-        /* Genel Bileşenler */
+        /* Diğer Bileşenler */
         .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
@@ -212,7 +227,6 @@
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
-        /* Stats Analysis Cards (Accordion) */
         .prayer-stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.03); transition: transform 0.2s; }
         .prayer-stat-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; background: rgba(25, 135, 84, 0.05); }
         body.dark-mode .prayer-stat-header { background: rgba(255,255,255,0.03); }
@@ -332,12 +346,12 @@
                 <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
             
-            <!-- YENİ KARTLI TASARIM GRID'İ -->
-            <div id="mainPrayerGrid" class="prayer-grid">
+            <!-- YENİ AKORDEON LISTE (DRAWER DESIGN) -->
+            <div id="prayerListContainer" class="prayer-list-container">
                 <!-- Javascript ile Doldurulacak -->
             </div>
             
-            <!-- YENİ ÖZET ÇUBUĞU -->
+            <!-- ÖZET ÇUBUĞU -->
             <div id="summaryBar" class="summary-bar">
                 <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
                 <div class="summary-item"><div class="summary-val text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
@@ -691,7 +705,7 @@
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
 
-    // --- YENİ KART TASARIMI RENDER FONKSİYONU ---
+    // --- YENİ AKORDEON (DRAWER) RENDER ---
     function renderApp() {
         if(!localData.counts) return;
         const todayISO = getIsoDate(new Date());
@@ -709,9 +723,9 @@
         const pausedBadge = document.getElementById('pausedBadge');
         const goalCard = document.getElementById('goalCard');
         const weeklyCard = document.getElementById('weeklyCard');
-        const mainGrid = document.getElementById('mainPrayerGrid'); // Yeni Grid ID
+        const listContainer = document.getElementById('prayerListContainer'); // Yeni Container ID
 
-        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); mainGrid.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); mainGrid.classList.remove('paused-mode-overlay'); }
+        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); listContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); listContainer.classList.remove('paused-mode-overlay'); }
 
         document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
@@ -729,48 +743,63 @@
         const wCard = document.getElementById('weeklyCard'); const wMsg = document.getElementById('weeklySuccessMessage');
         if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
 
-        // --- GRID RENDER ---
-        mainGrid.innerHTML = ""; 
+        // --- AKORDEON LISTE RENDER ---
+        listContainer.innerHTML = ""; 
         let tt=0, td=0; 
         const days = getElapsedDays(); 
         document.getElementById('elapsedDays').value = days; 
         
-        const icons = ["fa-sun", "fa-sun", "fa-cloud-sun", "fa-moon", "fa-star"];
+        // Simge ve Sınıf Tanımları
+        const iconMap = [
+            { icon: "fa-cloud-sun", class: "icon-sabah", badge: "Sabah" },
+            { icon: "fa-sun", class: "icon-ogle", badge: "Öğle" },
+            { icon: "fa-clock", class: "icon-ikindi", badge: "İkindi" }, // Clock daha uygun olabilir
+            { icon: "fa-moon", class: "icon-aksam", badge: "Akşam" },
+            { icon: "fa-star", class: "icon-yatsi", badge: "Yatsı" }
+        ];
 
         localData.counts.forEach((item, i) => { 
             tt += parseInt(item.target); 
             td += parseInt(item.done); 
-            let pp = item.target > 0 ? (item.done / item.target) * 100 : 0; 
-            const icon = icons[i] || "fa-mosque";
+            const remaining = Math.max(0, item.target - item.done);
+            const meta = iconMap[i] || { icon: "fa-mosque", class: "icon-sabah", badge: "Namaz" };
 
-            mainGrid.innerHTML += `
-            <div class="p-card">
-                <div class="p-card-header">
-                    <i class="fas ${icon} text-success"></i>
-                    <div class="p-card-title">${item.name}</div>
+            listContainer.innerHTML += `
+            <div class="prayer-row" id="p-row-${i}">
+                <div class="prayer-header" onclick="togglePrayerRow(${i})">
+                    <div class="ph-info">
+                        <div class="ph-icon-box ${meta.class}"><i class="fas ${meta.icon}"></i></div>
+                        <div class="ph-text">
+                            <div class="ph-title">${item.name}</div>
+                            <div class="ph-subtitle">Kalan Borç: <strong class="text-danger">${remaining}</strong></div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-down ph-arrow" id="p-arrow-${i}"></i>
                 </div>
-                <div class="p-card-body">
-                    <div class="p-input-row">
-                        <div class="p-input-group">
-                            <label class="p-label">Kılınacak</label>
-                            <input type="number" class="p-input" value="${item.target}" onchange="window.upT(${i},this.value)">
+                
+                <div class="prayer-body">
+                    <div class="pb-content">
+                        <!-- 3'lü İstatistik Grid -->
+                        <div class="pb-stats-grid">
+                            <div class="pb-stat-box">
+                                <span class="pb-label text-primary">KILINACAK</span>
+                                <input type="number" class="pb-input" value="${item.target}" onchange="window.upT(${i},this.value)">
+                            </div>
+                            <div class="pb-stat-box">
+                                <span class="pb-label text-success">KILINAN</span>
+                                <input type="number" class="pb-input" value="${item.done}" onchange="window.upD(${i},this.value)">
+                            </div>
+                            <div class="pb-stat-box">
+                                <span class="pb-label text-danger">KALAN</span>
+                                <div class="pb-val-static">${remaining}</div>
+                            </div>
                         </div>
-                        <div class="p-input-group">
-                            <label class="p-label text-warning">Kılınan</label>
-                            <input type="number" class="p-input text-warning" value="${item.done}" onchange="window.upD(${i},this.value)">
-                        </div>
-                    </div>
 
-                    <div class="p-progress-wrapper">
-                        <div class="p-progress-bg">
-                            <div class="p-progress-fill" style="width: ${pp}%"></div>
+                        <!-- Dev Aksiyon Butonları -->
+                        <div class="pb-actions">
+                            <button class="btn-huge btn-h-minus" onclick="window.chC(${i},-1)"><i class="fas fa-minus"></i></button>
+                            <button class="btn-huge btn-h-plus" onclick="window.chC(${i},1)"><i class="fas fa-plus"></i></button>
                         </div>
-                    </div>
-
-                    <div class="p-actions">
-                        <button class="p-btn p-btn-minus" onclick="window.chC(${i},-1)"><i class="fas fa-minus"></i></button>
-                        <span class="p-percent-text">%${pp.toFixed(1)}</span>
-                        <button class="p-btn p-btn-plus" onclick="window.chC(${i},1)"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
             </div>`; 
@@ -782,6 +811,19 @@
         document.getElementById('sumRemaining').innerText = tt - td;
 
         renderBadges(td); calculateEstFinish(td, days); 
+    }
+    
+    // Akordeon Açma/Kapama Fonksiyonu
+    window.togglePrayerRow = function(index) {
+        // Tüm açık olanları kapat (Opsiyonel - Tek tek açık kalsın isterseniz bu bloğu silebilirsiniz)
+        document.querySelectorAll('.prayer-row').forEach((row, i) => {
+            if(i !== index) row.classList.remove('open');
+        });
+
+        // Seçili olanı aç/kapat
+        const row = document.getElementById(`p-row-${index}`);
+        row.classList.toggle('open');
+        triggerHaptic();
     }
     
     window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
