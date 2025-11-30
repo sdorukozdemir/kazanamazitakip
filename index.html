@@ -53,7 +53,7 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* DASHBOARD & SPLIT LAYOUT */
+        /* --- DASHBOARD & SPLIT LAYOUT --- */
         .prayer-split-layout { display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; height: 420px; }
         .prayer-side-menu { width: 85px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; overflow-y: auto; }
         @media (max-width: 768px) {
@@ -111,7 +111,7 @@
         .pd-btn-plus { background: #198754; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
         .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
 
-        /* ACCORDION */
+        /* ACCORDION STATS */
         .stat-accordion-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 12px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
         .stat-accordion-header { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: var(--card-bg); user-select: none; }
         .stat-accordion-header:hover { background: rgba(0,0,0,0.02); }
@@ -205,51 +205,126 @@
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
         
-        /* METALİK TARİHÇE KARTLARI */
+        /* --- YENİ KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) --- */
         .metallic-card {
             border: none;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-            /* Gümüş / Metalik Gradyan (Koyu -> Açık -> Koyu) */
+            border-radius: 10px; /* Daha kompakt köşe */
+            margin-bottom: 8px; /* Daha az boşluk */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
             background: linear-gradient(145deg, #dce1e6 0%, #ffffff 50%, #dce1e6 100%);
+            padding: 0; /* İç padding yönetimi */
+            overflow: hidden;
+            color: #333;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        /* Şeritler */
+        .metallic-card.up { border-left: 5px solid #198754; }
+        .metallic-card.down { border-left: 5px solid #dc3545; }
+
+        /* Özet Kısmı (Her zaman görünür) */
+        .card-summary {
+            padding: 10px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 15px;
-            position: relative;
-            overflow: hidden;
-            color: #333; /* Metin her zaman koyu */
+            cursor: pointer;
+            min-height: 50px;
         }
-        .metallic-card .hist-content { flex: 1; z-index: 2; display: flex; align-items: center; gap: 15px; }
-        .metallic-card .hist-info { display: flex; flex-direction: column; }
-        .metallic-card .hist-prayer { font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-        .metallic-card .hist-time { font-size: 0.7rem; font-weight: 600; opacity: 0.7; }
-        .metallic-card .hist-values { text-align: right; z-index: 2; font-weight: 800; font-size: 1.1rem; }
-        .metallic-card .hist-arrow { font-size: 0.9rem; margin: 0 5px; opacity: 0.5; }
-        
-        /* Sol taraf belirteçleri */
-        .metallic-card.up { border-left: 6px solid #198754; }
-        .metallic-card.down { border-left: 6px solid #dc3545; }
-        .metallic-card.up .hist-values { color: #198754; }
-        .metallic-card.down .hist-values { color: #dc3545; }
 
-        /* GECE MODU METALİK (Koyu Titanyum) */
+        .summary-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-prayer {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        .change-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.05);
+            min-width: 30px;
+            text-align: center;
+        }
+        .metallic-card.up .change-badge { color: #198754; background: rgba(25, 135, 84, 0.1); }
+        .metallic-card.down .change-badge { color: #dc3545; background: rgba(220, 53, 69, 0.1); }
+
+        .summary-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0.7;
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        .metallic-card.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Detay Kısmı (Tıklayınca açılır) */
+        .card-detail {
+            display: none;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.03);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.85rem;
+            text-align: center;
+            animation: slideDown 0.2s ease-out;
+        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .detail-values {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .metallic-card.up .detail-values { color: #198754; }
+        .metallic-card.down .detail-values { color: #dc3545; }
+
+        .detail-full-date {
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+
+        /* GECE MODU METALİK */
         body.dark-mode .metallic-card {
-            /* Koyu Metalik: Koyu Gri -> Daha Açık Gri -> Koyu Gri */
             background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%);
             box-shadow: 0 4px 8px rgba(0,0,0,0.4);
             color: #e0e0e0;
         }
-        body.dark-mode .metallic-card.up .hist-values { color: #2ecc71; }
-        body.dark-mode .metallic-card.down .hist-values { color: #e74c3c; }
+        body.dark-mode .card-detail { background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); }
+        body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; }
+        body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
 
-        /* TARİH SEÇİCİ DÜZELTMESİ (Gece Modunda Görünmezlik Sorunu) */
+        /* TARİH SEÇİCİ DÜZELTMESİ (Görünürlük Garantisi) */
         input[type="date"] {
-             color-scheme: light;
+             appearance: none;
+             -webkit-appearance: none;
+             color: var(--text-color);
+             background: transparent;
+             min-width: 130px;
         }
-        body.dark-mode input[type="date"] {
-             color-scheme: dark; /* Bu satır gece modunda takvim ikonunu beyaz yapar */
+        /* Webkit tarayıcılarda (Chrome/Safari) gece modu ikonu için filtre */
+        body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.8;
+            cursor: pointer;
         }
         
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; margin: 20px auto 40px auto; }
@@ -471,13 +546,13 @@
                 <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
                      <div class="d-flex flex-row align-items-center gap-2 px-3 py-2" style="background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                         <label for="historyFilterDate" class="small text-muted fw-bold mb-0 me-1">Tarih:</label>
-                        <!-- type date'e color-scheme eklendiği için gece modunda ikon görünecek -->
+                        <!-- type date'e özel stil eklendiği için gece modunda ikon görünecek -->
                         <input type="date" id="historyFilterDate" class="form-control form-control-sm text-center border-0 p-0" style="background: transparent; color: var(--text-color); font-weight: bold; max-width: 130px; box-shadow: none;" onchange="filterHistoryByDate()">
                         <button class="btn btn-secondary btn-sm rounded-circle d-flex justify-content-center align-items-center" style="width: 24px; height: 24px; padding: 0;" onclick="clearHistoryFilter()"><i class="fas fa-times" style="font-size: 0.7rem;"></i></button>
                      </div>
                 </div>
 
-                <!-- Tablo yerine DIV listesi - Metalik Kartlar -->
+                <!-- Tablo yerine ACCORDION listesi - Kompakt Metalik Kartlar -->
                 <div id="historyListContainer" class="px-2"></div>
             </div>
         </div>
@@ -965,7 +1040,7 @@
     const BADGES = [ {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, {id:500,title:"Gayret",icon:"🏃", desc:"500 Namaz"}, {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} ];
     function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } c.innerHTML += `<div class="badge-item"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
     
-    // --- YENİLENMİŞ METALİK KARTLI RENDERHISTORY FONKSİYONU ---
+    // --- YENİ KOMPAKT METALİK KARTLI RENDERHISTORY FONKSİYONU ---
     function renderHistory(filterDate = null) { 
         const container = document.getElementById('historyListContainer'); 
         container.innerHTML = ""; 
@@ -994,26 +1069,61 @@
         displayData.forEach(r => { 
             const o = parseFloat(r.oldVal); 
             const n = parseFloat(r.newVal); 
-            let statusClass = n > o ? 'up' : (n < o ? 'down' : ''); 
-            // Metalik Kart HTML
+            const diff = n - o;
+            const diffSign = diff > 0 ? '+' : '';
+            const statusClass = diff > 0 ? 'up' : (diff < 0 ? 'down' : ''); 
+            
+            // Sadece saat kısmını al (örn: 14:30)
+            const timeOnly = r.time.split(' ')[1].substring(0, 5);
+
+            // Kompakt Accordion Kart HTML
             container.innerHTML += `
-            <div class="metallic-card ${statusClass}">
-                <div class="hist-content">
-                    <div class="hist-info">
-                        <span class="hist-prayer">${r.namaz}</span>
-                        <span class="hist-time">${r.time}</span>
+            <div class="metallic-card ${statusClass}" onclick="toggleHistoryCard(this)">
+                <div class="card-summary">
+                    <div class="summary-left">
+                        <span class="summary-prayer">${r.namaz}</span>
+                        <span class="change-badge">${diffSign}${diff}</span>
+                    </div>
+                    <div class="summary-right">
+                        <span>${timeOnly}</span>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
                     </div>
                 </div>
-                <div class="hist-values">
-                    <span>${o}</span>
-                    <i class="fas fa-arrow-right hist-arrow"></i>
-                    <span>${n}</span>
+                <div class="card-detail">
+                    <div class="detail-values">
+                        <span>${o}</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>${n}</span>
+                    </div>
+                    <div class="detail-full-date">${r.time}</div>
                 </div>
             </div>`; 
         }); 
 
         if(!filterDate && localData.history.length > 50) {
              container.innerHTML += '<div class="text-center text-muted small py-2">Daha eski kayıtlar için tarih filtresini kullanınız...</div>';
+        }
+    }
+
+    // Kart açma kapama fonksiyonu
+    window.toggleHistoryCard = function(el) {
+        // Varsa açık olan diğerlerini kapat (Opsiyonel: hepsi tek tek açılsın isterseniz burayı kaldırabilirsiniz)
+        const allOpen = document.querySelectorAll('.metallic-card.open');
+        allOpen.forEach(card => {
+            if(card !== el) {
+                card.classList.remove('open');
+                card.querySelector('.card-detail').style.display = 'none';
+            }
+        });
+
+        // Tıklananı aç/kapat
+        const detail = el.querySelector('.card-detail');
+        if (el.classList.contains('open')) {
+            el.classList.remove('open');
+            detail.style.display = 'none';
+        } else {
+            el.classList.add('open');
+            detail.style.display = 'block';
         }
     }
 
