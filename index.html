@@ -53,61 +53,80 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- YENİ SPLIT LAYOUT VE NAMAZ KARTLARI --- */
+        /* --- SPLIT LAYOUT (MENU + KART) --- */
         .prayer-split-layout { display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; height: 420px; }
         
-        /* SOL MENU */
-        .prayer-side-menu { width: 70px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
-        .side-menu-item { background: var(--card-bg); border-radius: 15px; height: 100%; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.6; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .side-menu-item:hover { transform: translateX(3px); }
-        .side-menu-item.active { opacity: 1; transform: scale(1.05); border: none; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        /* MENU (Desktop: Yan, Mobil: Üst) */
+        .prayer-side-menu { width: 85px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; overflow-y: auto; }
         
-        .side-menu-icon { font-size: 1.4rem; margin-bottom: 3px; }
-        .side-menu-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        /* MOBİL İÇİN DÜZEN (MENÜ YUKARIYA) */
+        @media (max-width: 768px) {
+            .prayer-split-layout { flex-direction: column; height: auto; }
+            .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+            .prayer-side-menu::-webkit-scrollbar { display: none; }
+            .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; }
+            .prayer-detail-card { min-height: 380px; }
+        }
 
-        /* Renk Temaları (Gradient) */
-        .theme-sabah .active { background: linear-gradient(135deg, #0dcaf0, #0d6efd); }
-        .theme-ogle .active { background: linear-gradient(135deg, #ffc107, #fd7e14); }
-        .theme-ikindi .active { background: linear-gradient(135deg, #fd7e14, #d63384); }
-        .theme-aksam .active { background: linear-gradient(135deg, #6610f2, #0d6efd); }
-        .theme-yatsi .active { background: linear-gradient(135deg, #212529, #495057); }
-
-        /* SAĞ KART ALANI */
-        .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: background 0.5s ease; border: 1px solid var(--border-color); background-size: 200% 200%; animation: gradientBG 10s ease infinite; }
+        .side-menu-item { background: var(--card-bg); border-radius: 18px; height: 100%; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.7; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex: 1; }
+        .side-menu-item:hover { transform: translateY(-2px); }
         
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        /* Aktif Durum (Tüm Modlarda Okunur) */
+        .side-menu-item.active { opacity: 1; transform: scale(1.05); border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); color: #fff !important; }
+        .side-menu-item.active .side-menu-label { color: #fff !important; opacity: 1; }
+        .side-menu-item.active .side-menu-icon { color: #fff !important; }
 
-        /* Kartın İçeriği (Glassmorphism) */
-        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); }
-        body.dark-mode .pd-content { background: rgba(30, 30, 30, 0.85); }
+        .side-menu-icon { font-size: 1.5rem; margin-bottom: 4px; color: var(--text-color); transition: 0.3s; }
+        .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-color); opacity: 0.8; transition: 0.3s; }
+
+        /* Menü Temaları (Aktifken) */
+        .theme-sabah.active { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .theme-ogle.active { background: linear-gradient(135deg, #f09819, #edde5d); }
+        .theme-ikindi.active { background: linear-gradient(135deg, #f83600, #fe8c00); } /* Kızıl/Turuncu */
+        .theme-aksam.active { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .theme-yatsi.active { background: linear-gradient(135deg, #434343, #000000); }
+
+        /* DETAY KARTI */
+        .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: background 0.5s ease; border: 1px solid var(--border-color); }
+        
+        /* Kart Arkaplanları (Gradient) */
+        .bg-sabah { background: linear-gradient(135deg, #e0c3fc, #8ec5fc); }
+        .bg-ogle { background: linear-gradient(135deg, #fff1eb, #ace0f9); }
+        .bg-ikindi { background: linear-gradient(135deg, #fad0c4, #ffd1ff); }
+        .bg-aksam { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+        .bg-yatsi { background: linear-gradient(135deg, #cfd9df, #e2ebf0); } /* Gece için açık bir gri/mavi ton */
+        
+        /* Dark Mode Kart Arkaplanları */
+        body.dark-mode .bg-sabah { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+        body.dark-mode .bg-ogle { background: linear-gradient(135deg, #240b36, #c31432); } /* Sıcak ton dark */
+        body.dark-mode .bg-ikindi { background: linear-gradient(135deg, #59253a, #8c4a5d); }
+        body.dark-mode .bg-aksam { background: linear-gradient(135deg, #141e30, #243b55); }
+        body.dark-mode .bg-yatsi { background: linear-gradient(135deg, #000000, #434343); }
+
+        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
+        body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.85); }
 
         .pd-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
         .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; }
         .pd-remaining-badge { background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); }
 
         .pd-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: auto; }
-        .pd-input-group { background: var(--input-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; }
-        .pd-label { font-size: 0.75rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
+        .pd-input-group { background: var(--input-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .pd-label { font-size: 0.75rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; color: var(--text-color); }
         .pd-input { background: transparent; border: none; font-size: 1.8rem; font-weight: 800; text-align: center; width: 100%; color: var(--text-color); outline: none; }
 
-        .pd-actions { display: flex; gap: 20px; justify-content: center; margin-top: 20px; }
-        .pd-btn { width: 80px; height: 80px; border-radius: 25px; border: none; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; color: white; }
-        .pd-btn:active { transform: scale(0.9); }
-        .pd-btn-plus { background: linear-gradient(135deg, #198754, #20c997); box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
-        .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
+        /* Progress Bar (Yeni) */
+        .pd-progress-container { margin-top: 20px; margin-bottom: 5px; }
+        .pd-progress-track { height: 12px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; position: relative; }
+        body.dark-mode .pd-progress-track { background: rgba(255,255,255,0.1); }
+        .pd-progress-fill { height: 100%; background: linear-gradient(90deg, #198754, #20c997); width: 0%; transition: width 0.5s ease; border-radius: 10px; }
+        .pd-progress-text { font-size: 0.75rem; font-weight: 700; text-align: center; margin-top: 4px; opacity: 0.7; }
 
-        /* Arkaplan Renkleri (JS ile atanacak) */
-        .bg-sabah { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
-        .bg-ogle { background: linear-gradient(135deg, #fff9c4, #ffe082); }
-        .bg-ikindi { background: linear-gradient(135deg, #ffe0b2, #ffcc80); }
-        .bg-aksam { background: linear-gradient(135deg, #e1bee7, #d1c4e9); }
-        .bg-yatsi { background: linear-gradient(135deg, #cfd8dc, #b0bec5); }
-        
-        body.dark-mode .bg-sabah { background: linear-gradient(135deg, #0d47a1, #1565c0); }
-        body.dark-mode .bg-ogle { background: linear-gradient(135deg, #f57f17, #ff6f00); }
-        body.dark-mode .bg-ikindi { background: linear-gradient(135deg, #e65100, #bf360c); }
-        body.dark-mode .bg-aksam { background: linear-gradient(135deg, #4a148c, #311b92); }
-        body.dark-mode .bg-yatsi { background: linear-gradient(135deg, #263238, #37474f); }
+        .pd-actions { display: flex; gap: 20px; justify-content: center; margin-top: 15px; }
+        .pd-btn { width: 70px; height: 70px; border-radius: 20px; border: none; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; color: white; }
+        .pd-btn:active { transform: scale(0.9); }
+        .pd-btn-plus { background: #198754; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
+        .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
 
         /* Özet Çubuğu */
         .summary-bar { background: var(--sidebar-bg); color: white; border-radius: 16px; padding: 15px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(21, 115, 71, 0.3); }
@@ -758,9 +777,9 @@
         // --- SPLIT CONTAINER OLUŞTURMA ---
         splitContainer.innerHTML = ""; 
         
-        // 1. SOL MENÜ OLUŞTUR
+        // 1. MENU OLUŞTUR (Mobile: Top, Desktop: Left)
         let menuHTML = `<div class="prayer-side-menu">`;
-        const iconList = ["fa-cloud-sun", "fa-sun", "fa-clock", "fa-moon", "fa-star"];
+        const iconList = ["fa-cloud-sun", "fa-sun", "fa-cloud-sun", "fa-moon", "fa-star"]; // Ikindi: fa-cloud-sun
         const themeList = ["theme-sabah", "theme-ogle", "theme-ikindi", "theme-aksam", "theme-yatsi"];
         
         localData.counts.forEach((item, i) => {
@@ -773,11 +792,18 @@
         });
         menuHTML += `</div>`;
         
-        // 2. SAĞ KART (AKTİF OLAN) OLUŞTUR
+        // 2. KART (AKTİF OLAN) OLUŞTUR
         const activeItem = localData.counts[activeRowIndex];
         const remaining = Math.max(0, activeItem.target - activeItem.done);
         const bgList = ["bg-sabah", "bg-ogle", "bg-ikindi", "bg-aksam", "bg-yatsi"];
         
+        // Progress Bar Calculation
+        let progressPercent = 0;
+        if(activeItem.target > 0) {
+            progressPercent = (activeItem.done / activeItem.target) * 100;
+            if(progressPercent > 100) progressPercent = 100;
+        }
+
         let cardHTML = `
         <div class="prayer-detail-card ${bgList[activeRowIndex]}">
             <div class="pd-content">
@@ -797,6 +823,13 @@
                     </div>
                 </div>
                 
+                <div class="pd-progress-container">
+                    <div class="pd-progress-track">
+                        <div class="pd-progress-fill" style="width: ${progressPercent}%"></div>
+                    </div>
+                    <div class="pd-progress-text">%${progressPercent.toFixed(1)} Tamamlandı</div>
+                </div>
+
                 <div class="pd-actions">
                     <button class="pd-btn pd-btn-minus" onclick="window.chC(${activeRowIndex},-1)"><i class="fas fa-minus"></i></button>
                     <button class="pd-btn pd-btn-plus" onclick="window.chC(${activeRowIndex},1)"><i class="fas fa-plus"></i></button>
