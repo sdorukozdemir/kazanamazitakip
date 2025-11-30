@@ -12,7 +12,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -53,48 +53,61 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; }
         body.dark-mode .app-header { color: #20c997; }
 
-        /* --- AKORDEON (DRAWER) KART TASARIMI --- */
-        .prayer-list-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-        .prayer-row { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.3s; }
+        /* --- YENİ SPLIT LAYOUT VE NAMAZ KARTLARI --- */
+        .prayer-split-layout { display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; height: 420px; }
         
-        /* Kartın üst kısmı (Her zaman görünen) */
-        .prayer-header { padding: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: transparent; }
-        .prayer-header:active { background-color: rgba(0,0,0,0.02); }
+        /* SOL MENU */
+        .prayer-side-menu { width: 70px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+        .side-menu-item { background: var(--card-bg); border-radius: 15px; height: 100%; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.6; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .side-menu-item:hover { transform: translateX(3px); }
+        .side-menu-item.active { opacity: 1; transform: scale(1.05); border: none; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         
-        .ph-info { display: flex; align-items: center; gap: 15px; flex: 1; }
-        .ph-icon-box { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-        .ph-text { display: flex; flex-direction: column; }
-        .ph-title { font-weight: 700; font-size: 1.1rem; line-height: 1.2; }
-        .ph-subtitle { font-size: 0.75rem; opacity: 0.7; font-weight: 500; margin-top: 2px; }
+        .side-menu-icon { font-size: 1.4rem; margin-bottom: 3px; }
+        .side-menu-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Renk Temaları (Gradient) */
+        .theme-sabah .active { background: linear-gradient(135deg, #0dcaf0, #0d6efd); }
+        .theme-ogle .active { background: linear-gradient(135deg, #ffc107, #fd7e14); }
+        .theme-ikindi .active { background: linear-gradient(135deg, #fd7e14, #d63384); }
+        .theme-aksam .active { background: linear-gradient(135deg, #6610f2, #0d6efd); }
+        .theme-yatsi .active { background: linear-gradient(135deg, #212529, #495057); }
+
+        /* SAĞ KART ALANI */
+        .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: background 0.5s ease; border: 1px solid var(--border-color); background-size: 200% 200%; animation: gradientBG 10s ease infinite; }
         
-        /* Renkli İkonlar */
-        .icon-sabah { background: linear-gradient(135deg, #0dcaf0, #0d6efd); }
-        .icon-ogle { background: linear-gradient(135deg, #ffc107, #fd7e14); }
-        .icon-ikindi { background: linear-gradient(135deg, #fd7e14, #d63384); }
-        .icon-aksam { background: linear-gradient(135deg, #6610f2, #0d6efd); }
-        .icon-yatsi { background: linear-gradient(135deg, #212529, #495057); }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* Kartın İçeriği (Glassmorphism) */
+        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); }
+        body.dark-mode .pd-content { background: rgba(30, 30, 30, 0.85); }
+
+        .pd-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
+        .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; }
+        .pd-remaining-badge { background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); }
+
+        .pd-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: auto; }
+        .pd-input-group { background: var(--input-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; }
+        .pd-label { font-size: 0.75rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
+        .pd-input { background: transparent; border: none; font-size: 1.8rem; font-weight: 800; text-align: center; width: 100%; color: var(--text-color); outline: none; }
+
+        .pd-actions { display: flex; gap: 20px; justify-content: center; margin-top: 20px; }
+        .pd-btn { width: 80px; height: 80px; border-radius: 25px; border: none; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; color: white; }
+        .pd-btn:active { transform: scale(0.9); }
+        .pd-btn-plus { background: linear-gradient(135deg, #198754, #20c997); box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
+        .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
+
+        /* Arkaplan Renkleri (JS ile atanacak) */
+        .bg-sabah { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+        .bg-ogle { background: linear-gradient(135deg, #fff9c4, #ffe082); }
+        .bg-ikindi { background: linear-gradient(135deg, #ffe0b2, #ffcc80); }
+        .bg-aksam { background: linear-gradient(135deg, #e1bee7, #d1c4e9); }
+        .bg-yatsi { background: linear-gradient(135deg, #cfd8dc, #b0bec5); }
         
-        .ph-arrow { transition: transform 0.3s; font-size: 1.2rem; opacity: 0.5; margin-left: 10px; }
-        .prayer-row.open .ph-arrow { transform: rotate(180deg); opacity: 1; color: #198754; }
-        
-        /* Kartın alt kısmı (Açılan çekmece) */
-        .prayer-body { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1); background-color: rgba(0,0,0,0.015); border-top: 1px solid transparent; }
-        .prayer-row.open .prayer-body { max-height: 400px; border-top-color: var(--border-color); }
-        .pb-content { padding: 20px; }
-        
-        /* 3'lü İstatistik Kutuları */
-        .pb-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .pb-stat-box { background: var(--input-bg); padding: 10px 5px; border-radius: 12px; text-align: center; border: 1px solid var(--border-color); }
-        .pb-label { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; opacity: 0.7; display: block; margin-bottom: 5px; }
-        .pb-input { width: 100%; background: transparent; border: none; text-align: center; font-weight: 800; font-size: 1.1rem; color: var(--text-color); outline: none; padding: 0; }
-        .pb-val-static { font-weight: 800; font-size: 1.1rem; color: #dc3545; }
-        
-        /* Dev Butonlar */
-        .pb-actions { display: flex; align-items: center; justify-content: center; gap: 20px; }
-        .btn-huge { width: 65px; height: 65px; border-radius: 18px; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; transition: transform 0.1s; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .btn-huge:active { transform: scale(0.92); }
-        .btn-h-minus { background: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); }
-        .btn-h-plus { background: #198754; color: white; box-shadow: 0 8px 20px rgba(25, 135, 84, 0.4); }
+        body.dark-mode .bg-sabah { background: linear-gradient(135deg, #0d47a1, #1565c0); }
+        body.dark-mode .bg-ogle { background: linear-gradient(135deg, #f57f17, #ff6f00); }
+        body.dark-mode .bg-ikindi { background: linear-gradient(135deg, #e65100, #bf360c); }
+        body.dark-mode .bg-aksam { background: linear-gradient(135deg, #4a148c, #311b92); }
+        body.dark-mode .bg-yatsi { background: linear-gradient(135deg, #263238, #37474f); }
 
         /* Özet Çubuğu */
         .summary-bar { background: var(--sidebar-bg); color: white; border-radius: 16px; padding: 15px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(21, 115, 71, 0.3); }
@@ -344,9 +357,9 @@
                 <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
             
-            <!-- YENİ AKORDEON LISTE (DRAWER DESIGN) -->
-            <div id="prayerListContainer" class="prayer-list-container">
-                <!-- Javascript ile Doldurulacak -->
+            <!-- YENİ SPLIT LAYOUT (SOL MENU + SAĞ KART) -->
+            <div id="prayerSplitContainer" class="prayer-split-layout">
+                <!-- Javascript ile doldurulacak -->
             </div>
             
             <!-- ÖZET ÇUBUĞU -->
@@ -471,7 +484,7 @@
 <script>
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
-    let activeRowIndex = null; // YENİ EKLENEN DEĞİŞKEN (Açık olan satırı hafızada tutar)
+    let activeRowIndex = 0; // Varsayılan olarak ilk namaz açık
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     function hideLoader() {
@@ -704,7 +717,7 @@
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
 
-    // --- YENİ AKORDEON (DRAWER) RENDER ---
+    // --- YENİ RENDER FONKSİYONU: SPLIT LAYOUT ---
     function renderApp() {
         if(!localData.counts) return;
         const todayISO = getIsoDate(new Date());
@@ -722,9 +735,9 @@
         const pausedBadge = document.getElementById('pausedBadge');
         const goalCard = document.getElementById('goalCard');
         const weeklyCard = document.getElementById('weeklyCard');
-        const listContainer = document.getElementById('prayerListContainer'); 
+        const splitContainer = document.getElementById('prayerSplitContainer');
 
-        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); listContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); listContainer.classList.remove('paused-mode-overlay'); }
+        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); splitContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); splitContainer.classList.remove('paused-mode-overlay'); }
 
         document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
@@ -742,71 +755,63 @@
         const wCard = document.getElementById('weeklyCard'); const wMsg = document.getElementById('weeklySuccessMessage');
         if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
 
-        // --- AKORDEON LISTE RENDER ---
-        listContainer.innerHTML = ""; 
+        // --- SPLIT CONTAINER OLUŞTURMA ---
+        splitContainer.innerHTML = ""; 
+        
+        // 1. SOL MENÜ OLUŞTUR
+        let menuHTML = `<div class="prayer-side-menu">`;
+        const iconList = ["fa-cloud-sun", "fa-sun", "fa-clock", "fa-moon", "fa-star"];
+        const themeList = ["theme-sabah", "theme-ogle", "theme-ikindi", "theme-aksam", "theme-yatsi"];
+        
+        localData.counts.forEach((item, i) => {
+            const isActive = (i === activeRowIndex) ? 'active' : '';
+            menuHTML += `
+            <div class="side-menu-item ${isActive} ${themeList[i]}" onclick="setActivePrayer(${i})">
+                <i class="fas ${iconList[i]} side-menu-icon"></i>
+                <div class="side-menu-label">${item.name}</div>
+            </div>`;
+        });
+        menuHTML += `</div>`;
+        
+        // 2. SAĞ KART (AKTİF OLAN) OLUŞTUR
+        const activeItem = localData.counts[activeRowIndex];
+        const remaining = Math.max(0, activeItem.target - activeItem.done);
+        const bgList = ["bg-sabah", "bg-ogle", "bg-ikindi", "bg-aksam", "bg-yatsi"];
+        
+        let cardHTML = `
+        <div class="prayer-detail-card ${bgList[activeRowIndex]}">
+            <div class="pd-content">
+                <div class="pd-header">
+                    <div class="pd-title"><i class="fas ${iconList[activeRowIndex]}"></i> ${activeItem.name}</div>
+                    <div class="pd-remaining-badge">Kalan: ${remaining}</div>
+                </div>
+                
+                <div class="pd-stats-row">
+                    <div class="pd-input-group">
+                        <span class="pd-label">KILINACAK</span>
+                        <input type="number" class="pd-input" value="${activeItem.target}" onchange="window.upT(${activeRowIndex},this.value)">
+                    </div>
+                    <div class="pd-input-group">
+                        <span class="pd-label text-success">KILINAN</span>
+                        <input type="number" class="pd-input text-success" value="${activeItem.done}" onchange="window.upD(${activeRowIndex},this.value)">
+                    </div>
+                </div>
+                
+                <div class="pd-actions">
+                    <button class="pd-btn pd-btn-minus" onclick="window.chC(${activeRowIndex},-1)"><i class="fas fa-minus"></i></button>
+                    <button class="pd-btn pd-btn-plus" onclick="window.chC(${activeRowIndex},1)"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>`;
+        
+        splitContainer.innerHTML = menuHTML + cardHTML;
+        
+        // Özet Çubuğu Hesaplama
         let tt=0, td=0; 
+        localData.counts.forEach(c => { tt += parseInt(c.target); td += parseInt(c.done); });
         const days = getElapsedDays(); 
         document.getElementById('elapsedDays').value = days; 
         
-        const iconMap = [
-            { icon: "fa-cloud-sun", class: "icon-sabah", badge: "Sabah" },
-            { icon: "fa-sun", class: "icon-ogle", badge: "Öğle" },
-            { icon: "fa-clock", class: "icon-ikindi", badge: "İkindi" }, 
-            { icon: "fa-moon", class: "icon-aksam", badge: "Akşam" },
-            { icon: "fa-star", class: "icon-yatsi", badge: "Yatsı" }
-        ];
-
-        localData.counts.forEach((item, i) => { 
-            tt += parseInt(item.target); 
-            td += parseInt(item.done); 
-            const remaining = Math.max(0, item.target - item.done);
-            const meta = iconMap[i] || { icon: "fa-mosque", class: "icon-sabah", badge: "Namaz" };
-            
-            // DÜZELTME: Açık/Kapalı sınıfını kontrol et ve ekle
-            const openClass = (i === activeRowIndex) ? 'open' : '';
-
-            listContainer.innerHTML += `
-            <div class="prayer-row ${openClass}" id="p-row-${i}">
-                <div class="prayer-header" onclick="togglePrayerRow(${i})">
-                    <div class="ph-info">
-                        <div class="ph-icon-box ${meta.class}"><i class="fas ${meta.icon}"></i></div>
-                        <div class="ph-text">
-                            <div class="ph-title">${item.name}</div>
-                            <div class="ph-subtitle">Kalan Borç: <strong class="text-danger">${remaining}</strong></div>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-down ph-arrow" id="p-arrow-${i}"></i>
-                </div>
-                
-                <div class="prayer-body">
-                    <div class="pb-content">
-                        <!-- 3'lü İstatistik Grid -->
-                        <div class="pb-stats-grid">
-                            <div class="pb-stat-box">
-                                <span class="pb-label text-primary">KILINACAK</span>
-                                <input type="number" class="pb-input" value="${item.target}" onchange="window.upT(${i},this.value)">
-                            </div>
-                            <div class="pb-stat-box">
-                                <span class="pb-label text-success">KILINAN</span>
-                                <input type="number" class="pb-input" value="${item.done}" onchange="window.upD(${i},this.value)">
-                            </div>
-                            <div class="pb-stat-box">
-                                <span class="pb-label text-danger">KALAN</span>
-                                <div class="pb-val-static">${remaining}</div>
-                            </div>
-                        </div>
-
-                        <!-- Dev Aksiyon Butonları -->
-                        <div class="pb-actions">
-                            <button class="btn-huge btn-h-minus" onclick="window.chC(${i},-1)"><i class="fas fa-minus"></i></button>
-                            <button class="btn-huge btn-h-plus" onclick="window.chC(${i},1)"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>`; 
-        });
-        
-        // Özet Çubuğu
         document.getElementById('sumTarget').innerText = tt;
         document.getElementById('sumDone').innerText = td;
         document.getElementById('sumRemaining').innerText = tt - td;
@@ -814,29 +819,11 @@
         renderBadges(td); calculateEstFinish(td, days); 
     }
     
-    // GÜNCELLENEN AKORDEON FONKSİYONU
-    window.togglePrayerRow = function(index) {
-        // Durumu güncelle
-        if (activeRowIndex === index) {
-            activeRowIndex = null; // Kapat
-        } else {
-            activeRowIndex = index; // Aç
-        }
-
-        // Tüm açık olanları kapat (CSS class olarak)
-        document.querySelectorAll('.prayer-row').forEach((row, i) => {
-            if(i !== index) row.classList.remove('open');
-        });
-
-        // Seçili olanın sınıfını güncelle
-        const row = document.getElementById(`p-row-${index}`);
-        if(activeRowIndex === index) {
-            row.classList.add('open');
-        } else {
-            row.classList.remove('open');
-        }
-        
+    // AKTİF NAMAZI DEĞİŞTİRME FONKSİYONU
+    window.setActivePrayer = function(index) {
+        activeRowIndex = index;
         triggerHaptic();
+        renderApp(); // Sadece UI güncellemek için render çağırıyoruz
     }
     
     window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
