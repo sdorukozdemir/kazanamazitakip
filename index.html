@@ -12,7 +12,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- FONT GÜNCELLEMESİ: 'Cinzel' Eklendi (Rozetler için) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -64,6 +66,7 @@
             .prayer-detail-card { min-height: 380px; }
         }
         
+        /* YAN MENÜ TASARIMI */
         .side-menu-item { 
             border-radius: 18px; 
             height: 100%; 
@@ -119,7 +122,7 @@
         .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
         
         /* Dark Mode: BEAM VAR (Gece Mavisi/Koyu Tonlar Üzerine Işık Hüzmesi) */
-        /* Akşam namazındaki gibi: Koyu Kenarlar -> Ortada Parlak Hüzme -> Koyu Kenarlar */
+        /* Hepsi Akşam namazı stilinde: Koyu Kenarlar -> Ortada Parlak Hüzme -> Koyu Kenarlar */
         
         /* Sabah (Koyu Mavi - Parlak Mavi Hüzme) */
         body.dark-mode .bg-sabah { background: linear-gradient(120deg, #01579b 0%, #0288d1 40%, #29b6f6 50%, #0288d1 60%, #01579b 100%); }
@@ -134,7 +137,7 @@
         body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); }
         
         /* Yatsı (Koyu Antrasit - Gümüş Hüzme) */
-        body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #37474f 40%, #78909c 50%, #37474f 60%, #102027 100%); }
+        body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
 
         .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
         body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); }
@@ -1132,18 +1135,7 @@
 
     function renderTesbihat() { const c = document.getElementById('tesbihatContainer'); c.innerHTML = ""; if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat)); localData.tesbihat.forEach((item, i) => { let p = item.target > 0 ? (item.current / item.target) * 100 : 0; c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="tesbihat-target-box"><span class="tesbihat-target-label">HEDEF</span><input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-container"><input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet"><button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button></div></div></div>`; }); }
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
-    
-    // GÜNCELLENEN ROZET EMOJİLERİ VE ID'LERİ
-    const BADGES = [ 
-        {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, 
-        {id:500,title:"Gayret",icon:"🔥", desc:"500 Namaz"}, 
-        {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, 
-        {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, 
-        {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, 
-        {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, 
-        {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} 
-    ];
-    
+    const BADGES = [ {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, {id:500,title:"Gayret",icon:"🔥", desc:"500 Namaz"}, {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} ];
     function renderBadges(total) { 
         const c = document.getElementById('badgeContainer'); 
         c.innerHTML = ""; 
