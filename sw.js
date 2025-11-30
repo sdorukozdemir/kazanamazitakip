@@ -1,5 +1,5 @@
 /* Dosya Adı: sw.js */
-const CACHE_NAME = 'ibadet-takip-v26'; // Versiyonu v25'ten v26'ya güncelledim
+const CACHE_NAME = 'ibadet-takip-v27'; // Versiyonu v27 yaptım. Bu sayede telefon yeni tasarımı indirecek.
 
 const STATIC_ASSETS = [
   './',
@@ -15,25 +15,25 @@ const STATIC_ASSETS = [
   'https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js'
 ];
 
-// 1. KURULUM
+// 1. KURULUM (Install)
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  self.skipWaiting(); // Yeni versiyon gelir gelmez beklemeden yükle
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Dosyalar önbelleğe alınıyor...');
+      console.log('[SW] Yeni dosyalar önbelleğe alınıyor...');
       return cache.addAll(STATIC_ASSETS);
     })
   );
 });
 
-// 2. AKTİF OLMA (Eski cache'leri sil)
+// 2. AKTİF OLMA (Activate - Eski cache'leri sil)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('[SW] Eski cache silindi:', cache);
+            console.log('[SW] Eski cache temizlendi:', cache);
             return caches.delete(cache);
           }
         })
@@ -43,32 +43,36 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 3. İSTEKLERİ YÖNETME
+// 3. İSTEKLERİ YÖNETME (Fetch)
 self.addEventListener('fetch', (event) => {
   const reqUrl = new URL(event.request.url);
 
-  // A) Firebase isteklerini ASLA cacheleme (Network Only)
+  // A) Firebase ve Google API isteklerini ASLA cacheleme (Network Only)
   if (reqUrl.href.includes('firebase') || reqUrl.href.includes('googleapis')) {
     return; 
   }
 
-  // B) Sayfa yenileme isteği ise (Navigation)
+  // B) Sayfa yenileme isteği ise (Navigation) - İnternet varsa yenisini al, yoksa cache'den ver
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        // İnternet yoksa index.html döndür
-        return caches.match('./index.html');
-      })
+      fetch(event.request)
+        .then((networkResponse) => {
+          return caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        })
+        .catch(() => {
+          return caches.match('./index.html');
+        })
     );
     return;
   }
 
-  // C) Diğer statik dosyalar (CSS, JS, Resim)
+  // C) Diğer statik dosyalar
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      // Varsa cache'den ver, yoksa internetten çek
       return cachedResponse || fetch(event.request);
     })
   );
 });
-
