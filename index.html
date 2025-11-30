@@ -64,7 +64,6 @@
             .prayer-detail-card { min-height: 380px; }
         }
         
-        /* YAN MENÜ TASARIMI */
         .side-menu-item { 
             border-radius: 18px; 
             height: 100%; 
@@ -76,7 +75,7 @@
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             opacity: 0.8; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(0,0,0,0.05);
             color: #333;
         }
         .side-menu-item:hover { transform: translateY(-2px); opacity: 1; }
@@ -87,49 +86,49 @@
         .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; transition: 0.3s; }
         .flip-icon { transform: scaleX(-1); display: inline-block; }
 
-        /* YAN MENÜ TEMALARI */
-        .theme-sabah { background: linear-gradient(145deg, #bbdefb 0%, #e3f2fd 50%, #bbdefb 100%); color: #0d47a1; }
-        .theme-sabah.active { background: linear-gradient(145deg, #1976d2 0%, #42a5f5 50%, #1976d2 100%); }
-        .theme-ogle { background: linear-gradient(145deg, #ffe082 0%, #fff8e1 50%, #ffe082 100%); color: #f57f17; }
-        .theme-ogle.active { background: linear-gradient(145deg, #fbc02d 0%, #ffee58 50%, #fbc02d 100%); }
-        .theme-ikindi { background: linear-gradient(145deg, #ffcc80 0%, #fff3e0 50%, #ffcc80 100%); color: #e65100; }
-        .theme-ikindi.active { background: linear-gradient(145deg, #f57c00 0%, #ffa726 50%, #f57c00 100%); }
-        .theme-aksam { background: linear-gradient(145deg, #ce93d8 0%, #f3e5f5 50%, #ce93d8 100%); color: #4a148c; }
-        .theme-aksam.active { background: linear-gradient(145deg, #7b1fa2 0%, #ab47bc 50%, #7b1fa2 100%); }
-        .theme-yatsi { background: linear-gradient(145deg, #b0bec5 0%, #eceff1 50%, #b0bec5 100%); color: #263238; }
-        .theme-yatsi.active { background: linear-gradient(145deg, #455a64 0%, #78909c 50%, #455a64 100%); }
+        /* YAN MENÜ RENKLERİ (PASTEL) */
+        .theme-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: #006064; }
+        .theme-sabah.active { background: linear-gradient(135deg, #00acc1 0%, #00838f 100%); }
+        .theme-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); color: #f57f17; }
+        .theme-ogle.active { background: linear-gradient(135deg, #fdd835 0%, #fbc02d 100%); }
+        .theme-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; }
+        .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); }
+        .theme-aksam { background: linear-gradient(135deg, #e1bee7 0%, #ce93d8 100%); color: #4a148c; }
+        .theme-aksam.active { background: linear-gradient(135deg, #8e24aa 0%, #7b1fa2 100%); }
+        .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
+        .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        body.dark-mode .side-menu-item { color: #e0e0e0; }
-        body.dark-mode .theme-sabah { background: linear-gradient(145deg, #102a43 0%, #243b53 50%, #102a43 100%); color: #90caf9; }
-        body.dark-mode .theme-sabah.active { background: linear-gradient(145deg, #0d47a1 0%, #1976d2 50%, #0d47a1 100%); }
-        body.dark-mode .theme-ogle { background: linear-gradient(145deg, #3e2723 0%, #5d4037 50%, #3e2723 100%); color: #ffe082; }
-        body.dark-mode .theme-ogle.active { background: linear-gradient(145deg, #e65100 0%, #ff9800 50%, #e65100 100%); }
-        body.dark-mode .theme-ikindi { background: linear-gradient(145deg, #3e1b1b 0%, #5c2b2b 50%, #3e1b1b 100%); color: #ffcc80; }
-        body.dark-mode .theme-ikindi.active { background: linear-gradient(145deg, #bf360c 0%, #d84315 50%, #bf360c 100%); }
-        body.dark-mode .theme-aksam { background: linear-gradient(145deg, #2a1a3e 0%, #402a5c 50%, #2a1a3e 100%); color: #ce93d8; }
-        body.dark-mode .theme-aksam.active { background: linear-gradient(145deg, #4a148c 0%, #7b1fa2 50%, #4a148c 100%); }
-        body.dark-mode .theme-yatsi { background: linear-gradient(145deg, #18191a 0%, #2c2e30 50%, #18191a 100%); color: #b0bec5; }
-        body.dark-mode .theme-yatsi.active { background: linear-gradient(145deg, #263238 0%, #455a64 50%, #263238 100%); }
+        body.dark-mode .side-menu-item { color: #e0e0e0; border-color: rgba(255,255,255,0.1); }
+        body.dark-mode .theme-sabah { background: linear-gradient(135deg, #1c2b36 0%, #2f4553 100%); color: #b2ebf2; }
+        body.dark-mode .theme-sabah.active { background: linear-gradient(135deg, #00838f 0%, #006064 100%); }
+        body.dark-mode .theme-ogle { background: linear-gradient(135deg, #383020 0%, #4f4430 100%); color: #fff59d; }
+        body.dark-mode .theme-ogle.active { background: linear-gradient(135deg, #fbc02d 0%, #f9a825 100%); }
+        body.dark-mode .theme-ikindi { background: linear-gradient(135deg, #3d2820 0%, #593b30 100%); color: #ffcc80; }
+        body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #ef6c00 0%, #e65100 100%); }
+        body.dark-mode .theme-aksam { background: linear-gradient(135deg, #2d2036 0%, #42304d 100%); color: #e1bee7; }
+        body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%); }
+        body.dark-mode .theme-yatsi { background: linear-gradient(135deg, #1f2226 0%, #2d3238 100%); color: #cfd8dc; }
+        body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); }
 
-        /* BÜYÜK DETAY KART METALİK ZEMİNLERİ */
+        /* BÜYÜK DETAY KART PASTEL ZEMİNLERİ */
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: background 0.5s ease; border: 1px solid var(--border-color); }
         
-        /* Light Mode: Pastel Metalik Silindir Efektleri (Koyu > Açık > Koyu) */
-        .bg-sabah { background: linear-gradient(145deg, #90caf9 0%, #e3f2fd 45%, #90caf9 100%); } /* Gümüş Mavi */
-        .bg-ogle { background: linear-gradient(145deg, #ffe082 0%, #fff8e1 45%, #ffe082 100%); } /* Şampanya Altın */
-        .bg-ikindi { background: linear-gradient(145deg, #ffcc80 0%, #fff3e0 45%, #ffcc80 100%); } /* Yumuşak Bakır */
-        .bg-aksam { background: linear-gradient(145deg, #ce93d8 0%, #f3e5f5 45%, #ce93d8 100%); } /* Ametist */
-        .bg-yatsi { background: linear-gradient(145deg, #b0bec5 0%, #eceff1 45%, #b0bec5 100%); } /* Çelik Gri */
+        /* Light Mode: Pastel & Belirgin Gradient */
+        .bg-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #80deea 100%); } /* Ferah Turkuaz */
+        .bg-ogle { background: linear-gradient(135deg, #fff9c4 0%, #ffd54f 100%); } /* Yumuşak Sarı */
+        .bg-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffb74d 100%); } /* Tatlı Turuncu */
+        .bg-aksam { background: linear-gradient(135deg, #e1bee7 0%, #ba68c8 100%); } /* Pastel Mor */
+        .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #90a4ae 100%); } /* Sakin Gri-Mavi */
         
-        /* Dark Mode: Koyu Metalik */
-        body.dark-mode .bg-sabah { background: linear-gradient(145deg, #1565c0 0%, #1e88e5 50%, #1565c0 100%); } /* Derin Mavi Çelik */
-        body.dark-mode .bg-ogle { background: linear-gradient(145deg, #f57f17 0%, #ffb300 50%, #f57f17 100%); } /* Bronz */
-        body.dark-mode .bg-ikindi { background: linear-gradient(145deg, #e65100 0%, #fb8c00 50%, #e65100 100%); } /* Koyu Bakır */
-        body.dark-mode .bg-aksam { background: linear-gradient(145deg, #6a1b9a 0%, #8e24aa 50%, #6a1b9a 100%); } /* Koyu Mor Metal */
-        body.dark-mode .bg-yatsi { background: linear-gradient(145deg, #263238 0%, #37474f 50%, #263238 100%); } /* Silah Metali */
+        /* Dark Mode: Mat & Koyu (Göz Yormayan) */
+        body.dark-mode .bg-sabah { background: linear-gradient(135deg, #1c2b36 0%, #2f4553 100%); } /* Koyu Petrol Yeşili */
+        body.dark-mode .bg-ogle { background: linear-gradient(135deg, #383020 0%, #4f4430 100%); } /* Koyu Kahve/Haki */
+        body.dark-mode .bg-ikindi { background: linear-gradient(135deg, #3d2820 0%, #593b30 100%); } /* Koyu Kiremit */
+        body.dark-mode .bg-aksam { background: linear-gradient(135deg, #2d2036 0%, #42304d 100%); } /* Koyu Patlıcan */
+        body.dark-mode .bg-yatsi { background: linear-gradient(135deg, #1f2226 0%, #2d3238 100%); } /* Mat Antrasit */
 
         .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px); border-radius: 24px; margin: 10px; }
-        body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.6); }
+        body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.4); }
         
         .pd-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
         .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
