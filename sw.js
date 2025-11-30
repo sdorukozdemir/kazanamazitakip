@@ -1,5 +1,5 @@
 /* Dosya Adı: sw.js */
-const CACHE_NAME = 'ibadet-takip-v28'; // Versiyonu v28 yaptım. Bu sayede telefon yeni tasarımı indirecek.
+const CACHE_NAME = 'ibadet-takip-v29'; // Versiyonu v29 yaptım. Bu sayede telefon yeni tasarımı indirecek.
 
 const STATIC_ASSETS = [
   './',
@@ -76,4 +76,5 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
 
