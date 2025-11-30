@@ -64,7 +64,7 @@
             .prayer-detail-card { min-height: 380px; }
         }
         
-        /* METALİK YAN MENÜ TASARIMI */
+        /* YAN MENÜ TASARIMI */
         .side-menu-item { 
             border-radius: 18px; 
             height: 100%; 
@@ -87,62 +87,49 @@
         .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; transition: 0.3s; }
         .flip-icon { transform: scaleX(-1); display: inline-block; }
 
-        /* METALİK RENK TEMALARI (Koyu -> Açık -> Koyu Geçişi) */
-        
-        /* Sabah (Mavi Metalik) */
+        /* YAN MENÜ TEMALARI */
         .theme-sabah { background: linear-gradient(145deg, #bbdefb 0%, #e3f2fd 50%, #bbdefb 100%); color: #0d47a1; }
         .theme-sabah.active { background: linear-gradient(145deg, #1976d2 0%, #42a5f5 50%, #1976d2 100%); }
-        
-        /* Öğle (Sarı/Altın Metalik) */
         .theme-ogle { background: linear-gradient(145deg, #ffe082 0%, #fff8e1 50%, #ffe082 100%); color: #f57f17; }
         .theme-ogle.active { background: linear-gradient(145deg, #fbc02d 0%, #ffee58 50%, #fbc02d 100%); }
-        
-        /* İkindi (Turuncu/Bakır Metalik) */
         .theme-ikindi { background: linear-gradient(145deg, #ffcc80 0%, #fff3e0 50%, #ffcc80 100%); color: #e65100; }
         .theme-ikindi.active { background: linear-gradient(145deg, #f57c00 0%, #ffa726 50%, #f57c00 100%); }
-        
-        /* Akşam (Mor/Ametist Metalik) */
         .theme-aksam { background: linear-gradient(145deg, #ce93d8 0%, #f3e5f5 50%, #ce93d8 100%); color: #4a148c; }
         .theme-aksam.active { background: linear-gradient(145deg, #7b1fa2 0%, #ab47bc 50%, #7b1fa2 100%); }
-        
-        /* Yatsı (Gri/Gümüş Metalik) */
         .theme-yatsi { background: linear-gradient(145deg, #b0bec5 0%, #eceff1 50%, #b0bec5 100%); color: #263238; }
         .theme-yatsi.active { background: linear-gradient(145deg, #455a64 0%, #78909c 50%, #455a64 100%); }
 
-        /* Gece Modu Metalik Temaları (Daha koyu metalik) */
         body.dark-mode .side-menu-item { color: #e0e0e0; }
         body.dark-mode .theme-sabah { background: linear-gradient(145deg, #102a43 0%, #243b53 50%, #102a43 100%); color: #90caf9; }
         body.dark-mode .theme-sabah.active { background: linear-gradient(145deg, #0d47a1 0%, #1976d2 50%, #0d47a1 100%); }
-        
         body.dark-mode .theme-ogle { background: linear-gradient(145deg, #3e2723 0%, #5d4037 50%, #3e2723 100%); color: #ffe082; }
         body.dark-mode .theme-ogle.active { background: linear-gradient(145deg, #e65100 0%, #ff9800 50%, #e65100 100%); }
-        
         body.dark-mode .theme-ikindi { background: linear-gradient(145deg, #3e1b1b 0%, #5c2b2b 50%, #3e1b1b 100%); color: #ffcc80; }
         body.dark-mode .theme-ikindi.active { background: linear-gradient(145deg, #bf360c 0%, #d84315 50%, #bf360c 100%); }
-        
         body.dark-mode .theme-aksam { background: linear-gradient(145deg, #2a1a3e 0%, #402a5c 50%, #2a1a3e 100%); color: #ce93d8; }
         body.dark-mode .theme-aksam.active { background: linear-gradient(145deg, #4a148c 0%, #7b1fa2 50%, #4a148c 100%); }
-        
         body.dark-mode .theme-yatsi { background: linear-gradient(145deg, #18191a 0%, #2c2e30 50%, #18191a 100%); color: #b0bec5; }
         body.dark-mode .theme-yatsi.active { background: linear-gradient(145deg, #263238 0%, #455a64 50%, #263238 100%); }
 
-        /* BÜYÜK KART METALİK ZEMİNLERİ */
+        /* BÜYÜK DETAY KART METALİK ZEMİNLERİ */
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: background 0.5s ease; border: 1px solid var(--border-color); }
         
-        .bg-sabah { background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 50%, #e3f2fd 100%); }
-        .bg-ogle { background: linear-gradient(135deg, #fff8e1 0%, #ffffff 50%, #fff8e1 100%); }
-        .bg-ikindi { background: linear-gradient(135deg, #fff3e0 0%, #ffffff 50%, #fff3e0 100%); }
-        .bg-aksam { background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 50%, #f3e5f5 100%); }
-        .bg-yatsi { background: linear-gradient(135deg, #eceff1 0%, #ffffff 50%, #eceff1 100%); }
+        /* Light Mode: Pastel Metalik Silindir Efektleri (Koyu > Açık > Koyu) */
+        .bg-sabah { background: linear-gradient(145deg, #90caf9 0%, #e3f2fd 45%, #90caf9 100%); } /* Gümüş Mavi */
+        .bg-ogle { background: linear-gradient(145deg, #ffe082 0%, #fff8e1 45%, #ffe082 100%); } /* Şampanya Altın */
+        .bg-ikindi { background: linear-gradient(145deg, #ffcc80 0%, #fff3e0 45%, #ffcc80 100%); } /* Yumuşak Bakır */
+        .bg-aksam { background: linear-gradient(145deg, #ce93d8 0%, #f3e5f5 45%, #ce93d8 100%); } /* Ametist */
+        .bg-yatsi { background: linear-gradient(145deg, #b0bec5 0%, #eceff1 45%, #b0bec5 100%); } /* Çelik Gri */
         
-        body.dark-mode .bg-sabah { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #0f2027 100%); }
-        body.dark-mode .bg-ogle { background: linear-gradient(135deg, #3e2723 0%, #4e342e 50%, #3e2723 100%); }
-        body.dark-mode .bg-ikindi { background: linear-gradient(135deg, #3e1b1b 0%, #4e2222 50%, #3e1b1b 100%); }
-        body.dark-mode .bg-aksam { background: linear-gradient(135deg, #1a1025 0%, #2a1a3e 50%, #1a1025 100%); }
-        body.dark-mode .bg-yatsi { background: linear-gradient(135deg, #101010 0%, #212121 50%, #101010 100%); }
+        /* Dark Mode: Koyu Metalik */
+        body.dark-mode .bg-sabah { background: linear-gradient(145deg, #1565c0 0%, #1e88e5 50%, #1565c0 100%); } /* Derin Mavi Çelik */
+        body.dark-mode .bg-ogle { background: linear-gradient(145deg, #f57f17 0%, #ffb300 50%, #f57f17 100%); } /* Bronz */
+        body.dark-mode .bg-ikindi { background: linear-gradient(145deg, #e65100 0%, #fb8c00 50%, #e65100 100%); } /* Koyu Bakır */
+        body.dark-mode .bg-aksam { background: linear-gradient(145deg, #6a1b9a 0%, #8e24aa 50%, #6a1b9a 100%); } /* Koyu Mor Metal */
+        body.dark-mode .bg-yatsi { background: linear-gradient(145deg, #263238 0%, #37474f 50%, #263238 100%); } /* Silah Metali */
 
-        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
-        body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.7); }
+        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px); border-radius: 24px; margin: 10px; }
+        body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.6); }
         
         .pd-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
         .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
@@ -1085,7 +1072,7 @@
     const BADGES = [ {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, {id:500,title:"Gayret",icon:"🏃", desc:"500 Namaz"}, {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} ];
     function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } c.innerHTML += `<div class="badge-item"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
     
-    // --- YENİ KOMPAKT METALİK KARTLI RENDERHISTORY FONKSİYONU ---
+    // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
     function renderHistory(filterDate = null) { 
         const container = document.getElementById('historyListContainer'); 
         container.innerHTML = ""; 
@@ -1146,7 +1133,6 @@
 
     // Kart açma kapama fonksiyonu
     window.toggleHistoryCard = function(el) {
-        // Varsa açık olan diğerlerini kapat (Opsiyonel: hepsi tek tek açılsın isterseniz burayı kaldırabilirsiniz)
         const allOpen = document.querySelectorAll('.metallic-card.open');
         allOpen.forEach(card => {
             if(card !== el) {
@@ -1155,7 +1141,6 @@
             }
         });
 
-        // Tıklananı aç/kapat
         const detail = el.querySelector('.card-detail');
         if (el.classList.contains('open')) {
             el.classList.remove('open');
