@@ -62,13 +62,13 @@
         /* MOBİL İÇİN DÜZEN (MENÜ YUKARIYA) */
         @media (max-width: 768px) {
             .prayer-split-layout { flex-direction: column; height: auto; }
-            .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+            .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding: 5px 15px; scrollbar-width: none; gap: 10px; } /* Padding arttırıldı */
             .prayer-side-menu::-webkit-scrollbar { display: none; }
-            .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; }
+            .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; flex: 0 0 auto; } /* flex: 0 0 auto ile sıkışma önlendi */
             .prayer-detail-card { min-height: 380px; }
         }
 
-        .side-menu-item { background: var(--card-bg); border-radius: 18px; height: 100%; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.7; box-shadow: 0 2px 5px rgba(0,0,0,0.05); flex: 1; }
+        .side-menu-item { background: var(--card-bg); border-radius: 18px; height: 100%; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.7; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .side-menu-item:hover { transform: translateY(-2px); }
         
         /* Aktif Durum (Tüm Modlarda Okunur) */
@@ -79,10 +79,13 @@
         .side-menu-icon { font-size: 1.5rem; margin-bottom: 4px; color: var(--text-color); transition: 0.3s; }
         .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-color); opacity: 0.8; transition: 0.3s; }
 
+        /* İkindi Güneşi Sağda Olsun (Flip) */
+        .flip-icon { transform: scaleX(-1); display: inline-block; }
+
         /* Menü Temaları (Aktifken) */
         .theme-sabah.active { background: linear-gradient(135deg, #4facfe, #00f2fe); }
         .theme-ogle.active { background: linear-gradient(135deg, #f09819, #edde5d); }
-        .theme-ikindi.active { background: linear-gradient(135deg, #f83600, #fe8c00); } /* Kızıl/Turuncu */
+        .theme-ikindi.active { background: linear-gradient(135deg, #f83600, #fe8c00); }
         .theme-aksam.active { background: linear-gradient(135deg, #667eea, #764ba2); }
         .theme-yatsi.active { background: linear-gradient(135deg, #434343, #000000); }
 
@@ -94,11 +97,10 @@
         .bg-ogle { background: linear-gradient(135deg, #fff1eb, #ace0f9); }
         .bg-ikindi { background: linear-gradient(135deg, #fad0c4, #ffd1ff); }
         .bg-aksam { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
-        .bg-yatsi { background: linear-gradient(135deg, #cfd9df, #e2ebf0); } /* Gece için açık bir gri/mavi ton */
+        .bg-yatsi { background: linear-gradient(135deg, #cfd9df, #e2ebf0); }
         
-        /* Dark Mode Kart Arkaplanları */
         body.dark-mode .bg-sabah { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
-        body.dark-mode .bg-ogle { background: linear-gradient(135deg, #240b36, #c31432); } /* Sıcak ton dark */
+        body.dark-mode .bg-ogle { background: linear-gradient(135deg, #240b36, #c31432); }
         body.dark-mode .bg-ikindi { background: linear-gradient(135deg, #59253a, #8c4a5d); }
         body.dark-mode .bg-aksam { background: linear-gradient(135deg, #141e30, #243b55); }
         body.dark-mode .bg-yatsi { background: linear-gradient(135deg, #000000, #434343); }
@@ -115,7 +117,7 @@
         .pd-label { font-size: 0.75rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; color: var(--text-color); }
         .pd-input { background: transparent; border: none; font-size: 1.8rem; font-weight: 800; text-align: center; width: 100%; color: var(--text-color); outline: none; }
 
-        /* Progress Bar (Yeni) */
+        /* Progress Bar */
         .pd-progress-container { margin-top: 20px; margin-bottom: 5px; }
         .pd-progress-track { height: 12px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; position: relative; }
         body.dark-mode .pd-progress-track { background: rgba(255,255,255,0.1); }
@@ -779,14 +781,17 @@
         
         // 1. MENU OLUŞTUR (Mobile: Top, Desktop: Left)
         let menuHTML = `<div class="prayer-side-menu">`;
-        const iconList = ["fa-cloud-sun", "fa-sun", "fa-cloud-sun", "fa-moon", "fa-star"]; // Ikindi: fa-cloud-sun
+        const iconList = ["fa-cloud-sun", "fa-sun", "fa-cloud-sun", "fa-moon", "fa-star"]; 
         const themeList = ["theme-sabah", "theme-ogle", "theme-ikindi", "theme-aksam", "theme-yatsi"];
         
         localData.counts.forEach((item, i) => {
             const isActive = (i === activeRowIndex) ? 'active' : '';
+            // Flip specifically for Ikindi (index 2)
+            const flipClass = (i === 2) ? 'flip-icon' : ''; 
+            
             menuHTML += `
             <div class="side-menu-item ${isActive} ${themeList[i]}" onclick="setActivePrayer(${i})">
-                <i class="fas ${iconList[i]} side-menu-icon"></i>
+                <i class="fas ${iconList[i]} side-menu-icon ${flipClass}"></i>
                 <div class="side-menu-label">${item.name}</div>
             </div>`;
         });
@@ -808,7 +813,7 @@
         <div class="prayer-detail-card ${bgList[activeRowIndex]}">
             <div class="pd-content">
                 <div class="pd-header">
-                    <div class="pd-title"><i class="fas ${iconList[activeRowIndex]}"></i> ${activeItem.name}</div>
+                    <div class="pd-title"><i class="fas ${iconList[activeRowIndex]} ${activeRowIndex === 2 ? 'flip-icon' : ''}"></i> ${activeItem.name}</div>
                     <div class="pd-remaining-badge">Kalan: ${remaining}</div>
                 </div>
                 
@@ -838,6 +843,12 @@
         </div>`;
         
         splitContainer.innerHTML = menuHTML + cardHTML;
+        
+        // Otomatik Kaydırma (Yatsı vb. için)
+        setTimeout(() => {
+            const activeEl = document.querySelector('.side-menu-item.active');
+            if(activeEl) activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }, 100);
         
         // Özet Çubuğu Hesaplama
         let tt=0, td=0; 
