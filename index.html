@@ -223,9 +223,9 @@
         .metallic-card.up { border-left: 5px solid #198754; }
         .metallic-card.down { border-left: 5px solid #dc3545; }
 
-        /* Özet Kısmı (Her zaman görünür) */
+        /* Özet Kısmı (Her zaman görünür) - SAĞ TARAF GRUPLAMA */
         .card-summary {
-            padding: 10px 15px;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -233,41 +233,35 @@
             min-height: 50px;
         }
 
-        .summary-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
         .summary-prayer {
             font-weight: 800;
             text-transform: uppercase;
             font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Sağ taraf: Badge ve Ok Yan Yana */
+        .summary-right-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .change-badge {
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 12px;
-            background: rgba(0,0,0,0.05);
-            min-width: 30px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 6px;
+            min-width: 35px;
             text-align: center;
         }
         .metallic-card.up .change-badge { color: #198754; background: rgba(25, 135, 84, 0.1); }
         .metallic-card.down .change-badge { color: #dc3545; background: rgba(220, 53, 69, 0.1); }
-
-        .summary-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            opacity: 0.7;
-        }
         
         .toggle-icon {
             transition: transform 0.3s ease;
+            opacity: 0.6;
+            font-size: 0.9rem;
         }
         .metallic-card.open .toggle-icon {
             transform: rotate(180deg);
@@ -288,18 +282,19 @@
         .detail-values {
             font-weight: 800;
             font-size: 1.1rem;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
         .metallic-card.up .detail-values { color: #198754; }
         .metallic-card.down .detail-values { color: #dc3545; }
 
         .detail-full-date {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             opacity: 0.6;
+            font-weight: 600;
         }
 
         /* GECE MODU METALİK */
@@ -1072,20 +1067,14 @@
             const diff = n - o;
             const diffSign = diff > 0 ? '+' : '';
             const statusClass = diff > 0 ? 'up' : (diff < 0 ? 'down' : ''); 
-            
-            // Sadece saat kısmını al (örn: 14:30)
-            const timeOnly = r.time.split(' ')[1].substring(0, 5);
 
             // Kompakt Accordion Kart HTML
             container.innerHTML += `
             <div class="metallic-card ${statusClass}" onclick="toggleHistoryCard(this)">
                 <div class="card-summary">
-                    <div class="summary-left">
-                        <span class="summary-prayer">${r.namaz}</span>
+                    <span class="summary-prayer">${r.namaz}</span>
+                    <div class="summary-right-group">
                         <span class="change-badge">${diffSign}${diff}</span>
-                    </div>
-                    <div class="summary-right">
-                        <span>${timeOnly}</span>
                         <i class="fas fa-chevron-down toggle-icon"></i>
                     </div>
                 </div>
@@ -1095,7 +1084,7 @@
                         <i class="fas fa-arrow-right"></i>
                         <span>${n}</span>
                     </div>
-                    <div class="detail-full-date">${r.time}</div>
+                    <div class="detail-full-date"><i class="far fa-clock me-1"></i> ${r.time}</div>
                 </div>
             </div>`; 
         }); 
