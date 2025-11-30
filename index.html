@@ -86,78 +86,62 @@
         .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; transition: 0.3s; }
         .flip-icon { transform: scaleX(-1); display: inline-block; }
 
-        /* YAN MENÜ RENKLERİ (UYUMLU KÜÇÜK KARTLAR) */
-        
-        /* Sabah (Mavi) */
-        .theme-sabah { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); color: #0277bd; }
-        .theme-sabah.active { background: linear-gradient(135deg, #0288d1 0%, #01579b 100%); }
-        
-        /* Öğle (Sarı-Turuncu) */
-        .theme-ogle { background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%); color: #f57f17; }
-        .theme-ogle.active { background: linear-gradient(135deg, #fbc02d 0%, #f57f17 100%); }
-        
-        /* İkindi (Turuncu-Kırmızı) */
-        .theme-ikindi { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); color: #e64a19; }
-        .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #d84315 100%); }
-        
-        /* Akşam (Lacivert) */
+        /* YAN MENÜ RENKLERİ */
+        .theme-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: #006064; }
+        .theme-sabah.active { background: linear-gradient(135deg, #00acc1 0%, #00838f 100%); }
+        .theme-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); color: #f57f17; }
+        .theme-ogle.active { background: linear-gradient(135deg, #fdd835 0%, #fbc02d 100%); }
+        .theme-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; }
+        .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); }
         .theme-aksam { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); color: #1a237e; }
         .theme-aksam.active { background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); }
-        
-        /* Yatsı (Gri-Ay Işığı) */
-        .theme-yatsi { background: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%); color: #263238; }
-        .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #37474f 100%); }
+        .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
+        .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        /* Dark Mode Side Menu */
-        body.dark-mode .side-menu-item { color: #b0bec5; border-color: rgba(255,255,255,0.1); }
-        body.dark-mode .theme-sabah { background: linear-gradient(135deg, #1c2b36 0%, #2f4553 100%); color: #81d4fa; }
-        body.dark-mode .theme-sabah.active { background: linear-gradient(135deg, #0277bd 0%, #01579b 100%); }
-        body.dark-mode .theme-ogle { background: linear-gradient(135deg, #3e2723 0%, #4e342e 100%); color: #fff59d; }
-        body.dark-mode .theme-ogle.active { background: linear-gradient(135deg, #ff8f00 0%, #e65100 100%); }
-        body.dark-mode .theme-ikindi { background: linear-gradient(135deg, #3e1b1b 0%, #4e2222 100%); color: #ffcc80; }
-        body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); }
+        body.dark-mode .side-menu-item { color: #e0e0e0; border-color: rgba(255,255,255,0.1); }
+        body.dark-mode .theme-sabah { background: linear-gradient(135deg, #1c2b36 0%, #2f4553 100%); color: #b2ebf2; }
+        body.dark-mode .theme-sabah.active { background: linear-gradient(135deg, #00838f 0%, #006064 100%); }
+        body.dark-mode .theme-ogle { background: linear-gradient(135deg, #383020 0%, #4f4430 100%); color: #fff59d; }
+        body.dark-mode .theme-ogle.active { background: linear-gradient(135deg, #fbc02d 0%, #f9a825 100%); }
+        body.dark-mode .theme-ikindi { background: linear-gradient(135deg, #3d2820 0%, #593b30 100%); color: #ffcc80; }
+        body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #ef6c00 0%, #e65100 100%); }
         body.dark-mode .theme-aksam { background: linear-gradient(135deg, #1a1025 0%, #2a1a3e 100%); color: #9fa8da; }
         body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); }
         body.dark-mode .theme-yatsi { background: linear-gradient(135deg, #101010 0%, #212121 100%); color: #cfd8dc; }
         body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); }
 
 
-        /* --- BÜYÜK DETAY KARTLARI (SİLİNDİR/METALİK EFEKT) --- */
+        /* --- BÜYÜK DETAY KARTLARI (IŞIK HÜZMESİ/BEAM EFEKTİ) --- */
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
         
-        /* Sabah: Mavi - Parlak - Mavi */
-        .bg-sabah { background: linear-gradient(120deg, #4fc3f7 0%, #b3e5fc 40%, #e1f5fe 50%, #b3e5fc 60%, #4fc3f7 100%); }
+        /* 
+           BEAM EFFECT LOGIC: 
+           Dark (0%) -> Mid Light (40%) -> Bright Beam (50%) -> Mid Light (60%) -> Dark (100%)
+        */
+
+        /* Sabah: Mavi Beam */
+        .bg-sabah { background: linear-gradient(120deg, #29b6f6 0%, #4fc3f7 40%, #e1f5fe 50%, #4fc3f7 60%, #29b6f6 100%); }
         
-        /* Öğle: Sarı/Turuncu - Parlak - Sarı/Turuncu */
-        .bg-ogle { background: linear-gradient(120deg, #ffb74d 0%, #ffe082 40%, #fff9c4 50%, #ffe082 60%, #ffb74d 100%); }
+        /* Öğle: Altın Beam */
+        .bg-ogle { background: linear-gradient(120deg, #fbc02d 0%, #fdd835 40%, #fffde7 50%, #fdd835 60%, #fbc02d 100%); }
         
-        /* İkindi: Koyu Turuncu - Kiremit - Koyu Turuncu */
-        .bg-ikindi { background: linear-gradient(120deg, #ff7043 0%, #ffab91 40%, #ffccbc 50%, #ffab91 60%, #ff7043 100%); }
+        /* İkindi: Turuncu/Gün Batımı Beam */
+        .bg-ikindi { background: linear-gradient(120deg, #ef6c00 0%, #f57c00 40%, #ffe0b2 50%, #f57c00 60%, #ef6c00 100%); }
         
-        /* Akşam: Lacivert - İndigo - Lacivert (Kırmızı YOK) */
-        .bg-aksam { background: linear-gradient(120deg, #3949ab 0%, #7986cb 40%, #c5cae9 50%, #7986cb 60%, #3949ab 100%); }
+        /* Akşam: Lacivert/İndigo Beam (Kırmızı YOK) */
+        .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #c5cae9 50%, #303f9f 60%, #1a237e 100%); }
         
-        /* Yatsı: Gri - Gümüş - Gri (Ay Işığı Efekti) */
-        .bg-yatsi { background: linear-gradient(120deg, #455a64 0%, #607d8b 40%, #eceff1 50%, #607d8b 60%, #455a64 100%); }
+        /* Yatsı: Gri/Gümüş Ay Işığı Beam */
+        .bg-yatsi { background: linear-gradient(120deg, #37474f 0%, #607d8b 40%, #eceff1 50%, #607d8b 60%, #37474f 100%); }
         
-        /* --- DARK MODE (Matlaştırılmış Koyu Metalik) --- */
-        
-        /* Sabah Gece: Koyu Mavi Çelik */
-        body.dark-mode .bg-sabah { background: linear-gradient(120deg, #01579b 0%, #0277bd 40%, #0288d1 50%, #0277bd 60%, #01579b 100%); }
-        
-        /* Öğle Gece: Koyu Altın/Bronz */
-        body.dark-mode .bg-ogle { background: linear-gradient(120deg, #e65100 0%, #ef6c00 40%, #f57c00 50%, #ef6c00 60%, #e65100 100%); }
-        
-        /* İkindi Gece: Koyu Bakır */
-        body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #e64a19 50%, #d84315 60%, #bf360c 100%); }
-        
-        /* Akşam Gece: Derin Gece Mavisi */
-        body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #283593 40%, #303f9f 50%, #283593 60%, #1a237e 100%); }
-        
-        /* Yatsı Gece: Koyu Antrasit */
+        /* Dark Mode: Matlaştırılmış Beam Efektleri */
+        body.dark-mode .bg-sabah { background: linear-gradient(120deg, #01579b 0%, #0277bd 40%, #4fc3f7 50%, #0277bd 60%, #01579b 100%); }
+        body.dark-mode .bg-ogle { background: linear-gradient(120deg, #e65100 0%, #f57f17 40%, #ffd54f 50%, #f57f17 60%, #e65100 100%); }
+        body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ffab91 50%, #d84315 60%, #bf360c 100%); }
+        body.dark-mode .bg-aksam { background: linear-gradient(120deg, #000051 0%, #1a237e 40%, #3949ab 50%, #1a237e 60%, #000051 100%); }
         body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
 
-        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
+        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
         body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); }
         
         .pd-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
@@ -388,13 +372,65 @@
             cursor: pointer;
         }
         
-        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; margin: 20px auto 40px auto; }
-        .badge-item { width: 110px; padding: 10px; background: var(--card-bg); border-radius: 15px; border: 1px solid var(--border-color); text-align: center; }
-        .badge-item.locked { filter: grayscale(100%); opacity: 0.5; }
-        .badge-icon { font-size: 2rem; display: block; margin-bottom: 5px; }
-        .badge-title { font-size: 0.8rem; font-weight: 600; color: #198754; }
-        .badge-desc { font-size: 0.6rem; color: var(--text-color); margin-top: 3px; opacity: 0.7; }
-        body.dark-mode .badge-title { color: #20c997; }
+        /* --- YENİ ROZET TASARIMI (ALTIN MADALYON) --- */
+        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
+        .badge-item {
+            width: 120px;
+            padding: 15px 10px;
+            border-radius: 18px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        /* Kazanılan Rozetler */
+        .badge-item.unlocked {
+            border: 2px solid #ffc107; /* Altın Kenar */
+            background: linear-gradient(135deg, #ffffff 0%, #fff8e1 100%);
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.25);
+            transform: scale(1.05);
+        }
+        body.dark-mode .badge-item.unlocked {
+            background: linear-gradient(135deg, #3e2723 0%, #4e342e 100%);
+            border-color: #ffd54f;
+            box-shadow: 0 8px 20px rgba(255, 213, 79, 0.15);
+        }
+        /* Kilitli Rozetler */
+        .badge-item.locked {
+            filter: grayscale(100%);
+            opacity: 0.6;
+            background: var(--input-bg);
+        }
+        
+        .badge-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .badge-title {
+            font-family: 'Amiri', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #d35400; /* Bronz/Altın tonu */
+            margin-bottom: 4px;
+        }
+        .badge-item.unlocked .badge-title {
+            color: #ff8f00;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+        body.dark-mode .badge-item.unlocked .badge-title { color: #ffca28; }
+        
+        .badge-desc {
+            font-size: 0.65rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -1099,7 +1135,22 @@
     function renderTesbihat() { const c = document.getElementById('tesbihatContainer'); c.innerHTML = ""; if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat)); localData.tesbihat.forEach((item, i) => { let p = item.target > 0 ? (item.current / item.target) * 100 : 0; c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="tesbihat-target-box"><span class="tesbihat-target-label">HEDEF</span><input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-container"><input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet"><button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button></div></div></div>`; }); }
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     const BADGES = [ {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, {id:500,title:"Gayret",icon:"🏃", desc:"500 Namaz"}, {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} ];
-    function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } c.innerHTML += `<div class="badge-item"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
+    function renderBadges(total) { 
+        const c = document.getElementById('badgeContainer'); 
+        c.innerHTML = ""; 
+        let next=false; 
+        BADGES.forEach(b => { 
+            let unlockedClass = '';
+            if(total >= b.id) { 
+                if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } 
+                unlockedClass = 'unlocked';
+                c.innerHTML += `<div class="badge-item ${unlockedClass}"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; 
+            } else if (!next) { 
+                c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; 
+                next=true; 
+            } 
+        }); 
+    }
     
     // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
     function renderHistory(filterDate = null) { 
