@@ -191,33 +191,199 @@
         .summary-val { font-size: 1.2rem; font-weight: 800; line-height: 1; }
         .summary-lbl { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
 
-        .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .login-card, .goal-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
         .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #609979; background: white; }
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
-        .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #609979; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #609979; margin: 10px 0; line-height: 1.3; }
-        body.dark-mode .arabic-text { color: #20c997; }
-        .zikr-count { font-size: 2.8rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
-        .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; }
-        .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.05s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
-        .zikr-btn:active { transform: scale(0.9); }
-        .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
-        .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); }
-        .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
-        .tesbihat-target-box { background: var(--box-target-bg); border: 1px solid var(--box-target-border); border-radius: 25px; padding: 8px 25px; display: inline-flex; align-items: center; gap: 15px; margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); min-width: 150px; justify-content: space-between; }
-        .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 1px; color: var(--box-target-text); }
-        .tesbihat-target-input { border: none; background: transparent; width: 90px; text-align: center; font-weight: bold; font-size: 1.2rem; color: var(--text-color); outline: none; }
-        .manual-zikr-container { position: relative; background-color: var(--box-add-bg); border: 1px solid var(--box-add-border); border-radius: 50px; padding: 4px 5px 4px 15px; display: flex; align-items: center; justify-content: space-between; width: 45%; min-width: 130px; margin: 15px auto 0 auto; box-shadow: 0 3px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .manual-zikr-container:focus-within { transform: scale(1.02); }
-        .manual-zikr-input-clean { border: none; background: transparent; font-weight: bold; color: var(--text-color); width: 100%; outline: none; font-size: 0.95rem; text-align: center; }
-        .btn-add-clean { background: #0d6efd; color: white; border: none; border-radius: 50px; padding: 6px 15px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap; }
-        .btn-add-clean:active { transform: scale(0.95); }
-        .btn-add-clean:hover { background: #0b5ed7; }
-        body.dark-mode .btn-add-clean { background: #3d8bfd; color: #121212; }
+
+        /* --- YENİ TESBİHAT TASARIMI --- */
+        .tesbihat-layout-wrapper {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 180px); /* Ekran yüksekliğine göre ayarla */
+            min-height: 400px;
+            align-items: stretch;
+        }
+
+        /* Sol Menü (Liste) */
+        .zikr-menu {
+            width: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 5px;
+            flex-shrink: 0;
+        }
+
+        /* Menü Elemanları */
+        .zikr-menu-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 15px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90px;
+        }
+
+        .zikr-menu-item:hover { transform: translateY(-2px); opacity: 1; }
+        .zikr-menu-item.active {
+            background: linear-gradient(135deg, #609979, #3e6b53);
+            color: white;
+            border-color: #609979;
+            opacity: 1;
+            box-shadow: 0 5px 15px rgba(96, 153, 121, 0.4);
+            transform: scale(1.05);
+        }
+        .zikr-menu-item.active .small-arabic { color: rgba(255,255,255,0.8); }
+
+        .zikr-menu-icon { font-size: 1.5rem; margin-bottom: 5px; }
+        .small-arabic { font-family: 'Amiri', serif; font-size: 1.2rem; line-height: 1; margin-top: 5px; color: #609979; }
+
+        /* Sağ Ana Kart (Detay) */
+        .zikr-active-card {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* Devasa Tıklama Alanı */
+        .big-tap-area {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 10;
+        }
+        .big-tap-area:active { transform: scale(0.98); }
+
+        .big-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 4rem;
+            color: #609979;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        body.dark-mode .big-arabic { color: #20c997; }
+
+        .big-counter {
+            font-size: 5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+
+        .zikr-info-badges {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none; /* Tıklamayı engellemesin */
+        }
+        .z-badge {
+            background: rgba(96, 153, 121, 0.1);
+            color: #609979;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Alt Kontroller */
+        .zikr-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: auto;
+            width: 100%;
+            justify-content: center;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border-color);
+            position: relative;
+            z-index: 20; /* Tıklama alanının üstünde olsun */
+        }
+
+        /* MOBİL GÖRÜNÜM (PORTRAIT) */
+        @media (max-width: 768px) {
+            .tesbihat-layout-wrapper {
+                flex-direction: column;
+                height: auto;
+                gap: 15px;
+            }
+            .zikr-menu {
+                flex-direction: row;
+                width: 100%;
+                height: auto;
+                overflow-x: auto;
+                padding-bottom: 5px;
+                padding-right: 0;
+            }
+            .zikr-menu-item {
+                min-width: 90px;
+                min-height: 80px;
+                flex: 0 0 auto;
+            }
+            .zikr-active-card {
+                min-height: 400px; /* Mobilde kart yüksekliği */
+            }
+            .big-arabic { font-size: 2.8rem; }
+            .big-counter { font-size: 4rem; }
+        }
+
+        /* YATAY MOBİL (LANDSCAPE) */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .tesbihat-layout-wrapper {
+                flex-direction: row !important; /* Yan yana zorla */
+                height: calc(100vh - 80px); /* Alt menü payı */
+                margin-bottom: 0;
+            }
+            .zikr-menu {
+                width: 90px;
+                flex-direction: column;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+            .zikr-menu-item {
+                min-height: 70px;
+                padding: 5px;
+            }
+            .zikr-active-card {
+                padding: 10px;
+            }
+            .big-arabic { font-size: 2.5rem; margin-bottom: 0; }
+            .big-counter { font-size: 3.5rem; }
+            .zikr-controls { padding-top: 10px; }
+            .btn-sm-landscape { padding: 5px 10px; font-size: 0.8rem; }
+        }
+
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
@@ -563,6 +729,7 @@
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
     let activeRowIndex = 0; 
+    let activeTesbihatIndex = 0; // Yeni Tesbihat için index
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
@@ -921,7 +1088,78 @@
     window.updateDailyGoal = function(v) { let totalDebt = 0; localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done)); if(totalDebt <= 0) { showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır."); document.getElementById('dailyGoalInput').value = localData.daily.target; return; } localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
     window.updateWeeklyGoal = function(v) { let totalDebt = 0; localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done)); if(totalDebt <= 0) { showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır."); document.getElementById('weeklyGoalInput').value = localData.weeklyTarget; return; } localData.weeklyTarget = parseInt(v)||50; saveToCloud(); renderApp(); };
     function getWeeklyProgress() { if (!localData.logs) return 0; const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day == 0 ? -6 : 1); const monday = new Date(today.setDate(diff)); monday.setHours(0,0,0,0); let weeklyTotal = 0; Object.keys(localData.logs).forEach(dateKey => { const logDate = new Date(dateKey); if (logDate >= monday) { weeklyTotal += localData.logs[dateKey]; } }); return weeklyTotal; }
-    function renderTesbihat() { const c = document.getElementById('tesbihatContainer'); c.innerHTML = ""; if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat)); localData.tesbihat.forEach((item, i) => { let p = item.target > 0 ? (item.current / item.target) * 100 : 0; c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="tesbihat-target-box"><span class="tesbihat-target-label">HEDEF</span><input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-container"><input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet"><button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button></div></div></div>`; }); }
+
+    // --- YENİ TESBİHAT FONKSİYONLARI ---
+    function renderTesbihat() {
+        const c = document.getElementById('tesbihatContainer');
+        c.innerHTML = "";
+        
+        if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
+        
+        const activeItem = localData.tesbihat[activeTesbihatIndex];
+        const percentage = activeItem.target > 0 ? (activeItem.current / activeItem.target) * 100 : 0;
+        
+        let menuHTML = `<div class="zikr-menu">`;
+        localData.tesbihat.forEach((item, i) => {
+            const isActive = (i === activeTesbihatIndex) ? 'active' : '';
+            menuHTML += `
+            <div class="zikr-menu-item ${isActive}" onclick="setActiveTesbihat(${i})">
+                <div class="fw-bold small">${item.name}</div>
+                <div class="small-arabic">${item.arabic}</div>
+                <div class="mt-1 badge bg-light text-dark shadow-sm">${item.current}</div>
+            </div>`;
+        });
+        menuHTML += `</div>`;
+
+        let mainCardHTML = `
+        <div class="zikr-active-card">
+            <div class="zikr-info-badges">
+                <span class="z-badge"><i class="fas fa-bullseye me-1"></i>Hedef: ${activeItem.target}</span>
+                <span class="z-badge ms-auto text-dark" style="background:var(--input-bg)">${percentage.toFixed(0)}%</span>
+            </div>
+            <div style="position:absolute; top:0; left:0; width:${percentage}%; height:4px; background:#609979; transition:width 0.3s;"></div>
+            <div class="big-tap-area" onclick="window.upTes(${activeTesbihatIndex}, 1)">
+                <div class="big-arabic">${activeItem.arabic}</div>
+                <div class="h4 text-muted mb-2">${activeItem.name}</div>
+                <div class="big-counter">${activeItem.current}</div>
+                <div class="text-muted small mt-2"><i class="fas fa-fingerprint me-1"></i>Dokun</div>
+            </div>
+            <div class="zikr-controls">
+                <button class="btn btn-outline-danger btn-sm-landscape rounded-pill" onclick="window.resTes(${activeTesbihatIndex})">
+                    <i class="fas fa-undo me-1"></i>Sıfırla
+                </button>
+                <div class="input-group" style="width: auto; max-width: 160px;">
+                    <input type="number" class="form-control text-center btn-sm-landscape" 
+                           placeholder="Hedef" value="${activeItem.target}" 
+                           onchange="window.setTesTarget(${activeTesbihatIndex}, this.value)">
+                </div>
+                <div class="dropdown">
+                     <button class="btn btn-outline-primary btn-sm-landscape rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-plus me-1"></i>Manuel
+                     </button>
+                     <div class="dropdown-menu p-3 shadow" style="min-width: 200px;">
+                        <label class="small text-muted mb-1">Toplu Ekle</label>
+                        <div class="d-flex gap-2">
+                            <input type="number" id="manZ-active" class="form-control" placeholder="Adet">
+                            <button class="btn btn-primary" onclick="addTesActive()">Ekle</button>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>`;
+
+        c.innerHTML = `
+        <div class="col-12">
+            <div class="tesbihat-layout-wrapper">
+                ${menuHTML}
+                ${mainCardHTML}
+            </div>
+        </div>`;
+    }
+
+    window.setActiveTesbihat = function(index) { triggerHaptic(); activeTesbihatIndex = index; renderTesbihat(); };
+    window.addTesActive = function() { triggerHaptic(); const valInput = document.getElementById('manZ-active'); const v = parseInt(valInput.value) || 0; if(v > 0) { window.upTes(activeTesbihatIndex, v); valInput.value = ""; } };
+
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     const BADGES = [ {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, {id:500,title:"Gayret",icon:"🔥", desc:"500 Namaz"}, {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} ];
     function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { let unlockedClass = ''; if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } unlockedClass = 'unlocked'; c.innerHTML += `<div class="badge-item ${unlockedClass}"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
@@ -1006,7 +1244,6 @@
             </div>`;
         }); 
         
-        // Metinleri önceden yaz (Hata olursa da görünsün)
         const bestText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
         const worstText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
         document.getElementById('bestPrayer').innerText = bestText;
@@ -1026,7 +1263,6 @@
         document.getElementById('statYearly').innerText = periodStats.yearly;
         document.getElementById('statAverage').innerText = avg;
         
-        // Grafik çizimlerini try-catch ile sarmala
         try {
             const ctx1 = document.getElementById('completionChart').getContext('2d'); 
             if (chartCompletion) chartCompletion.destroy(); 
@@ -1213,7 +1449,6 @@
         document.body.style.filter = "none";
     });
 
-    // --- PWA INSTALL LOGIC ---
     let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
