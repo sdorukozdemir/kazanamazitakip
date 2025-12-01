@@ -20,7 +20,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Sürümü Sabitlendi (v3.9.1) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 </head>
@@ -189,18 +190,17 @@
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
-                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ -->
+                <!-- GÜNCELLENEN TARİH KAPSÜLÜ -->
                 <div class="date-filter-capsule">
                     <span class="capsule-label">İŞLEM TARİHİ</span>
                     <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
                            ontouchstart="(this.type='date');"
                            onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
                            onblur="if(!this.value) this.type='text'"
-                           onchange="filterHistoryByDate()">
+                           onchange="if(!this.value) this.type='text'; filterHistoryByDate()">
                     <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
                 </div>
 
-                <!-- Tablo yerine ACCORDION listesi -->
                 <div id="historyListContainer" class="px-2"></div>
             </div>
         </div>
@@ -233,7 +233,6 @@
             <h3 class="app-header">Yedekleme ve Ayarlar</h3>
             <div class="row justify-content-center g-4">
                 
-                <!-- YENİ EKLENEN YÜKLEME BUTONU -->
                 <div id="installContainer" class="col-12" style="display: none;">
                     <div class="settings-card text-center border-success" style="background: #e8f5e9; border: 1px solid #198754;">
                         <i class="fas fa-download settings-icon text-success"></i>
@@ -244,7 +243,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- YENİ EKLENEN YÜKLEME BUTONU SONU -->
 
                 <div class="col-12">
                      <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
