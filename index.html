@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Kaza ve İbadet Takip</title>
+    
+    <meta name="theme-color" content="#609979">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+</head>
+<body>
+
+<div id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Veriler Yükleniyor...</div>
+</div>
+
+<div id="toast-container"></div>
+
+<div id="gender-selection-modal" class="custom-modal-overlay">
+    <div class="custom-modal" style="max-width: 450px;">
+        <h4 class="mb-3 fw-bold">Hoş Geldiniz</h4>
+        <p class="mb-4 text-muted">Hesaplamaları daha doğru yapabilmemiz için lütfen cinsiyetinizi seçiniz.</p>
+        <div class="row g-3">
+            <div class="col-6">
+                <div id="genderOptFemale" class="gender-option" data-type="female" onclick="selectGender('female')">
+                    <i class="fas fa-female fa-3x mb-2"></i>
+                    <div class="fw-bold">Kadın</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div id="genderOptMale" class="gender-option" data-type="male" onclick="selectGender('male')">
+                    <i class="fas fa-male fa-3x mb-2"></i>
+                    <div class="fw-bold">Erkek</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="customModal" class="custom-modal-overlay">
+    <div class="custom-modal">
+        <h4 id="modalTitle">Başlık</h4>
+        <p id="modalMessage">Mesaj.</p>
+        <div class="modal-btn-group" id="modalButtons"></div>
+    </div>
+</div>
+<div id="overlay" onclick="toggleSidebar()"></div>
+
+<div id="login-screen">
+    <div class="login-card p-5 text-center" style="max-width: 400px;">
+        <h3 class="text-success fw-bold mb-4">İbadet Takip</h3>
+        <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="loginWithGoogle()">
+            <i class="fab fa-google me-2"></i> Google ile Giriş
+        </button>
+    </div>
+</div>
+
+<div id="app-wrapper" class="wrapper" style="display:none;">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h4 class="fw-bold"><i class="fas fa-kaaba me-2"></i>Takip</h4>
+            <div id="sidebarUserInfoBox" class="user-info-box">
+                <i class="fas fa-user-circle"></i>
+                <div id="sidebarUserInfo" class="user-info-text">Kullanıcı</div>
+            </div>
+        </div>
+        <ul class="list-unstyled components">
+            <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
+            <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
+            <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
+            <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
+            <li id="menu-settings" onclick="showSection('settings')"><i class="fas fa-cog me-3"></i> Yedekleme & Ayarlar</li>
+            <li onclick="toggleDarkMode()"><i class="fas fa-moon me-3"></i> <span id="darkModeText">Gece Modu</span></li>
+            <li onclick="logout()"><i class="fas fa-sign-out-alt me-3"></i> Çıkış Yap</li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <div id="section-dashboard" style="display: block;">
+            <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
+                <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
+                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
+            </div>
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8 col-lg-6">
+                    <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
+                    <div id="goalCard" class="goal-card">
+                        <h4>🎯 Günlük Hedef</h4>
+                        <div class="goal-content">
+                            <span class="fs-5">Bugün</span><strong class="fs-1" id="dailyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)"><span class="fs-5">Kaza</span>
+                        </div>
+                        <div class="progress mt-2" style="height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
+                        <div id="goalSuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🎉 Harika! Hedefe Ulaşıldı!</div>
+                        <div class="mt-2 streak-box"><i class="fas fa-fire text-warning"></i> <span>Zincir:</span><span id="streakValue" class="fw-bold text-warning">0</span> <span>Gün</span></div>
+                    </div>
+                    <div id="weeklyCard" class="goal-card" style="background: linear-gradient(135deg, #0d6efd, #0dcaf0); margin-top: 20px;">
+                        <h4>🏆 Haftalık Meydan Okuma</h4>
+                        <div class="goal-content">
+                            <span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)">
+                        </div>
+                        <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="weeklyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
+                        <div id="weeklySuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
+                        <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-4 justify-content-center">
+                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
+                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
+            </div>
+            
+            <div id="prayerSplitContainer" class="prayer-split-layout">
+                <!-- Javascript ile doldurulacak -->
+            </div>
+            
+            <div id="summaryBar" class="summary-bar">
+                <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
+                <div class="summary-item"><div class="summary-val text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
+                <div class="summary-item"><div class="summary-val" id="sumRemaining">0</div><div class="summary-lbl">Kalan</div></div>
+            </div>
+
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="prediction-card h-100">
+                        <i class="fas fa-hourglass-half prediction-icon"></i><h5 class="fw-bold">Ne Zaman Biter?</h5>
+                        <div id="prediction-container">
+                            <div class="mt-3"><div class="prediction-date" id="estFinishDate">Hesaplanıyor...</div><div class="prediction-days" id="estDaysLeft">...</div><span class="prediction-sub-label">Günlük Hedefe Göre</span></div>
+                            <div class="prediction-secondary"><div class="date-small" id="estFinishDateAvg">Hesaplanıyor...</div><div class="prediction-days" id="estDaysLeftAvg">...</div><span class="prediction-sub-label">Günlük Ortalamanıza Göre</span></div>
+                        </div>
+                        <div id="prediction-success" class="text-success fw-bold mt-2" style="display:none;">🎉 Borcunuz bulunmamaktadır!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4"><h5 class="fw-bold text-secondary"><i class="fas fa-trophy text-warning me-2"></i>Rozet Müzesi</h5></div>
+            <div id="badgeContainer" class="badge-container"></div>
+        </div>
+
+        <div id="section-stats" style="display: none;">
+            <h3 class="app-header">İstatistikler</h3>
+            <div class="stats-tab-container">
+                <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
+                <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
+            </div>
+            <div id="stats-view-analysis">
+                <div class="scrolling-wrapper mb-4">
+                    <div class="stat-card-scroll"><div class="stat-number text-primary" id="statToday">0</div><div class="stat-label">Bugün</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-success" id="statWeekly">0</div><div class="stat-label">Bu Hafta</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-info" id="statMonthly">0</div><div class="stat-label">Bu Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-warning" id="stat3Months">0</div><div class="stat-label">Son 3 Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-danger" id="stat6Months">0</div><div class="stat-label">Son 6 Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-secondary" id="statYearly">0</div><div class="stat-label">Son 1 Yıl</div></div>
+                     <div class="stat-card-scroll"><div class="stat-number" id="statAverage">0</div><div class="stat-label">Günlük Ort.</div></div>
+                </div>
+
+                <div class="analysis-box mb-4">
+                    <div class="analysis-row"><div class="analysis-icon icon-good"><i class="fas fa-check"></i></div><div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div></div>
+                    <div class="analysis-row"><div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div><div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div></div>
+                </div>
+
+                <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
+                <div id="prayer-analysis-grid" class="mb-4">
+                    <!-- Javascript ile doldurulacak -->
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
+                    <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Performans Analizi</h5><div class="d-flex justify-content-center mb-2"><div class="btn-group btn-group-sm" role="group"><input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')"><label class="btn btn-outline-success" for="btnradio1">Haftalık</label><input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')"><label class="btn btn-outline-success" for="btnradio2">Aylık</label></div></div><canvas id="lineChart" style="max-height: 250px;"></canvas></div></div>
+                    <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
+                </div>
+            </div>
+            
+            <div id="stats-view-history" style="display: none;">
+                <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
+                
+                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ -->
+                <div class="date-filter-capsule">
+                    <span class="capsule-label">İŞLEM TARİHİ</span>
+                    <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
+                           ontouchstart="(this.type='date');"
+                           onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
+                           onblur="if(!this.value) this.type='text'"
+                           onchange="filterHistoryByDate()">
+                    <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
+                </div>
+
+                <!-- Tablo yerine ACCORDION listesi -->
+                <div id="historyListContainer" class="px-2"></div>
+            </div>
+        </div>
+
+        <div id="section-tesbihat" style="display: none;">
+            <h3 class="app-header">Tesbihat ve Zikir</h3>
+            <div class="row g-4" id="tesbihatContainer"></div>
+        </div>
+
+        <div id="section-calculator" style="display: none;">
+            <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="calculator-card">
+                        <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
+                            <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
+                            <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
+                        </div>
+                        <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
+                        <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap"><button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button><button class="btn btn-sm btn-outline-secondary" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button></div>
+                        <div id="calcRowsContainer"></div>
+                        <hr class="my-4">
+                        <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-settings" style="display: none;">
+            <h3 class="app-header">Yedekleme ve Ayarlar</h3>
+            <div class="row justify-content-center g-4">
+                
+                <!-- YENİ EKLENEN YÜKLEME BUTONU -->
+                <div id="installContainer" class="col-12" style="display: none;">
+                    <div class="settings-card text-center border-success" style="background: #e8f5e9; border: 1px solid #198754;">
+                        <i class="fas fa-download settings-icon text-success"></i>
+                        <div class="settings-title text-success">Uygulamayı Yükle</div>
+                        <div class="settings-desc text-success">Daha hızlı erişim için ana ekrana ekle.</div>
+                        <button class="btn btn-success w-100 fw-bold" onclick="installPWA()">
+                            <i class="fas fa-mobile-alt me-2"></i> Ana Ekrana Ekle
+                        </button>
+                    </div>
+                </div>
+                <!-- YENİ EKLENEN YÜKLEME BUTONU SONU -->
+
+                <div class="col-12">
+                     <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
+                         <div class="d-flex align-items-center"><i class="fas fa-venus-mars fs-2 me-3" style="opacity: 0.8;"></i><div><div class="settings-title mb-0">Cinsiyet Ayarı</div><div class="settings-desc mb-0" id="currentGenderDisplay">Seçilmedi</div></div></div>
+                         <button class="btn btn-light btn-sm fw-bold shadow-sm" onclick="openGenderModal(true)">Değiştir</button>
+                     </div>
+                </div>
+                <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-download settings-icon"></i><div class="settings-title">Yedek Al</div><div class="settings-desc">Verileri indir.</div><button class="btn btn-success w-100" onclick="downloadBackupJSON()"><i class="fas fa-file-export me-2"></i> Yedek İndir (.json)</button></div></div>
+                <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-upload settings-icon text-primary"></i><div class="settings-title">Yedekten Dön</div><div class="settings-desc">Yedek dosyasını yükle.</div><button class="btn btn-primary w-100" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i> Yedek Yükle</button><input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupJSON(this)"></div></div>
+                <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-file-csv settings-icon text-warning"></i><div class="settings-title">Excel Raporu</div><div class="settings-desc">Excel (.csv) formatında indir.</div><button class="btn btn-warning w-100 text-white" onclick="downloadDataAsCSV()"><i class="fas fa-table me-2"></i> Rapor İndir (.csv)</button></div></div>
+                <div class="col-12"><div class="settings-card text-center border-danger"><i class="fas fa-exclamation-triangle settings-icon text-danger"></i><div class="settings-title text-danger">Verileri Sıfırla</div><div class="settings-desc">Her şeyi siler.</div><button class="btn btn-danger py-2 px-5" onclick="confirmResetData()"><i class="fas fa-trash-alt me-2"></i> Her Şeyi Sil ve Sıfırla</button></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
+    <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>İstatistik</span></div>
+    <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
+    <div class="nav-item" onclick="showSection('calculator'); activateNav(this)"><i class="fas fa-calculator"></i><span>Hesap</span></div>
+    <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
