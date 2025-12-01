@@ -1,4 +1,4 @@
-// Sadece bu satırı değiştirin (Örn: v42)
+// Sadece bu satırı değiştirin (Örn: v43)
 const CACHE_NAME = 'ibadet-takip-v42-final'; 
 
 // Geri kalan kodlar aynı kalabilir...
@@ -54,4 +54,5 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
+
 
