@@ -399,20 +399,20 @@
             background-color: var(--capsule-bg);
             border: 1px solid var(--capsule-border);
             border-radius: 12px;
-            padding: 10px 15px;
+            padding: 8px 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             width: fit-content;
-            margin: 0 auto 20px auto;
+            margin: 0 auto 15px auto;
             position: relative;
-            min-width: 200px;
+            min-width: 160px;
             box-shadow: var(--capsule-shadow);
             transition: all 0.3s ease;
         }
         .capsule-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 800;
             color: var(--capsule-label);
             text-transform: uppercase;
@@ -423,7 +423,7 @@
             background: transparent;
             border: none;
             color: var(--capsule-text);
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: 600;
             text-align: center;
             width: 100%;
@@ -441,12 +441,12 @@
         
         .capsule-reset {
             position: absolute;
-            right: 15px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             color: #dc3545;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: none; /* Değer girilince JS ile block yapılacak */
         }
 
@@ -672,12 +672,12 @@
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
-                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ -->
+                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ (GÜNCELLENDİ) -->
                 <div class="date-filter-capsule">
                     <span class="capsule-label">İŞLEM TARİHİ</span>
                     <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
-                           onfocus="(this.type='date')" 
-                           onblur="this.type='text'; if(this.value) this.value = formatDateTR(this.value);" 
+                           onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
+                           onblur="if(!this.value) this.type='text'"
                            onchange="filterHistoryByDate()">
                     <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
                 </div>
