@@ -1,5 +1,7 @@
-const CACHE_NAME = 'ibadet-takip-v40-final'; // Yeni bir isim vererek eski bozuk önbelleği siliyoruz.
+// Sadece bu satırı değiştirin (Örn: v40 -> v41)
+const CACHE_NAME = 'ibadet-takip-v41-final'; 
 
+// Geri kalan kodlar aynı kalabilir...
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -39,18 +41,15 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const reqUrl = new URL(event.request.url);
-  
   if (reqUrl.href.includes('firebase') || reqUrl.href.includes('googleapis')) {
     return;
   }
-
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => caches.match('./index.html'))
     );
     return;
   }
-
   event.respondWith(
     caches.match(event.request).then((response) => response || fetch(event.request))
   );
