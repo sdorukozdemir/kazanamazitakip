@@ -55,7 +55,7 @@
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
             --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
             
-            /* GÜNDÜZ MODU KAPSÜL RENKLERİ (Pastel uyumlu) */
+            /* GÜNDÜZ MODU KAPSÜL RENKLERİ */
             --capsule-bg: #e9ecef;
             --capsule-border: #ced4da;
             --capsule-label: #6c757d;
@@ -1157,15 +1157,38 @@
     window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
     
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
-    window.upD = function(i, v) { const o = localData.counts[i].done; const n = parseInt(v) || 0; if (o !== n) { localData.counts[i].done = n; addHistory(localData.counts[i].name, o, n); saveToCloud(); renderApp(); } };
+    window.upD = function(i, v) { 
+        const val = parseInt(v) || 0;
+        const item = localData.counts[i];
+        if (val > item.target) {
+            showModal("Uyarı", `${item.name} namazı için girilen sayı hedeften büyük olamaz.`);
+            document.getElementById('pdInputDone').value = item.done; 
+            return;
+        }
+        if (item.done !== val) { 
+            const o = item.done;
+            item.done = val; 
+            addHistory(item.name, o, val); 
+            saveToCloud(); 
+            renderApp(); 
+        } 
+    };
     
-    // --- chC FONKSİYONU GÜNCELLENDİ: Haftalık Hedef & Borç Bitti Uyarısı ---
     window.chC = function(i, d) { 
         triggerHaptic(); 
-        const o = localData.counts[i].done; 
+        const item = localData.counts[i];
+        const remaining = Math.max(0, item.target - item.done);
+
+        if (d > 0 && remaining <= 0) {
+            showModal("Bilgi", `${item.name} namazı için kaza borcunuz bulunmamaktadır.`);
+            return;
+        }
+
+        const o = item.done; 
         const n = o + d; 
+        
         if (n >= 0) { 
-            localData.counts[i].done = n; 
+            item.done = n; 
             if (d > 0) { 
                 localData.daily.counts[i]++; 
                 const todayISO = getIsoDate(new Date()); 
@@ -1178,7 +1201,6 @@
                     delete localData.calendar[todayISO]; 
                 } 
                 
-                // HAFTALIK HEDEF KONTROLÜ (AY VE YILDIZ KONFETİ)
                 const wTotal = getWeeklyProgress();
                 const wTarget = localData.weeklyTarget || 50;
                 if(wTotal === wTarget) {
@@ -1190,7 +1212,6 @@
                     showToast("Haftalık Hedef Tamamlandı! 🏆", "success");
                 }
 
-                // BORÇ BİTTİ Mİ KONTROLÜ
                 let totalDebt = 0;
                 localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
                 if(totalDebt <= 0) {
@@ -1214,13 +1235,13 @@
     
     function recalculateStreak() { let currentStreak = 0; const today = new Date(); const isoToday = getIsoDate(today); if (localData.calendar && localData.calendar[isoToday]) { currentStreak++; } for (let i = 1; i < 1000; i++) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); if (localData.calendar && localData.calendar[iso]) { currentStreak++; } else { if (i === 1 && currentStreak === 0) {} else { break; } } } localData.streak.current = currentStreak; }
     
-    // --- HEDEF GÜNCELLEME FONKSİYONLARI (BORÇ KONTROLÜ EKLENDİ) ---
     window.updateDailyGoal = function(v) { 
         let totalDebt = 0;
         localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
+        
         if(totalDebt <= 0) {
             showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
-            document.getElementById('dailyGoalInput').value = localData.daily.target; // Eski değere dön
+            document.getElementById('dailyGoalInput').value = localData.daily.target;
             return;
         }
         localData.daily.target = parseInt(v)||10; 
@@ -1231,9 +1252,10 @@
     window.updateWeeklyGoal = function(v) { 
         let totalDebt = 0;
         localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
+        
         if(totalDebt <= 0) {
             showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
-            document.getElementById('weeklyGoalInput').value = localData.weeklyTarget; // Eski değere dön
+            document.getElementById('weeklyGoalInput').value = localData.weeklyTarget;
             return;
         }
         localData.weeklyTarget = parseInt(v)||50; 
