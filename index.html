@@ -399,7 +399,7 @@
             background-color: var(--capsule-bg);
             border: 1px solid var(--capsule-border);
             border-radius: 12px;
-            padding: 8px 12px;
+            padding: 5px 15px; /* Küçültüldü */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -407,7 +407,7 @@
             width: fit-content;
             margin: 0 auto 15px auto;
             position: relative;
-            min-width: 160px;
+            min-width: 150px; /* Küçültüldü */
             box-shadow: var(--capsule-shadow);
             transition: all 0.3s ease;
         }
@@ -423,7 +423,8 @@
             background: transparent;
             border: none;
             color: var(--capsule-text);
-            font-size: 1.1rem;
+            font-size: 1rem; /* Küçültüldü */
+            height: 30px;
             font-weight: 600;
             text-align: center;
             width: 100%;
@@ -446,7 +447,7 @@
             transform: translateY(-50%);
             color: #dc3545;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
             display: none; /* Değer girilince JS ile block yapılacak */
         }
 
@@ -676,6 +677,7 @@
                 <div class="date-filter-capsule">
                     <span class="capsule-label">İŞLEM TARİHİ</span>
                     <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
+                           ontouchstart="(this.type='date');"
                            onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
                            onblur="if(!this.value) this.type='text'"
                            onchange="filterHistoryByDate()">
