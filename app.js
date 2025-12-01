@@ -742,7 +742,7 @@ function renderStats() {
         document.getElementById('statYearly').innerText = periodStats.yearly;
         document.getElementById('statAverage').innerText = avg;
         
-        // Hata veren kısımları güncelledik
+        // Hata veren kısımları güncelledik (ÖNCE METİNLERİ YAZIYORUZ)
         const bestText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`;
         const worstText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`;
         
@@ -788,7 +788,7 @@ function renderStats() {
                     responsive: true, 
                     maintainAspectRatio: false, 
                     plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, 
-                    scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } 
+                    scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } 
                 } 
             }); 
 
