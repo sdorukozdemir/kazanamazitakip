@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Kaza ve İbadet Takip</title>
     
-    <meta name="theme-color" content="#198754">
+    <meta name="theme-color" content="#609979">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" id="my-manifest">
@@ -29,21 +29,23 @@
             --bg-color: #e3e6ec; 
             --text-color: #212529; 
             --card-bg: #ffffff; 
-            /* GÜNDÜZ MODU MENÜ: Yeşil Gradient */
-            --sidebar-bg: linear-gradient(180deg, #198754 0%, #0f5132 100%);
+            
+            /* GÜNDÜZ MODU MENÜ: Pastel Yeşil (Sage Green) Gradient - YENİLENDİ */
+            --sidebar-bg: linear-gradient(180deg, #609979 0%, #3e6b53 100%);
+            
             --sidebar-item-active: rgba(255, 255, 255, 0.25);
             --sidebar-item-hover: rgba(255, 255, 255, 0.1);
             
             --input-bg: #f8f9fa; --input-text: #000000; --border-color: #ced4da; 
             --modal-bg: #ffffff; --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057; 
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404; 
-            --z-btn-plus-bg: linear-gradient(145deg, #198754, #20c997); 
+            --z-btn-plus-bg: linear-gradient(145deg, #609979, #3e6b53); 
             --scroll-track: #e9ecef; --scroll-thumb: #ced4da; 
             --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724; 
             --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe; 
             --stat-avg-color: #6610f2; 
-            --calc-box-bg: #f8f9fa; --calc-header-bg: linear-gradient(135deg, #198754, #20c997); 
-            --calc-header-text: #ffffff; --calc-header-shadow: rgba(25, 135, 84, 0.3); 
+            --calc-box-bg: #f8f9fa; --calc-header-bg: linear-gradient(135deg, #609979, #3e6b53); 
+            --calc-header-text: #ffffff; --calc-header-shadow: rgba(96, 153, 121, 0.3); 
             --placeholder-color: #6c757d; --pink-accent: #d63384; --pink-bg-light: #fce4ec; 
             --blue-accent: #0d6efd; --blue-bg-light: #e7f1ff; 
             --fade-box-bg: rgba(255, 255, 255, 0.6); --fade-box-border: rgba(0,0,0,0.05); 
@@ -61,7 +63,7 @@
             --card-bg: #1e1e1e; 
             /* GECE MODU MENÜ: Derin Gece Mavisi / Antrasit Gradient */
             --sidebar-bg: linear-gradient(180deg, #111827 0%, #1f2937 100%);
-            --sidebar-item-active: rgba(32, 201, 151, 0.2); /* Hafif Teal Parlama */
+            --sidebar-item-active: rgba(96, 153, 121, 0.2); 
             --sidebar-item-hover: rgba(255, 255, 255, 0.05);
             
             --input-bg: #3a3a3a; --input-text: #ffffff; --border-color: #444; 
@@ -87,9 +89,9 @@
         
         /* Loading Overlay */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
-        .spinner { width: 50px; height: 50px; border: 5px solid rgba(25, 135, 84, 0.2); border-top-color: #198754; border-radius: 50%; animation: spin 1s linear infinite; }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { margin-top: 15px; font-weight: 600; color: #198754; animation: pulse 1.5s infinite; }
+        .loading-text { margin-top: 15px; font-weight: 600; color: #609979; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
         /* Layout Wrapper */
@@ -124,19 +126,19 @@
             margin-bottom: 15px;
         }
 
-        /* Sidebar Menü Öğeleri (Kapsül Tasarım) */
+        /* Sidebar Menü Öğeleri */
         #sidebar ul { padding: 0 15px; }
         #sidebar ul li { 
             padding: 12px 20px; 
             margin-bottom: 8px;
             cursor: pointer; 
-            border-radius: 12px; /* Kapsül kenarlar */
+            border-radius: 12px; 
             transition: all 0.2s ease; 
             display: flex;
             align-items: center;
             font-weight: 500;
             opacity: 0.85;
-            border: none; /* Eski border-left kaldırıldı */
+            border: none;
         }
         
         #sidebar ul li:hover { 
@@ -168,7 +170,7 @@
         .user-info-female { background: var(--user-box-bg-female); }
         
         #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
-        .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #198754, #20c997); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         body.dark-mode .app-header { background: -webkit-linear-gradient(45deg, #20c997, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* --- DASHBOARD & SPLIT LAYOUT --- */
@@ -251,12 +253,12 @@
         .pd-progress-container { margin-top: 20px; margin-bottom: 5px; }
         .pd-progress-track { height: 12px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; position: relative; }
         body.dark-mode .pd-progress-track { background: rgba(255,255,255,0.1); }
-        .pd-progress-fill { height: 100%; background: linear-gradient(90deg, #198754, #20c997); width: 0%; transition: width 0.5s ease; border-radius: 10px; }
+        .pd-progress-fill { height: 100%; background: linear-gradient(90deg, #609979, #3e6b53); width: 0%; transition: width 0.5s ease; border-radius: 10px; }
         .pd-progress-text { font-size: 0.75rem; font-weight: 700; text-align: center; margin-top: 4px; opacity: 0.7; }
         .pd-actions { display: flex; gap: 20px; justify-content: center; margin-top: 15px; }
         .pd-btn { width: 70px; height: 70px; border-radius: 20px; border: none; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; color: white; }
         .pd-btn:active { transform: scale(0.9); }
-        .pd-btn-plus { background: #198754; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
+        .pd-btn-plus { background: #609979; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); }
         .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
 
         /* ACCORDION STATS */
@@ -264,10 +266,10 @@
         .stat-accordion-header { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: var(--card-bg); user-select: none; }
         .stat-accordion-header:hover { background: rgba(0,0,0,0.02); }
         .stat-header-content { display: flex; align-items: center; gap: 12px; }
-        .stat-icon-wrapper { width: 40px; height: 40px; border-radius: 10px; background: rgba(25, 135, 84, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #198754; }
+        .stat-icon-wrapper { width: 40px; height: 40px; border-radius: 10px; background: rgba(96, 153, 121, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #609979; }
         .stat-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
         .stat-arrow { transition: transform 0.3s; color: var(--placeholder-color); }
-        .stat-accordion-item.open .stat-arrow { transform: rotate(180deg); color: #198754; }
+        .stat-accordion-item.open .stat-arrow { transform: rotate(180deg); color: #609979; }
         .stat-accordion-body { display: none; padding: 0 20px 20px 20px; border-top: 1px dashed var(--border-color); animation: statSlideDown 0.3s ease-out; }
         .stat-accordion-item.open .stat-accordion-body { display: block; }
         @keyframes statSlideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -275,7 +277,7 @@
         .stat-detail-item { background: var(--input-bg); padding: 10px; border-radius: 12px; text-align: center; }
         .stat-detail-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.6; display: block; margin-bottom: 3px; }
         .stat-detail-value { font-size: 1.1rem; font-weight: 800; }
-        .text-done { color: #198754; } .text-rem { color: #dc3545; }
+        .text-done { color: #609979; } .text-rem { color: #dc3545; }
         
         .summary-bar { background: var(--sidebar-bg); color: white; border-radius: 16px; padding: 15px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .summary-item { text-align: center; }
@@ -284,20 +286,20 @@
 
         .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
-        .goal-card { background: linear-gradient(135deg, #198754, #20c997); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
+        .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
-        .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #198754; background: white; }
+        .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #609979; background: white; }
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
-        .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #198754; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #198754; margin: 10px 0; line-height: 1.3; }
+        .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #609979; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #609979; margin: 10px 0; line-height: 1.3; }
         body.dark-mode .arabic-text { color: #20c997; }
         .zikr-count { font-size: 2.8rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
         .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; }
         .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.05s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
         .zikr-btn:active { transform: scale(0.9); }
         .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
-        .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(25, 135, 84, 0.3); }
+        .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); }
         .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
         .tesbihat-target-box { background: var(--box-target-bg); border: 1px solid var(--box-target-border); border-radius: 25px; padding: 8px 25px; display: inline-flex; align-items: center; gap: 15px; margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); min-width: 150px; justify-content: space-between; }
         .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 1px; color: var(--box-target-text); }
@@ -321,7 +323,7 @@
         .calc-group-box { background: var(--calc-item-bg); border: 1px solid var(--calc-item-border); border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
         .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
         .settings-card:hover { transform: translateY(-3px); }
-        .settings-icon { font-size: 2rem; margin-bottom: 10px; color: #198754; }
+        .settings-icon { font-size: 2rem; margin-bottom: 10px; color: #609979; }
         .settings-title { font-weight: 600; margin-bottom: 5px; }
         .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
         .settings-gender-male { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #90caf9; color: #0d47a1; }
@@ -333,7 +335,7 @@
         .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
         .scrolling-wrapper::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 10px; }
         .stat-card-scroll { display: inline-block; width: 160px; margin-right: 15px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; text-align: center; white-space: normal; vertical-align: top; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #198754; }
+        .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #609979; }
         .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; }
         #statAverage { color: var(--stat-avg-color) !important; }
         .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
@@ -346,8 +348,8 @@
         .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
         .analysis-value { font-size: 1.1rem; font-weight: bold; }
         .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .prediction-icon { font-size: 2.5rem; color: #198754; margin-bottom: 10px; }
-        .prediction-date { font-size: 1.5rem; font-weight: bold; color: #198754; margin: 5px 0; }
+        .prediction-icon { font-size: 2.5rem; color: #609979; margin-bottom: 10px; }
+        .prediction-date { font-size: 1.5rem; font-weight: bold; color: #609979; margin: 5px 0; }
         .prediction-days { font-size: 0.9rem; color: #6c757d; font-weight: 600; }
         .prediction-sub-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; display: block; margin-top: 5px; }
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
@@ -355,20 +357,20 @@
         
         /* Metallic Cards */
         .metallic-card { border: none; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); background: linear-gradient(145deg, #dce1e6 0%, #ffffff 50%, #dce1e6 100%); padding: 0; overflow: hidden; color: #333; transition: all 0.2s ease; position: relative; }
-        .metallic-card.up { border-left: 5px solid #198754; }
+        .metallic-card.up { border-left: 5px solid #609979; }
         .metallic-card.down { border-left: 5px solid #dc3545; }
         .card-summary { padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; min-height: 50px; }
         .summary-prayer { font-weight: 800; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.5px; }
         .summary-right-group { display: flex; align-items: center; gap: 12px; }
         .change-badge { font-size: 0.85rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; min-width: 35px; text-align: center; }
-        .metallic-card.up .change-badge { color: #198754; background: rgba(25, 135, 84, 0.1); }
+        .metallic-card.up .change-badge { color: #609979; background: rgba(96, 153, 121, 0.1); }
         .metallic-card.down .change-badge { color: #dc3545; background: rgba(220, 53, 69, 0.1); }
         .toggle-icon { transition: transform 0.3s ease; opacity: 0.6; font-size: 0.9rem; }
         .metallic-card.open .toggle-icon { transform: rotate(180deg); }
         .card-detail { display: none; padding: 10px 15px; background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); font-size: 0.85rem; text-align: center; animation: slideDown 0.2s ease-out; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         .detail-values { font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; display: flex; justify-content: center; align-items: center; gap: 15px; }
-        .metallic-card.up .detail-values { color: #198754; } .metallic-card.down .detail-values { color: #dc3545; }
+        .metallic-card.up .detail-values { color: #609979; } .metallic-card.down .detail-values { color: #dc3545; }
         .detail-full-date { font-size: 0.8rem; opacity: 0.6; font-weight: 600; }
         body.dark-mode .metallic-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.4); color: #e0e0e0; }
         body.dark-mode .card-detail { background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); }
@@ -378,6 +380,55 @@
         input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
         body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
         
+        /* ÖZEL TARİH FİLTRESİ KAPSÜL TASARIMI */
+        .date-filter-capsule {
+            background-color: #333333;
+            border-radius: 12px;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            margin: 0 auto 20px auto;
+            position: relative;
+            min-width: 200px;
+        }
+        .capsule-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .capsule-input {
+            background: transparent;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            outline: none;
+            font-family: inherit;
+        }
+        /* Mobilde takvim ikonunu gizle/beyaz yap, ama tüm alana tıklanınca açılması için JS kullanacağız */
+        .capsule-input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.6;
+        }
+        .capsule-reset {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none; /* Değer girilince JS ile block yapılacak */
+        }
+
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
         .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .badge-item.unlocked { border: 2px solid #20c997; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); box-shadow: 0 8px 20px rgba(32, 201, 151, 0.25); transform: scale(1.05); color: #004d40; }
@@ -395,14 +446,14 @@
         @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
         .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
-        .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #198754; color: white; width: 100%; }
+        .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
         .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
         .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nav-item.active { color: #198754; opacity: 1; font-weight: 600; }
+        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
         #gender-selection-modal { display: none; z-index: 2005; }
         .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
-        .gender-option:hover { border-color: #198754; }
+        .gender-option:hover { border-color: #609979; }
         .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
         .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
         .menstrual-toggle-container { margin-bottom: 15px; padding: 15px 20px; background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); border-radius: 50px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15); }
@@ -422,12 +473,12 @@
         .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
         .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
         .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
-        .stats-tab-btn.active { background-color: #198754; color: white; box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3); }
+        .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
         @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
-        .toast-success { border-color: #198754; } .toast-success i { color: #198754; font-size: 1.2rem; }
+        .toast-success { border-color: #609979; } .toast-success i { color: #609979; font-size: 1.2rem; }
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
@@ -596,19 +647,21 @@
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
             </div>
+            
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
-                <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
-                     <div class="d-flex flex-row align-items-center gap-2 px-3 py-2" style="background-color: var(--input-bg); border: 1px solid var(--border-color); border-radius: 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                        <label for="historyFilterDate" class="small text-muted fw-bold mb-0 me-1">Tarih:</label>
-                        <!-- type date'e özel stil eklendiği için gece modunda ikon görünecek -->
-                        <input type="date" id="historyFilterDate" class="form-control form-control-sm text-center border-0 p-0" style="background: transparent; color: var(--text-color); font-weight: bold; max-width: 130px; box-shadow: none;" onchange="filterHistoryByDate()">
-                        <button class="btn btn-secondary btn-sm rounded-circle d-flex justify-content-center align-items-center" style="width: 24px; height: 24px; padding: 0;" onclick="clearHistoryFilter()"><i class="fas fa-times" style="font-size: 0.7rem;"></i></button>
-                     </div>
+                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ -->
+                <div class="date-filter-capsule">
+                    <span class="capsule-label">İŞLEM TARİHİ</span>
+                    <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
+                           onfocus="(this.type='date')" 
+                           onblur="this.type='text'; if(this.value) this.value = formatDateTR(this.value);" 
+                           onchange="filterHistoryByDate()">
+                    <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
                 </div>
 
-                <!-- Tablo yerine ACCORDION listesi - Kompakt Metalik Kartlar -->
+                <!-- Tablo yerine ACCORDION listesi -->
                 <div id="historyListContainer" class="px-2"></div>
             </div>
         </div>
@@ -680,10 +733,10 @@
     
     setTimeout(() => { hideLoader(); }, 5000); 
 
-    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23198754' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
+    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
         "name": "İbadet Takip v17", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
-        "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#198754", 
+        "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#609979", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
     document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
@@ -1136,8 +1189,12 @@
         if (filterDate) {
             const parts = filterDate.split('-'); 
             if(parts.length === 3) {
+                // Input date formatı YYYY-MM-DD olarak gelir
                 const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
+            } else if(filterDate.includes('.')) {
+                // Eğer formatlı gelirse (gg.aa.yyyy)
+                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
             }
         } else {
             displayData = localData.history.slice(0, 50);
@@ -1203,11 +1260,21 @@
 
     window.filterHistoryByDate = function() {
         const val = document.getElementById('historyFilterDate').value;
-        renderHistory(val);
+        const resetBtn = document.getElementById('resetHistoryDateBtn');
+        if(val) {
+             resetBtn.style.display = 'block';
+             renderHistory(val);
+        } else {
+            resetBtn.style.display = 'none';
+            renderHistory();
+        }
     }
 
     window.clearHistoryFilter = function() {
-        document.getElementById('historyFilterDate').value = "";
+        const input = document.getElementById('historyFilterDate');
+        input.value = "";
+        input.type = "text"; // Placeholder geri gelsin diye
+        document.getElementById('resetHistoryDateBtn').style.display = 'none';
         renderHistory();
     }
 
@@ -1305,7 +1372,7 @@
         document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
         document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
         
-        const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#198754', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#198754', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(25, 135, 84, 0.5)'); gradientLine.addColorStop(1, 'rgba(25, 135, 84, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#198754', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
+        const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
         
         renderHistory();
     }
