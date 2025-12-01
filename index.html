@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    
-    <!-- Sizin oluşturduğunuz stil dosyası -->
     <link rel="stylesheet" href="style.css">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -191,7 +189,7 @@
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
-                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ (GÜNCELLENDİ) -->
+                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ -->
                 <div class="date-filter-capsule">
                     <span class="capsule-label">İŞLEM TARİHİ</span>
                     <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
@@ -234,6 +232,20 @@
         <div id="section-settings" style="display: none;">
             <h3 class="app-header">Yedekleme ve Ayarlar</h3>
             <div class="row justify-content-center g-4">
+                
+                <!-- YENİ EKLENEN YÜKLEME BUTONU -->
+                <div id="installContainer" class="col-12" style="display: none;">
+                    <div class="settings-card text-center border-success" style="background: #e8f5e9; border: 1px solid #198754;">
+                        <i class="fas fa-download settings-icon text-success"></i>
+                        <div class="settings-title text-success">Uygulamayı Yükle</div>
+                        <div class="settings-desc text-success">Daha hızlı erişim için ana ekrana ekle.</div>
+                        <button class="btn btn-success w-100 fw-bold" onclick="installPWA()">
+                            <i class="fas fa-mobile-alt me-2"></i> Ana Ekrana Ekle
+                        </button>
+                    </div>
+                </div>
+                <!-- YENİ EKLENEN YÜKLEME BUTONU SONU -->
+
                 <div class="col-12">
                      <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
                          <div class="d-flex align-items-center"><i class="fas fa-venus-mars fs-2 me-3" style="opacity: 0.8;"></i><div><div class="settings-title mb-0">Cinsiyet Ayarı</div><div class="settings-desc mb-0" id="currentGenderDisplay">Seçilmedi</div></div></div>
@@ -257,7 +269,6 @@
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
 </div>
 
-<!-- Sizin oluşturduğunuz JavaScript dosyası -->
 <script src="app.js"></script>
 </body>
 </html>
