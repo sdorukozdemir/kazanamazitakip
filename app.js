@@ -4,6 +4,7 @@ let activeRowIndex = 0;
 
 function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
 
+// Yükleyiciyi gizleyen fonksiyon
 function hideLoader() {
     const loader = document.getElementById('loading-overlay');
     if (loader) { 
@@ -12,6 +13,7 @@ function hideLoader() {
     }
 }
 
+// GÜVENLİK 1: Ne olursa olsun 5 saniye sonra yükleyiciyi kaldır.
 setTimeout(() => { hideLoader(); }, 5000); 
 
 const firebaseConfig = {
@@ -24,11 +26,19 @@ const firebaseConfig = {
     appId: "1:951730390034:web:639f96ee859c10b0e944cb",
     measurementId: "G-5WGCDTL1RX"
 };
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
-let dbRef = null;
+
+// GÜVENLİK 2: Firebase Başlatma Hatası Kontrolü
+let app, db, auth, provider, dbRef;
+try {
+    app = firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    auth = firebase.auth();
+    provider = new firebase.auth.GoogleAuthProvider();
+} catch (e) {
+    console.error("Firebase Hatası:", e);
+    // Hata olsa bile loader'ı kapat ki kullanıcı siyah ekranda kalmasın
+    hideLoader(); 
+}
 
 function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
 function getIsoDate(date) { 
@@ -68,75 +78,90 @@ const defaultData = {
 let localData = JSON.parse(JSON.stringify(defaultData));
 const saved = localStorage.getItem('offlineBackup');
 
+// GÜVENLİK 3: Yerel Veri Okuma Hatası Kontrolü
 if(saved) {
-    localData = JSON.parse(saved);
+    try {
+        localData = JSON.parse(saved);
+    } catch (e) {
+        console.error("Yerel veri bozuk, varsayılanlar yükleniyor.");
+        localData = JSON.parse(JSON.stringify(defaultData));
+    }
+    
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-wrapper').style.display = 'flex';
-        if (localData.gender) applyGenderSettings();
-        renderCalculatorRows();
-        renderApp();
-        renderStats();
+        try {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+            if (localData.gender) applyGenderSettings();
+            renderCalculatorRows();
+            renderApp();
+            renderStats();
+        } catch(renderErr) {
+            console.error("Render Hatası:", renderErr);
+        }
         hideLoader();
     });
 }
 
 let chartCompletion = null, barChart = null, lineChart = null;
 
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-wrapper').style.display = 'flex';
-        document.getElementById('sidebarUserInfo').innerText = user.displayName;
-        
-        dbRef = db.ref('users/' + user.uid + '/namazData');
-        dbRef.on('value', (s) => {
-            const d = s.val();
-            if (d) {
-                localData = d;
-                localStorage.setItem('offlineBackup', JSON.stringify(localData));
-            } else {
-                if(!saved) {
-                    localData = JSON.parse(JSON.stringify(defaultData));
+if(auth) {
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+            document.getElementById('sidebarUserInfo').innerText = user.displayName;
+            
+            dbRef = db.ref('users/' + user.uid + '/namazData');
+            dbRef.on('value', (s) => {
+                const d = s.val();
+                if (d) {
+                    localData = d;
+                    localStorage.setItem('offlineBackup', JSON.stringify(localData));
+                } else {
+                    if(!saved) {
+                        localData = JSON.parse(JSON.stringify(defaultData));
+                    }
                 }
-            }
-            
-            ensureDataStructure(); 
-            checkDailyReset();
-            
-            if (!d && !saved) saveToCloud();
-            
-            if (!localData.gender) {
-                if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
-            } else {
-                applyGenderSettings();
-            }
+                
+                ensureDataStructure(); 
+                checkDailyReset();
+                
+                if (!d && !saved) saveToCloud();
+                
+                if (!localData.gender) {
+                    if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
+                } else {
+                    applyGenderSettings();
+                }
 
-            try {
-                renderCalculatorRows();
-                renderApp();
-                renderStats();
-            } catch(e) {
-                console.error("Render hatası:", e);
+                try {
+                    renderCalculatorRows();
+                    renderApp();
+                    renderStats();
+                } catch(e) {
+                    console.error("Render hatası:", e);
+                }
+                hideLoader();
+            });
+        } else { 
+            if(!saved) { 
+                document.getElementById('loading-overlay').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'flex'; 
+                document.getElementById('app-wrapper').style.display = 'none'; 
+                localData = JSON.parse(JSON.stringify(defaultData)); 
             }
-            hideLoader();
-        });
-    } else { 
-        if(!saved) { 
-            document.getElementById('loading-overlay').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'flex'; 
-            document.getElementById('app-wrapper').style.display = 'none'; 
-            localData = JSON.parse(JSON.stringify(defaultData)); 
         }
-    }
-});
-
-function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
-function logout() { 
-    auth.signOut().then(() => {
-        localStorage.removeItem('offlineBackup');
-        window.location.reload(); 
     });
+}
+
+function loginWithGoogle() { if(auth) auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
+function logout() { 
+    if(auth) {
+        auth.signOut().then(() => {
+            localStorage.removeItem('offlineBackup');
+            window.location.reload(); 
+        });
+    }
 }
 
 function saveToCloud() { 
