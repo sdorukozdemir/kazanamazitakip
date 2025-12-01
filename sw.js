@@ -1,5 +1,5 @@
-// Sadece bu satırı değiştirin (Örn: v40 -> v41)
-const CACHE_NAME = 'ibadet-takip-v41-final'; 
+// Sadece bu satırı değiştirin (Örn: v42)
+const CACHE_NAME = 'ibadet-takip-v42-final'; 
 
 // Geri kalan kodlar aynı kalabilir...
 const STATIC_ASSETS = [
@@ -54,3 +54,4 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
+
