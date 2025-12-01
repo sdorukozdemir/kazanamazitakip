@@ -14,12 +14,6 @@ function hideLoader() {
 
 setTimeout(() => { hideLoader(); }, 5000); 
 
-/* 
-   NOT: Harici manifest.json dosyası oluşturduğumuz için 
-   buradaki dinamik manifest oluşturma koduna artık gerek kalmadı.
-   Tarayıcı direkt manifest.json dosyasını okuyacak.
-*/
-
 const firebaseConfig = {
     apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
     authDomain: "kazanamazi-ser.firebaseapp.com",
@@ -742,9 +736,6 @@ function renderStats() {
     document.getElementById('statYearly').innerText = periodStats.yearly;
     document.getElementById('statAverage').innerText = avg;
     
-    document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
-    document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
-    
     const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
     
     renderHistory();
@@ -905,4 +896,44 @@ window.addEventListener('offline', () => {
 window.addEventListener('online', () => {
     showToast("Tekrar çevrimiçi oldunuz!", "success");
     document.body.style.filter = "none";
+});
+
+// --- PWA KURULUM YÖNETİMİ ---
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // 1. Otomatik çıkan çirkin tarayıcı uyarısını engelle
+    e.preventDefault();
+    // 2. Olayı daha sonra kullanmak üzere sakla
+    deferredPrompt = e;
+    // 3. Bizim özel "Yükle" butonumuzu görünür yap
+    const installContainer = document.getElementById('installContainer');
+    if (installContainer) {
+        installContainer.style.display = 'block';
+    }
+});
+
+function installPWA() {
+    if (!deferredPrompt) return;
+    
+    // Tarayıcının yükleme penceresini aç
+    deferredPrompt.prompt();
+    
+    // Kullanıcının ne seçtiğini izle (İsteğe bağlı loglama)
+    deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('Kullanıcı kabul etti');
+        } else {
+            console.log('Kullanıcı reddetti');
+        }
+        deferredPrompt = null;
+        // Butonu tekrar gizle
+        document.getElementById('installContainer').style.display = 'none';
+    });
+}
+
+// Uygulama zaten yüklendiyse butonu gizle
+window.addEventListener('appinstalled', () => {
+    document.getElementById('installContainer').style.display = 'none';
+    showToast("Uygulama başarıyla yüklendi! 🎉", "success");
 });
