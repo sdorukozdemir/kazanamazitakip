@@ -19,7 +19,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Sürümü Sabitlendi -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
@@ -29,13 +30,9 @@
             --bg-color: #e3e6ec; 
             --text-color: #212529; 
             --card-bg: #ffffff; 
-            
-            /* GÜNDÜZ MODU MENÜ: Pastel Yeşil (Sage Green) Gradient */
             --sidebar-bg: linear-gradient(180deg, #609979 0%, #3e6b53 100%);
-            
             --sidebar-item-active: rgba(255, 255, 255, 0.25);
             --sidebar-item-hover: rgba(255, 255, 255, 0.1);
-            
             --input-bg: #f8f9fa; --input-text: #000000; --border-color: #ced4da; 
             --modal-bg: #ffffff; --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057; 
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404; 
@@ -54,25 +51,15 @@
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
             --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            
-            /* GÜNDÜZ MODU KAPSÜL RENKLERİ */
-            --capsule-bg: #e9ecef;
-            --capsule-border: #ced4da;
-            --capsule-label: #6c757d;
-            --capsule-text: #212529;
-            --capsule-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --capsule-bg: #e9ecef; --capsule-border: #ced4da; --capsule-label: #6c757d;
+            --capsule-text: #212529; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        /* --- GECE MODU DEĞİŞKENLERİ --- */
+        /* --- GECE MODU --- */
         body.dark-mode { 
-            --bg-color: #121212; 
-            --text-color: #e0e0e0; 
-            --card-bg: #1e1e1e; 
-            /* GECE MODU MENÜ: Derin Gece Mavisi / Antrasit Gradient */
+            --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; 
             --sidebar-bg: linear-gradient(180deg, #111827 0%, #1f2937 100%);
-            --sidebar-item-active: rgba(96, 153, 121, 0.2); 
-            --sidebar-item-hover: rgba(255, 255, 255, 0.05);
-            
+            --sidebar-item-active: rgba(96, 153, 121, 0.2); --sidebar-item-hover: rgba(255, 255, 255, 0.05);
             --input-bg: #3a3a3a; --input-text: #ffffff; --border-color: #444; 
             --modal-bg: #2d2d2d; --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da; 
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107; 
@@ -89,94 +76,35 @@
             --calc-item-bg: #262626; --calc-item-border: #333; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
-            
-             /* GECE MODU KAPSÜL RENKLERİ */
-            --capsule-bg: #2c3035;
-            --capsule-border: #444444;
-            --capsule-label: #aaaaaa;
-            --capsule-text: #ffffff;
-            --capsule-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            --capsule-bg: #2c3035; --capsule-border: #444444; --capsule-label: #aaaaaa;
+            --capsule-text: #ffffff; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
         
-        /* Loading Overlay */
+        /* Yükleme Ekranı */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #609979; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
-        /* Layout Wrapper */
+        /* Layout & Sidebar */
         .wrapper { display: flex; width: 100%; }
-        
-        /* --- YENİLENMİŞ SIDEBAR TASARIMI --- */
-        #sidebar { 
-            min-width: 280px; 
-            max-width: 280px; 
-            background: var(--sidebar-bg); 
-            color: #fff; 
-            height: 100vh; 
-            transition: all 0.3s ease; 
-            z-index: 2000; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            overflow-y: auto; 
-            margin-left: -280px; 
-            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-        }
-        
+        #sidebar { min-width: 280px; max-width: 280px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: all 0.3s ease; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -280px; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
         
-        /* Sidebar Header */
-        .sidebar-header {
-            padding: 30px 20px 20px 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 15px;
-        }
-
-        /* Sidebar Menü Öğeleri */
+        .sidebar-header { padding: 30px 20px 20px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
         #sidebar ul { padding: 0 15px; }
-        #sidebar ul li { 
-            padding: 12px 20px; 
-            margin-bottom: 8px;
-            cursor: pointer; 
-            border-radius: 12px; 
-            transition: all 0.2s ease; 
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-            opacity: 0.85;
-            border: none;
-        }
-        
-        #sidebar ul li:hover { 
-            background: var(--sidebar-item-hover); 
-            transform: translateX(5px);
-            opacity: 1;
-        }
-        
-        #sidebar ul li.active { 
-            background: var(--sidebar-item-active); 
-            color: #fff; 
-            font-weight: 700; 
-            opacity: 1;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        
+        #sidebar ul li { padding: 12px 20px; margin-bottom: 8px; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; display: flex; align-items: center; font-weight: 500; opacity: 0.85; border: none; }
+        #sidebar ul li:hover { background: var(--sidebar-item-hover); transform: translateX(5px); opacity: 1; }
+        #sidebar ul li.active { background: var(--sidebar-item-active); color: #fff; font-weight: 700; opacity: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         #sidebar ul li i { width: 30px; text-align: center; font-size: 1.1rem; }
 
-        @media (min-width: 769px) { 
-            #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } 
-            #sidebar.active { margin-left: -280px; } 
-            #overlay { display: none !important; } 
-            #content { width: calc(100% - 280px); margin-left: 0; } 
-        }
+        @media (min-width: 769px) { #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } #sidebar.active { margin-left: -280px; } #overlay { display: none !important; } #content { width: calc(100% - 280px); margin-left: 0; } }
         @media (max-width: 768px) { #content { width: 100%; } }
         
         .user-info-box { margin: 10px auto; width: 100%; padding: 15px 10px; border-radius: 12px; color: var(--user-box-text); box-shadow: var(--user-box-shadow); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; transition: 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
@@ -187,31 +115,11 @@
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         body.dark-mode .app-header { background: -webkit-linear-gradient(45deg, #20c997, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* --- DASHBOARD & SPLIT LAYOUT --- */
         .prayer-split-layout { display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; height: 420px; }
         .prayer-side-menu { width: 85px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; overflow-y: auto; }
-        @media (max-width: 768px) {
-            .prayer-split-layout { flex-direction: column; height: auto; }
-            .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding: 5px 15px; scrollbar-width: none; gap: 10px; } 
-            .prayer-side-menu::-webkit-scrollbar { display: none; }
-            .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; flex: 0 0 auto; }
-            .prayer-detail-card { min-height: 380px; }
-        }
+        @media (max-width: 768px) { .prayer-split-layout { flex-direction: column; height: auto; } .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding: 5px 15px; scrollbar-width: none; gap: 10px; } .prayer-side-menu::-webkit-scrollbar { display: none; } .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; flex: 0 0 auto; } .prayer-detail-card { min-height: 380px; } }
         
-        .side-menu-item { 
-            border-radius: 18px; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            cursor: pointer; 
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            opacity: 0.8; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
-            border: 1px solid rgba(0,0,0,0.05);
-            color: #333;
-        }
+        .side-menu-item { border-radius: 18px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.8; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); color: #333; }
         .side-menu-item:hover { transform: translateY(-2px); opacity: 1; }
         .side-menu-item.active { opacity: 1; transform: scale(1.05); border: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); color: #fff !important; }
         .side-menu-item.active .side-menu-label { color: #fff !important; opacity: 1; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
@@ -220,19 +128,11 @@
         .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; transition: 0.3s; }
         .flip-icon { transform: scaleX(-1); display: inline-block; }
 
-        /* YAN MENÜ RENKLERİ (LIGHT MODE) */
-        .theme-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: #006064; }
-        .theme-sabah.active { background: linear-gradient(135deg, #00acc1 0%, #00838f 100%); }
-        .theme-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); color: #f57f17; }
-        .theme-ogle.active { background: linear-gradient(135deg, #fdd835 0%, #fbc02d 100%); }
-        .theme-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; }
-        .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); }
-        .theme-aksam { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); color: #1a237e; }
-        .theme-aksam.active { background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); }
-        .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
-        .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
-
-        /* YAN MENÜ (DARK MODE) */
+        .theme-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: #006064; } .theme-sabah.active { background: linear-gradient(135deg, #00acc1 0%, #00838f 100%); }
+        .theme-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); color: #f57f17; } .theme-ogle.active { background: linear-gradient(135deg, #fdd835 0%, #fbc02d 100%); }
+        .theme-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; } .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); }
+        .theme-aksam { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); color: #1a237e; } .theme-aksam.active { background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); }
+        .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; } .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
         body.dark-mode .side-menu-item { background: #2c3035; color: #90a4ae; border: 1px solid #444; }
         body.dark-mode .theme-sabah.active { background: linear-gradient(135deg, #0277bd 0%, #01579b 100%); color: #e1f5fe; }
         body.dark-mode .theme-ogle.active { background: linear-gradient(135deg, #ff8f00 0%, #e65100 100%); color: #fffde7; }
@@ -240,14 +140,8 @@
         body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); color: #e8eaf6; }
         body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); color: #eceff1; }
 
-        /* --- BÜYÜK DETAY KARTLARI --- */
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
-        .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } 
-        .bg-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%); } 
-        .bg-ikindi { background: linear-gradient(135deg, #ffccbc 0%, #ff8a65 100%); } 
-        .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
-        .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
-        
+        .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } .bg-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%); } .bg-ikindi { background: linear-gradient(135deg, #ffccbc 0%, #ff8a65 100%); } .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); }
         body.dark-mode .bg-sabah { background: linear-gradient(120deg, #01579b 0%, #0288d1 40%, #29b6f6 50%, #0288d1 60%, #01579b 100%); }
         body.dark-mode .bg-ogle { background: linear-gradient(120deg, #e65100 0%, #f57c00 40%, #ffb74d 50%, #f57c00 60%, #e65100 100%); }
         body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
@@ -275,7 +169,6 @@
         .pd-btn-plus { background: #609979; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); }
         .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
 
-        /* ACCORDION STATS */
         .stat-accordion-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 12px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
         .stat-accordion-header { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: var(--card-bg); user-select: none; }
         .stat-accordion-header:hover { background: rgba(0,0,0,0.02); }
@@ -369,87 +262,32 @@
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
         
-        /* Metallic Cards */
         .metallic-card { border: none; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); background: linear-gradient(145deg, #dce1e6 0%, #ffffff 50%, #dce1e6 100%); padding: 0; overflow: hidden; color: #333; transition: all 0.2s ease; position: relative; }
-        .metallic-card.up { border-left: 5px solid #609979; }
-        .metallic-card.down { border-left: 5px solid #dc3545; }
+        .metallic-card.up { border-left: 5px solid #609979; } .metallic-card.down { border-left: 5px solid #dc3545; }
         .card-summary { padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; min-height: 50px; }
         .summary-prayer { font-weight: 800; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.5px; }
         .summary-right-group { display: flex; align-items: center; gap: 12px; }
         .change-badge { font-size: 0.85rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; min-width: 35px; text-align: center; }
-        .metallic-card.up .change-badge { color: #609979; background: rgba(96, 153, 121, 0.1); }
-        .metallic-card.down .change-badge { color: #dc3545; background: rgba(220, 53, 69, 0.1); }
-        .toggle-icon { transition: transform 0.3s ease; opacity: 0.6; font-size: 0.9rem; }
-        .metallic-card.open .toggle-icon { transform: rotate(180deg); }
+        .metallic-card.up .change-badge { color: #609979; background: rgba(96, 153, 121, 0.1); } .metallic-card.down .change-badge { color: #dc3545; background: rgba(220, 53, 69, 0.1); }
+        .toggle-icon { transition: transform 0.3s ease; opacity: 0.6; font-size: 0.9rem; } .metallic-card.open .toggle-icon { transform: rotate(180deg); }
         .card-detail { display: none; padding: 10px 15px; background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); font-size: 0.85rem; text-align: center; animation: slideDown 0.2s ease-out; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         .detail-values { font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; display: flex; justify-content: center; align-items: center; gap: 15px; }
         .metallic-card.up .detail-values { color: #609979; } .metallic-card.down .detail-values { color: #dc3545; }
         .detail-full-date { font-size: 0.8rem; opacity: 0.6; font-weight: 600; }
         body.dark-mode .metallic-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.4); color: #e0e0e0; }
         body.dark-mode .card-detail { background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); }
-        body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; }
-        body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
+        body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; } body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
 
         input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
         body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
         
-        /* ÖZEL TARİH FİLTRESİ KAPSÜL TASARIMI (MODERNİZE EDİLDİ) */
-        .date-filter-capsule {
-            background-color: var(--capsule-bg);
-            border: 1px solid var(--capsule-border);
-            border-radius: 12px;
-            padding: 5px 15px; /* Küçültüldü */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: fit-content;
-            margin: 0 auto 15px auto;
-            position: relative;
-            min-width: 150px; /* Küçültüldü */
-            box-shadow: var(--capsule-shadow);
-            transition: all 0.3s ease;
-        }
-        .capsule-label {
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--capsule-label);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
-        }
-        .capsule-input {
-            background: transparent;
-            border: none;
-            color: var(--capsule-text);
-            font-size: 1rem; /* Küçültüldü */
-            height: 30px;
-            font-weight: 600;
-            text-align: center;
-            width: 100%;
-            outline: none;
-            font-family: inherit;
-        }
-        /* Mobilde takvim ikonunu gizle/beyaz yap, ama tüm alana tıklanınca açılması için JS kullanacağız */
-        .capsule-input::-webkit-calendar-picker-indicator {
-            opacity: 0.3;
-        }
-        body.dark-mode .capsule-input::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-            opacity: 0.6;
-        }
-        
-        .capsule-reset {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #dc3545;
-            cursor: pointer;
-            font-size: 1rem;
-            display: none; /* Değer girilince JS ile block yapılacak */
-        }
+        /* KÜÇÜLTÜLMÜŞ DATE CAPSULE */
+        .date-filter-capsule { background-color: var(--capsule-bg); border: 1px solid var(--capsule-border); border-radius: 12px; padding: 4px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: fit-content; margin: 0 auto 15px auto; position: relative; min-width: 120px; box-shadow: var(--capsule-shadow); transition: all 0.3s ease; }
+        .capsule-label { font-size: 0.65rem; font-weight: 800; color: var(--capsule-label); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .capsule-input { background: transparent; border: none; color: var(--capsule-text); font-size: 0.9rem; height: 25px; font-weight: 600; text-align: center; width: 100%; outline: none; font-family: inherit; }
+        .capsule-input::-webkit-calendar-picker-indicator { opacity: 0.3; }
+        body.dark-mode .capsule-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; }
+        .capsule-reset { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #dc3545; cursor: pointer; font-size: 1rem; display: none; }
 
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
         .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
@@ -488,10 +326,8 @@
         .fade-box label { margin-bottom: 2px; opacity: 0.7; }
         .custom-alert-box { background: var(--card-bg); border-left: 5px solid #17a2b8; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 20px; font-size: 0.9rem; }
         .custom-alert-box strong { color: #17a2b8; }
-        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; }
-        .custom-alert-tip strong { color: #856404; }
-        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
-        body.dark-mode .custom-alert-tip strong { color: #ffc107; }
+        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; } .custom-alert-tip strong { color: #856404; }
+        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; } body.dark-mode .custom-alert-tip strong { color: #ffc107; }
         .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
         .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
         .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
@@ -513,6 +349,7 @@
 <div id="loading-overlay">
     <div class="spinner"></div>
     <div class="loading-text">Veriler Yükleniyor...</div>
+    <button id="forceCloseBtn" onclick="document.getElementById('loading-overlay').style.display='none'" style="display:none; margin-top:20px; padding:10px 20px; background:red; color:white; border:none; border-radius:10px;">Zorla Aç</button>
 </div>
 
 <div id="toast-container"></div>
@@ -522,18 +359,8 @@
         <h4 class="mb-3 fw-bold">Hoş Geldiniz</h4>
         <p class="mb-4 text-muted">Hesaplamaları daha doğru yapabilmemiz için lütfen cinsiyetinizi seçiniz.</p>
         <div class="row g-3">
-            <div class="col-6">
-                <div id="genderOptFemale" class="gender-option" data-type="female" onclick="selectGender('female')">
-                    <i class="fas fa-female fa-3x mb-2"></i>
-                    <div class="fw-bold">Kadın</div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div id="genderOptMale" class="gender-option" data-type="male" onclick="selectGender('male')">
-                    <i class="fas fa-male fa-3x mb-2"></i>
-                    <div class="fw-bold">Erkek</div>
-                </div>
-            </div>
+            <div class="col-6"><div id="genderOptFemale" class="gender-option" data-type="female" onclick="selectGender('female')"><i class="fas fa-female fa-3x mb-2"></i><div class="fw-bold">Kadın</div></div></div>
+            <div class="col-6"><div id="genderOptMale" class="gender-option" data-type="male" onclick="selectGender('male')"><i class="fas fa-male fa-3x mb-2"></i><div class="fw-bold">Erkek</div></div></div>
         </div>
     </div>
 </div>
@@ -550,9 +377,7 @@
 <div id="login-screen">
     <div class="login-card p-5 text-center" style="max-width: 400px;">
         <h3 class="text-success fw-bold mb-4">İbadet Takip</h3>
-        <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="loginWithGoogle()">
-            <i class="fab fa-google me-2"></i> Google ile Giriş
-        </button>
+        <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="loginWithGoogle()"><i class="fab fa-google me-2"></i> Google ile Giriş</button>
     </div>
 </div>
 
@@ -560,10 +385,7 @@
     <nav id="sidebar">
         <div class="sidebar-header">
             <h4 class="fw-bold"><i class="fas fa-kaaba me-2"></i>Takip</h4>
-            <div id="sidebarUserInfoBox" class="user-info-box">
-                <i class="fas fa-user-circle"></i>
-                <div id="sidebarUserInfo" class="user-info-text">Kullanıcı</div>
-            </div>
+            <div id="sidebarUserInfoBox" class="user-info-box"><i class="fas fa-user-circle"></i><div id="sidebarUserInfo" class="user-info-text">Kullanıcı</div></div>
         </div>
         <ul class="list-unstyled components">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
@@ -587,18 +409,14 @@
                     <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
                     <div id="goalCard" class="goal-card">
                         <h4>🎯 Günlük Hedef</h4>
-                        <div class="goal-content">
-                            <span class="fs-5">Bugün</span><strong class="fs-1" id="dailyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)"><span class="fs-5">Kaza</span>
-                        </div>
+                        <div class="goal-content"><span class="fs-5">Bugün</span><strong class="fs-1" id="dailyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)"><span class="fs-5">Kaza</span></div>
                         <div class="progress mt-2" style="height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
                         <div id="goalSuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🎉 Harika! Hedefe Ulaşıldı!</div>
                         <div class="mt-2 streak-box"><i class="fas fa-fire text-warning"></i> <span>Zincir:</span><span id="streakValue" class="fw-bold text-warning">0</span> <span>Gün</span></div>
                     </div>
                     <div id="weeklyCard" class="goal-card" style="background: linear-gradient(135deg, #0d6efd, #0dcaf0); margin-top: 20px;">
                         <h4>🏆 Haftalık Meydan Okuma</h4>
-                        <div class="goal-content">
-                            <span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)">
-                        </div>
+                        <div class="goal-content"><span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)"></div>
                         <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="weeklyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
                         <div id="weeklySuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
                         <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
@@ -609,17 +427,12 @@
                 <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
                 <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
-            
-            <div id="prayerSplitContainer" class="prayer-split-layout">
-                <!-- Javascript ile doldurulacak -->
-            </div>
-            
+            <div id="prayerSplitContainer" class="prayer-split-layout"></div>
             <div id="summaryBar" class="summary-bar">
                 <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
                 <div class="summary-item"><div class="summary-val text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
                 <div class="summary-item"><div class="summary-val" id="sumRemaining">0</div><div class="summary-lbl">Kalan</div></div>
             </div>
-
             <div class="row mt-4 justify-content-center">
                 <div class="col-md-8 col-lg-6">
                     <div class="prediction-card h-100">
@@ -652,39 +465,25 @@
                     <div class="stat-card-scroll"><div class="stat-number text-secondary" id="statYearly">0</div><div class="stat-label">Son 1 Yıl</div></div>
                      <div class="stat-card-scroll"><div class="stat-number" id="statAverage">0</div><div class="stat-label">Günlük Ort.</div></div>
                 </div>
-
                 <div class="analysis-box mb-4">
                     <div class="analysis-row"><div class="analysis-icon icon-good"><i class="fas fa-check"></i></div><div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div></div>
                     <div class="analysis-row"><div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div><div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div></div>
                 </div>
-
                 <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
-                <div id="prayer-analysis-grid" class="mb-4">
-                    <!-- Javascript ile doldurulacak -->
-                </div>
-
+                <div id="prayer-analysis-grid" class="mb-4"></div>
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Performans Analizi</h5><div class="d-flex justify-content-center mb-2"><div class="btn-group btn-group-sm" role="group"><input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')"><label class="btn btn-outline-success" for="btnradio1">Haftalık</label><input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')"><label class="btn btn-outline-success" for="btnradio2">Aylık</label></div></div><canvas id="lineChart" style="max-height: 250px;"></canvas></div></div>
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
             </div>
-            
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
-                
-                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ (GÜNCELLENDİ) -->
                 <div class="date-filter-capsule">
                     <span class="capsule-label">İŞLEM TARİHİ</span>
-                    <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
-                           ontouchstart="(this.type='date');"
-                           onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
-                           onblur="if(!this.value) this.type='text'"
-                           onchange="filterHistoryByDate()">
+                    <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date');" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="if(!this.value) this.type='text'" onchange="if(!this.value) this.type='text'; filterHistoryByDate()">
                     <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
                 </div>
-
-                <!-- Tablo yerine ACCORDION listesi -->
                 <div id="historyListContainer" class="px-2"></div>
             </div>
         </div>
@@ -716,6 +515,19 @@
         <div id="section-settings" style="display: none;">
             <h3 class="app-header">Yedekleme ve Ayarlar</h3>
             <div class="row justify-content-center g-4">
+                
+                <!-- YÜKLEME BUTONU -->
+                <div id="installContainer" class="col-12" style="display: none;">
+                    <div class="settings-card text-center border-success" style="background: #e8f5e9; border: 1px solid #198754;">
+                        <i class="fas fa-download settings-icon text-success"></i>
+                        <div class="settings-title text-success">Uygulamayı Yükle</div>
+                        <div class="settings-desc text-success">Daha hızlı erişim için ana ekrana ekle.</div>
+                        <button class="btn btn-success w-100 fw-bold" onclick="installPWA()">
+                            <i class="fas fa-mobile-alt me-2"></i> Ana Ekrana Ekle
+                        </button>
+                    </div>
+                </div>
+
                 <div class="col-12">
                      <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
                          <div class="d-flex align-items-center"><i class="fas fa-venus-mars fs-2 me-3" style="opacity: 0.8;"></i><div><div class="settings-title mb-0">Cinsiyet Ayarı</div><div class="settings-desc mb-0" id="currentGenderDisplay">Seçilmedi</div></div></div>
@@ -740,6 +552,14 @@
 </div>
 
 <script>
+    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
+    const manifestBlob = new Blob([JSON.stringify({ 
+        "name": "İbadet Takip v18", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
+        "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#609979", 
+        "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
+    })], {type: 'application/json'});
+    document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
+
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
     let activeRowIndex = 0; 
@@ -754,15 +574,7 @@
         }
     }
     
-    setTimeout(() => { hideLoader(); }, 5000); 
-
-    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
-    const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "İbadet Takip v17", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
-        "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#609979", 
-        "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
-    })], {type: 'application/json'});
-    document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
+    setTimeout(() => { hideLoader(); }, 4000); 
 
     const firebaseConfig = {
         apiKey: "AIzaSyC7zdr3x8H--8piHR_1muAz2TVOOaebI54",
@@ -774,11 +586,16 @@
         appId: "1:951730390034:web:639f96ee859c10b0e944cb",
         measurementId: "G-5WGCDTL1RX"
     };
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const auth = firebase.auth();
-    const provider = new firebase.auth.GoogleAuthProvider();
-    let dbRef = null;
+    let app, db, auth, provider, dbRef;
+    
+    try {
+        app = firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        auth = firebase.auth();
+        provider = new firebase.auth.GoogleAuthProvider();
+    } catch(e) {
+        console.error("Firebase init error:", e);
+    }
 
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     function getIsoDate(date) { 
@@ -805,7 +622,13 @@
         weeklyTarget: 50,
         streak: { current: 0, lastAchievedDate: "" },
         calendar: {}, logs: {},
-        counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
+        counts: [
+            {name:"Sabah",target:0,done:0},
+            {name:"Öğle",target:0,done:0},
+            {name:"İkindi",target:0,done:0},
+            {name:"Akşam",target:0,done:0},
+            {name:"Yatsı",target:0,done:0}
+        ],
         tesbihat: [
             { name: "Sübhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
             { name: "Elhamdülillah", arabic: "ٱلْحَمْدُ لِلَّٰهِ", current: 0, target: 33 },
@@ -833,60 +656,64 @@
 
     let chartCompletion = null, barChart = null, lineChart = null;
 
-    auth.onAuthStateChanged((user) => {
-        if (user) {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app-wrapper').style.display = 'flex';
-            document.getElementById('sidebarUserInfo').innerText = user.displayName;
-            
-            dbRef = db.ref('users/' + user.uid + '/namazData');
-            dbRef.on('value', (s) => {
-                const d = s.val();
-                if (d) {
-                    localData = d;
-                    localStorage.setItem('offlineBackup', JSON.stringify(localData));
-                } else {
-                    if(!saved) {
-                        localData = JSON.parse(JSON.stringify(defaultData));
+    if(auth) {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-wrapper').style.display = 'flex';
+                document.getElementById('sidebarUserInfo').innerText = user.displayName;
+                
+                dbRef = db.ref('users/' + user.uid + '/namazData');
+                dbRef.on('value', (s) => {
+                    const d = s.val();
+                    if (d) {
+                        localData = d;
+                        localStorage.setItem('offlineBackup', JSON.stringify(localData));
+                    } else {
+                        if(!saved) {
+                            localData = JSON.parse(JSON.stringify(defaultData));
+                        }
                     }
-                }
-                
-                ensureDataStructure(); 
-                checkDailyReset();
-                
-                if (!d && !saved) saveToCloud();
-                
-                if (!localData.gender) {
-                    if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
-                } else {
-                    applyGenderSettings();
-                }
+                    
+                    ensureDataStructure(); 
+                    checkDailyReset();
+                    
+                    if (!d && !saved) saveToCloud();
+                    
+                    if (!localData.gender) {
+                        if(document.getElementById('gender-selection-modal').style.display === 'none') openGenderModal(false);
+                    } else {
+                        applyGenderSettings();
+                    }
 
-                try {
-                    renderCalculatorRows();
-                    renderApp();
-                    renderStats();
-                } catch(e) {
-                    console.error("Render hatası:", e);
+                    try {
+                        renderCalculatorRows();
+                        renderApp();
+                        renderStats();
+                    } catch(e) {
+                        console.error("Render error:", e);
+                    }
+                    hideLoader();
+                });
+            } else { 
+                if(!saved) { 
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    document.getElementById('login-screen').style.display = 'flex'; 
+                    document.getElementById('app-wrapper').style.display = 'none'; 
+                    localData = JSON.parse(JSON.stringify(defaultData)); 
                 }
-                hideLoader();
-            });
-        } else { 
-            if(!saved) { 
-                document.getElementById('loading-overlay').style.display = 'none';
-                document.getElementById('login-screen').style.display = 'flex'; 
-                document.getElementById('app-wrapper').style.display = 'none'; 
-                localData = JSON.parse(JSON.stringify(defaultData)); 
             }
-        }
-    });
-
-    function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
-    function logout() { 
-        auth.signOut().then(() => {
-            localStorage.removeItem('offlineBackup');
-            window.location.reload(); 
         });
+    }
+
+    function loginWithGoogle() { if(auth) auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
+    function logout() { 
+        if(auth) {
+            auth.signOut().then(() => {
+                localStorage.removeItem('offlineBackup');
+                window.location.reload(); 
+            });
+        }
     }
     
     function saveToCloud() { 
@@ -903,7 +730,7 @@
         if (localData.menstrualDaysPerMonth === undefined) localData.menstrualDaysPerMonth = 6;
         if (localData.isMenstrualState === undefined) localData.isMenstrualState = false;
         
-        const t = new Date().toLocaleDateString('tr-TR');
+        const t = getCurrentDateSimple();
         if (!localData.daily || localData.daily.date !== t) { 
             localData.daily = { date: t, counts: [0,0,0,0,0], target: localData.daily?.target || 10 }; 
             saveToCloud(); 
@@ -1021,7 +848,6 @@
         const wCard = document.getElementById('weeklyCard'); const wMsg = document.getElementById('weeklySuccessMessage');
         if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
 
-        
         if(document.getElementById('prayerDetailCard')) {
             updateCardUI(activeRowIndex);
         } else {
@@ -1033,48 +859,10 @@
             localData.counts.forEach((item, i) => {
                 const isActive = (i === activeRowIndex) ? 'active' : '';
                 const flipClass = (i === 2) ? 'flip-icon' : ''; 
-                
-                menuHTML += `
-                <div id="menuItem${i}" class="side-menu-item ${isActive} ${themeList[i]}" onclick="setActivePrayer(${i})">
-                    <i class="fas ${iconList[i]} side-menu-icon ${flipClass}"></i>
-                    <div class="side-menu-label">${item.name}</div>
-                </div>`;
+                menuHTML += `<div id="menuItem${i}" class="side-menu-item ${isActive} ${themeList[i]}" onclick="setActivePrayer(${i})"><i class="fas ${iconList[i]} side-menu-icon ${flipClass}"></i><div class="side-menu-label">${item.name}</div></div>`;
             });
             menuHTML += `</div>`;
-            
-            let cardHTML = `
-            <div id="prayerDetailCard" class="prayer-detail-card">
-                <div class="pd-content">
-                    <div class="pd-header">
-                        <div class="pd-title"><i id="pdTitleIcon" class="fas"></i> <span id="pdTitleText"></span></div>
-                        <div id="pdRemainingBadge" class="pd-remaining-badge"></div>
-                    </div>
-                    
-                    <div class="pd-stats-row">
-                        <div class="pd-input-group">
-                            <span class="pd-label">KILINACAK</span>
-                            <input type="number" id="pdInputTarget" class="pd-input">
-                        </div>
-                        <div class="pd-input-group">
-                            <span class="pd-label text-success">KILINAN</span>
-                            <input type="number" id="pdInputDone" class="pd-input text-success">
-                        </div>
-                    </div>
-                    
-                    <div class="pd-progress-container">
-                        <div class="pd-progress-track">
-                            <div id="pdProgressFill" class="pd-progress-fill"></div>
-                        </div>
-                        <div id="pdProgressText" class="pd-progress-text"></div>
-                    </div>
-
-                    <div class="pd-actions">
-                        <button id="btnMinus" class="pd-btn pd-btn-minus"><i class="fas fa-minus"></i></button>
-                        <button id="btnPlus" class="pd-btn pd-btn-plus"><i class="fas fa-plus"></i></button>
-                    </div>
-                </div>
-            </div>`;
-            
+            let cardHTML = `<div id="prayerDetailCard" class="prayer-detail-card"><div class="pd-content"><div class="pd-header"><div class="pd-title"><i id="pdTitleIcon" class="fas"></i> <span id="pdTitleText"></span></div><div id="pdRemainingBadge" class="pd-remaining-badge"></div></div><div class="pd-stats-row"><div class="pd-input-group"><span class="pd-label">KILINACAK</span><input type="number" id="pdInputTarget" class="pd-input"></div><div class="pd-input-group"><span class="pd-label text-success">KILINAN</span><input type="number" id="pdInputDone" class="pd-input text-success"></div></div><div class="pd-progress-container"><div class="pd-progress-track"><div id="pdProgressFill" class="pd-progress-fill"></div></div><div id="pdProgressText" class="pd-progress-text"></div></div><div class="pd-actions"><button id="btnMinus" class="pd-btn pd-btn-minus"><i class="fas fa-minus"></i></button><button id="btnPlus" class="pd-btn pd-btn-plus"><i class="fas fa-plus"></i></button></div></div></div>`;
             splitContainer.innerHTML = menuHTML + cardHTML;
             document.getElementById('pdInputTarget').onchange = (e) => window.upT(activeRowIndex, e.target.value);
             document.getElementById('pdInputDone').onchange = (e) => window.upD(activeRowIndex, e.target.value);
@@ -1082,16 +870,13 @@
             document.getElementById('btnPlus').onclick = () => window.chC(activeRowIndex, 1);
             updateCardUI(activeRowIndex);
         }
-        
         let tt=0, td=0; 
         localData.counts.forEach(c => { tt += parseInt(c.target); td += parseInt(c.done); });
         const days = getElapsedDays(); 
         document.getElementById('elapsedDays').value = days; 
-        
         document.getElementById('sumTarget').innerText = tt;
         document.getElementById('sumDone').innerText = td;
         document.getElementById('sumRemaining').innerText = tt - td;
-
         renderBadges(td); calculateEstFinish(td, days); 
     }
     
@@ -1101,306 +886,49 @@
         const percent = item.target > 0 ? (item.done / item.target) * 100 : 0;
         const bgList = ["bg-sabah", "bg-ogle", "bg-ikindi", "bg-aksam", "bg-yatsi"];
         const iconList = ["fa-cloud-sun", "fa-sun", "fa-cloud-sun", "fa-moon", "fa-star"];
-
         const card = document.getElementById('prayerDetailCard');
         if(card) card.className = `prayer-detail-card ${bgList[index]}`;
-
         const iconEl = document.getElementById('pdTitleIcon');
-        if(iconEl) {
-            iconEl.className = `fas ${iconList[index]}`;
-            if(index === 2) iconEl.classList.add('flip-icon');
-            else iconEl.classList.remove('flip-icon');
-        }
-        
+        if(iconEl) { iconEl.className = `fas ${iconList[index]}`; if(index === 2) iconEl.classList.add('flip-icon'); else iconEl.classList.remove('flip-icon'); }
         const titleText = document.getElementById('pdTitleText');
         if(titleText) titleText.innerText = item.name;
-        
         const badge = document.getElementById('pdRemainingBadge');
         if(badge) badge.innerText = `Kalan: ${remaining}`;
-
         const inpTarget = document.getElementById('pdInputTarget');
         if(inpTarget) inpTarget.value = item.target;
-        
         const inpDone = document.getElementById('pdInputDone');
         if(inpDone) inpDone.value = item.done;
-
         const progFill = document.getElementById('pdProgressFill');
         if(progFill) progFill.style.width = `${percent}%`;
-        
         const progText = document.getElementById('pdProgressText');
         if(progText) progText.innerText = `%${percent.toFixed(1)} Tamamlandı`;
-
-        document.querySelectorAll('.side-menu-item').forEach((el, i) => {
-            if(i === index) el.classList.add('active');
-            else el.classList.remove('active');
-        });
-
+        document.querySelectorAll('.side-menu-item').forEach((el, i) => { if(i === index) el.classList.add('active'); else el.classList.remove('active'); });
         if(inpTarget) inpTarget.onchange = (e) => window.upT(index, e.target.value);
         if(inpDone) inpDone.onchange = (e) => window.upD(index, e.target.value);
-        
         const btnMinus = document.getElementById('btnMinus');
         if(btnMinus) btnMinus.onclick = () => window.chC(index, -1);
-        
         const btnPlus = document.getElementById('btnPlus');
         if(btnPlus) btnPlus.onclick = () => window.chC(index, 1);
     }
 
-    window.setActivePrayer = function(index) {
-        activeRowIndex = index;
-        triggerHaptic();
-        updateCardUI(index); 
-        setTimeout(() => {
-            const activeEl = document.getElementById(`menuItem${index}`);
-            if(activeEl) activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }, 100);
-    }
-    
+    window.setActivePrayer = function(index) { activeRowIndex = index; triggerHaptic(); updateCardUI(index); setTimeout(() => { const activeEl = document.getElementById(`menuItem${index}`); if(activeEl) activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); }, 100); }
     window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
     window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
-    
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
-    window.upD = function(i, v) { 
-        const val = parseInt(v) || 0;
-        const item = localData.counts[i];
-        if (val > item.target) {
-            showModal("Uyarı", `${item.name} namazı için girilen sayı hedeften büyük olamaz.`);
-            document.getElementById('pdInputDone').value = item.done; 
-            return;
-        }
-        if (item.done !== val) { 
-            const o = item.done;
-            item.done = val; 
-            addHistory(item.name, o, val); 
-            saveToCloud(); 
-            renderApp(); 
-        } 
-    };
-    
-    window.chC = function(i, d) { 
-        triggerHaptic(); 
-        const item = localData.counts[i];
-        const remaining = Math.max(0, item.target - item.done);
-
-        if (d > 0 && remaining <= 0) {
-            showModal("Bilgi", `${item.name} namazı için kaza borcunuz bulunmamaktadır.`);
-            return;
-        }
-
-        const o = item.done; 
-        const n = o + d; 
-        
-        if (n >= 0) { 
-            item.done = n; 
-            if (d > 0) { 
-                localData.daily.counts[i]++; 
-                const todayISO = getIsoDate(new Date()); 
-                localData.logs[todayISO] = (localData.logs[todayISO] || 0) + 1; 
-                const ct = localData.daily.counts.reduce((a, b) => a + b, 0); 
-                if (ct >= localData.daily.target) { 
-                    localData.calendar[todayISO] = true; 
-                    if (ct === localData.daily.target) jsConfetti.addConfetti(); 
-                } else { 
-                    delete localData.calendar[todayISO]; 
-                } 
-                
-                const wTotal = getWeeklyProgress();
-                const wTarget = localData.weeklyTarget || 50;
-                if(wTotal === wTarget) {
-                    jsConfetti.addConfetti({
-                        emojis: ['🌙', '⭐'],
-                        emojiSize: 35,
-                        confettiNumber: 60
-                    });
-                    showToast("Haftalık Hedef Tamamlandı! 🏆", "success");
-                }
-
-                let totalDebt = 0;
-                localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
-                if(totalDebt <= 0) {
-                     showModal("Tebrikler!", "Kaza namaz borcunuz bulunmamaktadır. Allah kabul etsin!");
-                }
-
-                recalculateStreak(); 
-            } else if (localData.daily.counts[i] > 0) { 
-                localData.daily.counts[i]--; 
-                const todayISO = getIsoDate(new Date()); 
-                if(localData.logs && localData.logs[todayISO] > 0) localData.logs[todayISO]--; 
-                const ct = localData.daily.counts.reduce((a, b) => a + b, 0); 
-                if (ct < localData.daily.target) { delete localData.calendar[todayISO]; } 
-                recalculateStreak(); 
-            } 
-            addHistory(localData.counts[i].name, o, n); 
-            saveToCloud(); 
-            renderApp(); 
-        } 
-    };
-    
+    window.upD = function(i, v) { const val = parseInt(v) || 0; const item = localData.counts[i]; if (val > item.target) { showModal("Uyarı", `${item.name} namazı için girilen sayı hedeften büyük olamaz.`); document.getElementById('pdInputDone').value = item.done; return; } if (item.done !== val) { const o = item.done; item.done = val; addHistory(item.name, o, val); saveToCloud(); renderApp(); } };
+    window.chC = function(i, d) { triggerHaptic(); const item = localData.counts[i]; const remaining = Math.max(0, item.target - item.done); if (d > 0 && remaining <= 0) { showModal("Bilgi", `${item.name} namazı için kaza borcunuz bulunmamaktadır.`); return; } const o = item.done; const n = o + d; if (n >= 0) { item.done = n; if (d > 0) { localData.daily.counts[i]++; const todayISO = getIsoDate(new Date()); localData.logs[todayISO] = (localData.logs[todayISO] || 0) + 1; const ct = localData.daily.counts.reduce((a, b) => a + b, 0); if (ct >= localData.daily.target) { localData.calendar[todayISO] = true; if (ct === localData.daily.target) jsConfetti.addConfetti(); } else { delete localData.calendar[todayISO]; } const wTotal = getWeeklyProgress(); const wTarget = localData.weeklyTarget || 50; if(wTotal === wTarget) { jsConfetti.addConfetti({ emojis: ['🌙', '⭐'], emojiSize: 35, confettiNumber: 60 }); showToast("Haftalık Hedef Tamamlandı! 🏆", "success"); } let totalDebt = 0; localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done)); if(totalDebt <= 0) { showModal("Tebrikler!", "Kaza namaz borcunuz bulunmamaktadır. Allah kabul etsin!"); } recalculateStreak(); } else if (localData.daily.counts[i] > 0) { localData.daily.counts[i]--; const todayISO = getIsoDate(new Date()); if(localData.logs && localData.logs[todayISO] > 0) localData.logs[todayISO]--; const ct = localData.daily.counts.reduce((a, b) => a + b, 0); if (ct < localData.daily.target) { delete localData.calendar[todayISO]; } recalculateStreak(); } addHistory(localData.counts[i].name, o, n); saveToCloud(); renderApp(); } };
     function recalculateStreak() { let currentStreak = 0; const today = new Date(); const isoToday = getIsoDate(today); if (localData.calendar && localData.calendar[isoToday]) { currentStreak++; } for (let i = 1; i < 1000; i++) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); if (localData.calendar && localData.calendar[iso]) { currentStreak++; } else { if (i === 1 && currentStreak === 0) {} else { break; } } } localData.streak.current = currentStreak; }
-    
-    window.updateDailyGoal = function(v) { 
-        let totalDebt = 0;
-        localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
-        
-        if(totalDebt <= 0) {
-            showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
-            document.getElementById('dailyGoalInput').value = localData.daily.target;
-            return;
-        }
-        localData.daily.target = parseInt(v)||10; 
-        saveToCloud(); 
-        renderApp(); 
-    };
-
-    window.updateWeeklyGoal = function(v) { 
-        let totalDebt = 0;
-        localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
-        
-        if(totalDebt <= 0) {
-            showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
-            document.getElementById('weeklyGoalInput').value = localData.weeklyTarget;
-            return;
-        }
-        localData.weeklyTarget = parseInt(v)||50; 
-        saveToCloud(); 
-        renderApp(); 
-    };
-
+    window.updateDailyGoal = function(v) { let totalDebt = 0; localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done)); if(totalDebt <= 0) { showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır."); document.getElementById('dailyGoalInput').value = localData.daily.target; return; } localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
+    window.updateWeeklyGoal = function(v) { let totalDebt = 0; localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done)); if(totalDebt <= 0) { showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır."); document.getElementById('weeklyGoalInput').value = localData.weeklyTarget; return; } localData.weeklyTarget = parseInt(v)||50; saveToCloud(); renderApp(); };
     function getWeeklyProgress() { if (!localData.logs) return 0; const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day == 0 ? -6 : 1); const monday = new Date(today.setDate(diff)); monday.setHours(0,0,0,0); let weeklyTotal = 0; Object.keys(localData.logs).forEach(dateKey => { const logDate = new Date(dateKey); if (logDate >= monday) { weeklyTotal += localData.logs[dateKey]; } }); return weeklyTotal; }
-
     function renderTesbihat() { const c = document.getElementById('tesbihatContainer'); c.innerHTML = ""; if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat)); localData.tesbihat.forEach((item, i) => { let p = item.target > 0 ? (item.current / item.target) * 100 : 0; c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="tesbihat-target-box"><span class="tesbihat-target-label">HEDEF</span><input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-container"><input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet"><button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button></div></div></div>`; }); }
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
-    
-    // ROZETLER: ESKİ EMOJİLERE DÖNÜŞ & GAYRET ATEŞ EMOJİSİ
-    const BADGES = [ 
-        {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, 
-        {id:500,title:"Gayret",icon:"🔥", desc:"500 Namaz"}, 
-        {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, 
-        {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, 
-        {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, 
-        {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, 
-        {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} 
-    ];
-    
-    function renderBadges(total) { 
-        const c = document.getElementById('badgeContainer'); 
-        c.innerHTML = ""; 
-        let next=false; 
-        BADGES.forEach(b => { 
-            let unlockedClass = '';
-            if(total >= b.id) { 
-                if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } 
-                unlockedClass = 'unlocked';
-                c.innerHTML += `<div class="badge-item ${unlockedClass}"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; 
-            } else if (!next) { 
-                c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; 
-                next=true; 
-            } 
-        }); 
-    }
-    
-    // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
-    function renderHistory(filterDate = null) { 
-        const container = document.getElementById('historyListContainer'); 
-        container.innerHTML = ""; 
-
-        if (!localData.history || localData.history.length === 0) {
-            container.innerHTML = '<div class="text-center text-muted small py-4">Henüz işlem geçmişi yok.</div>';
-            return;
-        }
-
-        let displayData = [];
-        if (filterDate) {
-            const parts = filterDate.split('-'); 
-            if(parts.length === 3) {
-                // Input date formatı YYYY-MM-DD olarak gelir
-                const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
-                displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
-            } else if(filterDate.includes('.')) {
-                // Eğer formatlı gelirse (gg.aa.yyyy)
-                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
-            }
-        } else {
-            displayData = localData.history.slice(0, 50);
-        }
-
-        if(displayData.length === 0) {
-             container.innerHTML = '<div class="text-center text-muted small py-4">Bu tarihte işlem bulunamadı.</div>';
-             return;
-        }
-
-        displayData.forEach(r => { 
-            const o = parseFloat(r.oldVal); 
-            const n = parseFloat(r.newVal); 
-            const diff = n - o;
-            const diffSign = diff > 0 ? '+' : '';
-            const statusClass = diff > 0 ? 'up' : (diff < 0 ? 'down' : ''); 
-
-            // Kompakt Accordion Kart HTML
-            container.innerHTML += `
-            <div class="metallic-card ${statusClass}" onclick="toggleHistoryCard(this)">
-                <div class="card-summary">
-                    <span class="summary-prayer">${r.namaz}</span>
-                    <div class="summary-right-group">
-                        <span class="change-badge">${diffSign}${diff}</span>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
-                    </div>
-                </div>
-                <div class="card-detail">
-                    <div class="detail-values">
-                        <span>${o}</span>
-                        <i class="fas fa-arrow-right"></i>
-                        <span>${n}</span>
-                    </div>
-                    <div class="detail-full-date"><i class="far fa-clock me-1"></i> ${r.time}</div>
-                </div>
-            </div>`; 
-        }); 
-
-        if(!filterDate && localData.history.length > 50) {
-             container.innerHTML += '<div class="text-center text-muted small py-2">Daha eski kayıtlar için tarih filtresini kullanınız...</div>';
-        }
-    }
-
-    // Kart açma kapama fonksiyonu
-    window.toggleHistoryCard = function(el) {
-        const allOpen = document.querySelectorAll('.metallic-card.open');
-        allOpen.forEach(card => {
-            if(card !== el) {
-                card.classList.remove('open');
-                card.querySelector('.card-detail').style.display = 'none';
-            }
-        });
-
-        const detail = el.querySelector('.card-detail');
-        if (el.classList.contains('open')) {
-            el.classList.remove('open');
-            detail.style.display = 'none';
-        } else {
-            el.classList.add('open');
-            detail.style.display = 'block';
-        }
-    }
-
-    window.filterHistoryByDate = function() {
-        const val = document.getElementById('historyFilterDate').value;
-        const resetBtn = document.getElementById('resetHistoryDateBtn');
-        if(val) {
-             resetBtn.style.display = 'block';
-             renderHistory(val);
-        } else {
-            resetBtn.style.display = 'none';
-            renderHistory();
-        }
-    }
-
-    window.clearHistoryFilter = function() {
-        const input = document.getElementById('historyFilterDate');
-        input.value = "";
-        input.type = "text"; // Placeholder geri gelsin diye
-        document.getElementById('resetHistoryDateBtn').style.display = 'none';
-        renderHistory();
-    }
-
+    const BADGES = [ {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, {id:500,title:"Gayret",icon:"🔥", desc:"500 Namaz"}, {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} ];
+    function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { let unlockedClass = ''; if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } unlockedClass = 'unlocked'; c.innerHTML += `<div class="badge-item ${unlockedClass}"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
+    function renderHistory(filterDate = null) { const container = document.getElementById('historyListContainer'); container.innerHTML = ""; if (!localData.history || localData.history.length === 0) { container.innerHTML = '<div class="text-center text-muted small py-4">Henüz işlem geçmişi yok.</div>'; return; } let displayData = []; if (filterDate) { const parts = filterDate.split('-'); if(parts.length === 3) { const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr); } else if(filterDate.includes('.')) { displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate); } } else { displayData = localData.history.slice(0, 50); } if(displayData.length === 0) { container.innerHTML = '<div class="text-center text-muted small py-4">Bu tarihte işlem bulunamadı.</div>'; return; } displayData.forEach(r => { const o = parseFloat(r.oldVal); const n = parseFloat(r.newVal); const diff = n - o; const diffSign = diff > 0 ? '+' : ''; const statusClass = diff > 0 ? 'up' : (diff < 0 ? 'down' : ''); container.innerHTML += `<div class="metallic-card ${statusClass}" onclick="toggleHistoryCard(this)"><div class="card-summary"><span class="summary-prayer">${r.namaz}</span><div class="summary-right-group"><span class="change-badge">${diffSign}${diff}</span><i class="fas fa-chevron-down toggle-icon"></i></div></div><div class="card-detail"><div class="detail-values"><span>${o}</span><i class="fas fa-arrow-right"></i><span>${n}</span></div><div class="detail-full-date"><i class="far fa-clock me-1"></i> ${r.time}</div></div></div>`; }); if(!filterDate && localData.history.length > 50) { container.innerHTML += '<div class="text-center text-muted small py-2">Daha eski kayıtlar için tarih filtresini kullanınız...</div>'; } }
+    window.toggleHistoryCard = function(el) { const allOpen = document.querySelectorAll('.metallic-card.open'); allOpen.forEach(card => { if(card !== el) { card.classList.remove('open'); card.querySelector('.card-detail').style.display = 'none'; } }); const detail = el.querySelector('.card-detail'); if (el.classList.contains('open')) { el.classList.remove('open'); detail.style.display = 'none'; } else { el.classList.add('open'); detail.style.display = 'block'; } }
+    window.filterHistoryByDate = function() { const val = document.getElementById('historyFilterDate').value; const resetBtn = document.getElementById('resetHistoryDateBtn'); if(val) { resetBtn.style.display = 'block'; renderHistory(val); } else { resetBtn.style.display = 'none'; renderHistory(); } }
+    window.clearHistoryFilter = function() { const input = document.getElementById('historyFilterDate'); input.value = ""; input.type = "text"; document.getElementById('resetHistoryDateBtn').style.display = 'none'; renderHistory(); }
     function calculateEstFinish(totalDoneInput, elapsedDaysInput) { const dailyTarget = localData.daily.target || 10; let totalDebt = 0; localData.counts.forEach(c => totalDebt += (c.target - c.done)); const elContainer = document.getElementById('prediction-container'); const elSuccess = document.getElementById('prediction-success'); if (totalDebt <= 0) { elContainer.style.display = 'none'; elSuccess.style.display = 'block'; return; } elContainer.style.display = 'block'; elSuccess.style.display = 'none'; if (dailyTarget > 0) { const daysLeft = Math.ceil(totalDebt / dailyTarget); const today = new Date(); const finishDate = new Date(); finishDate.setDate(today.getDate() + daysLeft); const options = { year: 'numeric', month: 'long', day: 'numeric' }; document.getElementById('estFinishDate').innerText = finishDate.toLocaleDateString('tr-TR', options); document.getElementById('estDaysLeft').innerText = `${daysLeft} Gün Kaldı`; } else { document.getElementById('estFinishDate').innerText = "Belirlenmedi"; document.getElementById('estDaysLeft').innerText = "-"; } const avgDaily = totalDoneInput > 0 ? (totalDoneInput / elapsedDaysInput) : 0; const elDateAvg = document.getElementById('estFinishDateAvg'); const elDaysAvg = document.getElementById('estDaysLeftAvg'); if(avgDaily > 0) { const daysLeftAvg = Math.ceil(totalDebt / avgDaily); const todayAvg = new Date(); const finishDateAvg = new Date(); finishDateAvg.setDate(todayAvg.getDate() + daysLeftAvg); elDateAvg.innerText = finishDateAvg.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }); elDaysAvg.innerText = `(${daysLeftAvg} Gün)`; } else { elDateAvg.innerText = "Veri Yok"; elDaysAvg.innerText = "Henüz kazaya başlanmadı"; } }
     function showModal(title, message, onConfirm) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalMessage').innerText = message; const btnGroup = document.getElementById('modalButtons'); btnGroup.innerHTML = ''; if (onConfirm) { btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`; document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); }; } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; } document.getElementById('customModal').style.display = 'flex'; }
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
@@ -1478,6 +1006,12 @@
             </div>`;
         }); 
         
+        // Metinleri önceden yaz (Hata olursa da görünsün)
+        const bestText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
+        const worstText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
+        document.getElementById('bestPrayer').innerText = bestText;
+        document.getElementById('worstPrayer').innerText = worstText;
+        
         const periodStats = calculatePeriodStats(); 
         const avg = (totalDone / days).toFixed(2); 
     
@@ -1492,10 +1026,29 @@
         document.getElementById('statYearly').innerText = periodStats.yearly;
         document.getElementById('statAverage').innerText = avg;
         
-        document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
-        document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
-        
-        const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
+        // Grafik çizimlerini try-catch ile sarmala
+        try {
+            const ctx1 = document.getElementById('completionChart').getContext('2d'); 
+            if (chartCompletion) chartCompletion.destroy(); 
+            const isDark = document.body.classList.contains('dark-mode'); 
+            const lc = isDark ? '#fff' : '#666'; 
+            chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); 
+            
+            const ctx2 = document.getElementById('barChart').getContext('2d'); 
+            if (barChart) barChart.destroy(); 
+            barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); 
+            
+            const ctx3 = document.getElementById('lineChart').getContext('2d'); 
+            if (lineChart) lineChart.destroy(); 
+            const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); 
+            gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); 
+            let chartLabels = []; let chartData = []; let pointRadiusVal = 3; 
+            if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } 
+            else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } 
+            lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
+        } catch (e) {
+            console.error("Grafik çizim hatası:", e);
+        }
         
         renderHistory();
     }
@@ -1659,6 +1212,32 @@
         showToast("Tekrar çevrimiçi oldunuz!", "success");
         document.body.style.filter = "none";
     });
+
+    // --- PWA INSTALL LOGIC ---
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const installContainer = document.getElementById('installContainer');
+        if (installContainer) {
+            installContainer.style.display = 'block';
+        }
+    });
+
+    function installPWA() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            deferredPrompt = null;
+            document.getElementById('installContainer').style.display = 'none';
+        });
+    }
+
+    window.addEventListener('appinstalled', () => {
+        document.getElementById('installContainer').style.display = 'none';
+        showToast("Uygulama başarıyla yüklendi! 🎉", "success");
+    });
+
 </script>
 </body>
 </html>
