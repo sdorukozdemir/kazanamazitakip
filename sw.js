@@ -1,5 +1,5 @@
 /* Dosya Adı: sw.js */
-const CACHE_NAME = 'ibadet-takip-v37'; // Dosya yapısı değiştiği için versiyonu güncelledim.
+const CACHE_NAME = 'ibadet-takip-v38'; // Versiyonu v38 yaptım.
 
 const STATIC_ASSETS = [
   './',
@@ -14,14 +14,14 @@ const STATIC_ASSETS = [
   'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js',
   'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js',
-  'https://cdn.jsdelivr.net/npm/chart.js',
+  'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js', // Chart.js sürümünü buraya da ekledim
   'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0',
   'https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js'
 ];
 
 // 1. KURULUM (Install)
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Yeni versiyon gelir gelmez beklemeden yükle
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[SW] Yeni dosyalar önbelleğe alınıyor...');
@@ -47,17 +47,16 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// 3. İSTEKLERİ YÖNETME (Fetch) - Gelişmiş Strateji
+// 3. İSTEKLERİ YÖNETME (Fetch)
 self.addEventListener('fetch', (event) => {
   const reqUrl = new URL(event.request.url);
 
-  // A) Firebase ve Google API isteklerini ASLA cacheleme (Network Only)
+  // A) Firebase ve Google API isteklerini ASLA cacheleme
   if (reqUrl.href.includes('firebase') || reqUrl.href.includes('googleapis')) {
     return; 
   }
 
   // B) Ana Sayfa (HTML) isteği ise: Network First
-  // İnternet varsa yenisini indir, yoksa cache'den ver.
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
@@ -74,8 +73,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // C) Diğer statik dosyalar (CSS, JS, Resimler): Stale-While-Revalidate
-  // Önce eldeki (cache) hızlıca göster, arka planda internetten yenisini çekip cache'i güncelle.
+  // C) Diğer statik dosyalar: Stale-While-Revalidate
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) => {
       return caches.match(event.request).then((cachedResponse) => {
