@@ -668,77 +668,153 @@ window.switchStatsTab = function(tab) {
 function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
 
 function renderStats() { 
-    let totalTarget = 0, totalDone = 0; 
-    let labels = [], remainingData = [], doneData = []; 
-    let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; 
-    const days = getElapsedDays();
+    try {
+        if(!localData.counts || !Array.isArray(localData.counts)) {
+            console.error("Veri hatası: counts dizisi bulunamadı");
+            return;
+        }
 
-    const gridContainer = document.getElementById('prayer-analysis-grid');
-    gridContainer.innerHTML = "";
+        let totalTarget = 0, totalDone = 0; 
+        let labels = [], remainingData = [], doneData = []; 
+        let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; 
+        const days = getElapsedDays() || 1; // 0 gelirse 1 yap
 
-    localData.counts.forEach((c, index) => { 
-        totalTarget += c.target; 
-        totalDone += c.done; 
-        const remaining = Math.max(0, c.target - c.done); 
-        labels.push(c.name); 
-        remainingData.push(remaining); 
-        doneData.push(c.done); 
-        
-        if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } 
-        if (c.done > maxDone) { maxDone = c.done; bestName = c.name; }
+        const gridContainer = document.getElementById('prayer-analysis-grid');
+        gridContainer.innerHTML = "";
 
-        const avg = (c.done / days).toFixed(2);
-        const estText = formatTime(avg > 0 ? Math.ceil(remaining/avg) : 0);
-        
-        gridContainer.innerHTML += `
-        <div class="stat-accordion-item">
-            <div class="stat-accordion-header" onclick="toggleStatDetails(${index})">
-                <div class="stat-header-content">
-                    <div class="stat-icon-wrapper"><i class="fas fa-mosque"></i></div>
-                    <div class="stat-title">${c.name}</div>
+        localData.counts.forEach((c, index) => { 
+            totalTarget += (c.target || 0); 
+            totalDone += (c.done || 0); 
+            const remaining = Math.max(0, (c.target || 0) - (c.done || 0)); 
+            labels.push(c.name); 
+            remainingData.push(remaining); 
+            doneData.push(c.done); 
+            
+            if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } 
+            if (c.done > maxDone) { maxDone = c.done; bestName = c.name; }
+
+            const avg = (c.done / days).toFixed(2);
+            const estText = formatTime(avg > 0 ? Math.ceil(remaining/avg) : 0);
+            
+            gridContainer.innerHTML += `
+            <div class="stat-accordion-item">
+                <div class="stat-accordion-header" onclick="toggleStatDetails(${index})">
+                    <div class="stat-header-content">
+                        <div class="stat-icon-wrapper"><i class="fas fa-mosque"></i></div>
+                        <div class="stat-title">${c.name}</div>
+                    </div>
+                    <i class="fas fa-chevron-down stat-arrow" id="icon-stat-${index}"></i>
                 </div>
-                <i class="fas fa-chevron-down stat-arrow" id="icon-stat-${index}"></i>
-            </div>
-            <div class="stat-accordion-body" id="detail-stat-${index}">
-                <div class="stat-detail-grid">
-                    <div class="stat-detail-item">
-                        <span class="stat-detail-label">KILINAN</span>
-                        <div class="stat-detail-value text-done">${c.done}</div>
-                    </div>
-                    <div class="stat-detail-item">
-                        <span class="stat-detail-label">KALAN</span>
-                        <div class="stat-detail-value text-rem">${remaining}</div>
-                    </div>
-                    <div class="stat-detail-item">
-                        <span class="stat-detail-label">GÜNLÜK ORT.</span>
-                        <div class="stat-detail-value text-primary">${avg}</div>
-                    </div>
-                    <div class="stat-detail-item">
-                        <span class="stat-detail-label">TAHMİNİ BİTİŞ</span>
-                        <div class="stat-detail-value text-warning" style="font-size:0.9rem;">${estText}</div>
+                <div class="stat-accordion-body" id="detail-stat-${index}">
+                    <div class="stat-detail-grid">
+                        <div class="stat-detail-item">
+                            <span class="stat-detail-label">KILINAN</span>
+                            <div class="stat-detail-value text-done">${c.done}</div>
+                        </div>
+                        <div class="stat-detail-item">
+                            <span class="stat-detail-label">KALAN</span>
+                            <div class="stat-detail-value text-rem">${remaining}</div>
+                        </div>
+                        <div class="stat-detail-item">
+                            <span class="stat-detail-label">GÜNLÜK ORT.</span>
+                            <div class="stat-detail-value text-primary">${avg}</div>
+                        </div>
+                        <div class="stat-detail-item">
+                            <span class="stat-detail-label">TAHMİNİ BİTİŞ</span>
+                            <div class="stat-detail-value text-warning" style="font-size:0.9rem;">${estText}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>`;
-    }); 
-    
-    const periodStats = calculatePeriodStats(); 
-    const avg = (totalDone / days).toFixed(2); 
+            </div>`;
+        }); 
+        
+        const periodStats = calculatePeriodStats(); 
+        const avg = (totalDone / days).toFixed(2); 
 
-    const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
-    const weeklyDone = getWeeklyProgress(); 
+        const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
+        const weeklyDone = getWeeklyProgress(); 
 
-    document.getElementById('statToday').innerText = dailyDone; 
-    document.getElementById('statWeekly').innerText = weeklyDone; 
-    document.getElementById('statMonthly').innerText = periodStats.monthly; 
-    document.getElementById('stat3Months').innerText = periodStats.months3;
-    document.getElementById('stat6Months').innerText = periodStats.months6;
-    document.getElementById('statYearly').innerText = periodStats.yearly;
-    document.getElementById('statAverage').innerText = avg;
-    
-    const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
-    
-    renderHistory();
+        document.getElementById('statToday').innerText = dailyDone; 
+        document.getElementById('statWeekly').innerText = weeklyDone; 
+        document.getElementById('statMonthly').innerText = periodStats.monthly; 
+        document.getElementById('stat3Months').innerText = periodStats.months3;
+        document.getElementById('stat6Months').innerText = periodStats.months6;
+        document.getElementById('statYearly').innerText = periodStats.yearly;
+        document.getElementById('statAverage').innerText = avg;
+        
+        // Hata veren kısımları güncelledik
+        const bestText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`;
+        const worstText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`;
+        
+        if(document.getElementById('bestPrayer')) document.getElementById('bestPrayer').innerText = bestText; 
+        if(document.getElementById('worstPrayer')) document.getElementById('worstPrayer').innerText = worstText; 
+        
+        // Grafik çizimi (Hata verirse durmasın diye try-catch içinde)
+        try {
+            const ctx1 = document.getElementById('completionChart').getContext('2d'); 
+            if (chartCompletion) chartCompletion.destroy(); 
+            const isDark = document.body.classList.contains('dark-mode'); 
+            const lc = isDark ? '#fff' : '#666'; 
+            
+            chartCompletion = new Chart(ctx1, { 
+                type: 'doughnut', 
+                data: { 
+                    labels: ['Kılınan', 'Kalan'], 
+                    datasets: [{ 
+                        data: [totalDone, Math.max(0, totalTarget - totalDone)], 
+                        backgroundColor: ['#609979', '#d9534f'], 
+                        borderWidth: 0 
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, 
+                        datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } 
+                    } 
+                } 
+            }); 
+
+            const ctx2 = document.getElementById('barChart').getContext('2d'); 
+            if (barChart) barChart.destroy(); 
+            barChart = new Chart(ctx2, { 
+                type: 'bar', 
+                data: { 
+                    labels: labels, 
+                    datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, 
+                    scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } 
+                } 
+            }); 
+
+            const ctx3 = document.getElementById('lineChart').getContext('2d'); 
+            if (lineChart) lineChart.destroy(); 
+            const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); 
+            gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); 
+            gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); 
+            
+            let chartLabels = []; let chartData = []; let pointRadiusVal = 3; 
+            if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } 
+            else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } 
+            
+            lineChart = new Chart(ctx3, { 
+                type: 'line', 
+                data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, 
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } 
+            }); 
+        } catch(chartErr) {
+            console.warn("Grafik hatası:", chartErr);
+        }
+        
+        renderHistory();
+    } catch(err) {
+        console.error("renderStats genel hata:", err);
+    }
 }
 
 window.toggleStatDetails = function(index) {
@@ -851,7 +927,25 @@ if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-m
 document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
 const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; this.value = formatDateTR(this.value); }; dInput.placeholder = 'gg.aa.yyyy';
 function checkDailyReset() { const t = getCurrentDateSimple(); if (localData.daily.date !== t) { localData.daily.date = t; localData.daily.counts = [0,0,0,0,0]; saveToCloud(); } }
-function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
+
+// GÜNCELLENMİŞ TARİH HESAPLAMA (Daha Güvenli)
+function getElapsedDays() { 
+    if (!localData.startDate) return 1; 
+    try {
+        const s = new Date(localData.startDate); 
+        // Eğer tarih geçersizse hata fırlatır veya NaN döner
+        if(isNaN(s.getTime())) return 1; 
+        
+        const n = new Date(); 
+        s.setHours(0,0,0,0); 
+        n.setHours(0,0,0,0); 
+        const diff = Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24));
+        return diff || 1; 
+    } catch(e) {
+        return 1;
+    }
+}
+
 function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
 function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); 
 saveToCloud(); }
