@@ -12,425 +12,42 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
-    <!-- Chart.js Sürümü Sabitlendi -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <style>
-        /* --- TEMEL DEĞİŞKENLER --- */
-        :root { 
-            --bg-color: #e3e6ec; 
-            --text-color: #212529; 
-            --card-bg: #ffffff; 
-            --sidebar-bg: linear-gradient(180deg, #609979 0%, #3e6b53 100%);
-            --sidebar-item-active: rgba(255, 255, 255, 0.25);
-            --sidebar-item-hover: rgba(255, 255, 255, 0.1);
-            --input-bg: #f8f9fa; --input-text: #000000; --border-color: #ced4da; 
-            --modal-bg: #ffffff; --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057; 
-            --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404; 
-            --z-btn-plus-bg: linear-gradient(145deg, #609979, #3e6b53); 
-            --scroll-track: #e9ecef; --scroll-thumb: #ced4da; 
-            --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724; 
-            --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe; 
-            --stat-avg-color: #6610f2; 
-            --calc-box-bg: #f8f9fa; --calc-header-bg: linear-gradient(135deg, #609979, #3e6b53); 
-            --calc-header-text: #ffffff; --calc-header-shadow: rgba(96, 153, 121, 0.3); 
-            --placeholder-color: #6c757d; --pink-accent: #d63384; --pink-bg-light: #fce4ec; 
-            --blue-accent: #0d6efd; --blue-bg-light: #e7f1ff; 
-            --fade-box-bg: rgba(255, 255, 255, 0.6); --fade-box-border: rgba(0,0,0,0.05); 
-            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
-            --calc-item-bg: #ffffff; --calc-item-border: #e9ecef; 
-            --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
-            --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
-            --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            --capsule-bg: #e9ecef; --capsule-border: #ced4da; --capsule-label: #6c757d;
-            --capsule-text: #212529; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+        /* --- TEMEL STİLLER --- */
+        :root { --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; --sidebar-bg: linear-gradient(180deg, #609979 0%, #3e6b53 100%); --sidebar-item-active: rgba(255, 255, 255, 0.25); --sidebar-item-hover: rgba(255, 255, 255, 0.1); --input-bg: #f8f9fa; --input-text: #000000; --border-color: #ced4da; --modal-bg: #ffffff; --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057; --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404; --z-btn-plus-bg: linear-gradient(145deg, #609979, #3e6b53); --scroll-track: #e9ecef; --scroll-thumb: #ced4da; --box-target-bg: #e8f5e9; --box-target-border: #c3e6cb; --box-target-text: #155724; --box-add-bg: #e7f1ff; --box-add-border: #b6d4fe; --stat-avg-color: #6610f2; --calc-box-bg: #f8f9fa; --calc-header-bg: linear-gradient(135deg, #609979, #3e6b53); --calc-header-text: #ffffff; --calc-header-shadow: rgba(96, 153, 121, 0.3); --placeholder-color: #6c757d; --pink-accent: #d63384; --pink-bg-light: #fce4ec; --blue-accent: #0d6efd; --blue-bg-light: #e7f1ff; --fade-box-bg: rgba(255, 255, 255, 0.6); --fade-box-border: rgba(0,0,0,0.05); --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.03); --calc-item-bg: #ffffff; --calc-item-border: #e9ecef; --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); --capsule-bg: #e9ecef; --capsule-border: #ced4da; --capsule-label: #6c757d; --capsule-text: #212529; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; --sidebar-bg: linear-gradient(180deg, #111827 0%, #1f2937 100%); --sidebar-item-active: rgba(96, 153, 121, 0.2); --sidebar-item-hover: rgba(255, 255, 255, 0.05); --input-bg: #3a3a3a; --input-text: #ffffff; --border-color: #444; --modal-bg: #2d2d2d; --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da; --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107; --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43); --scroll-track: #2d2d2d; --scroll-thumb: #555; --box-target-bg: #0f2e1c; --box-target-border: #146c43; --box-target-text: #75b798; --box-add-bg: #052c65; --box-add-border: #084298; --stat-avg-color: #d63384; --calc-box-bg: #2d2d2d; --calc-header-bg: linear-gradient(135deg, #0f5132, #146c43); --calc-header-text: #e0e0e0; --calc-header-shadow: rgba(0, 0, 0, 0.5); --placeholder-color: #bbbbbb; --pink-bg-light: #4a1b2d; --blue-bg-light: #0d2b4a; --fade-box-bg: rgba(255, 255, 255, 0.05); --fade-box-border: rgba(255,255,255,0.05); --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.2); --calc-item-bg: #262626; --calc-item-border: #333; --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); --capsule-bg: #2c3035; --capsule-border: #444444; --capsule-label: #aaaaaa; --capsule-text: #ffffff; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        body.dark-mode .text-muted { color: #adb5bd !important; } body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; } .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } } .loading-text { margin-top: 15px; font-weight: 600; color: #609979; animation: pulse 1.5s infinite; } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .wrapper { display: flex; width: 100%; } #sidebar { min-width: 280px; max-width: 280px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: all 0.3s ease; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -280px; box-shadow: 5px 0 15px rgba(0,0,0,0.1); } #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); } #overlay.active { display: block; } #sidebar.active { margin-left: 0; } .sidebar-header { padding: 30px 20px 20px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; } #sidebar ul { padding: 0 15px; } #sidebar ul li { padding: 12px 20px; margin-bottom: 8px; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; display: flex; align-items: center; font-weight: 500; opacity: 0.85; border: none; } #sidebar ul li:hover { background: var(--sidebar-item-hover); transform: translateX(5px); opacity: 1; } #sidebar ul li.active { background: var(--sidebar-item-active); color: #fff; font-weight: 700; opacity: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.1); } #sidebar ul li i { width: 30px; text-align: center; font-size: 1.1rem; } @media (min-width: 769px) { #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } #sidebar.active { margin-left: -280px; } #overlay { display: none !important; } #content { width: calc(100% - 280px); margin-left: 0; } } @media (max-width: 768px) { #content { width: 100%; } }
+        .user-info-box { margin: 10px auto; width: 100%; padding: 15px 10px; border-radius: 12px; color: var(--user-box-text); box-shadow: var(--user-box-shadow); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; transition: 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.2); } .user-info-male { background: var(--user-box-bg-male); } .user-info-female { background: var(--user-box-bg-female); } #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; } .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } body.dark-mode .app-header { background: -webkit-linear-gradient(45deg, #20c997, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .prayer-split-layout { display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; height: 420px; } .prayer-side-menu { width: 85px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; overflow-y: auto; } @media (max-width: 768px) { .prayer-split-layout { flex-direction: column; height: auto; } .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding: 5px 15px; scrollbar-width: none; gap: 10px; } .prayer-side-menu::-webkit-scrollbar { display: none; } .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; flex: 0 0 auto; } .prayer-detail-card { min-height: 380px; } }
+        .side-menu-item { border-radius: 18px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.8; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); color: #333; } .side-menu-item:hover { transform: translateY(-2px); opacity: 1; } .side-menu-item.active { opacity: 1; transform: scale(1.05); border: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); color: #fff !important; } .side-menu-item.active .side-menu-label { color: #fff !important; opacity: 1; text-shadow: 0 1px 2px rgba(0,0,0,0.2); } .side-menu-item.active .side-menu-icon { color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2); } .side-menu-icon { font-size: 1.5rem; margin-bottom: 4px; transition: 0.3s; } .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; transition: 0.3s; } .flip-icon { transform: scaleX(-1); display: inline-block; }
+        .theme-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: #006064; } .theme-sabah.active { background: linear-gradient(135deg, #00acc1 0%, #00838f 100%); } .theme-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); color: #f57f17; } .theme-ogle.active { background: linear-gradient(135deg, #fdd835 0%, #fbc02d 100%); } .theme-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; } .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); } .theme-aksam { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); color: #1a237e; } .theme-aksam.active { background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); } .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; } .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); } body.dark-mode .side-menu-item { background: #2c3035; color: #90a4ae; border: 1px solid #444; } body.dark-mode .theme-sabah.active { background: linear-gradient(135deg, #0277bd 0%, #01579b 100%); color: #e1f5fe; } body.dark-mode .theme-ogle.active { background: linear-gradient(135deg, #ff8f00 0%, #e65100 100%); color: #fffde7; } body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); color: #fbe9e7; } body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); color: #e8eaf6; } body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); color: #eceff1; }
+        .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); } .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } .bg-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%); } .bg-ikindi { background: linear-gradient(135deg, #ffccbc 0%, #ff8a65 100%); } .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } body.dark-mode .bg-sabah { background: linear-gradient(120deg, #01579b 0%, #0288d1 40%, #29b6f6 50%, #0288d1 60%, #01579b 100%); } body.dark-mode .bg-ogle { background: linear-gradient(120deg, #e65100 0%, #f57c00 40%, #ffb74d 50%, #f57c00 60%, #e65100 100%); } body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); } body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); } body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
+        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; } body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); } .pd-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; } .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; white-space: nowrap; } .pd-remaining-badge { background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); white-space: nowrap; flex-shrink: 0; } @media (max-width: 380px) { .pd-title { font-size: 1.4rem; } .pd-remaining-badge { padding: 4px 10px; font-size: 0.8rem; } } .pd-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: auto; } .pd-input-group { background: var(--input-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); } .pd-label { font-size: 0.75rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; color: var(--text-color); } .pd-input { background: transparent; border: none; font-size: 1.8rem; font-weight: 800; text-align: center; width: 100%; color: var(--text-color); outline: none; } .pd-progress-container { margin-top: 20px; margin-bottom: 5px; } .pd-progress-track { height: 12px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; position: relative; } body.dark-mode .pd-progress-track { background: rgba(255,255,255,0.1); } .pd-progress-fill { height: 100%; background: linear-gradient(90deg, #609979, #3e6b53); width: 0%; transition: width 0.5s ease; border-radius: 10px; } .pd-progress-text { font-size: 0.75rem; font-weight: 700; text-align: center; margin-top: 4px; opacity: 0.7; } .pd-actions { display: flex; gap: 20px; justify-content: center; margin-top: 15px; } .pd-btn { width: 70px; height: 70px; border-radius: 20px; border: none; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; color: white; } .pd-btn:active { transform: scale(0.9); } .pd-btn-plus { background: #609979; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); } .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
 
-        /* --- GECE MODU --- */
-        body.dark-mode { 
-            --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; 
-            --sidebar-bg: linear-gradient(180deg, #111827 0%, #1f2937 100%);
-            --sidebar-item-active: rgba(96, 153, 121, 0.2); --sidebar-item-hover: rgba(255, 255, 255, 0.05);
-            --input-bg: #3a3a3a; --input-text: #ffffff; --border-color: #444; 
-            --modal-bg: #2d2d2d; --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da; 
-            --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107; 
-            --z-btn-plus-bg: linear-gradient(145deg, #0f5132, #146c43); 
-            --scroll-track: #2d2d2d; --scroll-thumb: #555; 
-            --box-target-bg: #0f2e1c; --box-target-border: #146c43; --box-target-text: #75b798; 
-            --box-add-bg: #052c65; --box-add-border: #084298; 
-            --stat-avg-color: #d63384; 
-            --calc-box-bg: #2d2d2d; --calc-header-bg: linear-gradient(135deg, #0f5132, #146c43); 
-            --calc-header-text: #e0e0e0; --calc-header-shadow: rgba(0, 0, 0, 0.5); 
-            --placeholder-color: #bbbbbb; --pink-bg-light: #4a1b2d; --blue-bg-light: #0d2b4a; 
-            --fade-box-bg: rgba(255, 255, 255, 0.05); --fade-box-border: rgba(255,255,255,0.05); 
-            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            --calc-item-bg: #262626; --calc-item-border: #333; 
-            --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
-            --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
-            --capsule-bg: #2c3035; --capsule-border: #444444; --capsule-label: #aaaaaa;
-            --capsule-text: #ffffff; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
+        .stat-accordion-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 12px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; } .stat-accordion-header { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: var(--card-bg); user-select: none; } .stat-accordion-header:hover { background: rgba(0,0,0,0.02); } .stat-header-content { display: flex; align-items: center; gap: 12px; } .stat-icon-wrapper { width: 40px; height: 40px; border-radius: 10px; background: rgba(96, 153, 121, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #609979; } .stat-title { font-weight: 700; font-size: 1rem; color: var(--text-color); } .stat-arrow { transition: transform 0.3s; color: var(--placeholder-color); } .stat-accordion-item.open .stat-arrow { transform: rotate(180deg); color: #609979; } .stat-accordion-body { display: none; padding: 0 20px 20px 20px; border-top: 1px dashed var(--border-color); animation: statSlideDown 0.3s ease-out; } .stat-accordion-item.open .stat-accordion-body { display: block; } @keyframes statSlideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } } .stat-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; } .stat-detail-item { background: var(--input-bg); padding: 10px; border-radius: 12px; text-align: center; } .stat-detail-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.6; display: block; margin-bottom: 3px; } .stat-detail-value { font-size: 1.1rem; font-weight: 800; } .text-done { color: #609979; } .text-rem { color: #dc3545; }
         
-        body.dark-mode .text-muted { color: #adb5bd !important; }
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
+        .summary-bar { background: var(--sidebar-bg); color: white; border-radius: 16px; padding: 15px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); } .summary-item { text-align: center; } .summary-val { font-size: 1.2rem; font-weight: 800; line-height: 1; } .summary-lbl { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
+
+        .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); } #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); } .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; } .goal-card.success-mode { border: 3px solid #ffc107; } .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #609979; background: white; } .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; } .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; } .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #609979; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; } .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #609979; margin: 10px 0; line-height: 1.3; } body.dark-mode .arabic-text { color: #20c997; } .zikr-count { font-size: 2.8rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); } .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin: 20px 0; } .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.05s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; } .zikr-btn:active { transform: scale(0.9); } .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; } .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); } .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; } .tesbihat-target-box { background: var(--box-target-bg); border: 1px solid var(--box-target-border); border-radius: 25px; padding: 8px 25px; display: inline-flex; align-items: center; gap: 15px; margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); min-width: 150px; justify-content: space-between; } .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 1px; color: var(--box-target-text); } .tesbihat-target-input { border: none; background: transparent; width: 90px; text-align: center; font-weight: bold; font-size: 1.2rem; color: var(--text-color); outline: none; } .manual-zikr-container { position: relative; background-color: var(--box-add-bg); border: 1px solid var(--box-add-border); border-radius: 50px; padding: 4px 5px 4px 15px; display: flex; align-items: center; justify-content: space-between; width: 45%; min-width: 130px; margin: 15px auto 0 auto; box-shadow: 0 3px 6px rgba(0,0,0,0.05); transition: transform 0.2s; } .manual-zikr-container:focus-within { transform: scale(1.02); } .manual-zikr-input-clean { border: none; background: transparent; font-weight: bold; color: var(--text-color); width: 100%; outline: none; font-size: 0.95rem; text-align: center; } .btn-add-clean { background: #0d6efd; color: white; border: none; border-radius: 50px; padding: 6px 15px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap; } .btn-add-clean:active { transform: scale(0.95); } .btn-add-clean:hover { background: #0b5ed7; } body.dark-mode .btn-add-clean { background: #3d8bfd; color: #121212; } .calculator-card { padding: 20px; } .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); } .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; } .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; } .calc-item { flex: 1; min-width: 150px; text-align: center; } .calc-label-small { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-color); opacity: 0.7; margin-bottom: 5px; display: block; } .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; } .date-input::placeholder { color: var(--placeholder-color); opacity: 1; } .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; border-radius: 8px; } .calc-group-box { background: var(--calc-item-bg); border: 1px solid var(--calc-item-border); border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: flex-end; } .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; } .settings-card:hover { transform: translateY(-3px); } .settings-icon { font-size: 2rem; margin-bottom: 10px; color: #609979; } .settings-title { font-weight: 600; margin-bottom: 5px; } .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; } .settings-gender-male { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #90caf9; color: #0d47a1; } .settings-gender-female { background: linear-gradient(135deg, #fce4ec, #f8bbd0); border: 1px solid #f48fb1; color: #880e4f; } body.dark-mode .settings-gender-male { background: linear-gradient(135deg, #0d2b4a, #1a3e66); border-color: #1a3e66; color: #bbdefb; } body.dark-mode .settings-gender-female { background: linear-gradient(135deg, #4a1b2d, #661a36); border-color: #661a36; color: #f8bbd0; } .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); } .scrolling-wrapper::-webkit-scrollbar { height: 6px; } .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; } .scrolling-wrapper::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 10px; } .stat-card-scroll { display: inline-block; width: 160px; margin-right: 15px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; text-align: center; white-space: normal; vertical-align: top; box-shadow: 0 4px 10px rgba(0,0,0,0.05); } .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #609979; } .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; } #statAverage { color: var(--stat-avg-color) !important; } .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; } .analysis-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); } .analysis-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; } .analysis-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; } .icon-good { background: #d1e7dd; color: #0f5132; } .icon-bad { background: #f8d7da; color: #842029; } .analysis-text { flex: 1; } .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; } .analysis-value { font-size: 1.1rem; font-weight: bold; } .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; } .prediction-icon { font-size: 2.5rem; color: #609979; margin-bottom: 10px; } .prediction-date { font-size: 1.5rem; font-weight: bold; color: #609979; margin: 5px 0; } .prediction-days { font-size: 0.9rem; color: #6c757d; font-weight: 600; } .prediction-sub-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; display: block; margin-top: 5px; } .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; } .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
         
-        /* Yükleme Ekranı */
-        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
-        .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { margin-top: 15px; font-weight: 600; color: #609979; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        
-        /* Layout & Sidebar */
-        .wrapper { display: flex; width: 100%; }
-        #sidebar { min-width: 280px; max-width: 280px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: all 0.3s ease; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -280px; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
-        #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
-        #overlay.active { display: block; }
-        #sidebar.active { margin-left: 0; }
-        
-        .sidebar-header { padding: 30px 20px 20px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
-        #sidebar ul { padding: 0 15px; }
-        #sidebar ul li { padding: 12px 20px; margin-bottom: 8px; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; display: flex; align-items: center; font-weight: 500; opacity: 0.85; border: none; }
-        #sidebar ul li:hover { background: var(--sidebar-item-hover); transform: translateX(5px); opacity: 1; }
-        #sidebar ul li.active { background: var(--sidebar-item-active); color: #fff; font-weight: 700; opacity: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        #sidebar ul li i { width: 30px; text-align: center; font-size: 1.1rem; }
-
-        @media (min-width: 769px) { #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } #sidebar.active { margin-left: -280px; } #overlay { display: none !important; } #content { width: calc(100% - 280px); margin-left: 0; } }
-        @media (max-width: 768px) { #content { width: 100%; } }
-        
-        .user-info-box { margin: 10px auto; width: 100%; padding: 15px 10px; border-radius: 12px; color: var(--user-box-text); box-shadow: var(--user-box-shadow); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; transition: 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-        .user-info-male { background: var(--user-box-bg-male); }
-        .user-info-female { background: var(--user-box-bg-female); }
-        
-        #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
-        .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        body.dark-mode .app-header { background: -webkit-linear-gradient(45deg, #20c997, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .prayer-split-layout { display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; height: 420px; }
-        .prayer-side-menu { width: 85px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; overflow-y: auto; }
-        @media (max-width: 768px) { .prayer-split-layout { flex-direction: column; height: auto; } .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding: 5px 15px; scrollbar-width: none; gap: 10px; } .prayer-side-menu::-webkit-scrollbar { display: none; } .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; flex: 0 0 auto; } .prayer-detail-card { min-height: 380px; } }
-        
-        .side-menu-item { border-radius: 18px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.8; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); color: #333; }
-        .side-menu-item:hover { transform: translateY(-2px); opacity: 1; }
-        .side-menu-item.active { opacity: 1; transform: scale(1.05); border: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); color: #fff !important; }
-        .side-menu-item.active .side-menu-label { color: #fff !important; opacity: 1; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-        .side-menu-item.active .side-menu-icon { color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-        .side-menu-icon { font-size: 1.5rem; margin-bottom: 4px; transition: 0.3s; }
-        .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; transition: 0.3s; }
-        .flip-icon { transform: scaleX(-1); display: inline-block; }
-
-        .theme-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: #006064; } .theme-sabah.active { background: linear-gradient(135deg, #00acc1 0%, #00838f 100%); }
-        .theme-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); color: #f57f17; } .theme-ogle.active { background: linear-gradient(135deg, #fdd835 0%, #fbc02d 100%); }
-        .theme-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; } .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); }
-        .theme-aksam { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); color: #1a237e; } .theme-aksam.active { background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); }
-        .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; } .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
-        body.dark-mode .side-menu-item { background: #2c3035; color: #90a4ae; border: 1px solid #444; }
-        body.dark-mode .theme-sabah.active { background: linear-gradient(135deg, #0277bd 0%, #01579b 100%); color: #e1f5fe; }
-        body.dark-mode .theme-ogle.active { background: linear-gradient(135deg, #ff8f00 0%, #e65100 100%); color: #fffde7; }
-        body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); color: #fbe9e7; }
-        body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); color: #e8eaf6; }
-        body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); color: #eceff1; }
-
-        .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
-        .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } .bg-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%); } .bg-ikindi { background: linear-gradient(135deg, #ffccbc 0%, #ff8a65 100%); } .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); }
-        body.dark-mode .bg-sabah { background: linear-gradient(120deg, #01579b 0%, #0288d1 40%, #29b6f6 50%, #0288d1 60%, #01579b 100%); }
-        body.dark-mode .bg-ogle { background: linear-gradient(120deg, #e65100 0%, #f57c00 40%, #ffb74d 50%, #f57c00 60%, #e65100 100%); }
-        body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
-        body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); }
-        body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
-
-        .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
-        body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); }
-        .pd-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
-        .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
-        .pd-remaining-badge { background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); white-space: nowrap; flex-shrink: 0; }
-        @media (max-width: 380px) { .pd-title { font-size: 1.4rem; } .pd-remaining-badge { padding: 4px 10px; font-size: 0.8rem; } }
-        .pd-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: auto; }
-        .pd-input-group { background: var(--input-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .pd-label { font-size: 0.75rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; color: var(--text-color); }
-        .pd-input { background: transparent; border: none; font-size: 1.8rem; font-weight: 800; text-align: center; width: 100%; color: var(--text-color); outline: none; }
-        .pd-progress-container { margin-top: 20px; margin-bottom: 5px; }
-        .pd-progress-track { height: 12px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; position: relative; }
-        body.dark-mode .pd-progress-track { background: rgba(255,255,255,0.1); }
-        .pd-progress-fill { height: 100%; background: linear-gradient(90deg, #609979, #3e6b53); width: 0%; transition: width 0.5s ease; border-radius: 10px; }
-        .pd-progress-text { font-size: 0.75rem; font-weight: 700; text-align: center; margin-top: 4px; opacity: 0.7; }
-        .pd-actions { display: flex; gap: 20px; justify-content: center; margin-top: 15px; }
-        .pd-btn { width: 70px; height: 70px; border-radius: 20px; border: none; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; color: white; }
-        .pd-btn:active { transform: scale(0.9); }
-        .pd-btn-plus { background: #609979; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); }
-        .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
-
-        .stat-accordion-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 12px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
-        .stat-accordion-header { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: var(--card-bg); user-select: none; }
-        .stat-accordion-header:hover { background: rgba(0,0,0,0.02); }
-        .stat-header-content { display: flex; align-items: center; gap: 12px; }
-        .stat-icon-wrapper { width: 40px; height: 40px; border-radius: 10px; background: rgba(96, 153, 121, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #609979; }
-        .stat-title { font-weight: 700; font-size: 1rem; color: var(--text-color); }
-        .stat-arrow { transition: transform 0.3s; color: var(--placeholder-color); }
-        .stat-accordion-item.open .stat-arrow { transform: rotate(180deg); color: #609979; }
-        .stat-accordion-body { display: none; padding: 0 20px 20px 20px; border-top: 1px dashed var(--border-color); animation: statSlideDown 0.3s ease-out; }
-        .stat-accordion-item.open .stat-accordion-body { display: block; }
-        @keyframes statSlideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .stat-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .stat-detail-item { background: var(--input-bg); padding: 10px; border-radius: 12px; text-align: center; }
-        .stat-detail-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.6; display: block; margin-bottom: 3px; }
-        .stat-detail-value { font-size: 1.1rem; font-weight: 800; }
-        .text-done { color: #609979; } .text-rem { color: #dc3545; }
-        
-        .summary-bar { background: var(--sidebar-bg); color: white; border-radius: 16px; padding: 15px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .summary-item { text-align: center; }
-        .summary-val { font-size: 1.2rem; font-weight: 800; line-height: 1; }
-        .summary-lbl { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
-
-        .login-card, .goal-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
-        #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
-        .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
-        .goal-card.success-mode { border: 3px solid #ffc107; }
-        .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #609979; background: white; }
-        .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
-        .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
-
-        /* --- TESBİHAT YENİ TASARIM (DÜZELTİLMİŞ) --- */
-        .tesbihat-layout-wrapper {
-            display: flex;
-            gap: 20px;
-            height: calc(100vh - 180px); /* Ekran yüksekliğine göre ayarla */
-            min-height: 480px; /* Biraz daha uzun yaptık */
-            align-items: stretch;
-        }
-
-        /* Sol Menü (Liste) */
-        .zikr-menu {
-            width: 90px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            overflow-y: auto;
-            padding-right: 5px;
-            flex-shrink: 0;
-        }
-
-        /* Menü Elemanları - Daha uzun/dikdörtgen */
-        .zikr-menu-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 10px 5px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            opacity: 0.7;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 110px; /* Daha uzun yapıldı */
-        }
-
-        .zikr-menu-item:hover { transform: translateY(-2px); opacity: 1; }
-        .zikr-menu-item.active {
-            background: linear-gradient(135deg, #609979, #3e6b53);
-            color: white;
-            border-color: #609979;
-            opacity: 1;
-            box-shadow: 0 5px 15px rgba(96, 153, 121, 0.4);
-            transform: scale(1.05);
-        }
-        .zikr-menu-item.active .small-arabic { color: rgba(255,255,255,0.8); }
-
-        .small-arabic { font-family: 'Amiri', serif; font-size: 1.1rem; line-height: 1.1; margin-top: 8px; color: #609979; }
-
-        /* Sağ Ana Kart (Detay) - ESKİ TASARIM GİBİ */
-        .zikr-active-card {
-            flex: 1;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            border-top: 6px solid #609979;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Dokunmatik Alan (Üst Kısım) */
-        .touch-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            padding: 20px;
-        }
-        .touch-area:active { transform: scale(0.98); }
-        .touch-hint { font-size: 0.7rem; opacity: 0.5; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Eski Tasarım Elemanları */
-        .arabic-text-large { font-family: 'Amiri', serif; font-size: 2.8rem; color: #609979; margin: 10px 0; line-height: 1.3; text-align: center; }
-        body.dark-mode .arabic-text-large { color: #20c997; }
-        .zikr-count-large { font-size: 4rem; font-weight: bold; margin: 10px 0; color: var(--text-color); text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
-
-        /* Alt Kontroller */
-        .zikr-controls-area {
-            padding: 20px;
-            background: rgba(0,0,0,0.02);
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* Buton Grubu - Eski Tasarımın Aynısı */
-        .zikr-btn-group { display: flex; gap: 15px; align-items: center; justify-content: center; margin-bottom: 15px; }
-        .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.05s; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
-        .zikr-btn:active { transform: scale(0.9); }
-        .z-minus { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-minus-bg); color: var(--z-btn-minus-text); font-size: 1.2rem; }
-        .z-plus { width: 90px; height: 90px; border-radius: 25px; background: var(--z-btn-plus-bg); color: white; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); }
-        .z-reset { width: 55px; height: 55px; border-radius: 15px; background-color: var(--z-btn-reset-bg); color: var(--z-btn-reset-text); font-size: 1.2rem; }
-
-        .tesbihat-target-box { background: var(--box-target-bg); border: 1px solid var(--box-target-border); border-radius: 25px; padding: 8px 25px; display: flex; align-items: center; justify-content: space-between; gap: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); max-width: 250px; margin: 0 auto; }
-        .tesbihat-target-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.9; letter-spacing: 1px; color: var(--box-target-text); }
-        .tesbihat-target-input { border: none; background: transparent; width: 90px; text-align: center; font-weight: bold; font-size: 1.2rem; color: var(--text-color); outline: none; }
-        
-        .manual-zikr-container { position: relative; background-color: var(--box-add-bg); border: 1px solid var(--box-add-border); border-radius: 50px; padding: 4px 5px 4px 15px; display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 200px; margin: 15px auto 0 auto; box-shadow: 0 3px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .manual-zikr-container:focus-within { transform: scale(1.02); }
-        .manual-zikr-input-clean { border: none; background: transparent; font-weight: bold; color: var(--text-color); width: 100%; outline: none; font-size: 0.95rem; text-align: center; }
-        .btn-add-clean { background: #0d6efd; color: white; border: none; border-radius: 50px; padding: 6px 15px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap; }
-        .btn-add-clean:active { transform: scale(0.95); }
-
-        /* MOBİL GÖRÜNÜM (PORTRAIT) */
-        @media (max-width: 768px) {
-            .tesbihat-layout-wrapper {
-                flex-direction: column;
-                height: auto;
-                gap: 15px;
-            }
-            .zikr-menu {
-                flex-direction: row;
-                width: 100%;
-                height: auto;
-                overflow-x: auto;
-                padding-bottom: 5px;
-                padding-right: 0;
-            }
-            .zikr-menu-item {
-                min-width: 110px; /* Daha geniş */
-                min-height: 70px; /* Daha kısa (yatay olduğu için) */
-                flex: 0 0 auto;
-                flex-direction: row; /* Yan yana yazı */
-                gap: 5px;
-            }
-            .zikr-menu-item .fw-bold { font-size: 0.8rem; }
-            .small-arabic { margin-top: 0; font-size: 1rem; }
-            
-            .zikr-active-card {
-                min-height: 450px; /* Mobilde kart yüksekliği */
-            }
-            .arabic-text-large { font-size: 2.2rem; }
-            .zikr-count-large { font-size: 3.5rem; }
-        }
-
-        /* YATAY MOBİL (LANDSCAPE) */
-        @media (orientation: landscape) and (max-height: 600px) {
-            .tesbihat-layout-wrapper {
-                flex-direction: row !important;
-                height: calc(100vh - 80px);
-                margin-bottom: 0;
-            }
-            .zikr-menu {
-                width: 100px;
-                flex-direction: column;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-            .zikr-menu-item {
-                min-height: 90px;
-                flex-direction: column;
-            }
-            .zikr-active-card {
-                padding: 0;
-            }
-            .arabic-text-large { font-size: 2rem; margin: 5px 0; }
-            .zikr-count-large { font-size: 2.5rem; margin: 5px 0; }
-            .zikr-controls-area { padding: 10px; }
-            .z-minus, .z-reset { width: 45px; height: 45px; }
-            .z-plus { width: 70px; height: 70px; font-size: 2rem; }
-        }
-
-        .calculator-card { padding: 20px; }
-        .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
-        .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        .calc-item { flex: 1; min-width: 150px; text-align: center; }
-        .calc-label-small { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-color); opacity: 0.7; margin-bottom: 5px; display: block; }
-        .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
-        .date-input::placeholder { color: var(--placeholder-color); opacity: 1; }
-        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; border-radius: 8px; }
-        .calc-group-box { background: var(--calc-item-bg); border: 1px solid var(--calc-item-border); border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
-        .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
-        .settings-card:hover { transform: translateY(-3px); }
-        .settings-icon { font-size: 2rem; margin-bottom: 10px; color: #609979; }
-        .settings-title { font-weight: 600; margin-bottom: 5px; }
-        .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
-        .settings-gender-male { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #90caf9; color: #0d47a1; }
-        .settings-gender-female { background: linear-gradient(135deg, #fce4ec, #f8bbd0); border: 1px solid #f48fb1; color: #880e4f; }
-        body.dark-mode .settings-gender-male { background: linear-gradient(135deg, #0d2b4a, #1a3e66); border-color: #1a3e66; color: #bbdefb; }
-        body.dark-mode .settings-gender-female { background: linear-gradient(135deg, #4a1b2d, #661a36); border-color: #661a36; color: #f8bbd0; }
-        .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
-        .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
-        .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
-        .scrolling-wrapper::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 10px; }
-        .stat-card-scroll { display: inline-block; width: 160px; margin-right: 15px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; text-align: center; white-space: normal; vertical-align: top; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #609979; }
-        .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; }
-        #statAverage { color: var(--stat-avg-color) !important; }
-        .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-        .analysis-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-        .analysis-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .analysis-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; }
-        .icon-good { background: #d1e7dd; color: #0f5132; }
-        .icon-bad { background: #f8d7da; color: #842029; }
-        .analysis-text { flex: 1; }
-        .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
-        .analysis-value { font-size: 1.1rem; font-weight: bold; }
-        .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .prediction-icon { font-size: 2.5rem; color: #609979; margin-bottom: 10px; }
-        .prediction-date { font-size: 1.5rem; font-weight: bold; color: #609979; margin: 5px 0; }
-        .prediction-days { font-size: 0.9rem; color: #6c757d; font-weight: 600; }
-        .prediction-sub-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; display: block; margin-top: 5px; }
-        .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
-        .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
-        
-        .metallic-card { border: none; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); background: linear-gradient(145deg, #dce1e6 0%, #ffffff 50%, #dce1e6 100%); padding: 0; overflow: hidden; color: #333; transition: all 0.2s ease; position: relative; }
-        .metallic-card.up { border-left: 5px solid #609979; } .metallic-card.down { border-left: 5px solid #dc3545; }
-        .card-summary { padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; min-height: 50px; }
-        .summary-prayer { font-weight: 800; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.5px; }
-        .summary-right-group { display: flex; align-items: center; gap: 12px; }
-        .change-badge { font-size: 0.85rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; min-width: 35px; text-align: center; }
-        .metallic-card.up .change-badge { color: #609979; background: rgba(96, 153, 121, 0.1); } .metallic-card.down .change-badge { color: #dc3545; background: rgba(220, 53, 69, 0.1); }
-        .toggle-icon { transition: transform 0.3s ease; opacity: 0.6; font-size: 0.9rem; } .metallic-card.open .toggle-icon { transform: rotate(180deg); }
-        .card-detail { display: none; padding: 10px 15px; background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); font-size: 0.85rem; text-align: center; animation: slideDown 0.2s ease-out; }
-        .detail-values { font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; display: flex; justify-content: center; align-items: center; gap: 15px; }
-        .metallic-card.up .detail-values { color: #609979; } .metallic-card.down .detail-values { color: #dc3545; }
-        .detail-full-date { font-size: 0.8rem; opacity: 0.6; font-weight: 600; }
-        body.dark-mode .metallic-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.4); color: #e0e0e0; }
-        body.dark-mode .card-detail { background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); }
-        body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; } body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
+        .metallic-card { border: none; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); background: linear-gradient(145deg, #dce1e6 0%, #ffffff 50%, #dce1e6 100%); padding: 0; overflow: hidden; color: #333; transition: all 0.2s ease; position: relative; } .metallic-card.up { border-left: 5px solid #609979; } .metallic-card.down { border-left: 5px solid #dc3545; } .card-summary { padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; min-height: 50px; } .summary-prayer { font-weight: 800; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.5px; } .summary-right-group { display: flex; align-items: center; gap: 12px; } .change-badge { font-size: 0.85rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; min-width: 35px; text-align: center; } .metallic-card.up .change-badge { color: #609979; background: rgba(96, 153, 121, 0.1); } .metallic-card.down .change-badge { color: #dc3545; background: rgba(220, 53, 69, 0.1); } .toggle-icon { transition: transform 0.3s ease; opacity: 0.6; font-size: 0.9rem; } .metallic-card.open .toggle-icon { transform: rotate(180deg); } .card-detail { display: none; padding: 10px 15px; background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); font-size: 0.85rem; text-align: center; animation: slideDown 0.2s ease-out; } .detail-values { font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; display: flex; justify-content: center; align-items: center; gap: 15px; } .metallic-card.up .detail-values { color: #609979; } .metallic-card.down .detail-values { color: #dc3545; } .detail-full-date { font-size: 0.8rem; opacity: 0.6; font-weight: 600; } body.dark-mode .metallic-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.4); color: #e0e0e0; } body.dark-mode .card-detail { background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); } body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; } body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
 
         input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
         body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
         
-        /* KÜÇÜLTÜLMÜŞ DATE CAPSULE */
+        /* Date Filter Capsule - KÜÇÜLTÜLDÜ */
         .date-filter-capsule { background-color: var(--capsule-bg); border: 1px solid var(--capsule-border); border-radius: 12px; padding: 4px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: fit-content; margin: 0 auto 15px auto; position: relative; min-width: 120px; box-shadow: var(--capsule-shadow); transition: all 0.3s ease; }
         .capsule-label { font-size: 0.65rem; font-weight: 800; color: var(--capsule-label); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
         .capsule-input { background: transparent; border: none; color: var(--capsule-text); font-size: 0.9rem; height: 25px; font-weight: 600; text-align: center; width: 100%; outline: none; font-family: inherit; }
@@ -438,59 +55,10 @@
         body.dark-mode .capsule-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; }
         .capsule-reset { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #dc3545; cursor: pointer; font-size: 1rem; display: none; }
 
-        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
-        .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .badge-item.unlocked { border: 2px solid #20c997; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); box-shadow: 0 8px 20px rgba(32, 201, 151, 0.25); transform: scale(1.05); color: #004d40; }
-        body.dark-mode .badge-item.unlocked { background: linear-gradient(135deg, #004d40 0%, #00695c 100%); border-color: #4db6ac; color: #e0f2f1; box-shadow: 0 8px 20px rgba(77, 182, 172, 0.2); }
-        .badge-item.locked { filter: grayscale(100%); opacity: 0.6; background: var(--input-bg); }
-        .badge-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .badge-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1rem; color: #00695c; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .badge-item.unlocked .badge-title { color: #004d40; text-shadow: 0 1px 1px rgba(255,255,255,0.4); }
-        body.dark-mode .badge-item.unlocked .badge-title { color: #b2dfdb; text-shadow: none; }
-        .badge-desc { font-size: 0.65rem; color: var(--text-color); opacity: 0.8; font-family: 'Poppins', sans-serif; font-weight: 600; }
-        body.dark-mode .badge-item.unlocked .badge-desc { color: #80cbc4; opacity: 0.9; }
+        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; } .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); } .badge-item.unlocked { border: 2px solid #20c997; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); box-shadow: 0 8px 20px rgba(32, 201, 151, 0.25); transform: scale(1.05); color: #004d40; } body.dark-mode .badge-item.unlocked { background: linear-gradient(135deg, #004d40 0%, #00695c 100%); border-color: #4db6ac; color: #e0f2f1; box-shadow: 0 8px 20px rgba(77, 182, 172, 0.2); } .badge-item.locked { filter: grayscale(100%); opacity: 0.6; background: var(--input-bg); } .badge-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); } .badge-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1rem; color: #00695c; margin-bottom: 4px; letter-spacing: 0.5px; } .badge-item.unlocked .badge-title { color: #004d40; text-shadow: 0 1px 1px rgba(255,255,255,0.4); } body.dark-mode .badge-item.unlocked .badge-title { color: #b2dfdb; text-shadow: none; } .badge-desc { font-size: 0.65rem; color: var(--text-color); opacity: 0.8; font-family: 'Poppins', sans-serif; font-weight: 600; } body.dark-mode .badge-item.unlocked .badge-desc { color: #80cbc4; opacity: 0.9; }
 
-        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
-        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
-        .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
-        .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
-        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        #gender-selection-modal { display: none; z-index: 2005; }
-        .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
-        .gender-option:hover { border-color: #609979; }
-        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
-        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
-        .menstrual-toggle-container { margin-bottom: 15px; padding: 15px 20px; background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); border-radius: 50px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15); }
-        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
-        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
-        .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
-        .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
-        .fade-box { background: var(--fade-box-bg); border: 1px solid var(--fade-box-border); border-radius: 12px; padding: 8px 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); box-shadow: var(--fade-box-shadow); height: 100%; min-height: 70px; }
-        .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; }
-        .fade-box label { margin-bottom: 2px; opacity: 0.7; }
-        .custom-alert-box { background: var(--card-bg); border-left: 5px solid #17a2b8; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 20px; font-size: 0.9rem; }
-        .custom-alert-box strong { color: #17a2b8; }
-        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; } .custom-alert-tip strong { color: #856404; }
-        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; } body.dark-mode .custom-alert-tip strong { color: #ffc107; }
-        .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
-        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
-        .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
-        .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
-        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
-        @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
-        .toast-success { border-color: #609979; } .toast-success i { color: #609979; font-size: 1.2rem; }
-        .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
-        .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
-        
-        @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
-        @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); } .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; } @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } } .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; } .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; } .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; } .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; } .nav-item.active { color: #609979; opacity: 1; font-weight: 600; } .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -503,24 +71,8 @@
 
 <div id="toast-container"></div>
 
-<div id="gender-selection-modal" class="custom-modal-overlay">
-    <div class="custom-modal" style="max-width: 450px;">
-        <h4 class="mb-3 fw-bold">Hoş Geldiniz</h4>
-        <p class="mb-4 text-muted">Hesaplamaları daha doğru yapabilmemiz için lütfen cinsiyetinizi seçiniz.</p>
-        <div class="row g-3">
-            <div class="col-6"><div id="genderOptFemale" class="gender-option" data-type="female" onclick="selectGender('female')"><i class="fas fa-female fa-3x mb-2"></i><div class="fw-bold">Kadın</div></div></div>
-            <div class="col-6"><div id="genderOptMale" class="gender-option" data-type="male" onclick="selectGender('male')"><i class="fas fa-male fa-3x mb-2"></i><div class="fw-bold">Erkek</div></div></div>
-        </div>
-    </div>
-</div>
-
-<div id="customModal" class="custom-modal-overlay">
-    <div class="custom-modal">
-        <h4 id="modalTitle">Başlık</h4>
-        <p id="modalMessage">Mesaj.</p>
-        <div class="modal-btn-group" id="modalButtons"></div>
-    </div>
-</div>
+<div id="gender-selection-modal" class="custom-modal-overlay"><div class="custom-modal" style="max-width: 450px;"><h4 class="mb-3 fw-bold">Hoş Geldiniz</h4><p class="mb-4 text-muted">Hesaplamaları daha doğru yapabilmemiz için lütfen cinsiyetinizi seçiniz.</p><div class="row g-3"><div class="col-6"><div id="genderOptFemale" class="gender-option" data-type="female" onclick="selectGender('female')"><i class="fas fa-female fa-3x mb-2"></i><div class="fw-bold">Kadın</div></div></div><div class="col-6"><div id="genderOptMale" class="gender-option" data-type="male" onclick="selectGender('male')"><i class="fas fa-male fa-3x mb-2"></i><div class="fw-bold">Erkek</div></div></div></div></div></div>
+<div id="customModal" class="custom-modal-overlay"><div class="custom-modal"><h4 id="modalTitle">Başlık</h4><p id="modalMessage">Mesaj.</p><div class="modal-btn-group" id="modalButtons"></div></div></div>
 <div id="overlay" onclick="toggleSidebar()"></div>
 
 <div id="login-screen">
@@ -549,10 +101,7 @@
 
     <div id="content">
         <div id="section-dashboard" style="display: block;">
-            <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
-                <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
-                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
-            </div>
+            <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;"><div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div></div>
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
                     <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
@@ -665,13 +214,13 @@
             <h3 class="app-header">Yedekleme ve Ayarlar</h3>
             <div class="row justify-content-center g-4">
                 
-                <!-- YÜKLEME BUTONU -->
+                <!-- YÜKLEME BUTONU (Otomatik Gizlenir/Görünür) -->
                 <div id="installContainer" class="col-12" style="display: none;">
                     <div class="settings-card text-center border-success" style="background: #e8f5e9; border: 1px solid #198754;">
                         <i class="fas fa-download settings-icon text-success"></i>
                         <div class="settings-title text-success">Uygulamayı Yükle</div>
-                        <div class="settings-desc text-success">Daha hızlı erişim için ana ekrana ekle.</div>
-                        <button class="btn btn-success w-100 fw-bold" onclick="installPWA()">
+                        <div class="settings-desc text-success" id="installDesc">Daha hızlı erişim için ana ekrana ekle.</div>
+                        <button id="installBtn" class="btn btn-success w-100 fw-bold" onclick="installPWA()">
                             <i class="fas fa-mobile-alt me-2"></i> Ana Ekrana Ekle
                         </button>
                     </div>
@@ -700,6 +249,19 @@
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
 </div>
 
+<!-- Acil Durum Scripti -->
+<script>
+    // 4 saniye içinde loader kapanmazsa zorla kapat
+    setTimeout(function() {
+        var loader = document.getElementById('loading-overlay');
+        if(loader && loader.style.display !== 'none') {
+            document.getElementById('forceCloseBtn').style.display = 'block';
+            // Otomatik kapat
+            loader.style.display = 'none';
+        }
+    }, 4000);
+</script>
+
 <script>
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
@@ -712,7 +274,6 @@
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
     let activeRowIndex = 0; 
-    let activeTesbihatIndex = 0;
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
@@ -737,15 +298,12 @@
         measurementId: "G-5WGCDTL1RX"
     };
     let app, db, auth, provider, dbRef;
-    
     try {
         app = firebase.initializeApp(firebaseConfig);
         db = firebase.database();
         auth = firebase.auth();
         provider = new firebase.auth.GoogleAuthProvider();
-    } catch(e) {
-        console.error("Firebase init error:", e);
-    }
+    } catch(e) { console.error(e); }
 
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
     function getIsoDate(date) { 
@@ -772,13 +330,7 @@
         weeklyTarget: 50,
         streak: { current: 0, lastAchievedDate: "" },
         calendar: {}, logs: {},
-        counts: [
-            {name:"Sabah",target:0,done:0},
-            {name:"Öğle",target:0,done:0},
-            {name:"İkindi",target:0,done:0},
-            {name:"Akşam",target:0,done:0},
-            {name:"Yatsı",target:0,done:0}
-        ],
+        counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
         tesbihat: [
             { name: "Sübhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
             { name: "Elhamdülillah", arabic: "ٱلْحَمْدُ لِلَّٰهِ", current: 0, target: 33 },
@@ -1065,82 +617,13 @@
     window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
     window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
-    window.upD = function(i, v) { const val = parseInt(v) || 0; const item = localData.counts[i]; if (val > item.target) { showModal("Uyarı", `${item.name} namazı için girilen sayı hedeften büyük olamaz.`); document.getElementById('pdInputDone').value = item.done; return; } if (item.done !== val) { const o = item.done; item.done = val; addHistory(item.name, o, val); saveToCloud(); renderApp(); } };
+    window.upD = function(i, v) { const val = parseInt(v) || 0; const item = localData.counts[i]; if (val > item.target) { showModal("Uyarı", `${item.name} namazı için girilen sayı hedeften büyük olamaz.`); document.getElementById('pdInputDone').value = item.done; return; } item.done = val; saveToCloud(); renderApp(); };
     window.chC = function(i, d) { triggerHaptic(); const item = localData.counts[i]; const remaining = Math.max(0, item.target - item.done); if (d > 0 && remaining <= 0) { showModal("Bilgi", `${item.name} namazı için kaza borcunuz bulunmamaktadır.`); return; } const o = item.done; const n = o + d; if (n >= 0) { item.done = n; if (d > 0) { localData.daily.counts[i]++; const todayISO = getIsoDate(new Date()); localData.logs[todayISO] = (localData.logs[todayISO] || 0) + 1; const ct = localData.daily.counts.reduce((a, b) => a + b, 0); if (ct >= localData.daily.target) { localData.calendar[todayISO] = true; if (ct === localData.daily.target) jsConfetti.addConfetti(); } else { delete localData.calendar[todayISO]; } const wTotal = getWeeklyProgress(); const wTarget = localData.weeklyTarget || 50; if(wTotal === wTarget) { jsConfetti.addConfetti({ emojis: ['🌙', '⭐'], emojiSize: 35, confettiNumber: 60 }); showToast("Haftalık Hedef Tamamlandı! 🏆", "success"); } let totalDebt = 0; localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done)); if(totalDebt <= 0) { showModal("Tebrikler!", "Kaza namaz borcunuz bulunmamaktadır. Allah kabul etsin!"); } recalculateStreak(); } else if (localData.daily.counts[i] > 0) { localData.daily.counts[i]--; const todayISO = getIsoDate(new Date()); if(localData.logs && localData.logs[todayISO] > 0) localData.logs[todayISO]--; const ct = localData.daily.counts.reduce((a, b) => a + b, 0); if (ct < localData.daily.target) { delete localData.calendar[todayISO]; } recalculateStreak(); } addHistory(localData.counts[i].name, o, n); saveToCloud(); renderApp(); } };
     function recalculateStreak() { let currentStreak = 0; const today = new Date(); const isoToday = getIsoDate(today); if (localData.calendar && localData.calendar[isoToday]) { currentStreak++; } for (let i = 1; i < 1000; i++) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); if (localData.calendar && localData.calendar[iso]) { currentStreak++; } else { if (i === 1 && currentStreak === 0) {} else { break; } } } localData.streak.current = currentStreak; }
     window.updateDailyGoal = function(v) { let totalDebt = 0; localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done)); if(totalDebt <= 0) { showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır."); document.getElementById('dailyGoalInput').value = localData.daily.target; return; } localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
     window.updateWeeklyGoal = function(v) { let totalDebt = 0; localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done)); if(totalDebt <= 0) { showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır."); document.getElementById('weeklyGoalInput').value = localData.weeklyTarget; return; } localData.weeklyTarget = parseInt(v)||50; saveToCloud(); renderApp(); };
     function getWeeklyProgress() { if (!localData.logs) return 0; const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day == 0 ? -6 : 1); const monday = new Date(today.setDate(diff)); monday.setHours(0,0,0,0); let weeklyTotal = 0; Object.keys(localData.logs).forEach(dateKey => { const logDate = new Date(dateKey); if (logDate >= monday) { weeklyTotal += localData.logs[dateKey]; } }); return weeklyTotal; }
-
-    // --- YENİ TESBİHAT FONKSİYONLARI ---
-    function renderTesbihat() {
-        const c = document.getElementById('tesbihatContainer');
-        c.innerHTML = "";
-        
-        if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
-        
-        const activeItem = localData.tesbihat[activeTesbihatIndex];
-        const percentage = activeItem.target > 0 ? (activeItem.current / activeItem.target) * 100 : 0;
-        
-        // 1. SOL MENÜ
-        let menuHTML = `<div class="zikr-menu">`;
-        localData.tesbihat.forEach((item, i) => {
-            const isActive = (i === activeTesbihatIndex) ? 'active' : '';
-            menuHTML += `
-            <div class="zikr-menu-item ${isActive}" onclick="setActiveTesbihat(${i})">
-                <div class="fw-bold small text-wrap lh-sm">${item.name}</div>
-                <div class="small-arabic">${item.arabic}</div>
-                <div class="mt-2 badge bg-light text-dark shadow-sm" style="font-size:0.75rem">${item.current}</div>
-            </div>`;
-        });
-        menuHTML += `</div>`;
-
-        // 2. ANA KART - ESKİ TASARIM
-        let mainCardHTML = `
-        <div class="zikr-active-card">
-            <!-- Tıklanabilir Üst Alan (Yazı ve Sayaç) -->
-            <div class="touch-area" onclick="window.upTes(${activeTesbihatIndex}, 1)">
-                <h5 class="fw-bold text-secondary mb-2">${activeItem.name}</h5>
-                <div class="arabic-text-large">${activeItem.arabic}</div>
-                <div class="zikr-count-large">${activeItem.current}</div>
-                <div class="progress w-100 mb-2" style="height: 10px;">
-                    <div class="progress-bar bg-success" style="width: ${percentage}%"></div>
-                </div>
-                <div class="touch-hint"><i class="fas fa-fingerprint"></i> Basmak için dokun</div>
-            </div>
-
-            <!-- Alt Kontrol Alanı (Butonlar) -->
-            <div class="zikr-controls-area">
-                <div class="zikr-btn-group">
-                    <button class="zikr-btn z-minus" onclick="window.upTes(${activeTesbihatIndex},-1)"><i class="fas fa-minus"></i></button>
-                    <button class="zikr-btn z-plus" onclick="window.upTes(${activeTesbihatIndex},1)"><i class="fas fa-plus"></i></button>
-                    <button class="zikr-btn z-reset" onclick="window.resTes(${activeTesbihatIndex})"><i class="fas fa-undo"></i></button>
-                </div>
-
-                <div class="tesbihat-target-box mb-3">
-                    <span class="tesbihat-target-label">HEDEF</span>
-                    <input type="number" class="tesbihat-target-input" value="${activeItem.target}" onchange="window.setTesTarget(${activeTesbihatIndex}, this.value)">
-                </div>
-
-                <div class="manual-zikr-container">
-                    <input type="number" id="manZ-active" class="manual-zikr-input-clean" placeholder="+Adet">
-                    <button class="btn-add-clean" onclick="addTesActive()">EKLE</button>
-                </div>
-            </div>
-        </div>`;
-
-        c.innerHTML = `
-        <div class="col-12">
-            <div class="tesbihat-layout-wrapper">
-                ${menuHTML}
-                ${mainCardHTML}
-            </div>
-        </div>`;
-    }
-
-    window.setActiveTesbihat = function(index) { triggerHaptic(); activeTesbihatIndex = index; renderTesbihat(); };
-    window.addTesActive = function() { triggerHaptic(); const valInput = document.getElementById('manZ-active'); const v = parseInt(valInput.value) || 0; if(v > 0) { window.upTes(activeTesbihatIndex, v); valInput.value = ""; } };
-
+    function renderTesbihat() { const c = document.getElementById('tesbihatContainer'); c.innerHTML = ""; if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat)); localData.tesbihat.forEach((item, i) => { let p = item.target > 0 ? (item.current / item.target) * 100 : 0; c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="tesbihat-target-box"><span class="tesbihat-target-label">HEDEF</span><input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-container"><input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet"><button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button></div></div></div>`; }); }
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     const BADGES = [ {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, {id:500,title:"Gayret",icon:"🔥", desc:"500 Namaz"}, {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} ];
     function renderBadges(total) { const c = document.getElementById('badgeContainer'); c.innerHTML = ""; let next=false; BADGES.forEach(b => { let unlockedClass = ''; if(total >= b.id) { if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } unlockedClass = 'unlocked'; c.innerHTML += `<div class="badge-item ${unlockedClass}"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; } else if (!next) { c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; next=true; } }); }
@@ -1163,282 +646,114 @@
         document.getElementById('stats-view-analysis').style.display = 'none';
         document.getElementById('stats-view-history').style.display = 'none';
         document.getElementById('stats-view-' + tab).style.display = 'block';
-        if(tab === 'history') {
-            renderHistory(document.getElementById('historyFilterDate').value);
-        }
+        if(tab === 'history') { renderHistory(document.getElementById('historyFilterDate').value); }
     }
 
     function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
     
     function renderStats() { 
-        let totalTarget = 0, totalDone = 0; 
-        let labels = [], remainingData = [], doneData = []; 
-        let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; 
-        const days = getElapsedDays();
-
-        const gridContainer = document.getElementById('prayer-analysis-grid');
-        gridContainer.innerHTML = "";
-
-        localData.counts.forEach((c, index) => { 
-            totalTarget += c.target; 
-            totalDone += c.done; 
-            const remaining = Math.max(0, c.target - c.done); 
-            labels.push(c.name); 
-            remainingData.push(remaining); 
-            doneData.push(c.done); 
-            
-            if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } 
-            if (c.done > maxDone) { maxDone = c.done; bestName = c.name; }
-
-            const avg = (c.done / days).toFixed(2);
-            const estText = formatTime(avg > 0 ? Math.ceil(remaining/avg) : 0);
-            
-            gridContainer.innerHTML += `
-            <div class="stat-accordion-item">
-                <div class="stat-accordion-header" onclick="toggleStatDetails(${index})">
-                    <div class="stat-header-content">
-                        <div class="stat-icon-wrapper"><i class="fas fa-mosque"></i></div>
-                        <div class="stat-title">${c.name}</div>
-                    </div>
-                    <i class="fas fa-chevron-down stat-arrow" id="icon-stat-${index}"></i>
-                </div>
-                <div class="stat-accordion-body" id="detail-stat-${index}">
-                    <div class="stat-detail-grid">
-                        <div class="stat-detail-item">
-                            <span class="stat-detail-label">KILINAN</span>
-                            <div class="stat-detail-value text-done">${c.done}</div>
-                        </div>
-                        <div class="stat-detail-item">
-                            <span class="stat-detail-label">KALAN</span>
-                            <div class="stat-detail-value text-rem">${remaining}</div>
-                        </div>
-                        <div class="stat-detail-item">
-                            <span class="stat-detail-label">GÜNLÜK ORT.</span>
-                            <div class="stat-detail-value text-primary">${avg}</div>
-                        </div>
-                        <div class="stat-detail-item">
-                            <span class="stat-detail-label">TAHMİNİ BİTİŞ</span>
-                            <div class="stat-detail-value text-warning" style="font-size:0.9rem;">${estText}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        }); 
-        
-        const bestText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
-        const worstText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
-        document.getElementById('bestPrayer').innerText = bestText;
-        document.getElementById('worstPrayer').innerText = worstText;
-        
-        const periodStats = calculatePeriodStats(); 
-        const avg = (totalDone / days).toFixed(2); 
-    
-        const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
-        const weeklyDone = getWeeklyProgress(); 
-    
-        document.getElementById('statToday').innerText = dailyDone; 
-        document.getElementById('statWeekly').innerText = weeklyDone; 
-        document.getElementById('statMonthly').innerText = periodStats.monthly; 
-        document.getElementById('stat3Months').innerText = periodStats.months3;
-        document.getElementById('stat6Months').innerText = periodStats.months6;
-        document.getElementById('statYearly').innerText = periodStats.yearly;
-        document.getElementById('statAverage').innerText = avg;
-        
         try {
-            const ctx1 = document.getElementById('completionChart').getContext('2d'); 
-            if (chartCompletion) chartCompletion.destroy(); 
-            const isDark = document.body.classList.contains('dark-mode'); 
-            const lc = isDark ? '#fff' : '#666'; 
-            chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); 
+            if(!localData.counts || !Array.isArray(localData.counts)) { console.error("Veri hatası"); return; }
+            let totalTarget = 0, totalDone = 0; 
+            let labels = [], remainingData = [], doneData = []; 
+            let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; 
+            const days = getElapsedDays() || 1; 
+            const gridContainer = document.getElementById('prayer-analysis-grid'); 
+            if(gridContainer) gridContainer.innerHTML = "";
+
+            localData.counts.forEach((c, index) => { 
+                const t = parseInt(c.target) || 0; const d = parseInt(c.done) || 0;
+                totalTarget += t; totalDone += d; 
+                const remaining = Math.max(0, t - d); 
+                labels.push(c.name); remainingData.push(remaining); doneData.push(d); 
+                if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } 
+                if (d > maxDone) { maxDone = d; bestName = c.name; }
+                const avg = (d / days).toFixed(2); const estText = formatTime(avg > 0 ? Math.ceil(remaining/avg) : 0);
+                if(gridContainer) { gridContainer.innerHTML += `<div class="stat-accordion-item"><div class="stat-accordion-header" onclick="toggleStatDetails(${index})"><div class="stat-header-content"><div class="stat-icon-wrapper"><i class="fas fa-mosque"></i></div><div class="stat-title">${c.name}</div></div><i class="fas fa-chevron-down stat-arrow" id="icon-stat-${index}"></i></div><div class="stat-accordion-body" id="detail-stat-${index}"><div class="stat-detail-grid"><div class="stat-detail-item"><span class="stat-detail-label">KILINAN</span><div class="stat-detail-value text-done">${d}</div></div><div class="stat-detail-item"><span class="stat-detail-label">KALAN</span><div class="stat-detail-value text-rem">${remaining}</div></div><div class="stat-detail-item"><span class="stat-detail-label">GÜNLÜK ORT.</span><div class="stat-detail-value text-primary">${avg}</div></div><div class="stat-detail-item"><span class="stat-detail-label">TAHMİNİ BİTİŞ</span><div class="stat-detail-value text-warning" style="font-size:0.9rem;">${estText}</div></div></div></div></div>`; }
+            }); 
+
+            // GÜVENLİ TEXT ATAMASI (Grafikten Önce)
+            const bestText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; const worstText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
+            const elBest = document.getElementById('bestPrayer'); if(elBest) elBest.innerText = bestText;
+            const elWorst = document.getElementById('worstPrayer'); if(elWorst) elWorst.innerText = worstText;
+
+            const periodStats = calculatePeriodStats(); const avg = (totalDone / days).toFixed(2); 
+            const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); const weeklyDone = getWeeklyProgress(); 
             
-            const ctx2 = document.getElementById('barChart').getContext('2d'); 
-            if (barChart) barChart.destroy(); 
-            barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); 
-            
-            const ctx3 = document.getElementById('lineChart').getContext('2d'); 
-            if (lineChart) lineChart.destroy(); 
-            const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); 
-            gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); 
-            let chartLabels = []; let chartData = []; let pointRadiusVal = 3; 
-            if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } 
-            else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } 
-            lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
-        } catch (e) {
-            console.error("Grafik çizim hatası:", e);
-        }
-        
-        renderHistory();
+            if(document.getElementById('statToday')) document.getElementById('statToday').innerText = dailyDone; 
+            if(document.getElementById('statWeekly')) document.getElementById('statWeekly').innerText = weeklyDone; 
+            if(document.getElementById('statMonthly')) document.getElementById('statMonthly').innerText = periodStats.monthly; 
+            if(document.getElementById('stat3Months')) document.getElementById('stat3Months').innerText = periodStats.months3; 
+            if(document.getElementById('stat6Months')) document.getElementById('stat6Months').innerText = periodStats.months6; 
+            if(document.getElementById('statYearly')) document.getElementById('statYearly').innerText = periodStats.yearly; 
+            if(document.getElementById('statAverage')) document.getElementById('statAverage').innerText = avg;
+
+            // CHART
+            try {
+                const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; 
+                const elChart1 = document.getElementById('completionChart');
+                if(elChart1) { if (chartCompletion) chartCompletion.destroy(); chartCompletion = new Chart(elChart1.getContext('2d'), { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, Math.max(0, totalTarget - totalDone)], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); }
+                const elChart2 = document.getElementById('barChart');
+                if(elChart2) { if (barChart) barChart.destroy(); barChart = new Chart(elChart2.getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); }
+                const elChart3 = document.getElementById('lineChart');
+                if(elChart3) { if (lineChart) lineChart.destroy(); const gradientLine = elChart3.getContext('2d').createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; } lineChart = new Chart(elChart3.getContext('2d'), { type: 'line', data: { labels: chartLabels, datasets: [{ label: 'Günlük Kılınan', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: 3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); }
+            } catch(e) { console.warn("Grafik hatası:", e); }
+
+            renderHistory();
+        } catch(e) { console.error("renderStats genel hata:", e); }
     }
 
-    window.toggleStatDetails = function(index) {
-        const detail = document.getElementById(`detail-stat-${index}`);
-        const icon = document.getElementById(`icon-stat-${index}`);
-        const item = detail.parentElement;
-
-        if(item.classList.contains('open')) {
-            item.classList.remove('open');
-            icon.className = 'fas fa-chevron-down stat-arrow';
-        } else {
-            document.querySelectorAll('.stat-accordion-item').forEach(el => {
-                el.classList.remove('open');
-                const i = el.querySelector('.stat-arrow');
-                if(i) i.className = 'fas fa-chevron-down stat-arrow';
-            });
-
-            item.classList.add('open');
-            icon.className = 'fas fa-chevron-up stat-arrow';
-        }
-    }
-    
-    function calculatePeriodStats() { 
-        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [] }; 
-        const today = new Date(); 
-        
-        const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        let monthlyTotal = 0;
-
-        let weeklyTotal = 0, m3 = 0, m6 = 0, y1 = 0; 
-        let last7Data = [], last7Labels = []; 
-        let last30Data = [], last30Labels = []; 
-        
-        for(let i=6; i>=0; i--) { 
-            const d = new Date(); 
-            d.setDate(today.getDate() - i); 
-            const iso = getIsoDate(d); 
-            const val = localData.logs[iso] || 0; 
-            last7Data.push(val); 
-            last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'})); 
-        } 
-        for(let i=29; i>=0; i--) { 
-            const d = new Date(); 
-            d.setDate(today.getDate() - i); 
-            const iso = getIsoDate(d); 
-            const val = localData.logs[iso] || 0; 
-            last30Data.push(val); 
-            last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
-        } 
-        
-        const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3); 
-        const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6); 
-        const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1); 
-        
-        Object.keys(localData.logs).forEach(dateKey => { 
-            const d = new Date(dateKey); 
-            const val = localData.logs[dateKey]; 
-            if(d >= currentMonthStart) monthlyTotal += val;
-            if(d >= threeMonthsAgo) m3 += val; 
-            if(d >= sixMonthsAgo) m6 += val; 
-            if(d >= oneYearAgo) y1 += val; 
-        }); 
-        
-        return { monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels }; 
-    }
-    window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
-    window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
-    window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
-    window.downloadDataAsCSV = function() { let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; localData.counts.forEach(c => { csv += `${c.name};${c.target};${c.done}\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kaza_takip.csv"; link.click(); };
-    window.downloadBackupJSON = function() { const jsonStr = JSON.stringify(localData); const blob = new Blob([jsonStr], { type: 'application/json' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "ibadet_yedek_" + new Date().toISOString().split('T')[0] + ".json"; link.click(); };
-    window.importBackupJSON = function(input) { 
-        const file = input.files[0]; 
-        if (!file) return; 
-        const reader = new FileReader(); 
-        reader.onload = function(e) { 
-            try { 
-                const newData = JSON.parse(e.target.result); 
-                if (newData.counts && newData.tesbihat) { 
-                    localData = newData; 
-                    saveToCloud(); 
-                    renderApp(); 
-                    renderTesbihat(); 
-                    showToast("Yedek dosyası başarıyla yüklendi! 🚀", "success");
-                } else { 
-                    showToast("Geçersiz yedek dosyası.", "error"); 
-                } 
-            } catch (err) { 
-                showToast("Dosya okunamadı: " + err, "error"); 
-            } 
-        }; 
-        reader.readAsText(file); 
-        input.value = ""; 
-    };
-    
-    // --- GECE MODU VE OTOMATİK MENÜ KAPATMA FONKSİYONU ---
-    window.toggleDarkMode = function() { 
-        document.body.classList.toggle('dark-mode'); 
-        const isDark = document.body.classList.contains('dark-mode'); 
-        localStorage.setItem('theme', isDark ? 'dark' : 'light'); 
-        document.getElementById('darkModeText').innerText = isDark ? "Gündüz Modu" : "Gece Modu"; 
-        
-        // Eğer mobildeyse (768px'den küçükse) menüyü otomatik kapat
-        if(window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('active')) {
-             toggleSidebar();
-        }
-        
-        renderApp(); 
-        renderStats(); 
-    };
-    
-    if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
-    document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
-    const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; this.value = formatDateTR(this.value); }; dInput.placeholder = 'gg.aa.yyyy';
-    function checkDailyReset() { const t = getCurrentDateSimple(); if (localData.daily.date !== t) { localData.daily.date = t; localData.daily.counts = [0,0,0,0,0]; saveToCloud(); } }
-    function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
+    window.toggleStatDetails = function(index) { const detail = document.getElementById(`detail-stat-${index}`); const icon = document.getElementById(`icon-stat-${index}`); const item = detail.parentElement; if(item.classList.contains('open')) { item.classList.remove('open'); icon.className = 'fas fa-chevron-down stat-arrow'; } else { document.querySelectorAll('.stat-accordion-item').forEach(el => { el.classList.remove('open'); const i = el.querySelector('.stat-arrow'); if(i) i.className = 'fas fa-chevron-down stat-arrow'; }); item.classList.add('open'); icon.className = 'fas fa-chevron-up stat-arrow'; } }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
-    function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); 
-    saveToCloud(); }
-    
-    function forceResetData() { 
-        const savedGender = localData.gender;
-        const savedMenstrualDays = localData.menstrualDaysPerMonth;
-        const savedMenstrualState = localData.isMenstrualState;
-        localData = JSON.parse(JSON.stringify(defaultData)); 
-        if(savedGender) {
-            localData.gender = savedGender;
-            localData.menstrualDaysPerMonth = savedMenstrualDays;
-            localData.isMenstrualState = savedMenstrualState;
-        }
-        saveToCloud(); 
-        renderApp();
-        renderStats();
-        renderCalculatorRows();
-        applyGenderSettings(); 
-        // SIFIRLANINCA UYARI VER
-        showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
-    }
-    
+    function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); saveToCloud(); }
+    function forceResetData() { const savedGender = localData.gender; const savedMenstrualDays = localData.menstrualDaysPerMonth; const savedMenstrualState = localData.isMenstrualState; localData = JSON.parse(JSON.stringify(defaultData)); if(savedGender) { localData.gender = savedGender; localData.menstrualDaysPerMonth = savedMenstrualDays; localData.isMenstrualState = savedMenstrualState; } saveToCloud(); renderApp(); renderStats(); renderCalculatorRows(); applyGenderSettings(); showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır."); }
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
+    // --- SERVICE WORKER (Güncellenmiş Versiyon) ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then((registration) => {
-                    console.log('Service Worker başarıyla kaydedildi:', registration.scope);
-                })
-                .catch((error) => {
-                    console.log('Service Worker kaydı başarısız:', error);
-                });
+            navigator.serviceWorker.register('./sw.js').then((registration) => {
+                console.log('Service Worker Registered');
+            });
         });
     }
 
-    window.addEventListener('offline', () => {
-        showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "error");
-        document.body.style.filter = "grayscale(100%)";
-    });
+    window.addEventListener('offline', () => { showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "error"); document.body.style.filter = "grayscale(100%)"; });
+    window.addEventListener('online', () => { showToast("Tekrar çevrimiçi oldunuz!", "success"); document.body.style.filter = "none"; });
 
-    window.addEventListener('online', () => {
-        showToast("Tekrar çevrimiçi oldunuz!", "success");
-        document.body.style.filter = "none";
-    });
-
+    // --- PWA INSTALLATION LOGIC (IOS Support Added) ---
     let deferredPrompt;
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+    // Android/Chrome için:
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        const installContainer = document.getElementById('installContainer');
-        if (installContainer) {
-            installContainer.style.display = 'block';
-        }
+        showInstallButton();
     });
+
+    // iOS için (Manuel kontrol):
+    if (isIos && !isStandalone) {
+        showInstallButton(true); // true = iOS modu
+    }
+
+    function showInstallButton(isIosMode = false) {
+        const container = document.getElementById('installContainer');
+        const btn = document.getElementById('installBtn');
+        const desc = document.getElementById('installDesc');
+        
+        if (container) {
+            container.style.display = 'block';
+            if (isIosMode) {
+                // iOS'ta butona basınca işlem yapılamaz, sadece bilgi verilir
+                btn.style.display = 'none';
+                desc.innerHTML = '<strong>Nasıl Yüklenir?</strong><br>Alttaki <i class="fas fa-share-square"></i> Paylaş butonuna basıp "Ana Ekrana Ekle"yi seçin.';
+                desc.style.fontSize = '0.9rem';
+                desc.style.color = '#0f5132';
+            }
+        }
+    }
 
     function installPWA() {
         if (!deferredPrompt) return;
