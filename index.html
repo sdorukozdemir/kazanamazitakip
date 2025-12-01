@@ -13,27 +13,35 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Fontlar -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Dosyası -->
     <link rel="stylesheet" href="style.css">
     
+    <!-- Firebase Kütüphaneleri -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
-    <!-- Chart.js Sürümü Sabitlendi (v3.9.1) -->
+    <!-- Diğer Kütüphaneler (Chart.js Sabitlendi) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 </head>
 <body>
 
+<!-- Yükleme Ekranı -->
 <div id="loading-overlay">
     <div class="spinner"></div>
     <div class="loading-text">Veriler Yükleniyor...</div>
+    <!-- 5 saniye sonra çıkacak acil durum butonu -->
+    <button id="forceCloseBtn" onclick="document.getElementById('loading-overlay').style.display='none'" style="display:none; margin-top:20px; padding:10px 20px; background:red; color:white; border:none; border-radius:10px;">Zorla Aç</button>
 </div>
 
 <div id="toast-container"></div>
 
+<!-- Cinsiyet Modalı -->
 <div id="gender-selection-modal" class="custom-modal-overlay">
     <div class="custom-modal" style="max-width: 450px;">
         <h4 class="mb-3 fw-bold">Hoş Geldiniz</h4>
@@ -55,6 +63,7 @@
     </div>
 </div>
 
+<!-- Genel Modal -->
 <div id="customModal" class="custom-modal-overlay">
     <div class="custom-modal">
         <h4 id="modalTitle">Başlık</h4>
@@ -64,6 +73,7 @@
 </div>
 <div id="overlay" onclick="toggleSidebar()"></div>
 
+<!-- Giriş Ekranı -->
 <div id="login-screen">
     <div class="login-card p-5 text-center" style="max-width: 400px;">
         <h3 class="text-success fw-bold mb-4">İbadet Takip</h3>
@@ -73,6 +83,7 @@
     </div>
 </div>
 
+<!-- Ana Uygulama Alanı -->
 <div id="app-wrapper" class="wrapper" style="display:none;">
     <nav id="sidebar">
         <div class="sidebar-header">
@@ -127,9 +138,7 @@
                 <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
             
-            <div id="prayerSplitContainer" class="prayer-split-layout">
-                <!-- Javascript ile doldurulacak -->
-            </div>
+            <div id="prayerSplitContainer" class="prayer-split-layout"></div>
             
             <div id="summaryBar" class="summary-bar">
                 <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
@@ -176,9 +185,7 @@
                 </div>
 
                 <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
-                <div id="prayer-analysis-grid" class="mb-4">
-                    <!-- Javascript ile doldurulacak -->
-                </div>
+                <div id="prayer-analysis-grid" class="mb-4"></div>
 
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
@@ -190,7 +197,6 @@
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
-                <!-- GÜNCELLENEN TARİH KAPSÜLÜ -->
                 <div class="date-filter-capsule">
                     <span class="capsule-label">İŞLEM TARİHİ</span>
                     <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
@@ -266,6 +272,30 @@
     <div class="nav-item" onclick="showSection('calculator'); activateNav(this)"><i class="fas fa-calculator"></i><span>Hesap</span></div>
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
 </div>
+
+<!-- Acil Durum Scripti: Eğer app.js bozuksa bu çalışır ve loader'ı siler -->
+<script>
+    setTimeout(function() {
+        var loader = document.getElementById('loading-overlay');
+        if(loader && loader.style.display !== 'none') {
+            document.getElementById('forceCloseBtn').style.display = 'block';
+            console.error("Uygulama açılışı çok uzun sürdü. Manuel müdahale gerekli olabilir.");
+            
+            // Eğer istersen otomatik kapatmayı da açabilirsin:
+            loader.style.display = 'none';
+        }
+    }, 4000); // 4 saniye bekle, açılmazsa kapat.
+
+    // Cache Temizleyici (Sadece bir kere çalışır)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                // Eski bozuk cache'i silmek için (Version farklıysa)
+                registration.unregister();
+            }
+        });
+    }
+</script>
 
 <script src="app.js"></script>
 </body>
