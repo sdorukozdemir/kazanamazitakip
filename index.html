@@ -55,11 +55,11 @@
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
             --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
             
-            /* GÜNDÜZ MODU KAPSÜL RENKLERİ */
-            --capsule-bg: #ffffff;
-            --capsule-border: #dee2e6;
-            --capsule-label: #888888;
-            --capsule-text: #333333;
+            /* GÜNDÜZ MODU KAPSÜL RENKLERİ (Pastel uyumlu) */
+            --capsule-bg: #e9ecef;
+            --capsule-border: #ced4da;
+            --capsule-label: #6c757d;
+            --capsule-text: #212529;
             --capsule-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
@@ -1159,7 +1159,7 @@
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
     window.upD = function(i, v) { const o = localData.counts[i].done; const n = parseInt(v) || 0; if (o !== n) { localData.counts[i].done = n; addHistory(localData.counts[i].name, o, n); saveToCloud(); renderApp(); } };
     
-    // --- HAFTALIK HEDEF KONTROLÜ İLE GÜNCELLENEN chC FONKSİYONU ---
+    // --- chC FONKSİYONU GÜNCELLENDİ: Haftalık Hedef & Borç Bitti Uyarısı ---
     window.chC = function(i, d) { 
         triggerHaptic(); 
         const o = localData.counts[i].done; 
@@ -1178,7 +1178,7 @@
                     delete localData.calendar[todayISO]; 
                 } 
                 
-                // HAFTALIK HEDEF KONTROLÜ
+                // HAFTALIK HEDEF KONTROLÜ (AY VE YILDIZ KONFETİ)
                 const wTotal = getWeeklyProgress();
                 const wTarget = localData.weeklyTarget || 50;
                 if(wTotal === wTarget) {
@@ -1188,6 +1188,13 @@
                         confettiNumber: 60
                     });
                     showToast("Haftalık Hedef Tamamlandı! 🏆", "success");
+                }
+
+                // BORÇ BİTTİ Mİ KONTROLÜ
+                let totalDebt = 0;
+                localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
+                if(totalDebt <= 0) {
+                     showModal("Tebrikler!", "Kaza namaz borcunuz bulunmamaktadır. Allah kabul etsin!");
                 }
 
                 recalculateStreak(); 
@@ -1206,8 +1213,34 @@
     };
     
     function recalculateStreak() { let currentStreak = 0; const today = new Date(); const isoToday = getIsoDate(today); if (localData.calendar && localData.calendar[isoToday]) { currentStreak++; } for (let i = 1; i < 1000; i++) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); if (localData.calendar && localData.calendar[iso]) { currentStreak++; } else { if (i === 1 && currentStreak === 0) {} else { break; } } } localData.streak.current = currentStreak; }
-    window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
-    window.updateWeeklyGoal = function(v) { localData.weeklyTarget = parseInt(v)||50; saveToCloud(); renderApp(); };
+    
+    // --- HEDEF GÜNCELLEME FONKSİYONLARI (BORÇ KONTROLÜ EKLENDİ) ---
+    window.updateDailyGoal = function(v) { 
+        let totalDebt = 0;
+        localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
+        if(totalDebt <= 0) {
+            showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
+            document.getElementById('dailyGoalInput').value = localData.daily.target; // Eski değere dön
+            return;
+        }
+        localData.daily.target = parseInt(v)||10; 
+        saveToCloud(); 
+        renderApp(); 
+    };
+
+    window.updateWeeklyGoal = function(v) { 
+        let totalDebt = 0;
+        localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
+        if(totalDebt <= 0) {
+            showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
+            document.getElementById('weeklyGoalInput').value = localData.weeklyTarget; // Eski değere dön
+            return;
+        }
+        localData.weeklyTarget = parseInt(v)||50; 
+        saveToCloud(); 
+        renderApp(); 
+    };
+
     function getWeeklyProgress() { if (!localData.logs) return 0; const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day == 0 ? -6 : 1); const monday = new Date(today.setDate(diff)); monday.setHours(0,0,0,0); let weeklyTotal = 0; Object.keys(localData.logs).forEach(dateKey => { const logDate = new Date(dateKey); if (logDate >= monday) { weeklyTotal += localData.logs[dateKey]; } }); return weeklyTotal; }
 
     function renderTesbihat() { const c = document.getElementById('tesbihatContainer'); c.innerHTML = ""; if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat)); localData.tesbihat.forEach((item, i) => { let p = item.target > 0 ? (item.current / item.target) * 100 : 0; c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="tesbihat-target-box"><span class="tesbihat-target-label">HEDEF</span><input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-container"><input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet"><button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button></div></div></div>`; }); }
@@ -1575,7 +1608,8 @@
         renderStats();
         renderCalculatorRows();
         applyGenderSettings(); 
-        showToast("Verileriniz başarıyla sıfırlandı ve yenilendi! ✨", "success");
+        // SIFIRLANINCA UYARI VER
+        showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
     }
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
