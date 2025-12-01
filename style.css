@@ -373,7 +373,7 @@ body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: i
     background-color: var(--capsule-bg);
     border: 1px solid var(--capsule-border);
     border-radius: 12px;
-    padding: 5px 15px; /* Küçültüldü */
+    padding: 4px 10px; /* Küçültüldü */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -381,7 +381,7 @@ body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: i
     width: fit-content;
     margin: 0 auto 15px auto;
     position: relative;
-    min-width: 150px; /* Küçültüldü */
+    min-width: 120px; /* Küçültüldü */
     box-shadow: var(--capsule-shadow);
     transition: all 0.3s ease;
 }
@@ -397,8 +397,8 @@ body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: i
     background: transparent;
     border: none;
     color: var(--capsule-text);
-    font-size: 1rem; /* Küçültüldü */
-    height: 30px;
+    font-size: 0.9rem; /* Küçültüldü */
+    height: 25px; /* Küçültüldü */
     font-weight: 600;
     text-align: center;
     width: 100%;
