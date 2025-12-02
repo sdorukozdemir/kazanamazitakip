@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Kaza ve İbadet Takip</title>
     
     <meta name="theme-color" content="#609979">
@@ -29,13 +29,9 @@
             --bg-color: #e3e6ec; 
             --text-color: #212529; 
             --card-bg: #ffffff; 
-            
-            /* GÜNDÜZ MODU MENÜ: Pastel Yeşil (Sage Green) Gradient */
             --sidebar-bg: linear-gradient(180deg, #609979 0%, #3e6b53 100%);
-            
             --sidebar-item-active: rgba(255, 255, 255, 0.25);
             --sidebar-item-hover: rgba(255, 255, 255, 0.1);
-            
             --input-bg: #f8f9fa; --input-text: #000000; --border-color: #ced4da; 
             --modal-bg: #ffffff; --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057; 
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404; 
@@ -54,8 +50,6 @@
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
             --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            
-            /* GÜNDÜZ MODU KAPSÜL RENKLERİ */
             --capsule-bg: #e9ecef;
             --capsule-border: #ced4da;
             --capsule-label: #6c757d;
@@ -68,11 +62,9 @@
             --bg-color: #121212; 
             --text-color: #e0e0e0; 
             --card-bg: #1e1e1e; 
-            /* GECE MODU MENÜ: Derin Gece Mavisi / Antrasit Gradient */
             --sidebar-bg: linear-gradient(180deg, #111827 0%, #1f2937 100%);
             --sidebar-item-active: rgba(96, 153, 121, 0.2); 
             --sidebar-item-hover: rgba(255, 255, 255, 0.05);
-            
             --input-bg: #3a3a3a; --input-text: #ffffff; --border-color: #444; 
             --modal-bg: #2d2d2d; --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da; 
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107; 
@@ -89,8 +81,6 @@
             --calc-item-bg: #262626; --calc-item-border: #333; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
-            
-             /* GECE MODU KAPSÜL RENKLERİ */
             --capsule-bg: #2c3035;
             --capsule-border: #444444;
             --capsule-label: #aaaaaa;
@@ -99,7 +89,19 @@
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Poppins', sans-serif; 
+            transition: 0.3s; 
+            overflow-x: hidden; 
+            min-height: 100vh; 
+            
+            /* --- PULL-TO-REFRESH ENGELLEME --- */
+            overscroll-behavior-y: contain; 
+            /* Alternatif olarak 'none' da kullanılabilir */
+        }
         
         /* Loading Overlay */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
@@ -394,12 +396,11 @@
         input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
         body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
         
-        /* ÖZEL TARİH FİLTRESİ KAPSÜL TASARIMI (MODERNİZE EDİLDİ) */
         .date-filter-capsule {
             background-color: var(--capsule-bg);
             border: 1px solid var(--capsule-border);
             border-radius: 12px;
-            padding: 5px 15px; /* Küçültüldü */
+            padding: 5px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -407,7 +408,7 @@
             width: fit-content;
             margin: 0 auto 15px auto;
             position: relative;
-            min-width: 150px; /* Küçültüldü */
+            min-width: 150px;
             box-shadow: var(--capsule-shadow);
             transition: all 0.3s ease;
         }
@@ -423,7 +424,7 @@
             background: transparent;
             border: none;
             color: var(--capsule-text);
-            font-size: 1rem; /* Küçültüldü */
+            font-size: 1rem;
             height: 30px;
             font-weight: 600;
             text-align: center;
@@ -431,7 +432,6 @@
             outline: none;
             font-family: inherit;
         }
-        /* Mobilde takvim ikonunu gizle/beyaz yap, ama tüm alana tıklanınca açılması için JS kullanacağız */
         .capsule-input::-webkit-calendar-picker-indicator {
             opacity: 0.3;
         }
@@ -448,7 +448,7 @@
             color: #dc3545;
             cursor: pointer;
             font-size: 1rem;
-            display: none; /* Değer girilince JS ile block yapılacak */
+            display: none;
         }
 
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
@@ -725,6 +725,19 @@
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-download settings-icon"></i><div class="settings-title">Yedek Al</div><div class="settings-desc">Verileri indir.</div><button class="btn btn-success w-100" onclick="downloadBackupJSON()"><i class="fas fa-file-export me-2"></i> Yedek İndir (.json)</button></div></div>
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-upload settings-icon text-primary"></i><div class="settings-title">Yedekten Dön</div><div class="settings-desc">Yedek dosyasını yükle.</div><button class="btn btn-primary w-100" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i> Yedek Yükle</button><input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupJSON(this)"></div></div>
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-file-csv settings-icon text-warning"></i><div class="settings-title">Excel Raporu</div><div class="settings-desc">Excel (.csv) formatında indir.</div><button class="btn btn-warning w-100 text-white" onclick="downloadDataAsCSV()"><i class="fas fa-table me-2"></i> Rapor İndir (.csv)</button></div></div>
+                
+                <!-- PWA YÜKLEME KARTI -->
+                <div id="installAppContainer" class="col-md-6 col-lg-4" style="display: none;">
+                    <div class="settings-card text-center h-100" style="border: 2px solid #609979; background: linear-gradient(135deg, rgba(96, 153, 121, 0.1), rgba(255, 255, 255, 0.5));">
+                        <i class="fas fa-mobile-alt settings-icon text-success"></i>
+                        <div class="settings-title">Uygulamayı İndir</div>
+                        <div class="settings-desc">İnternetsiz erişim için yükle.</div>
+                        <button class="btn btn-success w-100 fw-bold shadow-sm" onclick="installPWA()">
+                            <i class="fas fa-download me-2"></i> Ana Ekrana Ekle
+                        </button>
+                    </div>
+                </div>
+
                 <div class="col-12"><div class="settings-card text-center border-danger"><i class="fas fa-exclamation-triangle settings-icon text-danger"></i><div class="settings-title text-danger">Verileri Sıfırla</div><div class="settings-desc">Her şeyi siler.</div><button class="btn btn-danger py-2 px-5" onclick="confirmResetData()"><i class="fas fa-trash-alt me-2"></i> Her Şeyi Sil ve Sıfırla</button></div></div>
             </div>
         </div>
@@ -1659,6 +1672,39 @@
         showToast("Tekrar çevrimiçi oldunuz!", "success");
         document.body.style.filter = "none";
     });
+
+    // --- PWA YÜKLEME BUTONU MANTIĞI ---
+    let deferredPrompt;
+    const installContainer = document.getElementById('installAppContainer');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        if (!window.matchMedia('(display-mode: standalone)').matches) {
+            if(installContainer) installContainer.style.display = 'block';
+        }
+    });
+
+    async function installPWA() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (outcome === 'accepted') {
+            if(installContainer) installContainer.style.display = 'none';
+        }
+    }
+
+    window.addEventListener('appinstalled', () => {
+        if(installContainer) installContainer.style.display = 'none';
+        deferredPrompt = null;
+        showToast("Uygulama başarıyla yüklendi! 📱", "success");
+    });
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        if(installContainer) installContainer.style.display = 'none';
+    }
 </script>
 </body>
 </html>
