@@ -97,10 +97,7 @@
             transition: 0.3s; 
             overflow-x: hidden; 
             min-height: 100vh; 
-            
-            /* --- PULL-TO-REFRESH ENGELLEME --- */
             overscroll-behavior-y: contain; 
-            /* Alternatif olarak 'none' da kullanılabilir */
         }
         
         /* Loading Overlay */
@@ -360,6 +357,10 @@
         .analysis-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; }
         .icon-good { background: #d1e7dd; color: #0f5132; }
         .icon-bad { background: #f8d7da; color: #842029; }
+        /* Yeni İkon Renkleri */
+        .icon-blue { background: #cce5ff; color: #004085; }
+        .icon-orange { background: #fff3cd; color: #856404; }
+        
         .analysis-text { flex: 1; }
         .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
         .analysis-value { font-size: 1.1rem; font-weight: bold; }
@@ -656,6 +657,24 @@
                 <div class="analysis-box mb-4">
                     <div class="analysis-row"><div class="analysis-icon icon-good"><i class="fas fa-check"></i></div><div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div></div>
                     <div class="analysis-row"><div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div><div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div></div>
+                </div>
+
+                <!-- YENİ EKLENEN KARTLAR -->
+                <div class="analysis-box mb-4">
+                    <div class="analysis-row">
+                        <div class="analysis-icon icon-blue"><i class="fas fa-calendar-week"></i></div>
+                        <div class="analysis-text">
+                            <span class="analysis-title">En Verimli Hafta</span>
+                            <span class="analysis-value" id="bestWeekVal">Hesaplanıyor...</span>
+                        </div>
+                    </div>
+                    <div class="analysis-row">
+                        <div class="analysis-icon icon-orange"><i class="fas fa-calendar-alt"></i></div>
+                        <div class="analysis-text">
+                            <span class="analysis-title">En Verimli Ay</span>
+                            <span class="analysis-value" id="bestMonthVal">Hesaplanıyor...</span>
+                        </div>
+                    </div>
                 </div>
 
                 <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
@@ -1436,6 +1455,59 @@
 
     function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
     
+    // --- YENİ EKLENEN FONKSİYON: EN VERİMLİ HAFTA VE AY ---
+    function calculateBestPeriods() {
+        if (!localData.logs) return { week: "-", month: "-" };
+        
+        const weeklySums = {};
+        const monthlySums = {};
+
+        Object.keys(localData.logs).forEach(date => {
+            const val = localData.logs[date];
+            if(val === 0) return;
+            
+            const d = new Date(date);
+            
+            // Ay Hesabı (Örn: "Ekim 2023")
+            const mKey = d.toLocaleString('tr-TR', { month: 'long', year: 'numeric' });
+            monthlySums[mKey] = (monthlySums[mKey] || 0) + val;
+
+            // Hafta Hesabı (Pazartesi bazlı)
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day == 0 ? -6 : 1); // Pazartesiye git
+            const monday = new Date(d); 
+            monday.setDate(diff);
+            const wKey = monday.toISOString().split('T')[0]; // Anahtar olarak Pazartesi tarihi
+            weeklySums[wKey] = (weeklySums[wKey] || 0) + val;
+        });
+
+        // En iyi haftayı bul
+        let maxW = 0, bestWDate = "";
+        for(let k in weeklySums) { 
+            if(weeklySums[k] > maxW) { maxW = weeklySums[k]; bestWDate = k; } 
+        }
+
+        // En iyi ayı bul
+        let maxM = 0, bestMName = "";
+        for(let k in monthlySums) { 
+            if(monthlySums[k] > maxM) { maxM = monthlySums[k]; bestMName = k; } 
+        }
+
+        // Haftayı okunabilir formata çevir (Örn: 10 Eki - 16 Eki)
+        let weekStr = "-";
+        if(bestWDate) {
+            const m = new Date(bestWDate);
+            const s = new Date(m); 
+            s.setDate(m.getDate() + 6); // Pazar
+            weekStr = `${m.getDate()} ${m.toLocaleString('tr-TR',{month:'short'})} - ${s.getDate()} ${s.toLocaleString('tr-TR',{month:'short'})} (${maxW})`;
+        }
+
+        return {
+            week: weekStr,
+            month: maxM > 0 ? `${bestMName} (${maxM})` : "-"
+        };
+    }
+
     function renderStats() { 
         let totalTarget = 0, totalDone = 0; 
         let labels = [], remainingData = [], doneData = []; 
@@ -1508,6 +1580,11 @@
         document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
         document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
         
+        // --- YENİ KARTLARI GÜNCELLE ---
+        const bestPeriods = calculateBestPeriods();
+        document.getElementById('bestWeekVal').innerText = bestPeriods.week;
+        document.getElementById('bestMonthVal').innerText = bestPeriods.month;
+
         const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
         
         renderHistory();
