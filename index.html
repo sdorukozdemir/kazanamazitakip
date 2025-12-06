@@ -360,6 +360,7 @@
         /* Yeni İkon Renkleri */
         .icon-blue { background: #cce5ff; color: #004085; }
         .icon-orange { background: #fff3cd; color: #856404; }
+        .icon-purple { background: #e0cffc; color: #5a189a; }
         
         .analysis-text { flex: 1; }
         .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
@@ -673,6 +674,13 @@
                         <div class="analysis-text">
                             <span class="analysis-title">En Verimli Ay</span>
                             <span class="analysis-value" id="bestMonthVal">Hesaplanıyor...</span>
+                        </div>
+                    </div>
+                     <div class="analysis-row">
+                        <div class="analysis-icon icon-purple"><i class="fas fa-fire-alt"></i></div>
+                        <div class="analysis-text">
+                            <span class="analysis-title">En Güçlü Zincir</span>
+                            <span class="analysis-value" id="longestStreakVal">Hesaplanıyor...</span>
                         </div>
                     </div>
                 </div>
@@ -1508,6 +1516,35 @@
         };
     }
 
+    // --- YENİ EKLENEN FONKSİYON: EN GÜÇLÜ ZİNCİRİ HESAPLA ---
+    function calculateMaxStreak() {
+        if (!localData.calendar) return 0;
+        const dates = Object.keys(localData.calendar).sort();
+        if (dates.length === 0) return 0;
+
+        let maxStreak = 1;
+        let currentStreak = 1;
+
+        for (let i = 1; i < dates.length; i++) {
+            const prev = new Date(dates[i-1]);
+            const curr = new Date(dates[i]);
+            
+            // Gün farkını hesapla
+            const diffTime = Math.abs(curr - prev);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 1) {
+                // Eğer tam 1 gün sonraysa zincir devam ediyor
+                currentStreak++;
+            } else {
+                // Zincir koptu
+                currentStreak = 1;
+            }
+            if (currentStreak > maxStreak) maxStreak = currentStreak;
+        }
+        return maxStreak;
+    }
+
     function renderStats() { 
         let totalTarget = 0, totalDone = 0; 
         let labels = [], remainingData = [], doneData = []; 
@@ -1582,8 +1619,11 @@
         
         // --- YENİ KARTLARI GÜNCELLE ---
         const bestPeriods = calculateBestPeriods();
+        const maxStreakVal = calculateMaxStreak();
+        
         document.getElementById('bestWeekVal').innerText = bestPeriods.week;
         document.getElementById('bestMonthVal').innerText = bestPeriods.month;
+        document.getElementById('longestStreakVal').innerText = maxStreakVal + " Gün";
 
         const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
         
