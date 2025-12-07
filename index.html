@@ -462,6 +462,11 @@
             display: none;
         }
 
+        /* --- YENİ EKLENEN HISTORY KATEGORİ BUTONLARI --- */
+        .history-filter-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
+        .h-tab-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-color); transition: 0.2s; }
+        .h-tab-btn.active { background: #609979; color: white; border-color: #609979; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
+
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
         .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .badge-item.unlocked { border: 2px solid #20c997; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); box-shadow: 0 8px 20px rgba(32, 201, 151, 0.25); transform: scale(1.05); color: #004d40; }
@@ -711,7 +716,14 @@
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
-                <!-- YENİ TARİH FİLTRESİ KAPSÜLÜ (GÜNCELLENDİ) -->
+                <!-- YENİ HISTORY FİLTRELEME BUTONLARI -->
+                <div class="history-filter-tabs">
+                    <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
+                    <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
+                    <button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button>
+                </div>
+
+                <!-- TARİH FİLTRESİ KAPSÜLÜ -->
                 <div class="date-filter-capsule">
                     <span class="capsule-label">İŞLEM TARİHİ</span>
                     <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
@@ -914,6 +926,7 @@
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
     let activeRowIndex = 0; 
+    let currentHistoryCategory = 'all'; // YENİ: Geçmiş filtreleme durumu
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
@@ -1491,6 +1504,7 @@
     }
     
     // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
+    // GÜNCELLENMİŞ VERSİYON: KATEGORİ FİLTRELEME EKLENDİ
     function renderHistory(filterDate = null) { 
         const container = document.getElementById('historyListContainer'); 
         container.innerHTML = ""; 
@@ -1501,6 +1515,8 @@
         }
 
         let displayData = [];
+        
+        // Önce tarihe göre filtrele (varsa)
         if (filterDate) {
             const parts = filterDate.split('-'); 
             if(parts.length === 3) {
@@ -1512,11 +1528,19 @@
                  displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
             }
         } else {
+            // Tarih filtresi yoksa ilk 50 kaydı al (performans için)
             displayData = localData.history.slice(0, 50);
         }
 
+        // Sonra kategoriye göre filtrele
+        if (currentHistoryCategory === 'namaz') {
+            displayData = displayData.filter(r => !r.namaz.includes('Oruç'));
+        } else if (currentHistoryCategory === 'oruc') {
+            displayData = displayData.filter(r => r.namaz.includes('Oruç'));
+        }
+
         if(displayData.length === 0) {
-             container.innerHTML = '<div class="text-center text-muted small py-4">Bu tarihte işlem bulunamadı.</div>';
+             container.innerHTML = '<div class="text-center text-muted small py-4">Bu kriterlerde işlem bulunamadı.</div>';
              return;
         }
 
@@ -1551,6 +1575,16 @@
         if(!filterDate && localData.history.length > 50) {
              container.innerHTML += '<div class="text-center text-muted small py-2">Daha eski kayıtlar için tarih filtresini kullanınız...</div>';
         }
+    }
+
+    // YENİ: Kategori değiştirme fonksiyonu
+    window.setHistoryCategory = function(cat, btn) {
+        currentHistoryCategory = cat;
+        // Butonların aktiflik durumunu güncelle
+        document.querySelectorAll('.h-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Listeyi yeniden render et
+        renderHistory(document.getElementById('historyFilterDate').value);
     }
 
     // Kart açma kapama fonksiyonu
