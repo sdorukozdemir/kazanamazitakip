@@ -49,7 +49,6 @@
             --calc-item-bg: #ffffff; --calc-item-border: #e9ecef; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
-            --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
             --capsule-bg: #e9ecef;
             --capsule-border: #ced4da;
             --capsule-label: #6c757d;
@@ -246,18 +245,28 @@
         .bg-ikindi { background: linear-gradient(135deg, #ffccbc 0%, #ff8a65 100%); } 
         .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
         .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
-        
+
+        /* ORUÇ RENKLERİ */
+        .bg-oruc-kaza { background: linear-gradient(135deg, #d35400 0%, #e67e22 100%); color: white; }
+        .bg-oruc-nafile { background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); color: white; }
+
         body.dark-mode .bg-sabah { background: linear-gradient(120deg, #01579b 0%, #0288d1 40%, #29b6f6 50%, #0288d1 60%, #01579b 100%); }
         body.dark-mode .bg-ogle { background: linear-gradient(120deg, #e65100 0%, #f57c00 40%, #ffb74d 50%, #f57c00 60%, #e65100 100%); }
         body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
         body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); }
         body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
+        body.dark-mode .bg-oruc-kaza { background: linear-gradient(135deg, #a04000 0%, #d35400 100%); }
+        body.dark-mode .bg-oruc-nafile { background: linear-gradient(135deg, #0e6655 0%, #117864 100%); }
+        
+        .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; }
+        .border-white-10 { border-color: rgba(255,255,255,0.2) !important; }
 
         .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
         body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); }
         .pd-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
         .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
         .pd-remaining-badge { background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); white-space: nowrap; flex-shrink: 0; }
+        .bg-oruc-kaza .pd-title, .bg-oruc-nafile .pd-title { color: white !important; }
         @media (max-width: 380px) { .pd-title { font-size: 1.4rem; } .pd-remaining-badge { padding: 4px 10px; font-size: 0.8rem; } }
         .pd-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: auto; }
         .pd-input-group { background: var(--input-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
@@ -571,6 +580,7 @@
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
+            <li id="menu-fasting" onclick="showSection('fasting')"><i class="fas fa-utensils me-3"></i> Oruç Takip</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
             <li id="menu-settings" onclick="showSection('settings')"><i class="fas fa-cog me-3"></i> Yedekleme & Ayarlar</li>
             <li onclick="toggleDarkMode()"><i class="fas fa-moon me-3"></i> <span id="darkModeText">Gece Modu</span></li>
@@ -721,6 +731,106 @@
             <div class="row g-4" id="tesbihatContainer"></div>
         </div>
 
+        <!-- ORUÇ TAKİP BÖLÜMÜ -->
+        <div id="section-fasting" style="display: none;">
+            <h3 class="app-header">Oruç Takip</h3>
+            
+            <div class="row g-4 justify-content-center">
+                
+                <!-- KAZA ORUÇ KARTI -->
+                <div class="col-md-6">
+                    <div class="prayer-detail-card bg-oruc-kaza">
+                        <div class="pd-content">
+                            <div class="pd-header">
+                                <div class="pd-title">
+                                    <i class="fas fa-star-and-crescent me-2"></i> Kaza Orucu
+                                </div>
+                                <div id="orucKazaBadge" class="pd-remaining-badge">Hesaplanıyor...</div>
+                            </div>
+
+                            <div class="pd-stats-row">
+                                <div class="pd-input-group">
+                                    <span class="pd-label">BORÇ (GÜN)</span>
+                                    <input type="number" id="inpOrucKazaTarget" class="pd-input" onchange="updateFastingTarget('kaza', this.value)">
+                                </div>
+                                <div class="pd-input-group">
+                                    <span class="pd-label text-white">TUTULAN</span>
+                                    <input type="number" id="inpOrucKazaDone" class="pd-input text-white" onchange="updateFastingDone('kaza', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="pd-progress-container">
+                                <div class="pd-progress-track">
+                                    <div id="progOrucKaza" class="pd-progress-fill bg-warning"></div>
+                                </div>
+                                <div id="txtOrucKaza" class="pd-progress-text text-white">Ilerleme</div>
+                            </div>
+
+                            <div class="pd-actions">
+                                <button class="pd-btn pd-btn-minus" onclick="changeFasting('kaza', -1)"><i class="fas fa-minus"></i></button>
+                                <button class="pd-btn pd-btn-plus bg-warning border-0" onclick="changeFasting('kaza', 1)"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NAFİLE ORUÇ KARTI -->
+                <div class="col-md-6">
+                    <div class="prayer-detail-card bg-oruc-nafile">
+                        <div class="pd-content">
+                            <div class="pd-header">
+                                <div class="pd-title">
+                                    <i class="fas fa-hands-holding-circle me-2"></i> Nafile Oruç
+                                </div>
+                                <!-- Hedef Aktifse Gösterilecek Badge -->
+                                <div id="orucNafileBadge" class="pd-remaining-badge" style="display:none; background:#ffc107; color:#333;">Hedef Aktif</div>
+                            </div>
+
+                            <!-- Hedef Kapalıyken Görünecek Sadece Sayaç -->
+                            <div id="nafileSimpleMode" class="text-center py-3">
+                                <div class="fs-1 fw-bold text-white mb-2" id="nafileCountSimple">0</div>
+                                <div class="text-white-50 small text-uppercase fw-bold">Toplam Tutulan Nafile</div>
+                            </div>
+
+                            <!-- Hedef Açıkken Görünecek Detaylar -->
+                            <div id="nafileTargetMode" style="display:none;">
+                                <div class="pd-stats-row">
+                                    <div class="pd-input-group bg-white-10">
+                                        <span class="pd-label text-white-50">HEDEF</span>
+                                        <input type="number" id="inpOrucNafileTarget" class="pd-input text-white" onchange="updateFastingTarget('nafile', this.value)">
+                                    </div>
+                                    <div class="pd-input-group bg-white-10">
+                                        <span class="pd-label text-white">TUTULAN</span>
+                                        <input type="number" id="inpOrucNafileDone" class="pd-input text-white" onchange="updateFastingDone('nafile', this.value)">
+                                    </div>
+                                </div>
+                                <div class="pd-progress-container">
+                                    <div class="pd-progress-track">
+                                        <div id="progOrucNafile" class="pd-progress-fill bg-success"></div>
+                                    </div>
+                                    <div id="txtOrucNafile" class="pd-progress-text text-white">İlerleme</div>
+                                </div>
+                            </div>
+
+                            <div class="pd-actions mt-3">
+                                <button class="pd-btn pd-btn-minus" onclick="changeFasting('nafile', -1)"><i class="fas fa-minus"></i></button>
+                                <button class="pd-btn pd-btn-plus bg-success border-0" onclick="changeFasting('nafile', 1)"><i class="fas fa-plus"></i></button>
+                            </div>
+
+                            <!-- Hedef Belirleme Toggle Butonu -->
+                            <div class="text-center mt-3 pt-3 border-top border-white-10">
+                                <button id="btnToggleNafileTarget" class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleNafileTargetMode()">
+                                    <i class="fas fa-bullseye me-2"></i> Hedef Belirle
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <div id="section-calculator" style="display: none;">
             <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
             <div class="row justify-content-center">
@@ -774,6 +884,7 @@
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
     <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>İstatistik</span></div>
+    <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-utensils"></i><span>Oruç</span></div>
     <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
     <div class="nav-item" onclick="showSection('calculator'); activateNav(this)"><i class="fas fa-calculator"></i><span>Hesap</span></div>
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
@@ -852,6 +963,10 @@
             { name: "Allahu Ekber", arabic: "ٱللَّٰهُ أَكْبَرُ", current: 0, target: 33 },
             { name: "La ilahe İllallah", arabic: "لَا إِلَٰهَ إِلَّا ٱللَّٰهُ", current: 0, target: 100 }
         ],
+        fasting: {
+            kaza: { target: 0, done: 0 },
+            nafile: { target: 10, done: 0, hasTarget: false }
+        },
         earnedBadges: [], history: []
     };
     
@@ -906,6 +1021,7 @@
                     renderCalculatorRows();
                     renderApp();
                     renderStats();
+                    renderFasting();
                 } catch(e) {
                     console.error("Render hatası:", e);
                 }
@@ -937,6 +1053,8 @@
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
+        if (!localData.fasting) localData.fasting = JSON.parse(JSON.stringify(defaultData.fasting));
+        if (!localData.fasting.nafile) localData.fasting.nafile = { target: 10, done: 0, hasTarget: false };
         if (!localData.calendar) localData.calendar = {};
         if (!localData.logs) localData.logs = {}; 
         if (localData.weeklyTarget === undefined) localData.weeklyTarget = 50;
@@ -1010,15 +1128,21 @@
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         const menuItem = document.getElementById('menu-' + id);
         if(menuItem) menuItem.classList.add('active');
-        const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings'];
+        const sections = ['dashboard', 'stats', 'tesbihat', 'fasting', 'calculator', 'settings'];
         sections.forEach(sec => { const el = document.getElementById('section-' + sec); if(el) el.style.display = 'none'; });
         const activeSec = document.getElementById('section-' + id);
         if(activeSec) activeSec.style.display = 'block';
         if(window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        const navMap = { 'dashboard': 0, 'stats': 1, 'tesbihat': 2, 'calculator': 3 };
+        const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
         if (navMap[id] !== undefined) document.querySelectorAll('.nav-item')[navMap[id]].classList.add('active');
-        try { if(id === 'dashboard') renderApp(); if(id === 'stats') renderStats(); if(id === 'tesbihat') renderTesbihat(); if(id === 'calculator') renderCalculatorRows(); } catch(e) { console.log("Render error:", e); }
+        try { 
+            if(id === 'dashboard') renderApp(); 
+            if(id === 'stats') renderStats(); 
+            if(id === 'tesbihat') renderTesbihat(); 
+            if(id === 'fasting') renderFasting();
+            if(id === 'calculator') renderCalculatorRows(); 
+        } catch(e) { console.log("Render error:", e); }
     };
 
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
@@ -1767,6 +1891,133 @@
     }
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
+
+    /* --- ORUÇ TAKİP FONKSİYONLARI --- */
+    
+    function renderFasting() {
+        if(!localData.fasting) return;
+        
+        // KAZA KISMI
+        const kaza = localData.fasting.kaza;
+        const kazaRem = Math.max(0, kaza.target - kaza.done);
+        const kazaPct = kaza.target > 0 ? (kaza.done / kaza.target) * 100 : 0;
+        
+        document.getElementById('inpOrucKazaTarget').value = kaza.target;
+        document.getElementById('inpOrucKazaDone').value = kaza.done;
+        document.getElementById('orucKazaBadge').innerText = `Kalan: ${kazaRem}`;
+        document.getElementById('progOrucKaza').style.width = `${kazaPct}%`;
+        document.getElementById('txtOrucKaza').innerText = `%${kazaPct.toFixed(1)} Tamamlandı`;
+
+        // NAFİLE KISMI
+        const nafile = localData.fasting.nafile;
+        const btnToggle = document.getElementById('btnToggleNafileTarget');
+        const simpleMode = document.getElementById('nafileSimpleMode');
+        const targetMode = document.getElementById('nafileTargetMode');
+        const badge = document.getElementById('orucNafileBadge');
+
+        if(nafile.hasTarget) {
+            // Hedef Modu Aktif
+            simpleMode.style.display = 'none';
+            targetMode.style.display = 'block';
+            badge.style.display = 'block';
+            btnToggle.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
+            btnToggle.classList.replace('btn-outline-light', 'btn-outline-warning');
+
+            const nafRem = Math.max(0, nafile.target - nafile.done);
+            const nafPct = nafile.target > 0 ? (nafile.done / nafile.target) * 100 : 0;
+            
+            document.getElementById('inpOrucNafileTarget').value = nafile.target;
+            document.getElementById('inpOrucNafileDone').value = nafile.done;
+            document.getElementById('progOrucNafile').style.width = `${nafPct}%`;
+            document.getElementById('txtOrucNafile').innerText = `%${nafPct.toFixed(1)} Tamamlandı`;
+        } else {
+            // Basit Mod
+            simpleMode.style.display = 'block';
+            targetMode.style.display = 'none';
+            badge.style.display = 'none';
+            btnToggle.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
+            btnToggle.classList.replace('btn-outline-warning', 'btn-outline-light');
+            document.getElementById('nafileCountSimple').innerText = nafile.done;
+        }
+    }
+
+    window.updateFastingTarget = function(type, val) {
+        const v = parseInt(val) || 0;
+        localData.fasting[type].target = v;
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.updateFastingDone = function(type, val) {
+        const v = parseInt(val) || 0;
+        if(type === 'kaza' && v > localData.fasting.kaza.target) {
+            showModal("Hata", "Tutulan oruç sayısı hedeften büyük olamaz.");
+            renderFasting();
+            return;
+        }
+        localData.fasting[type].done = v;
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.changeFasting = function(type, delta) {
+        triggerHaptic();
+        const item = localData.fasting[type];
+        
+        // Kaza ise ve borç bittiyse uyar
+        if(type === 'kaza' && delta > 0 && item.done >= item.target) {
+            showModal("Tebrikler", "Kaza oruç borcunuz kalmadı!");
+            return;
+        }
+
+        // Nafile hedefli ise ve hedef bittiyse uyar
+        if(type === 'nafile' && item.hasTarget && delta > 0 && item.done >= item.target) {
+            showModal("Tebrikler", "Hedeflenen nafile oruç sayısı tamamlandı.");
+            return;
+        }
+
+        const newVal = item.done + delta;
+        if(newVal < 0) return;
+
+        item.done = newVal;
+        
+        // Konfeti ve Başarı Kontrolü
+        if(delta > 0) {
+            let success = false;
+            // Kaza bitişi
+            if(type === 'kaza' && item.done === item.target) success = true;
+            // Nafile hedef bitişi
+            if(type === 'nafile' && item.hasTarget && item.done === item.target) success = true;
+
+            if(success) {
+                jsConfetti.addConfetti({
+                    emojis: ['🌙', '⭐', '✨'],
+                    emojiSize: 40,
+                    confettiNumber: 60
+                });
+                showModal("Harika!", "Hedefine ulaştın. Allah kabul etsin! 🤲");
+            } else {
+                // Standart artışta ufak toast
+                showToast("Oruç eklendi!", "success");
+            }
+            
+            // Tarihçeye ekleyelim
+            const name = type === 'kaza' ? "Kaza Orucu" : "Nafile Oruç";
+            addHistory(name, newVal - 1, newVal);
+        }
+
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.toggleNafileTargetMode = function() {
+        localData.fasting.nafile.hasTarget = !localData.fasting.nafile.hasTarget;
+        if(localData.fasting.nafile.hasTarget && localData.fasting.nafile.target === 0) {
+            localData.fasting.nafile.target = 10; // Varsayılan bir hedef ata
+        }
+        saveToCloud();
+        renderFasting();
+    };
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
