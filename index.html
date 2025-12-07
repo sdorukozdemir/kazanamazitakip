@@ -747,34 +747,47 @@
                                 <div class="pd-title">
                                     <i class="fas fa-star-and-crescent me-2"></i> Kaza Orucu
                                 </div>
-                                <div id="orucKazaBadge" class="pd-remaining-badge">Hesaplanıyor...</div>
-                                <button class="btn btn-sm btn-outline-light rounded-pill mb-2" onclick="toggleKazaDebt()">
-                                    <i class="fas fa-pen me-2"></i> Borç Düzenle
-                                </button>
+                                <div id="orucKazaBadge" class="pd-remaining-badge" style="display:none; background:#ffc107; color:#333;">Hedef Aktif</div>
                             </div>
 
-                            <div class="pd-stats-row" style="display: flex; justify-content: center; gap: 15px;">
-                                <div class="pd-input-group bg-white-10" id="kazaDebtContainer" style="display: none;">
-                                    <span class="pd-label text-white">BORÇ (GÜN)</span>
-                                    <input type="number" id="inpOrucKazaTarget" class="pd-input text-white" onchange="updateFastingTarget('kaza', this.value)">
+                            <!-- Basit Mod -->
+                            <div id="kazaSimpleMode" class="text-center py-3">
+                                <div class="fs-1 fw-bold text-white mb-2" id="kazaCountSimple">0</div>
+                                <div class="text-white-50 small text-uppercase fw-bold">Toplam Tutulan Kaza</div>
+                            </div>
+
+                            <!-- Hedef Modu -->
+                            <div id="kazaTargetMode" style="display:none;">
+                                <div class="pd-stats-row">
+                                    <div class="pd-input-group bg-white-10">
+                                        <span class="pd-label text-white-50">BORÇ (GÜN)</span>
+                                        <input type="number" id="inpOrucKazaTarget" class="pd-input text-white" onchange="updateFastingTarget('kaza', this.value)">
+                                    </div>
+                                    <div class="pd-input-group bg-white-10">
+                                        <span class="pd-label text-white">TUTULAN</span>
+                                        <input type="number" id="inpOrucKazaDone" class="pd-input text-white" onchange="updateFastingDone('kaza', this.value)">
+                                    </div>
                                 </div>
-                                <div class="pd-input-group bg-white-10" style="flex: 1;">
-                                    <span class="pd-label text-white">TUTULAN</span>
-                                    <input type="number" id="inpOrucKazaDone" class="pd-input text-white" onchange="updateFastingDone('kaza', this.value)">
+                                <div class="pd-progress-container">
+                                    <div class="pd-progress-track">
+                                        <div id="progOrucKaza" class="pd-progress-fill bg-warning"></div>
+                                    </div>
+                                    <div id="txtOrucKaza" class="pd-progress-text text-white">Ilerleme</div>
                                 </div>
                             </div>
 
-                            <div class="pd-progress-container">
-                                <div class="pd-progress-track">
-                                    <div id="progOrucKaza" class="pd-progress-fill bg-warning"></div>
-                                </div>
-                                <div id="txtOrucKaza" class="pd-progress-text text-white">Ilerleme</div>
-                            </div>
-
-                            <div class="pd-actions">
+                            <div class="pd-actions mt-3">
                                 <button class="pd-btn pd-btn-minus" onclick="changeFasting('kaza', -1)"><i class="fas fa-minus"></i></button>
                                 <button class="pd-btn pd-btn-plus bg-warning border-0" onclick="changeFasting('kaza', 1)"><i class="fas fa-plus"></i></button>
                             </div>
+
+                            <!-- Hedef Belirleme Toggle Butonu -->
+                            <div class="text-center mt-3 pt-3 border-top border-white-10">
+                                <button id="btnToggleKazaTarget" class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleKazaTargetMode()">
+                                    <i class="fas fa-bullseye me-2"></i> Hedef Belirle
+                                </button>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -972,7 +985,7 @@
         ],
         // YENİ EKLENEN ORUÇ VERİSİ
         fasting: {
-            kaza: { target: 0, done: 0 },
+            kaza: { target: 0, done: 0, hasTarget: false },
             nafile: { target: 10, done: 0, hasTarget: false }
         },
         earnedBadges: [], history: []
@@ -1064,6 +1077,7 @@
         // ORUÇ KONTROLÜ
         if (!localData.fasting) localData.fasting = JSON.parse(JSON.stringify(defaultData.fasting));
         if (!localData.fasting.nafile) localData.fasting.nafile = { target: 10, done: 0, hasTarget: false };
+        if (localData.fasting.kaza && localData.fasting.kaza.hasTarget === undefined) localData.fasting.kaza.hasTarget = false;
         
         if (!localData.calendar) localData.calendar = {};
         if (!localData.logs) localData.logs = {}; 
@@ -1913,29 +1927,54 @@
         
         // KAZA KISMI
         const kaza = localData.fasting.kaza;
-        const kazaRem = Math.max(0, kaza.target - kaza.done);
-        const kazaPct = kaza.target > 0 ? (kaza.done / kaza.target) * 100 : 0;
-        
-        document.getElementById('inpOrucKazaTarget').value = kaza.target;
-        document.getElementById('inpOrucKazaDone').value = kaza.done;
-        document.getElementById('orucKazaBadge').innerText = `Kalan: ${kazaRem}`;
-        document.getElementById('progOrucKaza').style.width = `${kazaPct}%`;
-        document.getElementById('txtOrucKaza').innerText = `%${kazaPct.toFixed(1)} Tamamlandı`;
+        const btnToggleKaza = document.getElementById('btnToggleKazaTarget');
+        const kazaSimple = document.getElementById('kazaSimpleMode');
+        const kazaTarget = document.getElementById('kazaTargetMode');
+        const kazaBadge = document.getElementById('orucKazaBadge');
+
+        // Kaza verisi için hasTarget kontrolü (Eski verilerde yoksa false varsay)
+        const hasKazaTarget = kaza.hasTarget === true;
+
+        if(hasKazaTarget) {
+            // Hedef Modu Aktif
+            kazaSimple.style.display = 'none';
+            kazaTarget.style.display = 'block';
+            kazaBadge.style.display = 'block';
+            btnToggleKaza.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
+            btnToggleKaza.classList.replace('btn-outline-light', 'btn-outline-warning');
+
+            const kazaRem = Math.max(0, kaza.target - kaza.done);
+            const kazaPct = kaza.target > 0 ? (kaza.done / kaza.target) * 100 : 0;
+            
+            document.getElementById('inpOrucKazaTarget').value = kaza.target;
+            document.getElementById('inpOrucKazaDone').value = kaza.done;
+            kazaBadge.innerText = `Kalan: ${kazaRem}`;
+            document.getElementById('progOrucKaza').style.width = `${kazaPct}%`;
+            document.getElementById('txtOrucKaza').innerText = `%${kazaPct.toFixed(1)} Tamamlandı`;
+        } else {
+            // Basit Mod
+            kazaSimple.style.display = 'block';
+            kazaTarget.style.display = 'none';
+            kazaBadge.style.display = 'none';
+            btnToggleKaza.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
+            btnToggleKaza.classList.replace('btn-outline-warning', 'btn-outline-light');
+            document.getElementById('kazaCountSimple').innerText = kaza.done;
+        }
 
         // NAFİLE KISMI
         const nafile = localData.fasting.nafile;
-        const btnToggle = document.getElementById('btnToggleNafileTarget');
-        const simpleMode = document.getElementById('nafileSimpleMode');
-        const targetMode = document.getElementById('nafileTargetMode');
-        const badge = document.getElementById('orucNafileBadge');
+        const btnToggleNafile = document.getElementById('btnToggleNafileTarget');
+        const nafileSimple = document.getElementById('nafileSimpleMode');
+        const nafileTarget = document.getElementById('nafileTargetMode');
+        const nafileBadge = document.getElementById('orucNafileBadge');
 
         if(nafile.hasTarget) {
             // Hedef Modu Aktif
-            simpleMode.style.display = 'none';
-            targetMode.style.display = 'block';
-            badge.style.display = 'block';
-            btnToggle.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
-            btnToggle.classList.replace('btn-outline-light', 'btn-outline-warning');
+            nafileSimple.style.display = 'none';
+            nafileTarget.style.display = 'block';
+            nafileBadge.style.display = 'block';
+            btnToggleNafile.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
+            btnToggleNafile.classList.replace('btn-outline-light', 'btn-outline-warning');
 
             const nafRem = Math.max(0, nafile.target - nafile.done);
             const nafPct = nafile.target > 0 ? (nafile.done / nafile.target) * 100 : 0;
@@ -1946,11 +1985,11 @@
             document.getElementById('txtOrucNafile').innerText = `%${nafPct.toFixed(1)} Tamamlandı`;
         } else {
             // Basit Mod
-            simpleMode.style.display = 'block';
-            targetMode.style.display = 'none';
-            badge.style.display = 'none';
-            btnToggle.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
-            btnToggle.classList.replace('btn-outline-warning', 'btn-outline-light');
+            nafileSimple.style.display = 'block';
+            nafileTarget.style.display = 'none';
+            nafileBadge.style.display = 'none';
+            btnToggleNafile.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
+            btnToggleNafile.classList.replace('btn-outline-warning', 'btn-outline-light');
             document.getElementById('nafileCountSimple').innerText = nafile.done;
         }
     }
@@ -1965,31 +2004,36 @@
     window.updateFastingDone = function(type, val) {
         const v = parseInt(val) || 0;
         if(type === 'kaza' && v > localData.fasting.kaza.target) {
-            showModal("Hata", "Tutulan oruç sayısı hedeften büyük olamaz.");
-            renderFasting();
-            return;
+            // Kaza'da target 0 değilse ve target aşıldıysa uyar (Target 0 ise sonsuz izin verilebilir ama mantıken borç sayısı girilmeli)
+             if(localData.fasting.kaza.hasTarget && localData.fasting.kaza.target > 0) {
+                 showModal("Hata", "Tutulan oruç sayısı hedeften büyük olamaz.");
+                 renderFasting();
+                 return;
+             }
         }
         localData.fasting[type].done = v;
         saveToCloud();
         renderFasting();
     };
 
-    window.toggleKazaDebt = function() {
-        const el = document.getElementById('kazaDebtContainer');
-        if(el.style.display === 'none') {
-            el.style.display = 'flex'; // pd-input-group olduğu için flex
-            document.getElementById('inpOrucKazaTarget').focus();
+    window.toggleKazaTargetMode = function() {
+        if(!localData.fasting.kaza.hasTarget) {
+             localData.fasting.kaza.hasTarget = true;
+             // Eğer hedef 0 ise varsayılan bir değer ata, değilse mevcut değeri koru
+             if(localData.fasting.kaza.target === 0) localData.fasting.kaza.target = 10;
         } else {
-            el.style.display = 'none';
+             localData.fasting.kaza.hasTarget = false;
         }
+        saveToCloud();
+        renderFasting();
     };
 
     window.changeFasting = function(type, delta) {
         triggerHaptic();
         const item = localData.fasting[type];
         
-        // Kaza ise ve borç bittiyse uyar (Target 0 ise ve delta + ise sonsuz devam etsin diye izin verebiliriz ama standardı bozmuyorum)
-        if(type === 'kaza' && delta > 0 && item.target > 0 && item.done >= item.target) {
+        // Kaza hedefli modda borç bittiyse uyar
+        if(type === 'kaza' && item.hasTarget && delta > 0 && item.target > 0 && item.done >= item.target) {
             showModal("Tebrikler", "Kaza oruç borcunuz kalmadı!");
             return;
         }
@@ -2008,8 +2052,8 @@
         // Konfeti ve Başarı Kontrolü
         if(delta > 0) {
             let success = false;
-            // Kaza bitişi
-            if(type === 'kaza' && item.target > 0 && item.done === item.target) success = true;
+            // Kaza bitişi (Hedefli modda)
+            if(type === 'kaza' && item.hasTarget && item.target > 0 && item.done === item.target) success = true;
             // Nafile hedef bitişi
             if(type === 'nafile' && item.hasTarget && item.done === item.target) success = true;
 
