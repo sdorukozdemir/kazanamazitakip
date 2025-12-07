@@ -748,14 +748,17 @@
                                     <i class="fas fa-star-and-crescent me-2"></i> Kaza Orucu
                                 </div>
                                 <div id="orucKazaBadge" class="pd-remaining-badge">Hesaplanıyor...</div>
+                                <button class="btn btn-sm btn-outline-light rounded-pill mb-2" onclick="toggleKazaDebt()">
+                                    <i class="fas fa-pen me-2"></i> Borç Düzenle
+                                </button>
                             </div>
 
-                            <div class="pd-stats-row">
-                                <div class="pd-input-group">
-                                    <span class="pd-label">BORÇ (GÜN)</span>
-                                    <input type="number" id="inpOrucKazaTarget" class="pd-input" onchange="updateFastingTarget('kaza', this.value)">
+                            <div class="pd-stats-row" style="display: flex; justify-content: center; gap: 15px;">
+                                <div class="pd-input-group bg-white-10" id="kazaDebtContainer" style="display: none;">
+                                    <span class="pd-label text-white">BORÇ (GÜN)</span>
+                                    <input type="number" id="inpOrucKazaTarget" class="pd-input text-white" onchange="updateFastingTarget('kaza', this.value)">
                                 </div>
-                                <div class="pd-input-group">
+                                <div class="pd-input-group bg-white-10" style="flex: 1;">
                                     <span class="pd-label text-white">TUTULAN</span>
                                     <input type="number" id="inpOrucKazaDone" class="pd-input text-white" onchange="updateFastingDone('kaza', this.value)">
                                 </div>
@@ -1081,6 +1084,10 @@
 
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
+        // Toast sayısını limitle (max 3)
+        if(container.childElementCount >= 3) {
+            container.removeChild(container.firstChild);
+        }
         const toast = document.createElement('div');
         toast.className = `custom-toast toast-${type}`;
         const icon = type === 'success' ? '<i class="fas fa-check-circle"></i>' : (type === 'warning' ? '<i class="fas fa-wifi"></i>' : '<i class="fas fa-exclamation-circle"></i>');
@@ -1894,7 +1901,7 @@
         renderCalculatorRows();
         applyGenderSettings(); 
         // SIFIRLANINCA UYARI VER
-        showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
+        showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır. Allah kabul etsin!");
     }
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
@@ -1967,12 +1974,22 @@
         renderFasting();
     };
 
+    window.toggleKazaDebt = function() {
+        const el = document.getElementById('kazaDebtContainer');
+        if(el.style.display === 'none') {
+            el.style.display = 'flex'; // pd-input-group olduğu için flex
+            document.getElementById('inpOrucKazaTarget').focus();
+        } else {
+            el.style.display = 'none';
+        }
+    };
+
     window.changeFasting = function(type, delta) {
         triggerHaptic();
         const item = localData.fasting[type];
         
-        // Kaza ise ve borç bittiyse uyar
-        if(type === 'kaza' && delta > 0 && item.done >= item.target) {
+        // Kaza ise ve borç bittiyse uyar (Target 0 ise ve delta + ise sonsuz devam etsin diye izin verebiliriz ama standardı bozmuyorum)
+        if(type === 'kaza' && delta > 0 && item.target > 0 && item.done >= item.target) {
             showModal("Tebrikler", "Kaza oruç borcunuz kalmadı!");
             return;
         }
@@ -1992,7 +2009,7 @@
         if(delta > 0) {
             let success = false;
             // Kaza bitişi
-            if(type === 'kaza' && item.done === item.target) success = true;
+            if(type === 'kaza' && item.target > 0 && item.done === item.target) success = true;
             // Nafile hedef bitişi
             if(type === 'nafile' && item.hasTarget && item.done === item.target) success = true;
 
@@ -2002,7 +2019,10 @@
                     emojiSize: 40,
                     confettiNumber: 60
                 });
-                showModal("Harika!", "Hedefine ulaştın. Allah kabul etsin! 🤲");
+                // 2-3 sn gecikmeli modal
+                setTimeout(() => {
+                    showModal("Harika!", "Hedefine ulaştın. Allah kabul etsin! 🤲");
+                }, 2500);
             } else {
                 // Standart artışta ufak toast
                 showToast("Oruç eklendi!", "success");
