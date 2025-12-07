@@ -462,10 +462,20 @@
             display: none;
         }
 
-        /* --- YENİ EKLENEN HISTORY KATEGORİ BUTONLARI --- */
-        .history-filter-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
-        .h-tab-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-color); transition: 0.2s; }
+        /* --- YENİ HISTORY FİLTRELEME BUTONLARI --- */
+        .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
+        .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; }
+        .h-sub-tabs { display: none; gap: 8px; justify-content: center; width: 100%; animation: fadeIn 0.3s ease; }
+        .h-sub-tabs.active { display: flex; }
+        
+        .h-tab-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-color); transition: 0.2s; cursor: pointer; }
+        .h-tab-btn:hover { background: var(--input-bg); }
         .h-tab-btn.active { background: #609979; color: white; border-color: #609979; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
+        
+        .h-sub-btn { background: var(--input-bg); border: 1px solid var(--border-color); padding: 4px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: 600; color: var(--text-color); transition: 0.2s; cursor: pointer; opacity: 0.8; }
+        .h-sub-btn.active { background: #fd7e14; color: white; border-color: #fd7e14; opacity: 1; box-shadow: 0 3px 8px rgba(253, 126, 20, 0.3); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
         .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
         .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
@@ -718,9 +728,16 @@
                 
                 <!-- YENİ HISTORY FİLTRELEME BUTONLARI -->
                 <div class="history-filter-tabs">
-                    <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
-                    <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
-                    <button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button>
+                    <div class="h-main-tabs">
+                        <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
+                        <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
+                        <button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button>
+                    </div>
+                    <div id="fastingSubTabs" class="h-sub-tabs">
+                        <button class="h-sub-btn active" onclick="setFastingSubCategory('all', this)">Tümü</button>
+                        <button class="h-sub-btn" onclick="setFastingSubCategory('kaza', this)">Kaza</button>
+                        <button class="h-sub-btn" onclick="setFastingSubCategory('nafile', this)">Nafile</button>
+                    </div>
                 </div>
 
                 <!-- TARİH FİLTRESİ KAPSÜLÜ -->
@@ -926,7 +943,8 @@
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
     let activeRowIndex = 0; 
-    let currentHistoryCategory = 'all'; // YENİ: Geçmiş filtreleme durumu
+    let currentHistoryCategory = 'all'; // Ana kategori: all, namaz, oruc
+    let currentFastingSubCat = 'all'; // Alt kategori: all, kaza, nafile
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
@@ -1532,11 +1550,20 @@
             displayData = localData.history.slice(0, 50);
         }
 
-        // Sonra kategoriye göre filtrele
+        // Kategori Filtreleme Mantığı
         if (currentHistoryCategory === 'namaz') {
-            displayData = displayData.filter(r => !r.namaz.includes('Oruç'));
+            // Namaz: İçinde 'Oruç' veya 'Orucu' GEÇMEYENLER
+            displayData = displayData.filter(r => !r.namaz.includes('Oruç') && !r.namaz.includes('Orucu'));
         } else if (currentHistoryCategory === 'oruc') {
-            displayData = displayData.filter(r => r.namaz.includes('Oruç'));
+            // Oruç: İçinde 'Oruç' veya 'Orucu' GEÇENLER
+            displayData = displayData.filter(r => r.namaz.includes('Oruç') || r.namaz.includes('Orucu'));
+            
+            // Oruç alt kategori filtreleme
+            if (currentFastingSubCat === 'kaza') {
+                displayData = displayData.filter(r => r.namaz.includes('Kaza'));
+            } else if (currentFastingSubCat === 'nafile') {
+                displayData = displayData.filter(r => r.namaz.includes('Nafile'));
+            }
         }
 
         if(displayData.length === 0) {
@@ -1580,10 +1607,30 @@
     // YENİ: Kategori değiştirme fonksiyonu
     window.setHistoryCategory = function(cat, btn) {
         currentHistoryCategory = cat;
-        // Butonların aktiflik durumunu güncelle
-        document.querySelectorAll('.h-tab-btn').forEach(b => b.classList.remove('active'));
+        // Ana butonların aktiflik durumunu güncelle
+        document.querySelectorAll('.h-main-tabs .h-tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        
+        // Oruç seçildiyse alt sekmeleri göster
+        const subTabs = document.getElementById('fastingSubTabs');
+        if (cat === 'oruc') {
+            subTabs.classList.add('active');
+            // Alt kategori varsayılan olarak 'all' olsun
+            setFastingSubCategory('all', subTabs.querySelector('.h-sub-btn:first-child'));
+        } else {
+            subTabs.classList.remove('active');
+            currentFastingSubCat = 'all'; // Diğer kategorilerde alt filtreyi sıfırla
+        }
+
         // Listeyi yeniden render et
+        renderHistory(document.getElementById('historyFilterDate').value);
+    }
+
+    // YENİ: Oruç alt kategori değiştirme
+    window.setFastingSubCategory = function(subCat, btn) {
+        currentFastingSubCat = subCat;
+        document.querySelectorAll('.h-sub-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         renderHistory(document.getElementById('historyFilterDate').value);
     }
 
@@ -2105,11 +2152,12 @@
                 // Standart artışta ufak toast
                 showToast("Oruç eklendi!", "success");
             }
-            
-            // Tarihçeye ekleyelim (Opsiyonel)
-            const name = type === 'kaza' ? "Kaza Orucu" : "Nafile Oruç";
-            addHistory(name, newVal - 1, newVal);
         }
+
+        // GEÇMİŞE KAYDET (Hem + hem - işlemleri için if dışına alındı)
+        const name = type === 'kaza' ? "Kaza Orucu" : "Nafile Oruç";
+        const oldVal = newVal - delta; // Eski değeri hesapla
+        addHistory(name, oldVal, newVal);
 
         saveToCloud();
         renderFasting();
