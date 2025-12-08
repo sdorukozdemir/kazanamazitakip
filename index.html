@@ -736,12 +736,12 @@
                     
                     <!-- Namaz Alt Sekmeler -->
                     <div id="namazSubTabs" class="h-sub-tabs">
-                        <button class="h-sub-btn active" onclick="setNamazSubCategory('all', this)">Tümü</button>
                         <button class="h-sub-btn" onclick="setNamazSubCategory('Sabah', this)">Sabah</button>
                         <button class="h-sub-btn" onclick="setNamazSubCategory('Öğle', this)">Öğle</button>
                         <button class="h-sub-btn" onclick="setNamazSubCategory('İkindi', this)">İkindi</button>
                         <button class="h-sub-btn" onclick="setNamazSubCategory('Akşam', this)">Akşam</button>
                         <button class="h-sub-btn" onclick="setNamazSubCategory('Yatsı', this)">Yatsı</button>
+                        <button class="h-sub-btn active" onclick="setNamazSubCategory('all', this)">Tümü</button>
                     </div>
 
                     <!-- Oruç Alt Sekmeler -->
@@ -1642,7 +1642,8 @@
             setFastingSubCategory('all', fastTabs.querySelector('.h-sub-btn:first-child'));
         } else if (cat === 'namaz') {
             namazTabs.classList.add('active');
-            setNamazSubCategory('all', namazTabs.querySelector('.h-sub-btn:first-child'));
+            // Tümü artık sonda olduğu için (lastElementChild) veya spesifik seçimle
+            setNamazSubCategory('all', namazTabs.lastElementChild);
         } else {
             // 'Tümü' seçildiyse alt filtreleri sıfırla
             currentFastingSubCat = 'all';
