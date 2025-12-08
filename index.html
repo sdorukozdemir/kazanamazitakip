@@ -465,7 +465,7 @@
         /* --- YENİ HISTORY FİLTRELEME BUTONLARI --- */
         .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
         .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; }
-        .h-sub-tabs { display: none; gap: 8px; justify-content: center; width: 100%; animation: fadeIn 0.3s ease; }
+        .h-sub-tabs { display: none; gap: 8px; justify-content: center; width: 100%; animation: fadeIn 0.3s ease; flex-wrap: wrap; }
         .h-sub-tabs.active { display: flex; }
         
         .h-tab-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-color); transition: 0.2s; cursor: pointer; }
@@ -733,6 +733,18 @@
                         <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
                         <button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button>
                     </div>
+                    
+                    <!-- Namaz Alt Sekmeler -->
+                    <div id="namazSubTabs" class="h-sub-tabs">
+                        <button class="h-sub-btn active" onclick="setNamazSubCategory('all', this)">Tümü</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('Sabah', this)">Sabah</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('Öğle', this)">Öğle</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('İkindi', this)">İkindi</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('Akşam', this)">Akşam</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('Yatsı', this)">Yatsı</button>
+                    </div>
+
+                    <!-- Oruç Alt Sekmeler -->
                     <div id="fastingSubTabs" class="h-sub-tabs">
                         <button class="h-sub-btn active" onclick="setFastingSubCategory('all', this)">Tümü</button>
                         <button class="h-sub-btn" onclick="setFastingSubCategory('kaza', this)">Kaza</button>
@@ -944,7 +956,8 @@
     let currentChartPeriod = 'weekly'; 
     let activeRowIndex = 0; 
     let currentHistoryCategory = 'all'; // Ana kategori: all, namaz, oruc
-    let currentFastingSubCat = 'all'; // Alt kategori: all, kaza, nafile
+    let currentFastingSubCat = 'all'; // Oruç Alt kategori: all, kaza, nafile
+    let currentNamazSubCat = 'all'; // YENİ: Namaz Alt kategori: all, Sabah, Öğle...
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
@@ -1522,7 +1535,7 @@
     }
     
     // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
-    // GÜNCELLENMİŞ VERSİYON: KATEGORİ FİLTRELEME EKLENDİ
+    // GÜNCELLENMİŞ VERSİYON: KATEGORİ VE ALT KATEGORİ FİLTRELEME
     function renderHistory(filterDate = null) { 
         const container = document.getElementById('historyListContainer'); 
         container.innerHTML = ""; 
@@ -1534,7 +1547,7 @@
 
         let displayData = [];
         
-        // Önce tarihe göre filtrele (varsa)
+        // 1. Önce tarihe göre filtrele (varsa)
         if (filterDate) {
             const parts = filterDate.split('-'); 
             if(parts.length === 3) {
@@ -1546,19 +1559,25 @@
                  displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
             }
         } else {
-            // Tarih filtresi yoksa ilk 50 kaydı al (performans için)
+            // Tarih filtresi yoksa ilk 50 kaydı al
             displayData = localData.history.slice(0, 50);
         }
 
-        // Kategori Filtreleme Mantığı
+        // 2. Ana Kategori Filtreleme
         if (currentHistoryCategory === 'namaz') {
             // Namaz: İçinde 'Oruç' veya 'Orucu' GEÇMEYENLER
             displayData = displayData.filter(r => !r.namaz.includes('Oruç') && !r.namaz.includes('Orucu'));
+            
+            // Namaz Alt Kategori Filtreleme
+            if (currentNamazSubCat !== 'all') {
+                displayData = displayData.filter(r => r.namaz === currentNamazSubCat);
+            }
+
         } else if (currentHistoryCategory === 'oruc') {
             // Oruç: İçinde 'Oruç' veya 'Orucu' GEÇENLER
             displayData = displayData.filter(r => r.namaz.includes('Oruç') || r.namaz.includes('Orucu'));
             
-            // Oruç alt kategori filtreleme
+            // Oruç Alt Kategori Filtreleme
             if (currentFastingSubCat === 'kaza') {
                 displayData = displayData.filter(r => r.namaz.includes('Kaza'));
             } else if (currentFastingSubCat === 'nafile') {
@@ -1611,15 +1630,23 @@
         document.querySelectorAll('.h-main-tabs .h-tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
-        // Oruç seçildiyse alt sekmeleri göster
-        const subTabs = document.getElementById('fastingSubTabs');
+        const fastTabs = document.getElementById('fastingSubTabs');
+        const namazTabs = document.getElementById('namazSubTabs');
+
+        // Önce hepsini kapat
+        fastTabs.classList.remove('active');
+        namazTabs.classList.remove('active');
+
         if (cat === 'oruc') {
-            subTabs.classList.add('active');
-            // Alt kategori varsayılan olarak 'all' olsun
-            setFastingSubCategory('all', subTabs.querySelector('.h-sub-btn:first-child'));
+            fastTabs.classList.add('active');
+            setFastingSubCategory('all', fastTabs.querySelector('.h-sub-btn:first-child'));
+        } else if (cat === 'namaz') {
+            namazTabs.classList.add('active');
+            setNamazSubCategory('all', namazTabs.querySelector('.h-sub-btn:first-child'));
         } else {
-            subTabs.classList.remove('active');
-            currentFastingSubCat = 'all'; // Diğer kategorilerde alt filtreyi sıfırla
+            // 'Tümü' seçildiyse alt filtreleri sıfırla
+            currentFastingSubCat = 'all';
+            currentNamazSubCat = 'all';
         }
 
         // Listeyi yeniden render et
@@ -1629,7 +1656,15 @@
     // YENİ: Oruç alt kategori değiştirme
     window.setFastingSubCategory = function(subCat, btn) {
         currentFastingSubCat = subCat;
-        document.querySelectorAll('.h-sub-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('#fastingSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderHistory(document.getElementById('historyFilterDate').value);
+    }
+
+    // YENİ: Namaz alt kategori değiştirme
+    window.setNamazSubCategory = function(subCat, btn) {
+        currentNamazSubCat = subCat;
+        document.querySelectorAll('#namazSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         renderHistory(document.getElementById('historyFilterDate').value);
     }
