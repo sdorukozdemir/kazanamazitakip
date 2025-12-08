@@ -313,6 +313,33 @@
         .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #609979; background: white; }
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
+        
+        /* TESBİHAT YENİ STİL */
+        .tesbihat-selector-wrapper { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; margin-bottom: 10px; }
+        .tesbihat-selector-wrapper::-webkit-scrollbar { display: none; }
+        .t-chip { 
+            flex: 0 0 auto; 
+            min-width: 120px; 
+            background: var(--fade-box-bg); 
+            border: 1px solid var(--fade-box-border); 
+            border-radius: 12px; 
+            padding: 10px 15px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: var(--fade-box-shadow); 
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .t-chip.active { background: #609979; color: white; border-color: #609979; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(96, 153, 121, 0.4); }
+        .t-chip-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; text-align: center; line-height: 1.2; }
+        .t-chip-add { border: 2px dashed var(--border-color); color: var(--placeholder-color); min-width: 60px; font-size: 1.5rem; }
+        .t-chip-add:hover { border-color: #609979; color: #609979; }
+        .t-delete-icon { position: absolute; top: 2px; right: 5px; font-size: 0.7rem; color: #dc3545; opacity: 0.7; z-index: 5; }
+
         .zikr-card { padding: 25px; text-align: center; border-top: 6px solid #609979; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .arabic-text { font-family: 'Amiri', serif; font-size: 2.4rem; color: #609979; margin: 10px 0; line-height: 1.3; }
         body.dark-mode .arabic-text { color: #20c997; }
@@ -333,6 +360,7 @@
         .btn-add-clean:active { transform: scale(0.95); }
         .btn-add-clean:hover { background: #0b5ed7; }
         body.dark-mode .btn-add-clean { background: #3d8bfd; color: #121212; }
+
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
@@ -770,7 +798,8 @@
 
         <div id="section-tesbihat" style="display: none;">
             <h3 class="app-header">Tesbihat ve Zikir</h3>
-            <div class="row g-4" id="tesbihatContainer"></div>
+            <!-- Tesbihat bölümü JS ile dinamik doldurulacak -->
+            <div id="tesbihatContainer"></div>
         </div>
 
         <!-- ORUÇ TAKİP BÖLÜMÜ (YENİ EKLENDİ) -->
@@ -958,6 +987,7 @@
     let currentHistoryCategory = 'all'; // Ana kategori: all, namaz, oruc
     let currentFastingSubCat = 'all'; // Oruç Alt kategori: all, kaza, nafile
     let currentNamazSubCat = 'all'; // YENİ: Namaz Alt kategori: all, Sabah, Öğle...
+    let activeTesbihatIndex = 0; // Tesbihat aktif seçim
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
@@ -1503,7 +1533,119 @@
 
     function getWeeklyProgress() { if (!localData.logs) return 0; const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day == 0 ? -6 : 1); const monday = new Date(today.setDate(diff)); monday.setHours(0,0,0,0); let weeklyTotal = 0; Object.keys(localData.logs).forEach(dateKey => { const logDate = new Date(dateKey); if (logDate >= monday) { weeklyTotal += localData.logs[dateKey]; } }); return weeklyTotal; }
 
-    function renderTesbihat() { const c = document.getElementById('tesbihatContainer'); c.innerHTML = ""; if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat)); localData.tesbihat.forEach((item, i) => { let p = item.target > 0 ? (item.current / item.target) * 100 : 0; c.innerHTML += `<div class="col-md-6"><div class="zikr-card"><h5>${item.name}</h5><div class="arabic-text">${item.arabic}</div><div class="zikr-count">${item.current}</div><div class="progress mb-3" style="height: 8px;"><div class="progress-bar bg-success" style="width: ${p}%"></div></div><div class="zikr-btn-group"><button class="zikr-btn z-minus" onclick="window.upTes(${i},-1)"><i class="fas fa-minus"></i></button><button class="zikr-btn z-plus" onclick="window.upTes(${i},1)"><i class="fas fa-plus"></i></button><button class="zikr-btn z-reset" onclick="window.resTes(${i})"><i class="fas fa-undo"></i></button></div><div class="tesbihat-target-box"><span class="tesbihat-target-label">HEDEF</span><input type="number" class="tesbihat-target-input" value="${item.target}" onchange="window.setTesTarget(${i}, this.value)"></div><div class="manual-zikr-container"><input type="number" id="manZ-${i}" class="manual-zikr-input-clean" placeholder="+Adet"><button class="btn-add-clean" onclick="window.addTes(${i})">EKLE</button></div></div></div>`; }); }
+    function renderTesbihat() {
+        const c = document.getElementById('tesbihatContainer');
+        c.innerHTML = "";
+        
+        if (!localData.tesbihat || localData.tesbihat.length === 0) {
+            localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
+        }
+
+        // --- 1. SEÇİM KUTUCUKLARI ---
+        let selectorHTML = '<div class="tesbihat-selector-wrapper">';
+        
+        localData.tesbihat.forEach((item, i) => {
+            const isActive = (i === activeTesbihatIndex) ? 'active' : '';
+            // Silme ikonu sadece sonradan eklenenlerde (index > 3)
+            const deleteIcon = i > 3 ? `<i class="fas fa-times t-delete-icon" onclick="event.stopPropagation(); deleteTesbihat(${i})"></i>` : '';
+            
+            selectorHTML += `
+                <div class="t-chip ${isActive}" onclick="selectTesbihat(${i})">
+                    ${deleteIcon}
+                    <div class="t-chip-label">${item.name}</div>
+                </div>
+            `;
+        });
+
+        // Yeni Ekle Butonu
+        selectorHTML += `
+            <div class="t-chip t-chip-add" onclick="addNewCustomTesbihat()">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>`;
+
+        c.innerHTML += selectorHTML;
+
+
+        // --- 2. TEK BÜYÜK KART ---
+        // Seçili Zikri Al
+        if(activeTesbihatIndex >= localData.tesbihat.length) activeTesbihatIndex = 0;
+        const currentZikr = localData.tesbihat[activeTesbihatIndex];
+        const p = currentZikr.target > 0 ? (currentZikr.current / currentZikr.target) * 100 : 0;
+        
+        // Zikr Kartı HTML
+        let cardHTML = `
+            <div class="zikr-card mt-2">
+                <h5>${currentZikr.name}</h5>
+                <div class="arabic-text">${currentZikr.arabic || ''}</div>
+                
+                <div class="zikr-count">${currentZikr.current}</div>
+                
+                <div class="progress mb-3 w-100" style="height: 8px;">
+                    <div class="progress-bar bg-success" style="width: ${p}%"></div>
+                </div>
+                
+                <div class="zikr-btn-group">
+                    <button class="zikr-btn z-minus" onclick="window.upTes(${activeTesbihatIndex},-1)"><i class="fas fa-minus"></i></button>
+                    <button class="zikr-btn z-plus" onclick="window.upTes(${activeTesbihatIndex},1)"><i class="fas fa-plus"></i></button>
+                    <button class="zikr-btn z-reset" onclick="window.resTes(${activeTesbihatIndex})"><i class="fas fa-undo"></i></button>
+                </div>
+                
+                <div class="tesbihat-target-box">
+                    <span class="tesbihat-target-label">HEDEF</span>
+                    <input type="number" class="tesbihat-target-input" value="${currentZikr.target}" onchange="window.setTesTarget(${activeTesbihatIndex}, this.value)">
+                </div>
+                
+                <div class="manual-zikr-container">
+                    <input type="number" id="manZ-${activeTesbihatIndex}" class="manual-zikr-input-clean" placeholder="+Adet">
+                    <button class="btn-add-clean" onclick="window.addTes(${activeTesbihatIndex})">EKLE</button>
+                </div>
+            </div>
+        `;
+
+        c.innerHTML += cardHTML;
+    }
+
+    // Yeni Zikir Seçimi
+    window.selectTesbihat = function(index) {
+        activeTesbihatIndex = index;
+        triggerHaptic();
+        renderTesbihat();
+    }
+
+    // Yeni Özel Zikir Ekleme
+    window.addNewCustomTesbihat = function() {
+        const name = prompt("Yeni zikrin adı nedir?");
+        if(name) {
+            localData.tesbihat.push({
+                name: name,
+                arabic: "", // Özel zikirlerde arapça boş olabilir veya istenirse sorulabilir
+                current: 0,
+                target: 33
+            });
+            activeTesbihatIndex = localData.tesbihat.length - 1; // Yeni ekleneni seç
+            saveToCloud();
+            renderTesbihat();
+            // Scroll en sona kaysın
+            setTimeout(() => {
+                const wrapper = document.querySelector('.tesbihat-selector-wrapper');
+                if(wrapper) wrapper.scrollLeft = wrapper.scrollWidth;
+            }, 100);
+        }
+    }
+
+    // Zikir Silme
+    window.deleteTesbihat = function(index) {
+        if(confirm(`${localData.tesbihat[index].name} silinsin mi?`)) {
+            localData.tesbihat.splice(index, 1);
+            if(activeTesbihatIndex >= localData.tesbihat.length) {
+                activeTesbihatIndex = Math.max(0, localData.tesbihat.length - 1);
+            }
+            saveToCloud();
+            renderTesbihat();
+        }
+    }
+
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     
     // ROZETLER: ESKİ EMOJİLERE DÖNÜŞ & GAYRET ATEŞ EMOJİSİ
@@ -1713,8 +1855,46 @@
     function calculateEstFinish(totalDoneInput, elapsedDaysInput) { const dailyTarget = localData.daily.target || 10; let totalDebt = 0; localData.counts.forEach(c => totalDebt += (c.target - c.done)); const elContainer = document.getElementById('prediction-container'); const elSuccess = document.getElementById('prediction-success'); if (totalDebt <= 0) { elContainer.style.display = 'none'; elSuccess.style.display = 'block'; return; } elContainer.style.display = 'block'; elSuccess.style.display = 'none'; if (dailyTarget > 0) { const daysLeft = Math.ceil(totalDebt / dailyTarget); const today = new Date(); const finishDate = new Date(); finishDate.setDate(today.getDate() + daysLeft); const options = { year: 'numeric', month: 'long', day: 'numeric' }; document.getElementById('estFinishDate').innerText = finishDate.toLocaleDateString('tr-TR', options); document.getElementById('estDaysLeft').innerText = `${daysLeft} Gün Kaldı`; } else { document.getElementById('estFinishDate').innerText = "Belirlenmedi"; document.getElementById('estDaysLeft').innerText = "-"; } const avgDaily = totalDoneInput > 0 ? (totalDoneInput / elapsedDaysInput) : 0; const elDateAvg = document.getElementById('estFinishDateAvg'); const elDaysAvg = document.getElementById('estDaysLeftAvg'); if(avgDaily > 0) { const daysLeftAvg = Math.ceil(totalDebt / avgDaily); const todayAvg = new Date(); const finishDateAvg = new Date(); finishDateAvg.setDate(todayAvg.getDate() + daysLeftAvg); elDateAvg.innerText = finishDateAvg.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }); elDaysAvg.innerText = `(${daysLeftAvg} Gün)`; } else { elDateAvg.innerText = "Veri Yok"; elDaysAvg.innerText = "Henüz kazaya başlanmadı"; } }
     function showModal(title, message, onConfirm) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalMessage').innerText = message; const btnGroup = document.getElementById('modalButtons'); btnGroup.innerHTML = ''; if (onConfirm) { btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`; document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); }; } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; } document.getElementById('customModal').style.display = 'flex'; }
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
-    window.upTes = function(i, d) { triggerHaptic(); const item = localData.tesbihat[i]; const target = item.target; if (d > 0 && item.current >= target) { showModal("Tebrikler", "Bu tesbihat için günlük hedef tamamlandı."); return; } const newVal = item.current + d; if (newVal < 0) return; item.current = newVal; saveToCloud(); renderTesbihat(); if (d > 0 && newVal === target) { jsConfetti.addConfetti(); setTimeout(() => { showModal("Hedef Tamamlandı!", "Allah kabul etsin, gönlüne şifa olsun. 🌹"); }, 800); } };
-    window.addTes = function(i) { triggerHaptic(); const valInput = document.getElementById(`manZ-${i}`); const v = parseInt(valInput.value) || 0; if(v > 0) { const item = localData.tesbihat[i]; const target = item.target; if (item.current >= target) { showModal("Tebrikler", "Zaten hedef tamamlandı."); return; } const newVal = item.current + v; item.current = newVal; saveToCloud(); renderTesbihat(); valInput.value = ""; if (newVal >= target) { jsConfetti.addConfetti(); setTimeout(() => { showModal("Hedef Tamamlandı!", "Allah kabul etsin, gönlüne şifa olsun. 🌹"); }, 800); } } };
+    
+    // Zikir Sayac Fonksiyonları (Artık activeTesbihatIndex'i kullanacak şekilde güncellendi)
+    window.upTes = function(i, d) { 
+        triggerHaptic(); 
+        // i parametresi gelse de activeTesbihatIndex kullanılabilir ancak 
+        // çoklu kart yapısından geçtiğimiz için mevcut parametreyi kullanmaya devam edebiliriz.
+        const item = localData.tesbihat[i]; 
+        const target = item.target; 
+        if (d > 0 && item.current >= target) { showModal("Tebrikler", "Bu tesbihat için günlük hedef tamamlandı."); return; } 
+        const newVal = item.current + d; 
+        if (newVal < 0) return; 
+        item.current = newVal; 
+        saveToCloud(); 
+        renderTesbihat(); 
+        if (d > 0 && newVal === target) { 
+            jsConfetti.addConfetti(); 
+            setTimeout(() => { showModal("Hedef Tamamlandı!", "Allah kabul etsin, gönlüne şifa olsun. 🌹"); }, 800); 
+        } 
+    };
+    
+    window.addTes = function(i) { 
+        triggerHaptic(); 
+        const valInput = document.getElementById(`manZ-${i}`); 
+        const v = parseInt(valInput.value) || 0; 
+        if(v > 0) { 
+            const item = localData.tesbihat[i]; 
+            const target = item.target; 
+            if (item.current >= target) { showModal("Tebrikler", "Zaten hedef tamamlandı."); return; } 
+            const newVal = item.current + v; 
+            item.current = newVal; 
+            saveToCloud(); 
+            renderTesbihat(); 
+            valInput.value = ""; 
+            if (newVal >= target) { 
+                jsConfetti.addConfetti(); 
+                setTimeout(() => { showModal("Hedef Tamamlandı!", "Allah kabul etsin, gönlüne şifa olsun. 🌹"); }, 800); 
+            } 
+        } 
+    };
+    
     window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
     window.switchChartPeriod = function(period) { currentChartPeriod = period; updatePerformanceChart(); }
