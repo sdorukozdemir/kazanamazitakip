@@ -1687,6 +1687,16 @@
         `;
 
         c.innerHTML += cardHTML;
+
+        // Otomatik yatay kaydırma (Sayfa zıplamadan)
+        setTimeout(() => {
+            const wrapper = document.querySelector('.tesbihat-selector-wrapper');
+            const activeEl = document.querySelector('.t-chip.active');
+            if(wrapper && activeEl) {
+                const center = activeEl.offsetLeft - (wrapper.offsetWidth / 2) + (activeEl.offsetWidth / 2);
+                wrapper.scrollTo({ left: center, behavior: 'smooth' });
+            }
+        }, 100);
     }
 
     // Yeni Zikir Seçimi
