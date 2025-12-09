@@ -26,12 +26,9 @@
     <style>
         /* --- TEMEL DEĞİŞKENLER --- */
         :root { 
-            --bg-color: #e3e6ec; 
-            --text-color: #212529; 
-            --card-bg: #ffffff; 
+            --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; 
             --sidebar-bg: linear-gradient(180deg, #609979 0%, #3e6b53 100%);
-            --sidebar-item-active: rgba(255, 255, 255, 0.25);
-            --sidebar-item-hover: rgba(255, 255, 255, 0.1);
+            --sidebar-item-active: rgba(255, 255, 255, 0.25); --sidebar-item-hover: rgba(255, 255, 255, 0.1);
             --input-bg: #f8f9fa; --input-text: #000000; --border-color: #ced4da; 
             --modal-bg: #ffffff; --z-btn-minus-bg: #e9ecef; --z-btn-minus-text: #495057; 
             --z-btn-reset-bg: #fff3cd; --z-btn-reset-text: #856404; 
@@ -50,21 +47,13 @@
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
             --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            --capsule-bg: #e9ecef;
-            --capsule-border: #ced4da;
-            --capsule-label: #6c757d;
-            --capsule-text: #212529;
-            --capsule-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --capsule-bg: #e9ecef; --capsule-border: #ced4da; --capsule-label: #6c757d; --capsule-text: #212529; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        /* --- GECE MODU DEĞİŞKENLERİ --- */
         body.dark-mode { 
-            --bg-color: #121212; 
-            --text-color: #e0e0e0; 
-            --card-bg: #1e1e1e; 
+            --bg-color: #121212; --text-color: #e0e0e0; --card-bg: #1e1e1e; 
             --sidebar-bg: linear-gradient(180deg, #111827 0%, #1f2937 100%);
-            --sidebar-item-active: rgba(96, 153, 121, 0.2); 
-            --sidebar-item-hover: rgba(255, 255, 255, 0.05);
+            --sidebar-item-active: rgba(96, 153, 121, 0.2); --sidebar-item-hover: rgba(255, 255, 255, 0.05);
             --input-bg: #3a3a3a; --input-text: #ffffff; --border-color: #444; 
             --modal-bg: #2d2d2d; --z-btn-minus-bg: #343a40; --z-btn-minus-text: #ced4da; 
             --z-btn-reset-bg: #3e2c00; --z-btn-reset-text: #ffc107; 
@@ -81,136 +70,40 @@
             --calc-item-bg: #262626; --calc-item-border: #333; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
-            --capsule-bg: #2c3035;
-            --capsule-border: #444444;
-            --capsule-label: #aaaaaa;
-            --capsule-text: #ffffff;
-            --capsule-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            --capsule-bg: #2c3035; --capsule-border: #444444; --capsule-label: #aaaaaa; --capsule-text: #ffffff; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
         
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            font-family: 'Poppins', sans-serif; 
-            transition: 0.3s; 
-            overflow-x: hidden; 
-            min-height: 100vh; 
-            overscroll-behavior-y: contain; 
-        }
-        
-        /* Loading Overlay */
+        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: 0.3s; overflow-x: hidden; min-height: 100vh; overscroll-behavior-y: contain; }
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #609979; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        
-        /* Layout Wrapper */
         .wrapper { display: flex; width: 100%; }
-        
-        /* --- YENİLENMİŞ SIDEBAR TASARIMI --- */
-        #sidebar { 
-            min-width: 280px; 
-            max-width: 280px; 
-            background: var(--sidebar-bg); 
-            color: #fff; 
-            height: 100vh; 
-            transition: all 0.3s ease; 
-            z-index: 2000; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            overflow-y: auto; 
-            margin-left: -280px; 
-            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-        }
-        
+        #sidebar { min-width: 280px; max-width: 280px; background: var(--sidebar-bg); color: #fff; height: 100vh; transition: all 0.3s ease; z-index: 2000; position: fixed; top: 0; left: 0; overflow-y: auto; margin-left: -280px; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
         #overlay { display: none; position: fixed; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1999; top: 0; left: 0; backdrop-filter: blur(2px); }
         #overlay.active { display: block; }
         #sidebar.active { margin-left: 0; }
-        
-        /* Sidebar Header */
-        .sidebar-header {
-            padding: 30px 20px 20px 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 15px;
-        }
-
-        /* Sidebar Menü Öğeleri */
+        .sidebar-header { padding: 30px 20px 20px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
         #sidebar ul { padding: 0 15px; }
-        #sidebar ul li { 
-            padding: 12px 20px; 
-            margin-bottom: 8px;
-            cursor: pointer; 
-            border-radius: 12px; 
-            transition: all 0.2s ease; 
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-            opacity: 0.85;
-            border: none;
-        }
-        
-        #sidebar ul li:hover { 
-            background: var(--sidebar-item-hover); 
-            transform: translateX(5px);
-            opacity: 1;
-        }
-        
-        #sidebar ul li.active { 
-            background: var(--sidebar-item-active); 
-            color: #fff; 
-            font-weight: 700; 
-            opacity: 1;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        
+        #sidebar ul li { padding: 12px 20px; margin-bottom: 8px; cursor: pointer; border-radius: 12px; transition: all 0.2s ease; display: flex; align-items: center; font-weight: 500; opacity: 0.85; border: none; }
+        #sidebar ul li:hover { background: var(--sidebar-item-hover); transform: translateX(5px); opacity: 1; }
+        #sidebar ul li.active { background: var(--sidebar-item-active); color: #fff; font-weight: 700; opacity: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         #sidebar ul li i { width: 30px; text-align: center; font-size: 1.1rem; }
-
-        @media (min-width: 769px) { 
-            #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } 
-            #sidebar.active { margin-left: -280px; } 
-            #overlay { display: none !important; } 
-            #content { width: calc(100% - 280px); margin-left: 0; } 
-        }
+        @media (min-width: 769px) { #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } #sidebar.active { margin-left: -280px; } #overlay { display: none !important; } #content { width: calc(100% - 280px); margin-left: 0; } }
         @media (max-width: 768px) { #content { width: 100%; } }
-        
         .user-info-box { margin: 10px auto; width: 100%; padding: 15px 10px; border-radius: 12px; color: var(--user-box-text); box-shadow: var(--user-box-shadow); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; transition: 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .user-info-male { background: var(--user-box-bg-male); }
         .user-info-female { background: var(--user-box-bg-female); }
-        
         #content { padding: 20px; min-height: 100vh; transition: 0.3s; width: 100%; max-width: 900px; margin: 0 auto; }
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         body.dark-mode .app-header { background: -webkit-linear-gradient(45deg, #20c997, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* --- DASHBOARD & SPLIT LAYOUT --- */
         .prayer-split-layout { display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; height: 420px; }
         .prayer-side-menu { width: 85px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; overflow-y: auto; }
-        @media (max-width: 768px) {
-            .prayer-split-layout { flex-direction: column; height: auto; }
-            .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding: 5px 15px; scrollbar-width: none; gap: 10px; } 
-            .prayer-side-menu::-webkit-scrollbar { display: none; }
-            .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; flex: 0 0 auto; }
-            .prayer-detail-card { min-height: 380px; }
-        }
-        
-        .side-menu-item { 
-            border-radius: 18px; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            cursor: pointer; 
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            opacity: 0.8; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
-            border: 1px solid rgba(0,0,0,0.05);
-            color: #333;
-        }
+        @media (max-width: 768px) { .prayer-split-layout { flex-direction: column; height: auto; } .prayer-side-menu { width: 100%; flex-direction: row; overflow-x: auto; padding: 5px 15px; scrollbar-width: none; gap: 10px; } .prayer-side-menu::-webkit-scrollbar { display: none; } .side-menu-item { min-width: 75px; padding: 10px 5px; height: 75px; flex: 0 0 auto; } .prayer-detail-card { min-height: 380px; } }
+        .side-menu-item { border-radius: 18px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0.8; box-shadow: 0 4px 10px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); color: #333; }
         .side-menu-item:hover { transform: translateY(-2px); opacity: 1; }
         .side-menu-item.active { opacity: 1; transform: scale(1.05); border: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); color: #fff !important; }
         .side-menu-item.active .side-menu-label { color: #fff !important; opacity: 1; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
@@ -218,42 +111,21 @@
         .side-menu-icon { font-size: 1.5rem; margin-bottom: 4px; transition: 0.3s; }
         .side-menu-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; transition: 0.3s; }
         .flip-icon { transform: scaleX(-1); display: inline-block; }
-
-        /* YAN MENÜ RENKLERİ (LIGHT MODE) */
-        .theme-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: #006064; }
-        .theme-sabah.active { background: linear-gradient(135deg, #00acc1 0%, #00838f 100%); }
-        .theme-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); color: #f57f17; }
-        .theme-ogle.active { background: linear-gradient(135deg, #fdd835 0%, #fbc02d 100%); }
-        .theme-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; }
-        .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); }
-        .theme-aksam { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); color: #1a237e; }
-        .theme-aksam.active { background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); }
-        .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
-        .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
-
-        /* YAN MENÜ (DARK MODE) */
+        .theme-sabah { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); color: #006064; } .theme-sabah.active { background: linear-gradient(135deg, #00acc1 0%, #00838f 100%); }
+        .theme-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); color: #f57f17; } .theme-ogle.active { background: linear-gradient(135deg, #fdd835 0%, #fbc02d 100%); }
+        .theme-ikindi { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; } .theme-ikindi.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); }
+        .theme-aksam { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); color: #1a237e; } .theme-aksam.active { background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%); }
+        .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; } .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
         body.dark-mode .side-menu-item { background: #2c3035; color: #90a4ae; border: 1px solid #444; }
         body.dark-mode .theme-sabah.active { background: linear-gradient(135deg, #0277bd 0%, #01579b 100%); color: #e1f5fe; }
         body.dark-mode .theme-ogle.active { background: linear-gradient(135deg, #ff8f00 0%, #e65100 100%); color: #fffde7; }
         body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); color: #fbe9e7; }
         body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); color: #e8eaf6; }
         body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); color: #eceff1; }
-
-        /* --- BÜYÜK DETAY KARTLARI --- */
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
-        .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } 
-        .bg-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%); } 
-        .bg-ikindi { background: linear-gradient(135deg, #ffccbc 0%, #ff8a65 100%); } 
-        .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
-        .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
-        
-        /* ORUÇ RENKLERİ (YENİ) */
-        .bg-oruc-kaza { background: linear-gradient(135deg, #d35400 0%, #e67e22 100%); color: white; }
-        .bg-oruc-nafile { background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); color: white; }
-        
-        .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; }
-        .border-white-10 { border-color: rgba(255,255,255,0.2) !important; }
-
+        .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } .bg-ogle { background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%); } .bg-ikindi { background: linear-gradient(135deg, #ffccbc 0%, #ff8a65 100%); } .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
+        .bg-oruc-kaza { background: linear-gradient(135deg, #d35400 0%, #e67e22 100%); color: white; } .bg-oruc-nafile { background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); color: white; }
+        .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; } .border-white-10 { border-color: rgba(255,255,255,0.2) !important; }
         body.dark-mode .bg-sabah { background: linear-gradient(120deg, #01579b 0%, #0288d1 40%, #29b6f6 50%, #0288d1 60%, #01579b 100%); }
         body.dark-mode .bg-ogle { background: linear-gradient(120deg, #e65100 0%, #f57c00 40%, #ffb74d 50%, #f57c00 60%, #e65100 100%); }
         body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
@@ -261,7 +133,6 @@
         body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
         body.dark-mode .bg-oruc-kaza { background: linear-gradient(135deg, #a04000 0%, #d35400 100%); }
         body.dark-mode .bg-oruc-nafile { background: linear-gradient(135deg, #0e6655 0%, #117864 100%); }
-
         .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
         body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); }
         .pd-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
@@ -282,8 +153,6 @@
         .pd-btn:active { transform: scale(0.9); }
         .pd-btn-plus { background: #609979; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); }
         .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
-
-        /* ACCORDION STATS */
         .stat-accordion-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 12px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
         .stat-accordion-header { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: var(--card-bg); user-select: none; }
         .stat-accordion-header:hover { background: rgba(0,0,0,0.02); }
@@ -300,13 +169,9 @@
         .stat-detail-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.6; display: block; margin-bottom: 3px; }
         .stat-detail-value { font-size: 1.1rem; font-weight: 800; }
         .text-done { color: #609979; } .text-rem { color: #dc3545; }
-        
         .summary-bar { background: var(--sidebar-bg); color: white; border-radius: 16px; padding: 15px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .summary-item { text-align: center; }
-        .summary-val { font-size: 1.2rem; font-weight: 800; line-height: 1; }
-        .summary-lbl { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
-
-        .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .summary-item { text-align: center; } .summary-val { font-size: 1.2rem; font-weight: 800; line-height: 1; } .summary-lbl { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
+        .login-card, .goal-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
@@ -314,205 +179,6 @@
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
         
-        .calculator-card { padding: 20px; }
-        .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
-        .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        .calc-item { flex: 1; min-width: 150px; text-align: center; }
-        .calc-label-small { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-color); opacity: 0.7; margin-bottom: 5px; display: block; }
-        .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
-        .date-input::placeholder { color: var(--placeholder-color); opacity: 1; }
-        .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; border-radius: 8px; }
-        .calc-group-box { background: var(--calc-item-bg); border: 1px solid var(--calc-item-border); border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
-        .settings-card { padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
-        .settings-card:hover { transform: translateY(-3px); }
-        .settings-icon { font-size: 2rem; margin-bottom: 10px; color: #609979; }
-        .settings-title { font-weight: 600; margin-bottom: 5px; }
-        .settings-desc { font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; }
-        .settings-gender-male { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #90caf9; color: #0d47a1; }
-        .settings-gender-female { background: linear-gradient(135deg, #fce4ec, #f8bbd0); border: 1px solid #f48fb1; color: #880e4f; }
-        body.dark-mode .settings-gender-male { background: linear-gradient(135deg, #0d2b4a, #1a3e66); border-color: #1a3e66; color: #bbdefb; }
-        body.dark-mode .settings-gender-female { background: linear-gradient(135deg, #4a1b2d, #661a36); border-color: #661a36; color: #f8bbd0; }
-        .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
-        .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
-        .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
-        .scrolling-wrapper::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 10px; }
-        .stat-card-scroll { display: inline-block; width: 160px; margin-right: 15px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; text-align: center; white-space: normal; vertical-align: top; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #609979; }
-        .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; }
-        #statAverage { color: var(--stat-avg-color) !important; }
-        .analysis-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-        .analysis-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-        .analysis-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .analysis-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; }
-        .icon-good { background: #d1e7dd; color: #0f5132; }
-        .icon-bad { background: #f8d7da; color: #842029; }
-        /* Yeni İkon Renkleri */
-        .icon-blue { background: #cce5ff; color: #004085; }
-        .icon-orange { background: #fff3cd; color: #856404; }
-        .icon-purple { background: #e0cffc; color: #5a189a; }
-        
-        .analysis-text { flex: 1; }
-        .analysis-title { font-size: 0.85rem; font-weight: bold; opacity: 0.7; display: block; }
-        .analysis-value { font-size: 1.1rem; font-weight: bold; }
-        .prediction-card { padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: center; }
-        .prediction-icon { font-size: 2.5rem; color: #609979; margin-bottom: 10px; }
-        .prediction-date { font-size: 1.5rem; font-weight: bold; color: #609979; margin: 5px 0; }
-        .prediction-days { font-size: 0.9rem; color: #6c757d; font-weight: 600; }
-        .prediction-sub-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; display: block; margin-top: 5px; }
-        .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
-        .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
-        
-        /* Metallic Cards */
-        .metallic-card { border: none; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); background: linear-gradient(145deg, #dce1e6 0%, #ffffff 50%, #dce1e6 100%); padding: 0; overflow: hidden; color: #333; transition: all 0.2s ease; position: relative; }
-        .metallic-card.up { border-left: 5px solid #609979; }
-        .metallic-card.down { border-left: 5px solid #dc3545; }
-        .card-summary { padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; min-height: 50px; }
-        .summary-prayer { font-weight: 800; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.5px; }
-        .summary-right-group { display: flex; align-items: center; gap: 12px; }
-        .change-badge { font-size: 0.85rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; min-width: 35px; text-align: center; }
-        .metallic-card.up .change-badge { color: #609979; background: rgba(96, 153, 121, 0.1); }
-        .metallic-card.down .change-badge { color: #dc3545; background: rgba(220, 53, 69, 0.1); }
-        .toggle-icon { transition: transform 0.3s ease; opacity: 0.6; font-size: 0.9rem; }
-        .metallic-card.open .toggle-icon { transform: rotate(180deg); }
-        .card-detail { display: none; padding: 10px 15px; background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); font-size: 0.85rem; text-align: center; animation: slideDown 0.2s ease-out; }
-        .detail-values { font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; display: flex; justify-content: center; align-items: center; gap: 15px; }
-        .metallic-card.up .detail-values { color: #609979; } .metallic-card.down .detail-values { color: #dc3545; }
-        .detail-full-date { font-size: 0.8rem; opacity: 0.6; font-weight: 600; }
-        body.dark-mode .metallic-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.4); color: #e0e0e0; }
-        body.dark-mode .card-detail { background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); }
-        body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; }
-        body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
-
-        input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
-        body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
-        
-        .date-filter-capsule {
-            background-color: var(--capsule-bg);
-            border: 1px solid var(--capsule-border);
-            border-radius: 12px;
-            padding: 5px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: fit-content;
-            margin: 0 auto 15px auto;
-            position: relative;
-            min-width: 150px;
-            box-shadow: var(--capsule-shadow);
-            transition: all 0.3s ease;
-        }
-        .capsule-label {
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--capsule-label);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
-        }
-        .capsule-input {
-            background: transparent;
-            border: none;
-            color: var(--capsule-text);
-            font-size: 1rem;
-            height: 30px;
-            font-weight: 600;
-            text-align: center;
-            width: 100%;
-            outline: none;
-            font-family: inherit;
-        }
-        .capsule-input::-webkit-calendar-picker-indicator {
-            opacity: 0.3;
-        }
-        body.dark-mode .capsule-input::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-            opacity: 0.6;
-        }
-        
-        .capsule-reset {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #dc3545;
-            cursor: pointer;
-            font-size: 1rem;
-            display: none;
-        }
-
-        /* --- YENİ HISTORY FİLTRELEME BUTONLARI --- */
-        .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
-        .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; }
-        .h-sub-tabs { display: none; gap: 8px; justify-content: center; width: 100%; animation: fadeIn 0.3s ease; flex-wrap: wrap; }
-        .h-sub-tabs.active { display: flex; }
-        
-        .h-tab-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-color); transition: 0.2s; cursor: pointer; }
-        .h-tab-btn:hover { background: var(--input-bg); }
-        .h-tab-btn.active { background: #609979; color: white; border-color: #609979; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
-        
-        .h-sub-btn { background: var(--input-bg); border: 1px solid var(--border-color); padding: 4px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: 600; color: var(--text-color); transition: 0.2s; cursor: pointer; opacity: 0.8; }
-        .h-sub-btn.active { background: #fd7e14; color: white; border-color: #fd7e14; opacity: 1; box-shadow: 0 3px 8px rgba(253, 126, 20, 0.3); }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
-        .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .badge-item.unlocked { border: 2px solid #20c997; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); box-shadow: 0 8px 20px rgba(32, 201, 151, 0.25); transform: scale(1.05); color: #004d40; }
-        body.dark-mode .badge-item.unlocked { background: linear-gradient(135deg, #004d40 0%, #00695c 100%); border-color: #4db6ac; color: #e0f2f1; box-shadow: 0 8px 20px rgba(77, 182, 172, 0.2); }
-        .badge-item.locked { filter: grayscale(100%); opacity: 0.6; background: var(--input-bg); }
-        .badge-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .badge-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1rem; color: #00695c; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .badge-item.unlocked .badge-title { color: #004d40; text-shadow: 0 1px 1px rgba(255,255,255,0.4); }
-        body.dark-mode .badge-item.unlocked .badge-title { color: #b2dfdb; text-shadow: none; }
-        .badge-desc { font-size: 0.65rem; color: var(--text-color); opacity: 0.8; font-family: 'Poppins', sans-serif; font-weight: 600; }
-        body.dark-mode .badge-item.unlocked .badge-desc { color: #80cbc4; opacity: 0.9; }
-
-        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
-        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
-        .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
-        .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
-        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        #gender-selection-modal { display: none; z-index: 2005; }
-        .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
-        .gender-option:hover { border-color: #609979; }
-        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
-        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
-        .menstrual-toggle-container { margin-bottom: 15px; padding: 15px 20px; background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); border-radius: 50px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15); }
-        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
-        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
-        .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
-        .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
-        .fade-box { background: var(--fade-box-bg); border: 1px solid var(--fade-box-border); border-radius: 12px; padding: 8px 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); box-shadow: var(--fade-box-shadow); height: 100%; min-height: 70px; }
-        .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; }
-        .fade-box label { margin-bottom: 2px; opacity: 0.7; }
-        .custom-alert-box { background: var(--card-bg); border-left: 5px solid #17a2b8; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 20px; font-size: 0.9rem; }
-        .custom-alert-box strong { color: #17a2b8; }
-        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; }
-        .custom-alert-tip strong { color: #856404; }
-        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
-        body.dark-mode .custom-alert-tip strong { color: #ffc107; }
-        .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
-        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
-        .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
-        .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
-        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
-        @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
-        .toast-success { border-color: #609979; } .toast-success i { color: #609979; font-size: 1.2rem; }
-        .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
-        .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
-        
-        @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
-        @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
-
         /* ------------------------------------------- */
         /* --- YENİ TESBİHAT CSS BAŞLANGIÇ --- */
         /* ------------------------------------------- */
@@ -618,17 +284,91 @@
         body.dark-mode .z-minus { background-color: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.1); }
         body.dark-mode .z-reset { color: #ffc107; background-color: rgba(255, 193, 7, 0.1); }
 
-        /* Alt Kutular (Hedef ve Ekle) */
+        /* Alt Kutular (Hedef ve Ekle) - GENİŞLETİLDİ (100px) */
         .z-bottom-row { display: flex; gap: 15px; justify-content: center; width: 100%; max-width: 400px; flex-wrap: wrap; }
         .z-target-box { flex: 1; min-width: 140px; background: rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); color: inherit; }
         .z-target-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; margin-bottom: 2px; }
-        .z-target-input { background: transparent; border: none; color: inherit; font-weight: 800; width: 80px; text-align: center; font-size: 1.5rem; outline: none; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 2px; }
+        /* INPUT GENİŞLİĞİ BURADA AYARLANDI (100px) */
+        .z-target-input { background: transparent; border: none; color: inherit; font-weight: 800; width: 100px; text-align: center; font-size: 1.5rem; outline: none; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 2px; }
         .z-add-btn-small { background: rgba(255,255,255,0.3); border: none; color: inherit; padding: 5px 12px; border-radius: 10px; font-weight: bold; font-size: 0.8rem; margin-top: 5px; cursor: pointer; }
         .z-add-btn-small:active { transform: scale(0.95); background: rgba(255,255,255,0.5); }
 
         /* ------------------------------------------- */
         /* --- YENİ TESBİHAT CSS BİTİŞ --- */
         /* ------------------------------------------- */
+
+        /* Diğer Orijinal CSS'ler (Devam) */
+        input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
+        body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
+        .date-filter-capsule { background-color: var(--capsule-bg); border: 1px solid var(--capsule-border); border-radius: 12px; padding: 5px 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: fit-content; margin: 0 auto 15px auto; position: relative; min-width: 150px; box-shadow: var(--capsule-shadow); transition: all 0.3s ease; }
+        .capsule-label { font-size: 0.65rem; font-weight: 800; color: var(--capsule-label); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .capsule-input { background: transparent; border: none; color: var(--capsule-text); font-size: 1rem; height: 30px; font-weight: 600; text-align: center; width: 100%; outline: none; font-family: inherit; }
+        .capsule-input::-webkit-calendar-picker-indicator { opacity: 0.3; }
+        body.dark-mode .capsule-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; }
+        .capsule-reset { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #dc3545; cursor: pointer; font-size: 1rem; display: none; }
+        .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
+        .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; }
+        .h-sub-tabs { display: none; gap: 8px; justify-content: center; width: 100%; animation: fadeIn 0.3s ease; flex-wrap: wrap; }
+        .h-sub-tabs.active { display: flex; }
+        .h-tab-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-color); transition: 0.2s; cursor: pointer; }
+        .h-tab-btn:hover { background: var(--input-bg); }
+        .h-tab-btn.active { background: #609979; color: white; border-color: #609979; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
+        .h-sub-btn { background: var(--input-bg); border: 1px solid var(--border-color); padding: 4px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: 600; color: var(--text-color); transition: 0.2s; cursor: pointer; opacity: 0.8; }
+        .h-sub-btn.active { background: #fd7e14; color: white; border-color: #fd7e14; opacity: 1; box-shadow: 0 3px 8px rgba(253, 126, 20, 0.3); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
+        .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .badge-item.unlocked { border: 2px solid #20c997; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); box-shadow: 0 8px 20px rgba(32, 201, 151, 0.25); transform: scale(1.05); color: #004d40; }
+        body.dark-mode .badge-item.unlocked { background: linear-gradient(135deg, #004d40 0%, #00695c 100%); border-color: #4db6ac; color: #e0f2f1; box-shadow: 0 8px 20px rgba(77, 182, 172, 0.2); }
+        .badge-item.locked { filter: grayscale(100%); opacity: 0.6; background: var(--input-bg); }
+        .badge-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .badge-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1rem; color: #00695c; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .badge-item.unlocked .badge-title { color: #004d40; text-shadow: 0 1px 1px rgba(255,255,255,0.4); }
+        body.dark-mode .badge-item.unlocked .badge-title { color: #b2dfdb; text-shadow: none; }
+        .badge-desc { font-size: 0.65rem; color: var(--text-color); opacity: 0.8; font-family: 'Poppins', sans-serif; font-weight: 600; }
+        body.dark-mode .badge-item.unlocked .badge-desc { color: #80cbc4; opacity: 0.9; }
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
+        .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
+        .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
+        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        #gender-selection-modal { display: none; z-index: 2005; }
+        .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
+        .gender-option:hover { border-color: #609979; }
+        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
+        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
+        .menstrual-toggle-container { margin-bottom: 15px; padding: 15px 20px; background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); border-radius: 50px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15); }
+        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
+        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
+        .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
+        .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
+        .fade-box { background: var(--fade-box-bg); border: 1px solid var(--fade-box-border); border-radius: 12px; padding: 8px 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); box-shadow: var(--fade-box-shadow); height: 100%; min-height: 70px; }
+        .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; }
+        .fade-box label { margin-bottom: 2px; opacity: 0.7; }
+        .custom-alert-box { background: var(--card-bg); border-left: 5px solid #17a2b8; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 20px; font-size: 0.9rem; }
+        .custom-alert-box strong { color: #17a2b8; }
+        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; }
+        .custom-alert-tip strong { color: #856404; }
+        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
+        body.dark-mode .custom-alert-tip strong { color: #ffc107; }
+        .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
+        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
+        .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
+        .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
+        @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
+        .toast-success { border-color: #609979; } .toast-success i { color: #609979; font-size: 1.2rem; }
+        .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
+        .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
+        @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
+        @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
     </style>
 </head>
 <body>
@@ -702,6 +442,7 @@
     </nav>
 
     <div id="content">
+        <!-- Dashboard Section -->
         <div id="section-dashboard" style="display: block;">
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                 <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
@@ -729,6 +470,10 @@
                         <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
                     </div>
                 </div>
+            </div>
+            <div class="row g-3 mb-4 justify-content-center">
+                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy"></div></div>
+                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
             
             <div id="prayerSplitContainer" class="prayer-split-layout">
@@ -764,6 +509,7 @@
                 <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
             </div>
             <div id="stats-view-analysis">
+                <!-- ... (İstatistik Analiz Kodları - Değişmedi) ... -->
                 <div class="scrolling-wrapper mb-4">
                     <div class="stat-card-scroll"><div class="stat-number text-primary" id="statToday">0</div><div class="stat-label">Bugün</div></div>
                     <div class="stat-card-scroll"><div class="stat-number text-success" id="statWeekly">0</div><div class="stat-label">Bu Hafta</div></div>
@@ -773,95 +519,36 @@
                     <div class="stat-card-scroll"><div class="stat-number text-secondary" id="statYearly">0</div><div class="stat-label">Son 1 Yıl</div></div>
                      <div class="stat-card-scroll"><div class="stat-number" id="statAverage">0</div><div class="stat-label">Günlük Ort.</div></div>
                 </div>
-
                 <div class="analysis-box mb-4">
                     <div class="analysis-row"><div class="analysis-icon icon-good"><i class="fas fa-check"></i></div><div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div></div>
                     <div class="analysis-row"><div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div><div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div></div>
                 </div>
-
-                <!-- YENİ EKLENEN KARTLAR -->
                 <div class="analysis-box mb-4">
-                    <div class="analysis-row">
-                        <div class="analysis-icon icon-blue"><i class="fas fa-calendar-week"></i></div>
-                        <div class="analysis-text">
-                            <span class="analysis-title">En Verimli Hafta</span>
-                            <span class="analysis-value" id="bestWeekVal">Hesaplanıyor...</span>
-                        </div>
-                    </div>
-                    <div class="analysis-row">
-                        <div class="analysis-icon icon-orange"><i class="fas fa-calendar-alt"></i></div>
-                        <div class="analysis-text">
-                            <span class="analysis-title">En Verimli Ay</span>
-                            <span class="analysis-value" id="bestMonthVal">Hesaplanıyor...</span>
-                        </div>
-                    </div>
-                     <div class="analysis-row">
-                        <div class="analysis-icon icon-purple"><i class="fas fa-fire-alt"></i></div>
-                        <div class="analysis-text">
-                            <span class="analysis-title">En Güçlü Zincir</span>
-                            <span class="analysis-value" id="longestStreakVal">Hesaplanıyor...</span>
-                        </div>
-                    </div>
+                    <div class="analysis-row"><div class="analysis-icon icon-blue"><i class="fas fa-calendar-week"></i></div><div class="analysis-text"><span class="analysis-title">En Verimli Hafta</span><span class="analysis-value" id="bestWeekVal">Hesaplanıyor...</span></div></div>
+                    <div class="analysis-row"><div class="analysis-icon icon-orange"><i class="fas fa-calendar-alt"></i></div><div class="analysis-text"><span class="analysis-title">En Verimli Ay</span><span class="analysis-value" id="bestMonthVal">Hesaplanıyor...</span></div></div>
+                     <div class="analysis-row"><div class="analysis-icon icon-purple"><i class="fas fa-fire-alt"></i></div><div class="analysis-text"><span class="analysis-title">En Güçlü Zincir</span><span class="analysis-value" id="longestStreakVal">Hesaplanıyor...</span></div></div>
                 </div>
-
-                <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
-                <div id="prayer-analysis-grid" class="mb-4">
-                    <!-- Javascript ile doldurulacak -->
-                </div>
-
+                <div id="prayer-analysis-grid" class="mb-4"></div>
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Performans Analizi</h5><div class="d-flex justify-content-center mb-2"><div class="btn-group btn-group-sm" role="group"><input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')"><label class="btn btn-outline-success" for="btnradio1">Haftalık</label><input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')"><label class="btn btn-outline-success" for="btnradio2">Aylık</label></div></div><canvas id="lineChart" style="max-height: 250px;"></canvas></div></div>
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
             </div>
-            
             <div id="stats-view-history" style="display: none;">
+                <!-- ... (İstatistik Geçmiş Kodları - Değişmedi) ... -->
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
-                
-                <!-- YENİ HISTORY FİLTRELEME BUTONLARI -->
                 <div class="history-filter-tabs">
-                    <div class="h-main-tabs">
-                        <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
-                        <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
-                        <button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button>
-                    </div>
-                    
-                    <!-- Namaz Alt Sekmeler -->
-                    <div id="namazSubTabs" class="h-sub-tabs">
-                        <button class="h-sub-btn" onclick="setNamazSubCategory('Sabah', this)">Sabah</button>
-                        <button class="h-sub-btn" onclick="setNamazSubCategory('Öğle', this)">Öğle</button>
-                        <button class="h-sub-btn" onclick="setNamazSubCategory('İkindi', this)">İkindi</button>
-                        <button class="h-sub-btn" onclick="setNamazSubCategory('Akşam', this)">Akşam</button>
-                        <button class="h-sub-btn" onclick="setNamazSubCategory('Yatsı', this)">Yatsı</button>
-                        <button class="h-sub-btn active" onclick="setNamazSubCategory('all', this)">Tümü</button>
-                    </div>
-
-                    <!-- Oruç Alt Sekmeler -->
-                    <div id="fastingSubTabs" class="h-sub-tabs">
-                        <button class="h-sub-btn active" onclick="setFastingSubCategory('all', this)">Tümü</button>
-                        <button class="h-sub-btn" onclick="setFastingSubCategory('kaza', this)">Kaza</button>
-                        <button class="h-sub-btn" onclick="setFastingSubCategory('nafile', this)">Nafile</button>
-                    </div>
+                    <div class="h-main-tabs"><button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button><button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button><button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button></div>
+                    <div id="namazSubTabs" class="h-sub-tabs"><button class="h-sub-btn" onclick="setNamazSubCategory('Sabah', this)">Sabah</button><button class="h-sub-btn" onclick="setNamazSubCategory('Öğle', this)">Öğle</button><button class="h-sub-btn" onclick="setNamazSubCategory('İkindi', this)">İkindi</button><button class="h-sub-btn" onclick="setNamazSubCategory('Akşam', this)">Akşam</button><button class="h-sub-btn" onclick="setNamazSubCategory('Yatsı', this)">Yatsı</button><button class="h-sub-btn active" onclick="setNamazSubCategory('all', this)">Tümü</button></div>
+                    <div id="fastingSubTabs" class="h-sub-tabs"><button class="h-sub-btn active" onclick="setFastingSubCategory('all', this)">Tümü</button><button class="h-sub-btn" onclick="setFastingSubCategory('kaza', this)">Kaza</button><button class="h-sub-btn" onclick="setFastingSubCategory('nafile', this)">Nafile</button></div>
                 </div>
-
-                <!-- TARİH FİLTRESİ KAPSÜLÜ -->
-                <div class="date-filter-capsule">
-                    <span class="capsule-label">İŞLEM TARİHİ</span>
-                    <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
-                           ontouchstart="(this.type='date');"
-                           onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
-                           onblur="if(!this.value) this.type='text'"
-                           onchange="filterHistoryByDate()">
-                    <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
-                </div>
-
-                <!-- Tablo yerine ACCORDION listesi -->
+                <div class="date-filter-capsule"><span class="capsule-label">İŞLEM TARİHİ</span><input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date');" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="if(!this.value) this.type='text'" onchange="filterHistoryByDate()"><i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i></div>
                 <div id="historyListContainer" class="px-2"></div>
             </div>
         </div>
 
-        <!-- YENİLENEN TESBİHAT KISMI BAŞLANGIÇ -->
+        <!-- TESBİHAT SECTION (YENİLENDİ) -->
         <div id="section-tesbihat" style="display: none;">
             <h3 class="app-header">Tesbihat ve Zikir</h3>
             <div class="tesbihat-view-container">
@@ -1023,28 +710,11 @@
         <div id="section-settings" style="display: none;">
             <h3 class="app-header">Yedekleme ve Ayarlar</h3>
             <div class="row justify-content-center g-4">
-                <div class="col-12">
-                     <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
-                         <div class="d-flex align-items-center"><i class="fas fa-venus-mars fs-2 me-3" style="opacity: 0.8;"></i><div><div class="settings-title mb-0">Cinsiyet Ayarı</div><div class="settings-desc mb-0" id="currentGenderDisplay">Seçilmedi</div></div></div>
-                         <button class="btn btn-light btn-sm fw-bold shadow-sm" onclick="openGenderModal(true)">Değiştir</button>
-                     </div>
-                </div>
+                <div class="col-12"><div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between"><div class="d-flex align-items-center"><i class="fas fa-venus-mars fs-2 me-3" style="opacity: 0.8;"></i><div><div class="settings-title mb-0">Cinsiyet Ayarı</div><div class="settings-desc mb-0" id="currentGenderDisplay">Seçilmedi</div></div></div><button class="btn btn-light btn-sm fw-bold shadow-sm" onclick="openGenderModal(true)">Değiştir</button></div></div>
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-download settings-icon"></i><div class="settings-title">Yedek Al</div><div class="settings-desc">Verileri indir.</div><button class="btn btn-success w-100" onclick="downloadBackupJSON()"><i class="fas fa-file-export me-2"></i> Yedek İndir (.json)</button></div></div>
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-upload settings-icon text-primary"></i><div class="settings-title">Yedekten Dön</div><div class="settings-desc">Yedek dosyasını yükle.</div><button class="btn btn-primary w-100" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i> Yedek Yükle</button><input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupJSON(this)"></div></div>
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-file-csv settings-icon text-warning"></i><div class="settings-title">Excel Raporu</div><div class="settings-desc">Excel (.csv) formatında indir.</div><button class="btn btn-warning w-100 text-white" onclick="downloadDataAsCSV()"><i class="fas fa-table me-2"></i> Rapor İndir (.csv)</button></div></div>
-                
-                <!-- PWA YÜKLEME KARTI -->
-                <div id="installAppContainer" class="col-md-6 col-lg-4" style="display: none;">
-                    <div class="settings-card text-center h-100" style="border: 2px solid #609979; background: linear-gradient(135deg, rgba(96, 153, 121, 0.1), rgba(255, 255, 255, 0.5));">
-                        <i class="fas fa-mobile-alt settings-icon text-success"></i>
-                        <div class="settings-title">Uygulamayı İndir</div>
-                        <div class="settings-desc">İnternetsiz erişim için yükle.</div>
-                        <button class="btn btn-success w-100 fw-bold shadow-sm" onclick="installPWA()">
-                            <i class="fas fa-download me-2"></i> Ana Ekrana Ekle
-                        </button>
-                    </div>
-                </div>
-
+                <div id="installAppContainer" class="col-md-6 col-lg-4" style="display: none;"><div class="settings-card text-center h-100" style="border: 2px solid #609979; background: linear-gradient(135deg, rgba(96, 153, 121, 0.1), rgba(255, 255, 255, 0.5));"><i class="fas fa-mobile-alt settings-icon text-success"></i><div class="settings-title">Uygulamayı İndir</div><div class="settings-desc">İnternetsiz erişim için yükle.</div><button class="btn btn-success w-100 fw-bold shadow-sm" onclick="installPWA()"><i class="fas fa-download me-2"></i> Ana Ekrana Ekle</button></div></div>
                 <div class="col-12"><div class="settings-card text-center border-danger"><i class="fas fa-exclamation-triangle settings-icon text-danger"></i><div class="settings-title text-danger">Verileri Sıfırla</div><div class="settings-desc">Her şeyi siler.</div><button class="btn btn-danger py-2 px-5" onclick="confirmResetData()"><i class="fas fa-trash-alt me-2"></i> Her Şeyi Sil ve Sıfırla</button></div></div>
             </div>
         </div>
@@ -1068,7 +738,7 @@
     let currentHistoryCategory = 'all'; 
     let currentFastingSubCat = 'all'; 
     let currentNamazSubCat = 'all'; 
-    let activeTesbihatIndex = 0; // Tesbihat aktif seçim
+    let activeTesbihatIndex = 0;
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
@@ -1122,7 +792,7 @@
         return `${d}.${m}.${y}`;
     }
 
-    // Default Veri Yapısı (Tesbihat'a themeIndex eklendi)
+    // Default Veri Yapısı
     const defaultData = {
         startDate: new Date().toISOString().split('T')[0],
         gender: null, 
@@ -1237,7 +907,6 @@
             localData.tesbihat.forEach(t => {
                 if(t.name === "Sübhanallah") t.name = "Subhanallah";
                 if(t.name === "Elhamdülillah") t.name = "Elhamdulillah";
-                // Eski verilerde theme yoksa varsayılan 0
                 if(t.themeIndex === undefined) t.themeIndex = 0;
             });
         }
@@ -1333,7 +1002,7 @@
         try { 
             if(id === 'dashboard') renderApp(); 
             if(id === 'stats') renderStats(); 
-            if(id === 'tesbihat') renderTesbihatList(); // BURASI DEĞİŞTİ
+            if(id === 'tesbihat') renderTesbihatList();
             if(id === 'calculator') renderCalculatorRows(); 
             if(id === 'fasting') renderFasting(); 
         } catch(e) { console.log("Render error:", e); }
@@ -1342,9 +1011,36 @@
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
 
-    // --- ORİJİNAL RENDER FONKSİYONLARI (KORUNUYOR) ---
+    // --- RENDER APP (DÜZELTİLMİŞ) ---
     function renderApp() {
         if(!localData.counts) return;
+
+        // 1. Önce ÖZET hesaplamalarını yapalım ki DOM hatalarından etkilenmesin
+        let tt = 0, td = 0; 
+        if (localData.counts) {
+            localData.counts.forEach(c => { 
+                tt += (parseInt(c.target) || 0); 
+                td += (parseInt(c.done) || 0); 
+            });
+        }
+        
+        const days = getElapsedDays(); 
+        const elElapsed = document.getElementById('elapsedDays');
+        if(elElapsed) elElapsed.value = days; 
+        
+        const elSumTarget = document.getElementById('sumTarget');
+        const elSumDone = document.getElementById('sumDone');
+        const elSumRemaining = document.getElementById('sumRemaining');
+
+        if(elSumTarget) elSumTarget.innerText = tt;
+        if(elSumDone) elSumDone.innerText = td;
+        if(elSumRemaining) elSumRemaining.innerText = tt - td;
+
+        // Rozet ve Tahminleri de güvenli şekilde çağır
+        try { renderBadges(td); } catch(e) {}
+        try { calculateEstFinish(td, days); } catch(e) {}
+
+        // 2. Günlük ve Haftalık İlerlemeler
         const todayISO = getIsoDate(new Date());
         const todayTotal = localData.daily.counts.reduce((a, b) => a + b, 0);
         if (localData.logs[todayISO] !== todayTotal) {
@@ -1354,7 +1050,9 @@
         recalculateStreak();
         
         const dateInput = document.getElementById('startDate');
-        if(dateInput.type !== 'date') { dateInput.value = formatDateTR(localData.startDate); } else { dateInput.value = localData.startDate; }
+        if(dateInput) {
+            if(dateInput.type !== 'date') { dateInput.value = formatDateTR(localData.startDate); } else { dateInput.value = localData.startDate; }
+        }
         
         const isPaused = localData.gender === 'female' && localData.isMenstrualState;
         const pausedBadge = document.getElementById('pausedBadge');
@@ -1362,7 +1060,9 @@
         const weeklyCard = document.getElementById('weeklyCard');
         const splitContainer = document.getElementById('prayerSplitContainer');
 
-        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); splitContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); splitContainer.classList.remove('paused-mode-overlay'); }
+        if(pausedBadge) {
+             if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); splitContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); splitContainer.classList.remove('paused-mode-overlay'); }
+        }
 
         document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
@@ -1380,7 +1080,7 @@
         const wCard = document.getElementById('weeklyCard'); const wMsg = document.getElementById('weeklySuccessMessage');
         if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
 
-        
+        // 3. Split Container (Görsel Kartlar)
         if(document.getElementById('prayerDetailCard')) {
             updateCardUI(activeRowIndex);
         } else {
@@ -1435,23 +1135,20 @@
             </div>`;
             
             splitContainer.innerHTML = menuHTML + cardHTML;
-            document.getElementById('pdInputTarget').onchange = (e) => window.upT(activeRowIndex, e.target.value);
-            document.getElementById('pdInputDone').onchange = (e) => window.upD(activeRowIndex, e.target.value);
-            document.getElementById('btnMinus').onclick = () => window.chC(activeRowIndex, -1);
-            document.getElementById('btnPlus').onclick = () => window.chC(activeRowIndex, 1);
+            
+            // Event listenerları güvenli ekle
+            const inpT = document.getElementById('pdInputTarget');
+            const inpD = document.getElementById('pdInputDone');
+            const bM = document.getElementById('btnMinus');
+            const bP = document.getElementById('btnPlus');
+
+            if(inpT) inpT.onchange = (e) => window.upT(activeRowIndex, e.target.value);
+            if(inpD) inpD.onchange = (e) => window.upD(activeRowIndex, e.target.value);
+            if(bM) bM.onclick = () => window.chC(activeRowIndex, -1);
+            if(bP) bP.onclick = () => window.chC(activeRowIndex, 1);
+            
             updateCardUI(activeRowIndex);
         }
-        
-        let tt=0, td=0; 
-        localData.counts.forEach(c => { tt += parseInt(c.target); td += parseInt(c.done); });
-        const days = getElapsedDays(); 
-        document.getElementById('elapsedDays').value = days; 
-        
-        document.getElementById('sumTarget').innerText = tt;
-        document.getElementById('sumDone').innerText = td;
-        document.getElementById('sumRemaining').innerText = tt - td;
-
-        renderBadges(td); calculateEstFinish(td, days); 
     }
     
     function updateCardUI(index) {
@@ -1829,6 +1526,7 @@
     
     function renderBadges(total) { 
         const c = document.getElementById('badgeContainer'); 
+        if(!c) return;
         c.innerHTML = ""; 
         let next=false; 
         BADGES.forEach(b => { 
@@ -1848,6 +1546,7 @@
     // GÜNCELLENMİŞ VERSİYON: KATEGORİ VE ALT KATEGORİ FİLTRELEME
     function renderHistory(filterDate = null) { 
         const container = document.getElementById('historyListContainer'); 
+        if(!container) return;
         container.innerHTML = ""; 
 
         if (!localData.history || localData.history.length === 0) {
