@@ -306,7 +306,7 @@
         .summary-val { font-size: 1.2rem; font-weight: 800; line-height: 1; }
         .summary-lbl { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; font-weight: 600; margin-top: 4px; }
 
-        .login-card, .goal-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
         .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
@@ -317,16 +317,20 @@
         /* TESBİHAT YENİ TASARIM (LIST + DETAIL VIEW) */
         
         /* Liste Elemanları (Strip Card) */
-        .t-list-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .tesbihat-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            padding: 5px 0;
+        }
+        @media (min-width: 768px) {
+            .tesbihat-grid { grid-template-columns: 1fr 1fr; }
         }
 
         .t-list-item {
             width: 100%;
             border-radius: 12px;
-            padding: 12px 20px;
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -336,34 +340,35 @@
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
-            height: 70px;
+            height: 75px;
         }
         
         .t-list-item:active { transform: scale(0.98); }
         
         .t-list-name {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.15rem;
+            font-weight: 700;
             z-index: 2;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
         .t-list-count {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 800;
             z-index: 2;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            font-family: 'Poppins', sans-serif;
         }
 
         .t-list-progress {
             position: absolute;
             bottom: 0;
             left: 0;
-            height: 4px;
-            background: rgba(255,255,255,0.4);
+            height: 5px;
+            background: rgba(255,255,255,0.3);
             width: 100%;
             z-index: 1;
         }
@@ -373,6 +378,24 @@
             background: white;
             opacity: 0.9;
             transition: width 0.3s;
+        }
+        
+        /* Silme butonu (Listede) */
+        .t-delete-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            font-size: 0.7rem;
+            color: white;
+            z-index: 10;
+            backdrop-filter: blur(2px);
         }
 
         .t-add-btn {
@@ -387,6 +410,7 @@
             justify-content: center;
             cursor: pointer;
             transition: 0.2s;
+            margin-top: 5px;
         }
         .t-add-btn:hover { border-color: #609979; color: #609979; }
 
@@ -402,7 +426,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .btn-back {
@@ -425,6 +449,7 @@
             display: flex; align-items: center; justify-content: center;
             color: var(--text-color);
             transition: transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .btn-palette:active { transform: scale(0.9); }
 
@@ -441,30 +466,31 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             text-align: center;
             position: relative;
+            /* Gradient JS ile eklenecek */
         }
 
         .t-detail-arabic { font-family: 'Amiri', serif; font-size: 2.8rem; margin-bottom: 10px; text-shadow: 0 2px 5px rgba(0,0,0,0.15); line-height: 1.3; }
-        .t-detail-title { font-size: 1.5rem; font-weight: 700; opacity: 0.9; margin-bottom: 20px; }
-        .t-detail-count { font-size: 4.5rem; font-weight: 800; line-height: 1; margin-bottom: 25px; text-shadow: 0 3px 10px rgba(0,0,0,0.2); }
+        .t-detail-title { font-size: 1.5rem; font-weight: 700; opacity: 0.9; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .t-detail-count { font-size: 5rem; font-weight: 800; line-height: 1; margin-bottom: 30px; text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 
         .t-controls {
             display: flex;
             align-items: center;
             gap: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
-        /* Butonlar (Eski Stil) */
+        /* Butonlar (Eski Stil Korundu) */
         .btn-control { border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.1s; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
         .btn-control:active { transform: scale(0.95); }
         
-        .c-minus { width: 60px; height: 60px; border-radius: 18px; background: #e9ecef; color: #495057; font-size: 1.3rem; }
-        .c-reset { width: 60px; height: 60px; border-radius: 18px; background: #fff3cd; color: #856404; font-size: 1.3rem; }
+        .c-minus { width: 65px; height: 65px; border-radius: 20px; background: rgba(255,255,255,0.9); color: #333; font-size: 1.4rem; }
+        .c-reset { width: 65px; height: 65px; border-radius: 20px; background: rgba(255, 193, 7, 0.9); color: #856404; font-size: 1.4rem; }
         .c-plus { 
-            width: 100px; height: 100px; border-radius: 35px; 
-            background: linear-gradient(145deg, #609979, #3e6b53); 
-            color: white; font-size: 3.5rem; 
-            box-shadow: 0 10px 25px rgba(96, 153, 121, 0.4); 
+            width: 110px; height: 110px; border-radius: 35px; 
+            background: linear-gradient(145deg, #ffffff, #e6e6e6); 
+            color: #333; font-size: 4rem; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); 
         }
 
         /* Alt Veri Girişleri */
@@ -474,26 +500,26 @@
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
             border-radius: 15px;
-            padding: 8px 12px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             backdrop-filter: blur(5px);
         }
-        .t-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; color: white; }
+        .t-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; color: white; letter-spacing: 0.5px; }
         .t-inp {
             background: transparent; border: none; text-align: center;
-            font-weight: 800; font-size: 1.2rem; color: white; width: 60px; outline: none;
+            font-weight: 800; font-size: 1.4rem; color: white; width: 70px; outline: none; padding: 0;
         }
-        .t-inp::placeholder { color: rgba(255,255,255,0.6); font-size: 0.8rem; }
+        .t-inp::placeholder { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
         .btn-add-val {
             background: white; color: #333; border: none;
-            padding: 5px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75rem;
+            padding: 8px 15px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         /* Renk Paleti Modal */
-        .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 15px; }
-        .p-option { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
+        .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 15px; }
+        .p-option { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: transform 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .p-option:hover { transform: scale(1.1); }
         .p-option.selected { border-color: #333; transform: scale(1.1); }
         body.dark-mode .p-option.selected { border-color: white; }
@@ -769,6 +795,7 @@
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
+            <!-- Oruç Menü (EKLENDİ) -->
             <li id="menu-fasting" onclick="showSection('fasting')"><i class="fas fa-utensils me-3"></i> Oruç Takip</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
             <li id="menu-settings" onclick="showSection('settings')"><i class="fas fa-cog me-3"></i> Yedekleme & Ayarlar</li>
@@ -811,7 +838,9 @@
                 <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
             
-            <div id="prayerSplitContainer" class="prayer-split-layout"></div>
+            <div id="prayerSplitContainer" class="prayer-split-layout">
+                <!-- Javascript ile doldurulacak -->
+            </div>
             
             <div id="summaryBar" class="summary-bar">
                 <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
@@ -835,13 +864,6 @@
             <div id="badgeContainer" class="badge-container"></div>
         </div>
 
-        <!-- TESBİHAT BÖLÜMÜ -->
-        <div id="section-tesbihat" style="display: none;">
-            <!-- Burası JS ile dolacak -->
-            <div id="tesbihatContainer"></div>
-        </div>
-
-        <!-- Diğer Bölümler -->
         <div id="section-stats" style="display: none;">
             <h3 class="app-header">İstatistikler</h3>
             <div class="stats-tab-container">
@@ -864,6 +886,7 @@
                     <div class="analysis-row"><div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div><div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div></div>
                 </div>
 
+                <!-- YENİ EKLENEN KARTLAR -->
                 <div class="analysis-box mb-4">
                     <div class="analysis-row">
                         <div class="analysis-icon icon-blue"><i class="fas fa-calendar-week"></i></div>
@@ -889,7 +912,9 @@
                 </div>
 
                 <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
-                <div id="prayer-analysis-grid" class="mb-4"></div>
+                <div id="prayer-analysis-grid" class="mb-4">
+                    <!-- Javascript ile doldurulacak -->
+                </div>
 
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
@@ -900,12 +925,16 @@
             
             <div id="stats-view-history" style="display: none;">
                 <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
+                
+                <!-- YENİ HISTORY FİLTRELEME BUTONLARI -->
                 <div class="history-filter-tabs">
                     <div class="h-main-tabs">
                         <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
                         <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
                         <button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button>
                     </div>
+                    
+                    <!-- Namaz Alt Sekmeler -->
                     <div id="namazSubTabs" class="h-sub-tabs">
                         <button class="h-sub-btn" onclick="setNamazSubCategory('Sabah', this)">Sabah</button>
                         <button class="h-sub-btn" onclick="setNamazSubCategory('Öğle', this)">Öğle</button>
@@ -914,12 +943,16 @@
                         <button class="h-sub-btn" onclick="setNamazSubCategory('Yatsı', this)">Yatsı</button>
                         <button class="h-sub-btn active" onclick="setNamazSubCategory('all', this)">Tümü</button>
                     </div>
+
+                    <!-- Oruç Alt Sekmeler -->
                     <div id="fastingSubTabs" class="h-sub-tabs">
                         <button class="h-sub-btn active" onclick="setFastingSubCategory('all', this)">Tümü</button>
                         <button class="h-sub-btn" onclick="setFastingSubCategory('kaza', this)">Kaza</button>
                         <button class="h-sub-btn" onclick="setFastingSubCategory('nafile', this)">Nafile</button>
                     </div>
                 </div>
+
+                <!-- TARİH FİLTRESİ KAPSÜLÜ -->
                 <div class="date-filter-capsule">
                     <span class="capsule-label">İŞLEM TARİHİ</span>
                     <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
@@ -929,69 +962,133 @@
                            onchange="filterHistoryByDate()">
                     <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
                 </div>
+
+                <!-- Tablo yerine ACCORDION listesi -->
                 <div id="historyListContainer" class="px-2"></div>
             </div>
         </div>
 
+        <div id="section-tesbihat" style="display: none;">
+            <h3 class="app-header">Tesbihat ve Zikir</h3>
+            <!-- Tesbihat bölümü JS ile dinamik doldurulacak -->
+            <div id="tesbihatContainer"></div>
+        </div>
+
+        <!-- ORUÇ TAKİP BÖLÜMÜ (YENİ EKLENDİ) -->
         <div id="section-fasting" style="display: none;">
             <h3 class="app-header">Oruç Takip</h3>
+            
             <div class="row g-4 justify-content-center">
+                
+                <!-- KAZA ORUÇ KARTI -->
                 <div class="col-md-6">
                     <div class="prayer-detail-card bg-oruc-kaza">
                         <div class="pd-content">
+                            <!-- Header Düzeltildi: Flex Column ile alt alta -->
                             <div class="pd-header" style="flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
-                                <div class="pd-title"><i class="fas fa-star-and-crescent me-2"></i> Kaza Orucu</div>
+                                <div class="pd-title">
+                                    <i class="fas fa-star-and-crescent me-2"></i> Kaza Orucu
+                                </div>
                                 <div id="orucKazaBadge" class="pd-remaining-badge" style="display:none; background:#ffc107; color:#333;">Hedef Aktif</div>
                             </div>
+
+                            <!-- Basit Mod -->
                             <div id="kazaSimpleMode" class="text-center py-3">
                                 <div class="fs-1 fw-bold text-white mb-2" id="kazaCountSimple">0</div>
                                 <div class="text-white-50 small text-uppercase fw-bold">Toplam Tutulan Kaza</div>
                             </div>
+
+                            <!-- Hedef Modu -->
                             <div id="kazaTargetMode" style="display:none;">
                                 <div class="pd-stats-row">
-                                    <div class="pd-input-group bg-white-10"><span class="pd-label text-white-50">BORÇ (GÜN)</span><input type="number" id="inpOrucKazaTarget" class="pd-input text-white" onchange="updateFastingTarget('kaza', this.value)"></div>
-                                    <div class="pd-input-group bg-white-10"><span class="pd-label text-white">TUTULAN</span><input type="number" id="inpOrucKazaDone" class="pd-input text-white" onchange="updateFastingDone('kaza', this.value)"></div>
+                                    <div class="pd-input-group bg-white-10">
+                                        <span class="pd-label text-white-50">BORÇ (GÜN)</span>
+                                        <input type="number" id="inpOrucKazaTarget" class="pd-input text-white" onchange="updateFastingTarget('kaza', this.value)">
+                                    </div>
+                                    <div class="pd-input-group bg-white-10">
+                                        <span class="pd-label text-white">TUTULAN</span>
+                                        <input type="number" id="inpOrucKazaDone" class="pd-input text-white" onchange="updateFastingDone('kaza', this.value)">
+                                    </div>
                                 </div>
-                                <div class="pd-progress-container"><div class="pd-progress-track"><div id="progOrucKaza" class="pd-progress-fill bg-warning"></div></div><div id="txtOrucKaza" class="pd-progress-text text-white">Ilerleme</div></div>
+                                <div class="pd-progress-container">
+                                    <div class="pd-progress-track">
+                                        <div id="progOrucKaza" class="pd-progress-fill bg-warning"></div>
+                                    </div>
+                                    <div id="txtOrucKaza" class="pd-progress-text text-white">Ilerleme</div>
+                                </div>
                             </div>
+
                             <div class="pd-actions mt-3">
                                 <button class="pd-btn pd-btn-minus" onclick="changeFasting('kaza', -1)"><i class="fas fa-minus"></i></button>
                                 <button class="pd-btn pd-btn-plus bg-warning border-0" onclick="changeFasting('kaza', 1)"><i class="fas fa-plus"></i></button>
                             </div>
+
+                            <!-- Hedef Belirleme Toggle Butonu -->
                             <div class="text-center mt-3 pt-3 border-top border-white-10">
-                                <button id="btnToggleKazaTarget" class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleKazaTargetMode()"><i class="fas fa-bullseye me-2"></i> Hedef Belirle</button>
+                                <button id="btnToggleKazaTarget" class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleKazaTargetMode()">
+                                    <i class="fas fa-bullseye me-2"></i> Hedef Belirle
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
+
+                <!-- NAFİLE ORUÇ KARTI -->
                 <div class="col-md-6">
                     <div class="prayer-detail-card bg-oruc-nafile">
                         <div class="pd-content">
+                            <!-- Header Düzeltildi: Flex Column ile alt alta -->
                             <div class="pd-header" style="flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
-                                <div class="pd-title"><i class="fas fa-hands-holding-circle me-2"></i> Nafile Oruç</div>
+                                <div class="pd-title">
+                                    <i class="fas fa-hands-holding-circle me-2"></i> Nafile Oruç
+                                </div>
+                                <!-- Hedef Aktifse Gösterilecek Badge -->
                                 <div id="orucNafileBadge" class="pd-remaining-badge" style="display:none; background:#ffc107; color:#333;">Hedef Aktif</div>
                             </div>
+
+                            <!-- Hedef Kapalıyken Görünecek Sadece Sayaç -->
                             <div id="nafileSimpleMode" class="text-center py-3">
                                 <div class="fs-1 fw-bold text-white mb-2" id="nafileCountSimple">0</div>
                                 <div class="text-white-50 small text-uppercase fw-bold">Toplam Tutulan Nafile</div>
                             </div>
+
+                            <!-- Hedef Açıkken Görünecek Detaylar -->
                             <div id="nafileTargetMode" style="display:none;">
                                 <div class="pd-stats-row">
-                                    <div class="pd-input-group bg-white-10"><span class="pd-label text-white-50">HEDEF</span><input type="number" id="inpOrucNafileTarget" class="pd-input text-white" onchange="updateFastingTarget('nafile', this.value)"></div>
-                                    <div class="pd-input-group bg-white-10"><span class="pd-label text-white">TUTULAN</span><input type="number" id="inpOrucNafileDone" class="pd-input text-white" onchange="updateFastingDone('nafile', this.value)"></div>
+                                    <div class="pd-input-group bg-white-10">
+                                        <span class="pd-label text-white-50">HEDEF</span>
+                                        <input type="number" id="inpOrucNafileTarget" class="pd-input text-white" onchange="updateFastingTarget('nafile', this.value)">
+                                    </div>
+                                    <div class="pd-input-group bg-white-10">
+                                        <span class="pd-label text-white">TUTULAN</span>
+                                        <input type="number" id="inpOrucNafileDone" class="pd-input text-white" onchange="updateFastingDone('nafile', this.value)">
+                                    </div>
                                 </div>
-                                <div class="pd-progress-container"><div class="pd-progress-track"><div id="progOrucNafile" class="pd-progress-fill bg-success"></div></div><div id="txtOrucNafile" class="pd-progress-text text-white">İlerleme</div></div>
+                                <div class="pd-progress-container">
+                                    <div class="pd-progress-track">
+                                        <div id="progOrucNafile" class="pd-progress-fill bg-success"></div>
+                                    </div>
+                                    <div id="txtOrucNafile" class="pd-progress-text text-white">İlerleme</div>
+                                </div>
                             </div>
+
                             <div class="pd-actions mt-3">
                                 <button class="pd-btn pd-btn-minus" onclick="changeFasting('nafile', -1)"><i class="fas fa-minus"></i></button>
                                 <button class="pd-btn pd-btn-plus bg-success border-0" onclick="changeFasting('nafile', 1)"><i class="fas fa-plus"></i></button>
                             </div>
+
+                            <!-- Hedef Belirleme Toggle Butonu -->
                             <div class="text-center mt-3 pt-3 border-top border-white-10">
-                                <button id="btnToggleNafileTarget" class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleNafileTargetMode()"><i class="fas fa-bullseye me-2"></i> Hedef Belirle</button>
+                                <button id="btnToggleNafileTarget" class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleNafileTargetMode()">
+                                    <i class="fas fa-bullseye me-2"></i> Hedef Belirle
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -1026,6 +1123,8 @@
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-download settings-icon"></i><div class="settings-title">Yedek Al</div><div class="settings-desc">Verileri indir.</div><button class="btn btn-success w-100" onclick="downloadBackupJSON()"><i class="fas fa-file-export me-2"></i> Yedek İndir (.json)</button></div></div>
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-upload settings-icon text-primary"></i><div class="settings-title">Yedekten Dön</div><div class="settings-desc">Yedek dosyasını yükle.</div><button class="btn btn-primary w-100" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i> Yedek Yükle</button><input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupJSON(this)"></div></div>
                 <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-file-csv settings-icon text-warning"></i><div class="settings-title">Excel Raporu</div><div class="settings-desc">Excel (.csv) formatında indir.</div><button class="btn btn-warning w-100 text-white" onclick="downloadDataAsCSV()"><i class="fas fa-table me-2"></i> Rapor İndir (.csv)</button></div></div>
+                
+                <!-- PWA YÜKLEME KARTI -->
                 <div id="installAppContainer" class="col-md-6 col-lg-4" style="display: none;">
                     <div class="settings-card text-center h-100" style="border: 2px solid #609979; background: linear-gradient(135deg, rgba(96, 153, 121, 0.1), rgba(255, 255, 255, 0.5));">
                         <i class="fas fa-mobile-alt settings-icon text-success"></i>
@@ -1036,6 +1135,7 @@
                         </button>
                     </div>
                 </div>
+
                 <div class="col-12"><div class="settings-card text-center border-danger"><i class="fas fa-exclamation-triangle settings-icon text-danger"></i><div class="settings-title text-danger">Verileri Sıfırla</div><div class="settings-desc">Her şeyi siler.</div><button class="btn btn-danger py-2 px-5" onclick="confirmResetData()"><i class="fas fa-trash-alt me-2"></i> Her Şeyi Sil ve Sıfırla</button></div></div>
             </div>
         </div>
@@ -1045,6 +1145,7 @@
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
     <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>İstatistik</span></div>
+    <!-- Oruç Menü (EKLENDİ) -->
     <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-utensils"></i><span>Oruç</span></div>
     <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
     <div class="nav-item" onclick="showSection('calculator'); activateNav(this)"><i class="fas fa-calculator"></i><span>Hesap</span></div>
@@ -1055,10 +1156,10 @@
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
     let activeRowIndex = 0; 
-    let currentHistoryCategory = 'all'; 
-    let currentFastingSubCat = 'all'; 
-    let currentNamazSubCat = 'all'; 
-    let activeTesbihatIndex = null; // Başlangıçta hiçbiri seçili değil
+    let currentHistoryCategory = 'all'; // Ana kategori: all, namaz, oruc
+    let currentFastingSubCat = 'all'; // Oruç Alt kategori: all, kaza, nafile
+    let currentNamazSubCat = 'all'; // YENİ: Namaz Alt kategori: all, Sabah, Öğle...
+    let activeTesbihatIndex = 0; // Tesbihat aktif seçim
 
     // --- RENK PALETLERİ ---
     const PALETTE_LIGHT = [
@@ -1232,7 +1333,7 @@
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
         
-        // Zikir isim ve renk düzeltme
+        // ZİKİR İSİM VE RENK DÜZELTMESİ
         if (localData.tesbihat) {
             localData.tesbihat.forEach((t, i) => {
                 if(t.name === "Sübhanallah") t.name = "Subhanallah";
@@ -1241,6 +1342,7 @@
             });
         }
 
+        // ORUÇ KONTROLÜ
         if (!localData.fasting) localData.fasting = JSON.parse(JSON.stringify(defaultData.fasting));
         if (!localData.fasting.nafile) localData.fasting.nafile = { target: 10, done: 0, hasTarget: false };
         if (localData.fasting.kaza && localData.fasting.kaza.hasTarget === undefined) localData.fasting.kaza.hasTarget = false;
@@ -1321,7 +1423,7 @@
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         const menuItem = document.getElementById('menu-' + id);
         if(menuItem) menuItem.classList.add('active');
-        const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings', 'fasting']; 
+        const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings', 'fasting'];
         sections.forEach(sec => { const el = document.getElementById('section-' + sec); if(el) el.style.display = 'none'; });
         const activeSec = document.getElementById('section-' + id);
         if(activeSec) activeSec.style.display = 'block';
@@ -1369,8 +1471,9 @@
         const pausedBadge = document.getElementById('pausedBadge');
         const goalCard = document.getElementById('goalCard');
         const weeklyCard = document.getElementById('weeklyCard');
-        
-        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); }
+        const splitContainer = document.getElementById('prayerSplitContainer');
+
+        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); splitContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); splitContainer.classList.remove('paused-mode-overlay'); }
 
         document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
@@ -1493,7 +1596,7 @@
                 <div class="t-list-progress">
                     <div class="t-list-bar" style="width: ${p}%;"></div>
                 </div>
-                ${i > 3 ? `<div style="position:absolute; top:5px; right:5px; padding:5px; z-index:10;" onclick="event.stopPropagation(); deleteTesbihat(${i})"><i class="fas fa-trash small text-white opacity-50"></i></div>` : ''}
+                ${i > 3 ? `<div style="position:absolute; top:5px; right:5px; padding:5px; z-index:10;" onclick="event.stopPropagation(); deleteTesbihat(${i})"><div class="t-delete-icon"><i class="fas fa-trash small"></i></div></div>` : ''}
             </div>`;
         });
 
