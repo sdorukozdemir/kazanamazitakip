@@ -366,14 +366,70 @@
         body.dark-mode .z-minus { background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.1); color: white; }
         body.dark-mode .z-reset { color: #ffc107; }
 
-        .tesbihat-target-box { background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); border-radius: 25px; padding: 5px 15px; display: flex; align-items: center; gap: 10px; min-width: 140px; justify-content: space-between; height: 45px; }
-        .tesbihat-target-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; white-space: nowrap; }
-        .tesbihat-target-input { border: none; background: transparent; width: 60px; text-align: center; font-weight: bold; font-size: 1.2rem; color: inherit; outline: none; }
-        
-        .manual-zikr-container { background-color: rgba(13, 110, 253, 0.1); border: 1px solid rgba(13, 110, 253, 0.2); border-radius: 50px; padding: 5px 5px 5px 15px; display: flex; align-items: center; justify-content: space-between; min-width: 140px; height: 45px; transition: transform 0.2s; }
-        .manual-zikr-container:focus-within { transform: scale(1.02); }
-        .manual-zikr-input-clean { border: none; background: transparent; font-weight: bold; color: inherit; width: 60px; outline: none; font-size: 1rem; text-align: center; }
-        .btn-add-clean { background: #0d6efd; color: white; border: none; border-radius: 50px; padding: 6px 15px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.1s; white-space: nowrap; }
+        /* GÜNCELLENMİŞ TESBİHAT KUTULARI */
+        .tesbihat-inputs-row {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tesbihat-box-style {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1;
+            min-width: 140px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        body.dark-mode .tesbihat-box-style {
+            background: rgba(0, 0, 0, 0.25);
+            border-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .t-label-small {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            opacity: 0.7;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .t-input {
+            width: 80px;
+            font-size: 1.3rem;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            color: inherit;
+            outline: none;
+        }
+
+        .btn-add-large {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+        .btn-add-large:active { transform: scale(0.95); }
         
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
@@ -1162,6 +1218,15 @@
     function ensureDataStructure() {
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
+        
+        // ZİKİR İSİM DÜZELTMESİ (Eski kayıtlı kullanıcılar için)
+        if (localData.tesbihat) {
+            localData.tesbihat.forEach(t => {
+                if(t.name === "Sübhanallah") t.name = "Subhanallah";
+                if(t.name === "Elhamdülillah") t.name = "Elhamdulillah";
+            });
+        }
+
         // ORUÇ KONTROLÜ
         if (!localData.fasting) localData.fasting = JSON.parse(JSON.stringify(defaultData.fasting));
         if (!localData.fasting.nafile) localData.fasting.nafile = { target: 10, done: 0, hasTarget: false };
@@ -1605,15 +1670,17 @@
                     <button class="zikr-btn z-reset" onclick="window.resTes(${activeTesbihatIndex})"><i class="fas fa-undo"></i></button>
                 </div>
                 
-                <div class="d-flex w-100 justify-content-center align-items-center mt-3 px-1 gap-3">
-                    <div class="tesbihat-target-box">
-                        <span class="tesbihat-target-label">HEDEF</span>
-                        <input type="number" class="tesbihat-target-input" value="${currentZikr.target}" onchange="window.setTesTarget(${activeTesbihatIndex}, this.value)">
+                <div class="tesbihat-inputs-row">
+                    <!-- Hedef Kutusu -->
+                    <div class="tesbihat-box-style">
+                        <span class="t-label-small">HEDEF</span>
+                        <input type="number" class="t-input" value="${currentZikr.target}" onchange="window.setTesTarget(${activeTesbihatIndex}, this.value)">
                     </div>
                     
-                    <div class="manual-zikr-container">
-                        <input type="number" id="manZ-${activeTesbihatIndex}" class="manual-zikr-input-clean" placeholder="+Adet">
-                        <button class="btn-add-clean" onclick="window.addTes(${activeTesbihatIndex})">EKLE</button>
+                    <!-- Manuel Ekle Kutusu -->
+                    <div class="tesbihat-box-style">
+                        <input type="number" id="manZ-${activeTesbihatIndex}" class="t-input" placeholder="+Adet">
+                        <button class="btn-add-large" onclick="window.addTes(${activeTesbihatIndex})">EKLE</button>
                     </div>
                 </div>
             </div>
