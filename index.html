@@ -314,216 +314,141 @@
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
         
-        /* TESBİHAT YENİ TASARIM (LIST + DETAIL VIEW) */
-        
-        /* Liste Elemanları (Strip Card) */
-        .tesbihat-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            padding: 5px 0;
-        }
-        @media (min-width: 768px) {
-            .tesbihat-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        .t-list-item {
-            width: 100%;
-            border-radius: 12px;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
+        /* TESBİHAT YENİ STİL */
+        .tesbihat-selector-wrapper { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; margin-bottom: 10px; }
+        .tesbihat-selector-wrapper::-webkit-scrollbar { display: none; }
+        .t-chip { 
+            flex: 0 0 auto; 
+            min-width: 120px; 
+            background: var(--fade-box-bg); 
+            border: 1px solid var(--fade-box-border); 
+            border-radius: 12px; 
+            padding: 10px 15px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: var(--fade-box-shadow); 
+            backdrop-filter: blur(5px);
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
             position: relative;
-            overflow: hidden;
-            height: 75px;
         }
-        
-        .t-list-item:active { transform: scale(0.98); }
-        
-        .t-list-name {
-            font-size: 1.15rem;
-            font-weight: 700;
-            z-index: 2;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .t-chip.active { background: #609979; color: white; border-color: #609979; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(96, 153, 121, 0.4); }
+        .t-chip-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; text-align: center; line-height: 1.2; }
+        .t-chip-add { border: 2px dashed var(--border-color); color: var(--placeholder-color); min-width: 60px; font-size: 1.5rem; }
+        .t-chip-add:hover { border-color: #609979; color: #609979; }
+        .t-delete-icon { position: absolute; top: 2px; right: 5px; font-size: 0.7rem; color: #dc3545; opacity: 0.7; z-index: 5; }
+
+        /* METALLIC CARD STYLE FOR TESBIHAT */
+        .bg-tesbihat-metallic {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Belirgin Metalik Gümüş */
+            border: 1px solid rgba(0,0,0,0.15);
+            color: #333;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1), inset 0 0 20px rgba(255,255,255,0.8);
         }
-        
-        .t-list-count {
-            font-size: 2.2rem;
-            font-weight: 800;
-            z-index: 2;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            font-family: 'Poppins', sans-serif;
+        body.dark-mode .bg-tesbihat-metallic {
+            background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%); /* Metallic Dark Teal */
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
         }
 
-        .t-list-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 5px;
-            background: rgba(255,255,255,0.3);
+        .zikr-card { padding: 15px 20px; text-align: center; border-radius: 25px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; border: none; }
+        .arabic-text { font-family: 'Amiri', serif; font-size: 2.2rem; color: #609979; margin: 10px 0 5px 0; line-height: 1.3; }
+        body.dark-mode .arabic-text { color: #81d4fa; }
+        .zikr-count { font-size: 3rem; font-weight: 800; margin: 0 0 10px 0; color: inherit; text-shadow: 2px 2px 5px rgba(0,0,0,0.05); }
+        
+        .zikr-btn-group { display: flex; gap: 20px; align-items: center; justify-content: center; margin: 10px 0; width: 100%; flex-wrap: wrap; }
+        .zikr-btn { border: none; display: flex; align-items: center; justify-content: center; transition: transform 0.05s; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; }
+        .zikr-btn:active { transform: scale(0.9); }
+        .z-minus { width: 55px; height: 55px; border-radius: 18px; background-color: rgba(0,0,0,0.05); color: inherit; font-size: 1.2rem; border: 1px solid rgba(0,0,0,0.1); }
+        
+        /* BÜYÜTÜLMÜŞ ARTI BUTONU */
+        .z-plus { width: 110px; height: 110px; border-radius: 35px; background: linear-gradient(145deg, #609979, #3e6b53); color: white; font-size: 4rem; box-shadow: 0 15px 30px rgba(96, 153, 121, 0.4); }
+        
+        .z-reset { width: 55px; height: 55px; border-radius: 18px; background-color: rgba(255, 193, 7, 0.2); color: #856404; font-size: 1.2rem; border: 1px solid rgba(255, 193, 7, 0.3); }
+        
+        body.dark-mode .z-minus { background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.1); color: white; }
+        body.dark-mode .z-reset { color: #ffc107; }
+
+        /* GÜNCELLENMİŞ TESBİHAT KUTULARI (DAHA GENİŞ VE NET) */
+        .tesbihat-inputs-row {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 15px;
             width: 100%;
-            z-index: 1;
-        }
-        
-        .t-list-bar {
-            height: 100%;
-            background: white;
-            opacity: 0.9;
-            transition: width 0.3s;
-        }
-        
-        /* Silme butonu (Listede) */
-        .t-delete-icon {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.2);
-            border-radius: 50%;
-            font-size: 0.7rem;
-            color: white;
-            z-index: 10;
-            backdrop-filter: blur(2px);
+            margin-top: 15px;
+            flex-wrap: nowrap; /* Tek satırda kal */
         }
 
-        .t-add-btn {
-            background: transparent;
-            border: 2px dashed var(--border-color);
-            color: var(--placeholder-color);
-            font-size: 1.5rem;
-            border-radius: 12px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 5px;
-        }
-        .t-add-btn:hover { border-color: #609979; color: #609979; }
-
-        /* Detay Ekranı (Tam Ekran Overlay) */
-        .t-detail-view {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            animation: fadeIn 0.2s ease-out;
-        }
-
-        .t-detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .btn-back {
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            font-weight: 700;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 0;
-        }
-        
-        .btn-palette {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-color);
-            transition: transform 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .btn-palette:active { transform: scale(0.9); }
-
-        /* Detay Kartı (Büyük) */
-        .t-detail-card {
-            flex: 1;
-            border-radius: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            text-align: center;
-            position: relative;
-            /* Gradient JS ile eklenecek */
-        }
-
-        .t-detail-arabic { font-family: 'Amiri', serif; font-size: 2.8rem; margin-bottom: 10px; text-shadow: 0 2px 5px rgba(0,0,0,0.15); line-height: 1.3; }
-        .t-detail-title { font-size: 1.5rem; font-weight: 700; opacity: 0.9; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .t-detail-count { font-size: 5rem; font-weight: 800; line-height: 1; margin-bottom: 30px; text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-
-        .t-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        /* Butonlar (Eski Stil Korundu) */
-        .btn-control { border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.1s; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-        .btn-control:active { transform: scale(0.95); }
-        
-        .c-minus { width: 65px; height: 65px; border-radius: 20px; background: rgba(255,255,255,0.9); color: #333; font-size: 1.4rem; }
-        .c-reset { width: 65px; height: 65px; border-radius: 20px; background: rgba(255, 193, 7, 0.9); color: #856404; font-size: 1.4rem; }
-        .c-plus { 
-            width: 110px; height: 110px; border-radius: 35px; 
-            background: linear-gradient(145deg, #ffffff, #e6e6e6); 
-            color: #333; font-size: 4rem; 
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2); 
-        }
-
-        /* Alt Veri Girişleri */
-        .t-footer { display: flex; gap: 15px; width: 100%; margin-top: auto; }
-        .t-input-group {
-            flex: 1;
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 15px;
-            padding: 10px 15px;
+        .tesbihat-box-style {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 8px 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex: 1;
+            min-width: 0; /* Flex fix */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
             backdrop-filter: blur(5px);
         }
-        .t-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; opacity: 0.8; color: white; letter-spacing: 0.5px; }
-        .t-inp {
-            background: transparent; border: none; text-align: center;
-            font-weight: 800; font-size: 1.4rem; color: white; width: 70px; outline: none; padding: 0;
+
+        body.dark-mode .tesbihat-box-style {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255,255,255,0.15);
+            color: white;
         }
-        .t-inp::placeholder { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
-        .btn-add-val {
-            background: white; color: #333; border: none;
-            padding: 8px 15px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+        /* HEDEF YAZISINI BÜYÜTME */
+        .t-label-small {
+            font-size: 0.8rem; /* +Adet ile dengelendi */
+            font-weight: 800;
+            text-transform: uppercase;
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            margin-right: 5px;
+        }
+
+        .t-input {
+            width: 100%;
+            font-size: 1.4rem;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            color: inherit;
+            outline: none;
+            padding: 0;
         }
         
-        /* Renk Paleti Modal */
-        .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 15px; }
-        .p-option { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: transform 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .p-option:hover { transform: scale(1.1); }
-        .p-option.selected { border-color: #333; transform: scale(1.1); }
-        body.dark-mode .p-option.selected { border-color: white; }
+        /* +Adet placeholder rengini belirginleştir */
+        .t-input::placeholder {
+            color: var(--placeholder-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
 
+        .btn-add-large {
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+            transition: transform 0.1s;
+            white-space: nowrap;
+        }
+        .btn-add-large:active { transform: scale(0.95); }
+        
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
@@ -752,15 +677,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- RENK PALETİ MODALI -->
-<div id="colorPickerModal" class="custom-modal-overlay">
-    <div class="custom-modal">
-        <h5 class="mb-3">Kart Rengi Seçiniz</h5>
-        <div class="palette-grid" id="paletteGrid"></div>
-        <button class="modal-btn btn-cancel mt-3 w-100" onclick="document.getElementById('colorPickerModal').style.display='none'">Kapat</button>
     </div>
 </div>
 
@@ -1161,19 +1077,6 @@
     let currentNamazSubCat = 'all'; // YENİ: Namaz Alt kategori: all, Sabah, Öğle...
     let activeTesbihatIndex = 0; // Tesbihat aktif seçim
 
-    // --- RENK PALETLERİ ---
-    const PALETTE_LIGHT = [
-        "#1abc9c", "#3498db", "#9b59b6", "#e67e22", "#e74c3c",
-        "#f1c40f", "#2ecc71", "#7f8c8d", "#6c5ce7", "#0984e3",
-        "#00cec9", "#fd79a8", "#fab1a0", "#636e72", "#ff7675"
-    ];
-
-    const PALETTE_DARK = [
-        "#16a085", "#2980b9", "#8e44ad", "#d35400", "#c0392b",
-        "#f39c12", "#27ae60", "#7f8c8d", "#a29bfe", "#74b9ff",
-        "#81ecec", "#55efc4", "#ffeaa7", "#2d3436", "#636e72"
-    ];
-
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
     function hideLoader() {
@@ -1237,11 +1140,12 @@
         calendar: {}, logs: {},
         counts: [{name:"Sabah",target:0,done:0},{name:"Öğle",target:0,done:0},{name:"İkindi",target:0,done:0},{name:"Akşam",target:0,done:0},{name:"Yatsı",target:0,done:0}],
         tesbihat: [
-            { name: "Subhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33, color: "#1abc9c" },
-            { name: "Elhamdulillah", arabic: "ٱلْحَمْدُ لِلَّٰهِ", current: 0, target: 33, color: "#3498db" },
-            { name: "Allahu Ekber", arabic: "ٱللَّٰهُ أَكْبَرُ", current: 0, target: 33, color: "#9b59b6" },
-            { name: "La ilahe İllallah", arabic: "لَا إِلَٰهَ إِلَّا ٱللَّٰهُ", current: 0, target: 100, color: "#e67e22" }
+            { name: "Subhanallah", arabic: "سُبْحَانَ ٱللَّٰهِ", current: 0, target: 33 },
+            { name: "Elhamdulillah", arabic: "ٱلْحَمْدُ لِلَّٰهِ", current: 0, target: 33 },
+            { name: "Allahu Ekber", arabic: "ٱللَّٰهُ أَكْبَرُ", current: 0, target: 33 },
+            { name: "La ilahe İllallah", arabic: "لَا إِلَٰهَ إِلَّا ٱللَّٰهُ", current: 0, target: 100 }
         ],
+        // YENİ EKLENEN ORUÇ VERİSİ
         fasting: {
             kaza: { target: 0, done: 0, hasTarget: false },
             nafile: { target: 10, done: 0, hasTarget: false }
@@ -1300,7 +1204,7 @@
                     renderCalculatorRows();
                     renderApp();
                     renderStats();
-                    renderFasting();
+                    renderFasting(); // YENİ FONKSİYON EKLENDİ
                 } catch(e) {
                     console.error("Render hatası:", e);
                 }
@@ -1333,12 +1237,11 @@
         if (!localData.counts) localData.counts = JSON.parse(JSON.stringify(defaultData.counts));
         if (!localData.tesbihat) localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
         
-        // ZİKİR İSİM VE RENK DÜZELTMESİ
+        // ZİKİR İSİM DÜZELTMESİ (Eski kayıtlı kullanıcılar için)
         if (localData.tesbihat) {
-            localData.tesbihat.forEach((t, i) => {
+            localData.tesbihat.forEach(t => {
                 if(t.name === "Sübhanallah") t.name = "Subhanallah";
                 if(t.name === "Elhamdülillah") t.name = "Elhamdulillah";
-                if(!t.color) t.color = PALETTE_LIGHT[i % PALETTE_LIGHT.length];
             });
         }
 
@@ -1366,6 +1269,7 @@
 
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast-container');
+        // Toast sayısını limitle (max 3)
         if(container.childElementCount >= 3) {
             container.removeChild(container.firstChild);
         }
@@ -1423,7 +1327,7 @@
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         const menuItem = document.getElementById('menu-' + id);
         if(menuItem) menuItem.classList.add('active');
-        const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings', 'fasting'];
+        const sections = ['dashboard', 'stats', 'tesbihat', 'calculator', 'settings', 'fasting']; // Fasting eklendi
         sections.forEach(sec => { const el = document.getElementById('section-' + sec); if(el) el.style.display = 'none'; });
         const activeSec = document.getElementById('section-' + id);
         if(activeSec) activeSec.style.display = 'block';
@@ -1431,30 +1335,19 @@
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
         if (navMap[id] !== undefined) document.querySelectorAll('.nav-item')[navMap[id]].classList.add('active');
-        
-        // Tesbihat görünümünü sıfırla (listeye dön)
-        if(id === 'tesbihat') {
-            renderTesbihat();
-        } else {
-            try { 
-                if(id === 'dashboard') renderApp(); 
-                if(id === 'stats') renderStats(); 
-                if(id === 'calculator') renderCalculatorRows(); 
-                if(id === 'fasting') renderFasting();
-            } catch(e) { console.log("Render error:", e); }
-        }
+        try { 
+            if(id === 'dashboard') renderApp(); 
+            if(id === 'stats') renderStats(); 
+            if(id === 'tesbihat') renderTesbihat(); 
+            if(id === 'calculator') renderCalculatorRows(); 
+            if(id === 'fasting') renderFasting(); // EKLENDİ
+        } catch(e) { console.log("Render error:", e); }
     };
 
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
 
-    // ... (Diğer App render ve utility fonksiyonları aynen korundu) ...
-    // Yer darlığı sebebiyle renderApp(), updateCardUI() vb. fonksiyonlar aynen burada var sayıyoruz, 
-    // ama Tesbihat için özel kodları aşağıya ekliyorum.
-
     function renderApp() {
-        // (App Render kodu burada aynen mevcut)
-        // ... (Kısaltma: Önceki kod bloğundaki renderApp içeriği aynen geçerli)
         if(!localData.counts) return;
         const todayISO = getIsoDate(new Date());
         const todayTotal = localData.daily.counts.reduce((a, b) => a + b, 0);
@@ -1479,54 +1372,92 @@
         document.getElementById('dailyGoalInput').value = localData.daily.target;
         let p = (todayTotal / localData.daily.target) * 100; if(p>100) p=100;
         document.getElementById('dailyProgressBar').style.width = p + "%";
-        
+        if(todayTotal >= localData.daily.target) { document.getElementById('goalCard').classList.add('success-mode'); document.getElementById('goalSuccessMessage').style.display='block'; } else { document.getElementById('goalCard').classList.remove('success-mode'); document.getElementById('goalSuccessMessage').style.display='none'; }
+        document.getElementById('streakValue').innerText = localData.streak.current;
+
         const weeklyTotal = getWeeklyProgress();
         const weeklyTarget = localData.weeklyTarget || 50;
         document.getElementById('weeklyCountDisplay').innerText = weeklyTotal;
         document.getElementById('weeklyGoalInput').value = weeklyTarget;
         let wp = (weeklyTotal / weeklyTarget) * 100; if (wp > 100) wp = 100;
         document.getElementById('weeklyProgressBar').style.width = wp + "%";
+        const wCard = document.getElementById('weeklyCard'); const wMsg = document.getElementById('weeklySuccessMessage');
+        if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
 
-        // Prayer Split Render (Basitleştirilmiş)
-        const splitContainer = document.getElementById('prayerSplitContainer');
-        if(splitContainer.innerHTML === "") {
-             let menuHTML = `<div class="prayer-side-menu">`;
-             const iconList = ["fa-cloud-sun", "fa-sun", "fa-cloud-sun", "fa-moon", "fa-star"]; 
-             localData.counts.forEach((item, i) => {
+        
+        if(document.getElementById('prayerDetailCard')) {
+            updateCardUI(activeRowIndex);
+        } else {
+            splitContainer.innerHTML = ""; 
+            let menuHTML = `<div class="prayer-side-menu">`;
+            const iconList = ["fa-cloud-sun", "fa-sun", "fa-cloud-sun", "fa-moon", "fa-star"]; 
+            const themeList = ["theme-sabah", "theme-ogle", "theme-ikindi", "theme-aksam", "theme-yatsi"];
+            
+            localData.counts.forEach((item, i) => {
                 const isActive = (i === activeRowIndex) ? 'active' : '';
-                menuHTML += `<div class="side-menu-item ${isActive}" onclick="setActivePrayer(${i})"><i class="fas ${iconList[i]} side-menu-icon"></i><div class="side-menu-label">${item.name}</div></div>`;
-             });
-             menuHTML += `</div>`;
-             // ... Card render logic same as before ...
-             // (Kart render kodu burada olacak)
-             let cardHTML = `<div id="prayerDetailCard" class="prayer-detail-card"><div class="pd-content">
-                <div class="pd-header"><div class="pd-title"><i id="pdTitleIcon" class="fas"></i> <span id="pdTitleText"></span></div><div id="pdRemainingBadge" class="pd-remaining-badge"></div></div>
-                <div class="pd-stats-row"><div class="pd-input-group"><span class="pd-label">KILINACAK</span><input type="number" id="pdInputTarget" class="pd-input"></div><div class="pd-input-group"><span class="pd-label text-success">KILINAN</span><input type="number" id="pdInputDone" class="pd-input text-success"></div></div>
-                <div class="pd-progress-container"><div class="pd-progress-track"><div id="pdProgressFill" class="pd-progress-fill"></div></div><div id="pdProgressText" class="pd-progress-text"></div></div>
-                <div class="pd-actions"><button id="btnMinus" class="pd-btn pd-btn-minus"><i class="fas fa-minus"></i></button><button id="btnPlus" class="pd-btn pd-btn-plus"><i class="fas fa-plus"></i></button></div>
-             </div></div>`;
-             splitContainer.innerHTML = menuHTML + cardHTML;
-             
-             // Event Listeners for Prayer Card
-             document.getElementById('pdInputTarget').onchange = (e) => window.upT(activeRowIndex, e.target.value);
-             document.getElementById('pdInputDone').onchange = (e) => window.upD(activeRowIndex, e.target.value);
-             document.getElementById('btnMinus').onclick = () => window.chC(activeRowIndex, -1);
-             document.getElementById('btnPlus').onclick = () => window.chC(activeRowIndex, 1);
-        }
-        updateCardUI(activeRowIndex);
+                const flipClass = (i === 2) ? 'flip-icon' : ''; 
+                
+                menuHTML += `
+                <div id="menuItem${i}" class="side-menu-item ${isActive} ${themeList[i]}" onclick="setActivePrayer(${i})">
+                    <i class="fas ${iconList[i]} side-menu-icon ${flipClass}"></i>
+                    <div class="side-menu-label">${item.name}</div>
+                </div>`;
+            });
+            menuHTML += `</div>`;
+            
+            let cardHTML = `
+            <div id="prayerDetailCard" class="prayer-detail-card">
+                <div class="pd-content">
+                    <div class="pd-header">
+                        <div class="pd-title"><i id="pdTitleIcon" class="fas"></i> <span id="pdTitleText"></span></div>
+                        <div id="pdRemainingBadge" class="pd-remaining-badge"></div>
+                    </div>
+                    
+                    <div class="pd-stats-row">
+                        <div class="pd-input-group">
+                            <span class="pd-label">KILINACAK</span>
+                            <input type="number" id="pdInputTarget" class="pd-input">
+                        </div>
+                        <div class="pd-input-group">
+                            <span class="pd-label text-success">KILINAN</span>
+                            <input type="number" id="pdInputDone" class="pd-input text-success">
+                        </div>
+                    </div>
+                    
+                    <div class="pd-progress-container">
+                        <div class="pd-progress-track">
+                            <div id="pdProgressFill" class="pd-progress-fill"></div>
+                        </div>
+                        <div id="pdProgressText" class="pd-progress-text"></div>
+                    </div>
 
+                    <div class="pd-actions">
+                        <button id="btnMinus" class="pd-btn pd-btn-minus"><i class="fas fa-minus"></i></button>
+                        <button id="btnPlus" class="pd-btn pd-btn-plus"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            </div>`;
+            
+            splitContainer.innerHTML = menuHTML + cardHTML;
+            document.getElementById('pdInputTarget').onchange = (e) => window.upT(activeRowIndex, e.target.value);
+            document.getElementById('pdInputDone').onchange = (e) => window.upD(activeRowIndex, e.target.value);
+            document.getElementById('btnMinus').onclick = () => window.chC(activeRowIndex, -1);
+            document.getElementById('btnPlus').onclick = () => window.chC(activeRowIndex, 1);
+            updateCardUI(activeRowIndex);
+        }
+        
         let tt=0, td=0; 
         localData.counts.forEach(c => { tt += parseInt(c.target); td += parseInt(c.done); });
         const days = getElapsedDays(); 
         document.getElementById('elapsedDays').value = days; 
+        
         document.getElementById('sumTarget').innerText = tt;
         document.getElementById('sumDone').innerText = td;
         document.getElementById('sumRemaining').innerText = tt - td;
-        calculateEstFinish(td, days);
+
+        renderBadges(td); calculateEstFinish(td, days); 
     }
     
-    // ... (updateCardUI, setActivePrayer ve diğer yardımcılar aynen önceki koddan) ...
-    // Kısa geçiyorum, renderApp içinde tanımlı gibi çalışacaklar.
     function updateCardUI(index) {
         const item = localData.counts[index];
         const remaining = Math.max(0, item.target - item.done);
@@ -1536,38 +1467,170 @@
 
         const card = document.getElementById('prayerDetailCard');
         if(card) card.className = `prayer-detail-card ${bgList[index]}`;
+
         const iconEl = document.getElementById('pdTitleIcon');
-        if(iconEl) iconEl.className = `fas ${iconList[index]}`;
-        document.getElementById('pdTitleText').innerText = item.name;
-        document.getElementById('pdRemainingBadge').innerText = `Kalan: ${remaining}`;
-        document.getElementById('pdInputTarget').value = item.target;
-        document.getElementById('pdInputDone').value = item.done;
-        document.getElementById('pdProgressFill').style.width = `${percent}%`;
-        document.getElementById('pdProgressText').innerText = `%${percent.toFixed(1)} Tamamlandı`;
+        if(iconEl) {
+            iconEl.className = `fas ${iconList[index]}`;
+            if(index === 2) iconEl.classList.add('flip-icon');
+            else iconEl.classList.remove('flip-icon');
+        }
         
+        const titleText = document.getElementById('pdTitleText');
+        if(titleText) titleText.innerText = item.name;
+        
+        const badge = document.getElementById('pdRemainingBadge');
+        if(badge) badge.innerText = `Kalan: ${remaining}`;
+
+        const inpTarget = document.getElementById('pdInputTarget');
+        if(inpTarget) inpTarget.value = item.target;
+        
+        const inpDone = document.getElementById('pdInputDone');
+        if(inpDone) inpDone.value = item.done;
+
+        const progFill = document.getElementById('pdProgressFill');
+        if(progFill) progFill.style.width = `${percent}%`;
+        
+        const progText = document.getElementById('pdProgressText');
+        if(progText) progText.innerText = `%${percent.toFixed(1)} Tamamlandı`;
+
         document.querySelectorAll('.side-menu-item').forEach((el, i) => {
-            if(i === index) el.classList.add('active'); else el.classList.remove('active');
+            if(i === index) el.classList.add('active');
+            else el.classList.remove('active');
         });
+
+        if(inpTarget) inpTarget.onchange = (e) => window.upT(index, e.target.value);
+        if(inpDone) inpDone.onchange = (e) => window.upD(index, e.target.value);
+        
+        const btnMinus = document.getElementById('btnMinus');
+        if(btnMinus) btnMinus.onclick = () => window.chC(index, -1);
+        
+        const btnPlus = document.getElementById('btnPlus');
+        if(btnPlus) btnPlus.onclick = () => window.chC(index, 1);
     }
 
-    window.setActivePrayer = function(index) { activeRowIndex = index; triggerHaptic(); updateCardUI(index); }
-    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
-    // ... (Diğer calculator fonksiyonları aynı) ...
-    window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
-    window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
-    window.upD = function(i, v) { const val = parseInt(v) || 0; const item = localData.counts[i]; if (val > item.target) { showModal("Uyarı", "Hedeften büyük olamaz."); document.getElementById('pdInputDone').value = item.done; return; } item.done = val; addHistory(item.name, item.done, val); saveToCloud(); renderApp(); };
-    window.chC = function(i, d) { triggerHaptic(); const item = localData.counts[i]; const n = item.done + d; if (n >= 0) { item.done = n; if (d > 0) { localData.daily.counts[i]++; const todayISO = getIsoDate(new Date()); localData.logs[todayISO] = (localData.logs[todayISO] || 0) + 1; const ct = localData.daily.counts.reduce((a, b) => a + b, 0); if (ct >= localData.daily.target && ct-1 < localData.daily.target) jsConfetti.addConfetti(); } else if (localData.daily.counts[i] > 0) localData.daily.counts[i]--; recalculateStreak(); addHistory(localData.counts[i].name, n-d, n); saveToCloud(); renderApp(); } };
-    function recalculateStreak() { let currentStreak = 0; const today = new Date(); const isoToday = getIsoDate(today); if (localData.calendar && localData.calendar[isoToday]) { currentStreak++; } for (let i = 1; i < 1000; i++) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); if (localData.calendar && localData.calendar[iso]) { currentStreak++; } else { if (i === 1 && currentStreak === 0) {} else { break; } } } localData.streak.current = currentStreak; }
-    window.updateDailyGoal = function(v) { localData.daily.target = parseInt(v)||10; saveToCloud(); renderApp(); };
-    window.updateWeeklyGoal = function(v) { localData.weeklyTarget = parseInt(v)||50; saveToCloud(); renderApp(); };
-    function getWeeklyProgress() { if (!localData.logs) return 0; const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day == 0 ? -6 : 1); const monday = new Date(today.setDate(diff)); monday.setHours(0,0,0,0); let weeklyTotal = 0; Object.keys(localData.logs).forEach(dateKey => { const logDate = new Date(dateKey); if (logDate >= monday) { weeklyTotal += localData.logs[dateKey]; } }); return weeklyTotal; }
-    function calculateEstFinish(totalDoneInput, elapsedDaysInput) { /* ... */ } // Önceki koddan aynı
-    function showModal(title, message, onConfirm) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalMessage').innerText = message; const btnGroup = document.getElementById('modalButtons'); if (onConfirm) { btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`; document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); }; } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; } document.getElementById('customModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('customModal').style.display = 'none'; }
-
-
-    /* --- TESBİHAT YÖNETİMİ --- */
+    window.setActivePrayer = function(index) {
+        activeRowIndex = index;
+        triggerHaptic();
+        updateCardUI(index); 
+        setTimeout(() => {
+            const activeEl = document.getElementById(`menuItem${index}`);
+            if(activeEl) activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }, 100);
+    }
     
+    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
+    window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
+    
+    window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
+    window.upD = function(i, v) { 
+        const val = parseInt(v) || 0;
+        const item = localData.counts[i];
+        if (val > item.target) {
+            showModal("Uyarı", `${item.name} namazı için girilen sayı hedeften büyük olamaz.`);
+            document.getElementById('pdInputDone').value = item.done; 
+            return;
+        }
+        if (item.done !== val) { 
+            const o = item.done;
+            item.done = val; 
+            addHistory(item.name, o, val); 
+            saveToCloud(); 
+            renderApp(); 
+        } 
+    };
+    
+    window.chC = function(i, d) { 
+        triggerHaptic(); 
+        const item = localData.counts[i];
+        const remaining = Math.max(0, item.target - item.done);
+
+        if (d > 0 && remaining <= 0) {
+            showModal("Bilgi", `${item.name} namazı için kaza borcunuz bulunmamaktadır.`);
+            return;
+        }
+
+        const o = item.done; 
+        const n = o + d; 
+        
+        if (n >= 0) { 
+            item.done = n; 
+            if (d > 0) { 
+                localData.daily.counts[i]++; 
+                const todayISO = getIsoDate(new Date()); 
+                localData.logs[todayISO] = (localData.logs[todayISO] || 0) + 1; 
+                const ct = localData.daily.counts.reduce((a, b) => a + b, 0); 
+                if (ct >= localData.daily.target) { 
+                    localData.calendar[todayISO] = true; 
+                    if (ct === localData.daily.target) jsConfetti.addConfetti(); 
+                } else { 
+                    delete localData.calendar[todayISO]; 
+                } 
+                
+                const wTotal = getWeeklyProgress();
+                const wTarget = localData.weeklyTarget || 50;
+                if(wTotal === wTarget) {
+                    jsConfetti.addConfetti({
+                        emojis: ['🌙', '⭐'],
+                        emojiSize: 35,
+                        confettiNumber: 60
+                    });
+                    showToast("Haftalık Hedef Tamamlandı! 🏆", "success");
+                }
+
+                let totalDebt = 0;
+                localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
+                if(totalDebt <= 0) {
+                     showModal("Tebrikler!", "Kaza namaz borcunuz bulunmamaktadır. Allah kabul etsin!");
+                }
+
+                recalculateStreak(); 
+            } else if (localData.daily.counts[i] > 0) { 
+                localData.daily.counts[i]--; 
+                const todayISO = getIsoDate(new Date()); 
+                if(localData.logs && localData.logs[todayISO] > 0) localData.logs[todayISO]--; 
+                const ct = localData.daily.counts.reduce((a, b) => a + b, 0); 
+                if (ct < localData.daily.target) { delete localData.calendar[todayISO]; } 
+                recalculateStreak(); 
+            } 
+            addHistory(localData.counts[i].name, o, n); 
+            saveToCloud(); 
+            renderApp(); 
+        } 
+    };
+    
+    function recalculateStreak() { let currentStreak = 0; const today = new Date(); const isoToday = getIsoDate(today); if (localData.calendar && localData.calendar[isoToday]) { currentStreak++; } for (let i = 1; i < 1000; i++) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); if (localData.calendar && localData.calendar[iso]) { currentStreak++; } else { if (i === 1 && currentStreak === 0) {} else { break; } } } localData.streak.current = currentStreak; }
+    
+    window.updateDailyGoal = function(v) { 
+        let totalDebt = 0;
+        localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
+        
+        if(totalDebt <= 0) {
+            showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
+            document.getElementById('dailyGoalInput').value = localData.daily.target;
+            return;
+        }
+        localData.daily.target = parseInt(v)||10; 
+        saveToCloud(); 
+        renderApp(); 
+    };
+
+    window.updateWeeklyGoal = function(v) { 
+        let totalDebt = 0;
+        localData.counts.forEach(c => totalDebt += Math.max(0, c.target - c.done));
+        
+        if(totalDebt <= 0) {
+            showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır.");
+            document.getElementById('weeklyGoalInput').value = localData.weeklyTarget;
+            return;
+        }
+        localData.weeklyTarget = parseInt(v)||50; 
+        saveToCloud(); 
+        renderApp(); 
+    };
+
+    function getWeeklyProgress() { if (!localData.logs) return 0; const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day == 0 ? -6 : 1); const monday = new Date(today.setDate(diff)); monday.setHours(0,0,0,0); let weeklyTotal = 0; Object.keys(localData.logs).forEach(dateKey => { const logDate = new Date(dateKey); if (logDate >= monday) { weeklyTotal += localData.logs[dateKey]; } }); return weeklyTotal; }
+
+    // --- TESBİHAT RENDER FONKSİYONU ---
     function renderTesbihat() {
         const c = document.getElementById('tesbihatContainer');
         c.innerHTML = "";
@@ -1576,185 +1639,648 @@
             localData.tesbihat = JSON.parse(JSON.stringify(defaultData.tesbihat));
         }
 
-        // --- LİSTE GÖRÜNÜMÜ ---
-        let listHTML = `<div id="tesbihatListView" class="t-list-container">`;
+        // --- 1. SEÇİM KUTUCUKLARI (Yatay Liste) ---
+        let selectorHTML = '<div class="tesbihat-selector-wrapper">';
         
         localData.tesbihat.forEach((item, i) => {
-            const p = item.target > 0 ? (item.current / item.target) * 100 : 0;
-            const color = item.color || "#609979";
+            const isActive = (i === activeTesbihatIndex) ? 'active' : '';
+            // Silme ikonu sadece sonradan eklenenlerde (index > 3)
+            const deleteIcon = i > 3 ? `<i class="fas fa-times t-delete-icon" onclick="event.stopPropagation(); deleteTesbihat(${i})"></i>` : '';
             
-            // Eğer renk # ile başlamıyorsa düzelt
-            const safeColor = color.startsWith('#') ? color : '#' + color;
-            
-            listHTML += `
-            <div class="t-list-item" onclick="openTesbihatDetail(${i})" style="background-color: ${safeColor}">
-                <div class="t-list-name">
-                    ${item.name}
-                    ${i > 3 ? '<i class="fas fa-pen small" style="opacity:0.6; font-size:0.7em;"></i>' : ''}
+            selectorHTML += `
+                <div class="t-chip ${isActive}" onclick="selectTesbihat(${i})">
+                    ${deleteIcon}
+                    <div class="t-chip-label">${item.name}</div>
                 </div>
-                <div class="t-list-count">${item.current}</div>
-                <div class="t-list-progress">
-                    <div class="t-list-bar" style="width: ${p}%;"></div>
-                </div>
-                ${i > 3 ? `<div style="position:absolute; top:5px; right:5px; padding:5px; z-index:10;" onclick="event.stopPropagation(); deleteTesbihat(${i})"><div class="t-delete-icon"><i class="fas fa-trash small"></i></div></div>` : ''}
-            </div>`;
+            `;
         });
 
-        // Yeni Ekleme Butonu
-        listHTML += `
-            <div class="t-add-btn" onclick="addNewCustomTesbihat()">
+        // Yeni Ekle Butonu
+        selectorHTML += `
+            <div class="t-chip t-chip-add" onclick="addNewCustomTesbihat()">
                 <i class="fas fa-plus"></i>
             </div>
         </div>`;
 
-        // --- DETAY GÖRÜNÜMÜ (Başlangıçta Gizli) ---
-        listHTML += `<div id="tesbihatDetailView" class="t-detail-view"></div>`;
+        c.innerHTML += selectorHTML;
 
-        c.innerHTML = listHTML;
-    }
 
-    window.openTesbihatDetail = function(index) {
-        activeTesbihatIndex = index;
-        document.getElementById('tesbihatListView').style.display = 'none';
-        document.getElementById('tesbihatDetailView').style.display = 'flex';
-        renderTesbihatDetail(index);
-    }
-
-    window.closeTesbihatDetail = function() {
-        document.getElementById('tesbihatDetailView').style.display = 'none';
-        document.getElementById('tesbihatListView').style.display = 'flex';
-        renderTesbihat(); // Listeyi güncelle
-    }
-
-    function renderTesbihatDetail(index) {
-        const item = localData.tesbihat[index];
-        const color = item.color || "#609979";
+        // --- 2. TEK BÜYÜK KART ---
+        if(activeTesbihatIndex >= localData.tesbihat.length) activeTesbihatIndex = 0;
+        const currentZikr = localData.tesbihat[activeTesbihatIndex];
+        const p = currentZikr.target > 0 ? (currentZikr.current / currentZikr.target) * 100 : 0;
         
-        const container = document.getElementById('tesbihatDetailView');
-        
-        container.innerHTML = `
-            <div class="t-detail-header">
-                <button class="btn-back" onclick="closeTesbihatDetail()">
-                    <i class="fas fa-arrow-left"></i> Geri Dön
-                </button>
-                <div class="btn-palette" onclick="openColorPalette(${index})">
-                    <i class="fas fa-palette" style="color:${color}"></i>
-                </div>
-            </div>
-
-            <div class="t-detail-card" style="background: linear-gradient(135deg, ${color}, #2d3436);">
-                <div class="t-detail-arabic">${item.arabic || ''}</div>
-                <div class="t-detail-title">${item.name}</div>
-                <div class="t-detail-count">${item.current}</div>
+        // Zikr Kartı HTML
+        let cardHTML = `
+            <div class="zikr-card bg-tesbihat-metallic mt-2">
+                <div class="arabic-text">${currentZikr.arabic || ''}</div>
+                <h5 class="fw-bold" style="opacity:0.8;">${currentZikr.name}</h5>
                 
-                <div class="t-controls">
-                    <button class="btn-control c-minus" onclick="upTes(${index}, -1)"><i class="fas fa-minus"></i></button>
-                    <button class="btn-control c-plus" onclick="upTes(${index}, 1)"><i class="fas fa-plus"></i></button>
-                    <button class="btn-control c-reset" onclick="resTes(${index})"><i class="fas fa-undo"></i></button>
+                <div class="zikr-count">${currentZikr.current}</div>
+                
+                <div class="progress mb-4 w-100" style="height: 10px; border-radius:10px; background:rgba(0,0,0,0.05);">
+                    <div class="progress-bar bg-success" style="width: ${p}%"></div>
                 </div>
-
-                <div class="t-footer">
-                    <div class="t-input-group">
-                        <span class="t-label">HEDEF</span>
-                        <input type="number" class="t-inp" value="${item.target}" onchange="setTesTarget(${index}, this.value)">
+                
+                <div class="zikr-btn-group">
+                    <button class="zikr-btn z-minus" onclick="window.upTes(${activeTesbihatIndex},-1)"><i class="fas fa-minus"></i></button>
+                    <button class="zikr-btn z-plus" onclick="window.upTes(${activeTesbihatIndex},1)"><i class="fas fa-plus"></i></button>
+                    <button class="zikr-btn z-reset" onclick="window.resTes(${activeTesbihatIndex})"><i class="fas fa-undo"></i></button>
+                </div>
+                
+                <div class="tesbihat-inputs-row">
+                    <!-- Hedef Kutusu -->
+                    <div class="tesbihat-box-style">
+                        <span class="t-label-small">HEDEF</span>
+                        <input type="number" class="t-input" value="${currentZikr.target}" onchange="window.setTesTarget(${activeTesbihatIndex}, this.value)">
                     </div>
-                    <div class="t-input-group">
-                        <input type="number" id="manZ-${index}" class="t-inp" placeholder="+ADET" style="text-align:left;">
-                        <button class="btn-add-val" onclick="addTes(${index})">EKLE</button>
+                    
+                    <!-- Manuel Ekle Kutusu -->
+                    <div class="tesbihat-box-style">
+                        <input type="number" id="manZ-${activeTesbihatIndex}" class="t-input" placeholder="+Adet">
+                        <button class="btn-add-large" onclick="window.addTes(${activeTesbihatIndex})">EKLE</button>
                     </div>
                 </div>
             </div>
         `;
+
+        c.innerHTML += cardHTML;
+
+        // Otomatik yatay kaydırma (Sayfa zıplamadan)
+        setTimeout(() => {
+            const wrapper = document.querySelector('.tesbihat-selector-wrapper');
+            const activeEl = document.querySelector('.t-chip.active');
+            if(wrapper && activeEl) {
+                const center = activeEl.offsetLeft - (wrapper.offsetWidth / 2) + (activeEl.offsetWidth / 2);
+                wrapper.scrollTo({ left: center, behavior: 'smooth' });
+            }
+        }, 100);
     }
 
-    // Renk Paleti İşlemleri
-    window.openColorPalette = function(index) {
+    // Yeni Zikir Seçimi
+    window.selectTesbihat = function(index) {
         activeTesbihatIndex = index;
-        const isDark = document.body.classList.contains('dark-mode');
-        const colors = isDark ? PALETTE_DARK : PALETTE_LIGHT;
-        
-        const grid = document.getElementById('paletteGrid');
-        grid.innerHTML = "";
-        
-        colors.forEach(c => {
-            grid.innerHTML += `<div class="p-option" style="background:${c}" onclick="selectColor('${c}')"></div>`;
-        });
-        
-        document.getElementById('colorPickerModal').style.display = 'flex';
+        triggerHaptic();
+        renderTesbihat();
     }
 
-    window.selectColor = function(color) {
-        if(activeTesbihatIndex !== null) {
-            localData.tesbihat[activeTesbihatIndex].color = color;
-            saveToCloud();
-            renderTesbihatDetail(activeTesbihatIndex);
-        }
-        document.getElementById('colorPickerModal').style.display = 'none';
-    }
-
+    // Yeni Özel Zikir Ekleme
     window.addNewCustomTesbihat = function() {
         const name = prompt("Yeni zikrin adı nedir?");
         if(name) {
-            const randomColor = PALETTE_LIGHT[Math.floor(Math.random() * PALETTE_LIGHT.length)];
             localData.tesbihat.push({
                 name: name,
                 arabic: "", 
                 current: 0,
-                target: 33,
-                color: randomColor
+                target: 33
             });
+            activeTesbihatIndex = localData.tesbihat.length - 1; 
             saveToCloud();
             renderTesbihat();
+            // Scroll en sona kaysın
+            setTimeout(() => {
+                const wrapper = document.querySelector('.tesbihat-selector-wrapper');
+                if(wrapper) wrapper.scrollLeft = wrapper.scrollWidth;
+            }, 100);
         }
     }
 
+    // Zikir Silme
     window.deleteTesbihat = function(index) {
-        if(confirm("Bu tesbihatı silmek istiyor musunuz?")) {
+        if(confirm(`${localData.tesbihat[index].name} silinsin mi?`)) {
             localData.tesbihat.splice(index, 1);
+            if(activeTesbihatIndex >= localData.tesbihat.length) {
+                activeTesbihatIndex = Math.max(0, localData.tesbihat.length - 1);
+            }
             saveToCloud();
             renderTesbihat();
         }
     }
 
-    // Tesbihat Counter Fonksiyonları (Global erişim için)
+    function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
+    
+    // ROZETLER: ESKİ EMOJİLERE DÖNÜŞ & GAYRET ATEŞ EMOJİSİ
+    const BADGES = [ 
+        {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, 
+        {id:500,title:"Gayret",icon:"🔥", desc:"500 Namaz"}, 
+        {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, 
+        {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, 
+        {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, 
+        {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, 
+        {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} 
+    ];
+    
+    function renderBadges(total) { 
+        const c = document.getElementById('badgeContainer'); 
+        c.innerHTML = ""; 
+        let next=false; 
+        BADGES.forEach(b => { 
+            let unlockedClass = '';
+            if(total >= b.id) { 
+                if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } 
+                unlockedClass = 'unlocked';
+                c.innerHTML += `<div class="badge-item ${unlockedClass}"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; 
+            } else if (!next) { 
+                c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; 
+                next=true; 
+            } 
+        }); 
+    }
+    
+    // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
+    // GÜNCELLENMİŞ VERSİYON: KATEGORİ VE ALT KATEGORİ FİLTRELEME
+    function renderHistory(filterDate = null) { 
+        const container = document.getElementById('historyListContainer'); 
+        container.innerHTML = ""; 
+
+        if (!localData.history || localData.history.length === 0) {
+            container.innerHTML = '<div class="text-center text-muted small py-4">Henüz işlem geçmişi yok.</div>';
+            return;
+        }
+
+        let displayData = [];
+        
+        // 1. Önce tarihe göre filtrele (varsa)
+        if (filterDate) {
+            const parts = filterDate.split('-'); 
+            if(parts.length === 3) {
+                // Input date formatı YYYY-MM-DD olarak gelir
+                const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
+                displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
+            } else if(filterDate.includes('.')) {
+                // Eğer formatlı gelirse (gg.aa.yyyy)
+                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
+            }
+        } else {
+            // Tarih filtresi yoksa ilk 50 kaydı al
+            displayData = localData.history.slice(0, 50);
+        }
+
+        // 2. Ana Kategori Filtreleme
+        if (currentHistoryCategory === 'namaz') {
+            // Namaz: İçinde 'Oruç' veya 'Orucu' GEÇMEYENLER
+            displayData = displayData.filter(r => !r.namaz.includes('Oruç') && !r.namaz.includes('Orucu'));
+            
+            // Namaz Alt Kategori Filtreleme
+            if (currentNamazSubCat !== 'all') {
+                displayData = displayData.filter(r => r.namaz === currentNamazSubCat);
+            }
+
+        } else if (currentHistoryCategory === 'oruc') {
+            // Oruç: İçinde 'Oruç' veya 'Orucu' GEÇENLER
+            displayData = displayData.filter(r => r.namaz.includes('Oruç') || r.namaz.includes('Orucu'));
+            
+            // Oruç Alt Kategori Filtreleme
+            if (currentFastingSubCat === 'kaza') {
+                displayData = displayData.filter(r => r.namaz.includes('Kaza'));
+            } else if (currentFastingSubCat === 'nafile') {
+                displayData = displayData.filter(r => r.namaz.includes('Nafile'));
+            }
+        }
+
+        if(displayData.length === 0) {
+             container.innerHTML = '<div class="text-center text-muted small py-4">Bu kriterlerde işlem bulunamadı.</div>';
+             return;
+        }
+
+        displayData.forEach(r => { 
+            const o = parseFloat(r.oldVal); 
+            const n = parseFloat(r.newVal); 
+            const diff = n - o;
+            const diffSign = diff > 0 ? '+' : '';
+            const statusClass = diff > 0 ? 'up' : (diff < 0 ? 'down' : ''); 
+
+            // Kompakt Accordion Kart HTML
+            container.innerHTML += `
+            <div class="metallic-card ${statusClass}" onclick="toggleHistoryCard(this)">
+                <div class="card-summary">
+                    <span class="summary-prayer">${r.namaz}</span>
+                    <div class="summary-right-group">
+                        <span class="change-badge">${diffSign}${diff}</span>
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </div>
+                </div>
+                <div class="card-detail">
+                    <div class="detail-values">
+                        <span>${o}</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span>${n}</span>
+                    </div>
+                    <div class="detail-full-date"><i class="far fa-clock me-1"></i> ${r.time}</div>
+                </div>
+            </div>`; 
+        }); 
+
+        if(!filterDate && localData.history.length > 50) {
+             container.innerHTML += '<div class="text-center text-muted small py-2">Daha eski kayıtlar için tarih filtresini kullanınız...</div>';
+        }
+    }
+
+    // YENİ: Kategori değiştirme fonksiyonu
+    window.setHistoryCategory = function(cat, btn) {
+        currentHistoryCategory = cat;
+        // Ana butonların aktiflik durumunu güncelle
+        document.querySelectorAll('.h-main-tabs .h-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const fastTabs = document.getElementById('fastingSubTabs');
+        const namazTabs = document.getElementById('namazSubTabs');
+
+        // Önce hepsini kapat
+        fastTabs.classList.remove('active');
+        namazTabs.classList.remove('active');
+
+        if (cat === 'oruc') {
+            fastTabs.classList.add('active');
+            setFastingSubCategory('all', fastTabs.querySelector('.h-sub-btn:first-child'));
+        } else if (cat === 'namaz') {
+            namazTabs.classList.add('active');
+            // Tümü artık sonda olduğu için (lastElementChild) veya spesifik seçimle
+            setNamazSubCategory('all', namazTabs.lastElementChild);
+        } else {
+            // 'Tümü' seçildiyse alt filtreleri sıfırla
+            currentFastingSubCat = 'all';
+            currentNamazSubCat = 'all';
+        }
+
+        // Listeyi yeniden render et
+        renderHistory(document.getElementById('historyFilterDate').value);
+    }
+
+    // YENİ: Oruç alt kategori değiştirme
+    window.setFastingSubCategory = function(subCat, btn) {
+        currentFastingSubCat = subCat;
+        document.querySelectorAll('#fastingSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderHistory(document.getElementById('historyFilterDate').value);
+    }
+
+    // YENİ: Namaz alt kategori değiştirme
+    window.setNamazSubCategory = function(subCat, btn) {
+        currentNamazSubCat = subCat;
+        document.querySelectorAll('#namazSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderHistory(document.getElementById('historyFilterDate').value);
+    }
+
+    // Kart açma kapama fonksiyonu
+    window.toggleHistoryCard = function(el) {
+        const allOpen = document.querySelectorAll('.metallic-card.open');
+        allOpen.forEach(card => {
+            if(card !== el) {
+                card.classList.remove('open');
+                card.querySelector('.card-detail').style.display = 'none';
+            }
+        });
+
+        const detail = el.querySelector('.card-detail');
+        if (el.classList.contains('open')) {
+            el.classList.remove('open');
+            detail.style.display = 'none';
+        } else {
+            el.classList.add('open');
+            detail.style.display = 'block';
+        }
+    }
+
+    window.filterHistoryByDate = function() {
+        const val = document.getElementById('historyFilterDate').value;
+        const resetBtn = document.getElementById('resetHistoryDateBtn');
+        if(val) {
+             resetBtn.style.display = 'block';
+             renderHistory(val);
+        } else {
+            resetBtn.style.display = 'none';
+            renderHistory();
+        }
+    }
+
+    window.clearHistoryFilter = function() {
+        const input = document.getElementById('historyFilterDate');
+        input.value = "";
+        input.type = "text"; // Placeholder geri gelsin diye
+        document.getElementById('resetHistoryDateBtn').style.display = 'none';
+        renderHistory();
+    }
+
+    function calculateEstFinish(totalDoneInput, elapsedDaysInput) { const dailyTarget = localData.daily.target || 10; let totalDebt = 0; localData.counts.forEach(c => totalDebt += (c.target - c.done)); const elContainer = document.getElementById('prediction-container'); const elSuccess = document.getElementById('prediction-success'); if (totalDebt <= 0) { elContainer.style.display = 'none'; elSuccess.style.display = 'block'; return; } elContainer.style.display = 'block'; elSuccess.style.display = 'none'; if (dailyTarget > 0) { const daysLeft = Math.ceil(totalDebt / dailyTarget); const today = new Date(); const finishDate = new Date(); finishDate.setDate(today.getDate() + daysLeft); const options = { year: 'numeric', month: 'long', day: 'numeric' }; document.getElementById('estFinishDate').innerText = finishDate.toLocaleDateString('tr-TR', options); document.getElementById('estDaysLeft').innerText = `${daysLeft} Gün Kaldı`; } else { document.getElementById('estFinishDate').innerText = "Belirlenmedi"; document.getElementById('estDaysLeft').innerText = "-"; } const avgDaily = totalDoneInput > 0 ? (totalDoneInput / elapsedDaysInput) : 0; const elDateAvg = document.getElementById('estFinishDateAvg'); const elDaysAvg = document.getElementById('estDaysLeftAvg'); if(avgDaily > 0) { const daysLeftAvg = Math.ceil(totalDebt / avgDaily); const todayAvg = new Date(); const finishDateAvg = new Date(); finishDateAvg.setDate(todayAvg.getDate() + daysLeftAvg); elDateAvg.innerText = finishDateAvg.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }); elDaysAvg.innerText = `(${daysLeftAvg} Gün)`; } else { elDateAvg.innerText = "Veri Yok"; elDaysAvg.innerText = "Henüz kazaya başlanmadı"; } }
+    function showModal(title, message, onConfirm) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalMessage').innerText = message; const btnGroup = document.getElementById('modalButtons'); btnGroup.innerHTML = ''; if (onConfirm) { btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`; document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); }; } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; } document.getElementById('customModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('customModal').style.display = 'none'; }
+    
+    // Zikir Sayac Fonksiyonları (Artık activeTesbihatIndex'i kullanacak şekilde güncellendi)
     window.upTes = function(i, d) { 
         triggerHaptic(); 
-        const item = localData.tesbihat[i];
-        if (d > 0 && item.current >= item.target) { showModal("Tebrikler", "Hedef tamamlandı."); return; }
-        const newVal = item.current + d;
-        if(newVal < 0) return;
-        item.current = newVal;
-        saveToCloud();
-        renderTesbihatDetail(i);
-        if (d > 0 && newVal === item.target) jsConfetti.addConfetti();
-    }
+        const item = localData.tesbihat[i]; 
+        const target = item.target; 
+        if (d > 0 && item.current >= target) { showModal("Tebrikler", "Bu tesbihat için günlük hedef tamamlandı."); return; } 
+        const newVal = item.current + d; 
+        if (newVal < 0) return; 
+        item.current = newVal; 
+        saveToCloud(); 
+        renderTesbihat(); 
+        if (d > 0 && newVal === target) { 
+            jsConfetti.addConfetti(); 
+            setTimeout(() => { showModal("Hedef Tamamlandı!", "Allah kabul etsin, gönlüne şifa olsun. 🌹"); }, 800); 
+        } 
+    };
     
-    window.resTes = function(i) {
-        showModal("Sıfırla", "Sıfırlansın mı?", () => {
-            localData.tesbihat[i].current = 0;
-            saveToCloud();
-            renderTesbihatDetail(i);
-        });
-    }
+    window.addTes = function(i) { 
+        triggerHaptic(); 
+        const valInput = document.getElementById(`manZ-${i}`); 
+        const v = parseInt(valInput.value) || 0; 
+        if(v > 0) { 
+            const item = localData.tesbihat[i]; 
+            const target = item.target; 
+            if (item.current >= target) { showModal("Tebrikler", "Zaten hedef tamamlandı."); return; } 
+            const newVal = item.current + v; 
+            item.current = newVal; 
+            saveToCloud(); 
+            renderTesbihat(); 
+            valInput.value = ""; 
+            if (newVal >= target) { 
+                jsConfetti.addConfetti(); 
+                setTimeout(() => { showModal("Hedef Tamamlandı!", "Allah kabul etsin, gönlüne şifa olsun. 🌹"); }, 800); 
+            } 
+        } 
+    };
     
-    window.setTesTarget = function(i, v) {
-        localData.tesbihat[i].target = parseInt(v) || 33;
-        saveToCloud();
-        renderTesbihatDetail(i);
-    }
+    window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
+    window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
+    window.switchChartPeriod = function(period) { currentChartPeriod = period; updatePerformanceChart(); }
     
-    window.addTes = function(i) {
-        const val = parseInt(document.getElementById(`manZ-${i}`).value) || 0;
-        if(val > 0) {
-            upTes(i, val);
-            document.getElementById(`manZ-${i}`).value = "";
+    window.switchStatsTab = function(tab) {
+        document.querySelectorAll('.stats-tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tabBtn-' + tab).classList.add('active');
+        document.getElementById('stats-view-analysis').style.display = 'none';
+        document.getElementById('stats-view-history').style.display = 'none';
+        document.getElementById('stats-view-' + tab).style.display = 'block';
+        if(tab === 'history') {
+            renderHistory(document.getElementById('historyFilterDate').value);
         }
     }
 
-    // ... (Diğer istatistik, hesaplama vb. fonksiyonlar aynen devam eder) ...
-    // Kalan fonksiyonlar önceki kodla birebir aynıdır, yer darlığı nedeniyle kısaltıyorum.
-    // Fonksiyonlar: copyStartDate, copyEndDate, applyAdvancedCalculation, downloadDataAsCSV, downloadBackupJSON, importBackupJSON, toggleDarkMode
+    function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
     
+    // --- YENİ EKLENEN FONKSİYON: EN VERİMLİ HAFTA VE AY ---
+    function calculateBestPeriods() {
+        if (!localData.logs) return { week: "-", month: "-" };
+        
+        const weeklySums = {};
+        const monthlySums = {};
+
+        Object.keys(localData.logs).forEach(date => {
+            const val = localData.logs[date];
+            if(val === 0) return;
+            
+            const d = new Date(date);
+            
+            // Ay Hesabı (Örn: "Ekim 2023")
+            const mKey = d.toLocaleString('tr-TR', { month: 'long', year: 'numeric' });
+            monthlySums[mKey] = (monthlySums[mKey] || 0) + val;
+
+            // Hafta Hesabı (Pazartesi bazlı)
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day == 0 ? -6 : 1); // Pazartesiye git
+            const monday = new Date(d); 
+            monday.setDate(diff);
+            const wKey = monday.toISOString().split('T')[0]; // Anahtar olarak Pazartesi tarihi
+            weeklySums[wKey] = (weeklySums[wKey] || 0) + val;
+        });
+
+        // En iyi haftayı bul
+        let maxW = 0, bestWDate = "";
+        for(let k in weeklySums) { 
+            if(weeklySums[k] > maxW) { maxW = weeklySums[k]; bestWDate = k; } 
+        }
+
+        // En iyi ayı bul
+        let maxM = 0, bestMName = "";
+        for(let k in monthlySums) { 
+            if(monthlySums[k] > maxM) { maxM = monthlySums[k]; bestMName = k; } 
+        }
+
+        // Haftayı okunabilir formata çevir (Örn: 10 Eki - 16 Eki)
+        let weekStr = "-";
+        if(bestWDate) {
+            const m = new Date(bestWDate);
+            const s = new Date(m); 
+            s.setDate(m.getDate() + 6); // Pazar
+            weekStr = `${m.getDate()} ${m.toLocaleString('tr-TR',{month:'short'})} - ${s.getDate()} ${s.toLocaleString('tr-TR',{month:'short'})} (${maxW})`;
+        }
+
+        return {
+            week: weekStr,
+            month: maxM > 0 ? `${bestMName} (${maxM})` : "-"
+        };
+    }
+
+    // --- YENİ EKLENEN FONKSİYON: EN GÜÇLÜ ZİNCİRİ HESAPLA ---
+    function calculateMaxStreak() {
+        if (!localData.calendar) return 0;
+        const dates = Object.keys(localData.calendar).sort();
+        if (dates.length === 0) return 0;
+
+        let maxStreak = 1;
+        let currentStreak = 1;
+
+        for (let i = 1; i < dates.length; i++) {
+            const prev = new Date(dates[i-1]);
+            const curr = new Date(dates[i]);
+            
+            // Gün farkını hesapla
+            const diffTime = Math.abs(curr - prev);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 1) {
+                // Eğer tam 1 gün sonraysa zincir devam ediyor
+                currentStreak++;
+            } else {
+                // Zincir koptu
+                currentStreak = 1;
+            }
+            if (currentStreak > maxStreak) maxStreak = currentStreak;
+        }
+        return maxStreak;
+    }
+
+    function renderStats() { 
+        let totalTarget = 0, totalDone = 0; 
+        let labels = [], remainingData = [], doneData = []; 
+        let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; 
+        const days = getElapsedDays();
+
+        const gridContainer = document.getElementById('prayer-analysis-grid');
+        gridContainer.innerHTML = "";
+
+        localData.counts.forEach((c, index) => { 
+            totalTarget += c.target; 
+            totalDone += c.done; 
+            const remaining = Math.max(0, c.target - c.done); 
+            labels.push(c.name); 
+            remainingData.push(remaining); 
+            doneData.push(c.done); 
+            
+            if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } 
+            if (c.done > maxDone) { maxDone = c.done; bestName = c.name; }
+
+            const avg = (c.done / days).toFixed(2);
+            const estText = formatTime(avg > 0 ? Math.ceil(remaining/avg) : 0);
+            
+            gridContainer.innerHTML += `
+            <div class="stat-accordion-item">
+                <div class="stat-accordion-header" onclick="toggleStatDetails(${index})">
+                    <div class="stat-header-content">
+                        <div class="stat-icon-wrapper"><i class="fas fa-mosque"></i></div>
+                        <div class="stat-title">${c.name}</div>
+                    </div>
+                    <i class="fas fa-chevron-down stat-arrow" id="icon-stat-${index}"></i>
+                </div>
+                <div class="stat-accordion-body" id="detail-stat-${index}">
+                    <div class="stat-detail-grid">
+                        <div class="stat-detail-item">
+                            <span class="stat-detail-label">KILINAN</span>
+                            <div class="stat-detail-value text-done">${c.done}</div>
+                        </div>
+                        <div class="stat-detail-item">
+                            <span class="stat-detail-label">KALAN</span>
+                            <div class="stat-detail-value text-rem">${remaining}</div>
+                        </div>
+                        <div class="stat-detail-item">
+                            <span class="stat-detail-label">GÜNLÜK ORT.</span>
+                            <div class="stat-detail-value text-primary">${avg}</div>
+                        </div>
+                        <div class="stat-detail-item">
+                            <span class="stat-detail-label">TAHMİNİ BİTİŞ</span>
+                            <div class="stat-detail-value text-warning" style="font-size:0.9rem;">${estText}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }); 
+        
+        const periodStats = calculatePeriodStats(); 
+        const avg = (totalDone / days).toFixed(2); 
+    
+        const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
+        const weeklyDone = getWeeklyProgress(); 
+    
+        document.getElementById('statToday').innerText = dailyDone; 
+        document.getElementById('statWeekly').innerText = weeklyDone; 
+        document.getElementById('statMonthly').innerText = periodStats.monthly; 
+        document.getElementById('stat3Months').innerText = periodStats.months3;
+        document.getElementById('stat6Months').innerText = periodStats.months6;
+        document.getElementById('statYearly').innerText = periodStats.yearly;
+        document.getElementById('statAverage').innerText = avg;
+        
+        document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
+        document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
+        
+        // --- YENİ KARTLARI GÜNCELLE ---
+        const bestPeriods = calculateBestPeriods();
+        const maxStreakVal = calculateMaxStreak();
+        
+        document.getElementById('bestWeekVal').innerText = bestPeriods.week;
+        document.getElementById('bestMonthVal').innerText = bestPeriods.month;
+        document.getElementById('longestStreakVal').innerText = maxStreakVal + " Gün";
+
+        const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
+        
+        renderHistory();
+    }
+
+    window.toggleStatDetails = function(index) {
+        const detail = document.getElementById(`detail-stat-${index}`);
+        const icon = document.getElementById(`icon-stat-${index}`);
+        const item = detail.parentElement;
+
+        if(item.classList.contains('open')) {
+            item.classList.remove('open');
+            icon.className = 'fas fa-chevron-down stat-arrow';
+        } else {
+            document.querySelectorAll('.stat-accordion-item').forEach(el => {
+                el.classList.remove('open');
+                const i = el.querySelector('.stat-arrow');
+                if(i) i.className = 'fas fa-chevron-down stat-arrow';
+            });
+
+            item.classList.add('open');
+            icon.className = 'fas fa-chevron-up stat-arrow';
+        }
+    }
+    
+    function calculatePeriodStats() { 
+        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [] }; 
+        const today = new Date(); 
+        
+        const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        let monthlyTotal = 0;
+
+        let weeklyTotal = 0, m3 = 0, m6 = 0, y1 = 0; 
+        let last7Data = [], last7Labels = []; 
+        let last30Data = [], last30Labels = []; 
+        
+        for(let i=6; i>=0; i--) { 
+            const d = new Date(); 
+            d.setDate(today.getDate() - i); 
+            const iso = getIsoDate(d); 
+            const val = localData.logs[iso] || 0; 
+            last7Data.push(val); 
+            last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'})); 
+        } 
+        for(let i=29; i>=0; i--) { 
+            const d = new Date(); 
+            d.setDate(today.getDate() - i); 
+            const iso = getIsoDate(d); 
+            const val = localData.logs[iso] || 0; 
+            last30Data.push(val); 
+            last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
+        } 
+        
+        const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3); 
+        const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6); 
+        const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1); 
+        
+        Object.keys(localData.logs).forEach(dateKey => { 
+            const d = new Date(dateKey); 
+            const val = localData.logs[dateKey]; 
+            if(d >= currentMonthStart) monthlyTotal += val;
+            if(d >= threeMonthsAgo) m3 += val; 
+            if(d >= sixMonthsAgo) m6 += val; 
+            if(d >= oneYearAgo) y1 += val; 
+        }); 
+        
+        return { monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels }; 
+    }
+    window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
+    window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
+    window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
+    window.downloadDataAsCSV = function() { let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; localData.counts.forEach(c => { csv += `${c.name};${c.target};${c.done}\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kaza_takip.csv"; link.click(); };
+    window.downloadBackupJSON = function() { const jsonStr = JSON.stringify(localData); const blob = new Blob([jsonStr], { type: 'application/json' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "ibadet_yedek_" + new Date().toISOString().split('T')[0] + ".json"; link.click(); };
+    window.importBackupJSON = function(input) { 
+        const file = input.files[0]; 
+        if (!file) return; 
+        const reader = new FileReader(); 
+        reader.onload = function(e) { 
+            try { 
+                const newData = JSON.parse(e.target.result); 
+                if (newData.counts && newData.tesbihat) { 
+                    localData = newData; 
+                    saveToCloud(); 
+                    renderApp(); 
+                    renderTesbihat(); 
+                    showToast("Yedek dosyası başarıyla yüklendi! 🚀", "success");
+                } else { 
+                    showToast("Geçersiz yedek dosyası.", "error"); 
+                } 
+            } catch (err) { 
+                showToast("Dosya okunamadı: " + err, "error"); 
+            } 
+        }; 
+        reader.readAsText(file); 
+        input.value = ""; 
+    };
+    
+    // --- GECE MODU VE OTOMATİK MENÜ KAPATMA FONKSİYONU ---
     window.toggleDarkMode = function() { 
         document.body.classList.toggle('dark-mode'); 
         const isDark = document.body.classList.contains('dark-mode'); 
@@ -1766,13 +2292,265 @@
              toggleSidebar();
         }
         
-        // Yeniden render et (renk paleti güncellemesi için önemli)
-        const currentSection = document.querySelector('.nav-item.active').getAttribute('onclick').match(/'(.*?)'/)[1];
-        showSection(currentSection);
+        renderApp(); 
+        renderStats(); 
     };
     
     if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
-    // ... (Service Worker, Install PWA vb.) ...
+    document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
+    const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; this.value = formatDateTR(this.value); }; dInput.placeholder = 'gg.aa.yyyy';
+    function checkDailyReset() { const t = getCurrentDateSimple(); if (localData.daily.date !== t) { localData.daily.date = t; localData.daily.counts = [0,0,0,0,0]; saveToCloud(); } }
+    function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
+    function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
+    function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history = []; localData.history.unshift(r); 
+    saveToCloud(); }
+    
+    function forceResetData() { 
+        const savedGender = localData.gender;
+        const savedMenstrualDays = localData.menstrualDaysPerMonth;
+        const savedMenstrualState = localData.isMenstrualState;
+        localData = JSON.parse(JSON.stringify(defaultData)); 
+        if(savedGender) {
+            localData.gender = savedGender;
+            localData.menstrualDaysPerMonth = savedMenstrualDays;
+            localData.isMenstrualState = savedMenstrualState;
+        }
+        saveToCloud(); 
+        renderApp();
+        renderStats();
+        renderCalculatorRows();
+        applyGenderSettings(); 
+        // SIFIRLANINCA UYARI VER
+        showModal("Bilgi", "Kaza namaz borcunuz bulunmamaktadır. Allah kabul etsin!");
+    }
+    
+    function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
+
+    /* --- YENİ EKLENEN ORUÇ TAKİP FONKSİYONLARI --- */
+    
+    function renderFasting() {
+        if(!localData.fasting) return;
+        
+        // KAZA KISMI
+        const kaza = localData.fasting.kaza;
+        const btnToggleKaza = document.getElementById('btnToggleKazaTarget');
+        const kazaSimple = document.getElementById('kazaSimpleMode');
+        const kazaTarget = document.getElementById('kazaTargetMode');
+        const kazaBadge = document.getElementById('orucKazaBadge');
+
+        // Kaza verisi için hasTarget kontrolü (Eski verilerde yoksa false varsay)
+        const hasKazaTarget = kaza.hasTarget === true;
+
+        if(hasKazaTarget) {
+            // Hedef Modu Aktif
+            kazaSimple.style.display = 'none';
+            kazaTarget.style.display = 'block';
+            kazaBadge.style.display = 'block';
+            btnToggleKaza.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
+            btnToggleKaza.classList.replace('btn-outline-light', 'btn-outline-warning');
+
+            const kazaRem = Math.max(0, kaza.target - kaza.done);
+            const kazaPct = kaza.target > 0 ? (kaza.done / kaza.target) * 100 : 0;
+            
+            document.getElementById('inpOrucKazaTarget').value = kaza.target;
+            document.getElementById('inpOrucKazaDone').value = kaza.done;
+            kazaBadge.innerText = `Kalan: ${kazaRem}`;
+            document.getElementById('progOrucKaza').style.width = `${kazaPct}%`;
+            document.getElementById('txtOrucKaza').innerText = `%${kazaPct.toFixed(1)} Tamamlandı`;
+        } else {
+            // Basit Mod
+            kazaSimple.style.display = 'block';
+            kazaTarget.style.display = 'none';
+            kazaBadge.style.display = 'none';
+            btnToggleKaza.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
+            btnToggleKaza.classList.replace('btn-outline-warning', 'btn-outline-light');
+            document.getElementById('kazaCountSimple').innerText = kaza.done;
+        }
+
+        // NAFİLE KISMI
+        const nafile = localData.fasting.nafile;
+        const btnToggleNafile = document.getElementById('btnToggleNafileTarget');
+        const nafileSimple = document.getElementById('nafileSimpleMode');
+        const nafileTarget = document.getElementById('nafileTargetMode');
+        const nafileBadge = document.getElementById('orucNafileBadge');
+
+        if(nafile.hasTarget) {
+            // Hedef Modu Aktif
+            nafileSimple.style.display = 'none';
+            nafileTarget.style.display = 'block';
+            nafileBadge.style.display = 'block';
+            btnToggleNafile.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
+            btnToggleNafile.classList.replace('btn-outline-light', 'btn-outline-warning');
+
+            const nafRem = Math.max(0, nafile.target - nafile.done);
+            const nafPct = nafile.target > 0 ? (nafile.done / nafile.target) * 100 : 0;
+            
+            document.getElementById('inpOrucNafileTarget').value = nafile.target;
+            document.getElementById('inpOrucNafileDone').value = nafile.done;
+            document.getElementById('progOrucNafile').style.width = `${nafPct}%`;
+            document.getElementById('txtOrucNafile').innerText = `%${nafPct.toFixed(1)} Tamamlandı`;
+        } else {
+            // Basit Mod
+            nafileSimple.style.display = 'block';
+            nafileTarget.style.display = 'none';
+            nafileBadge.style.display = 'none';
+            btnToggleNafile.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
+            btnToggleNafile.classList.replace('btn-outline-warning', 'btn-outline-light');
+            document.getElementById('nafileCountSimple').innerText = nafile.done;
+        }
+    }
+
+    window.updateFastingTarget = function(type, val) {
+        const v = parseInt(val) || 0;
+        localData.fasting[type].target = v;
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.updateFastingDone = function(type, val) {
+        const v = parseInt(val) || 0;
+        if(type === 'kaza' && v > localData.fasting.kaza.target) {
+            // Kaza'da target 0 değilse ve target aşıldıysa uyar (Target 0 ise sonsuz izin verilebilir ama mantıken borç sayısı girilmeli)
+             if(localData.fasting.kaza.hasTarget && localData.fasting.kaza.target > 0) {
+                 showModal("Hata", "Tutulan oruç sayısı hedeften büyük olamaz.");
+                 renderFasting();
+                 return;
+             }
+        }
+        localData.fasting[type].done = v;
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.toggleKazaTargetMode = function() {
+        if(!localData.fasting.kaza.hasTarget) {
+             localData.fasting.kaza.hasTarget = true;
+             // Eğer hedef 0 ise varsayılan bir değer ata, değilse mevcut değeri koru
+             if(localData.fasting.kaza.target === 0) localData.fasting.kaza.target = 10;
+        } else {
+             localData.fasting.kaza.hasTarget = false;
+        }
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.changeFasting = function(type, delta) {
+        triggerHaptic();
+        const item = localData.fasting[type];
+        
+        // Kaza hedefli modda borç bittiyse uyar
+        if(type === 'kaza' && item.hasTarget && delta > 0 && item.target > 0 && item.done >= item.target) {
+            showModal("Tebrikler", "Kaza oruç borcunuz kalmadı!");
+            return;
+        }
+
+        // Nafile hedefli ise ve hedef bittiyse uyar
+        if(type === 'nafile' && item.hasTarget && delta > 0 && item.done >= item.target) {
+            showModal("Tebrikler", "Hedeflenen nafile oruç sayısı tamamlandı.");
+            return;
+        }
+
+        const newVal = item.done + delta;
+        if(newVal < 0) return;
+
+        item.done = newVal;
+        
+        // Konfeti ve Başarı Kontrolü
+        if(delta > 0) {
+            let success = false;
+            // Kaza bitişi (Hedefli modda)
+            if(type === 'kaza' && item.hasTarget && item.target > 0 && item.done === item.target) success = true;
+            // Nafile hedef bitişi
+            if(type === 'nafile' && item.hasTarget && item.done === item.target) success = true;
+
+            if(success) {
+                jsConfetti.addConfetti({
+                    emojis: ['🌙', '⭐', '✨'],
+                    emojiSize: 40,
+                    confettiNumber: 60
+                });
+                // 2-3 sn gecikmeli modal
+                setTimeout(() => {
+                    showModal("Harika!", "Hedefine ulaştın. Allah kabul etsin! 🤲");
+                }, 2500);
+            } else {
+                // Standart artışta ufak toast
+                showToast("Oruç eklendi!", "success");
+            }
+        }
+
+        // GEÇMİŞE KAYDET (Hem + hem - işlemleri için if dışına alındı)
+        const name = type === 'kaza' ? "Kaza Orucu" : "Nafile Oruç";
+        const oldVal = newVal - delta; // Eski değeri hesapla
+        addHistory(name, oldVal, newVal);
+
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.toggleNafileTargetMode = function() {
+        localData.fasting.nafile.hasTarget = !localData.fasting.nafile.hasTarget;
+        if(localData.fasting.nafile.hasTarget && localData.fasting.nafile.target === 0) {
+            localData.fasting.nafile.target = 10; // Varsayılan bir hedef ata
+        }
+        saveToCloud();
+        renderFasting();
+    };
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('Service Worker başarıyla kaydedildi:', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('Service Worker kaydı başarısız:', error);
+                });
+        });
+    }
+
+    window.addEventListener('offline', () => {
+        showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "error");
+        document.body.style.filter = "grayscale(100%)";
+    });
+
+    window.addEventListener('online', () => {
+        showToast("Tekrar çevrimiçi oldunuz!", "success");
+        document.body.style.filter = "none";
+    });
+
+    // --- PWA YÜKLEME BUTONU MANTIĞI ---
+    let deferredPrompt;
+    const installContainer = document.getElementById('installAppContainer');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        if (!window.matchMedia('(display-mode: standalone)').matches) {
+            if(installContainer) installContainer.style.display = 'block';
+        }
+    });
+
+    async function installPWA() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (outcome === 'accepted') {
+            if(installContainer) installContainer.style.display = 'none';
+        }
+    }
+
+    window.addEventListener('appinstalled', () => {
+        if(installContainer) installContainer.style.display = 'none';
+        deferredPrompt = null;
+        showToast("Uygulama başarıyla yüklendi! 📱", "success");
+    });
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        if(installContainer) installContainer.style.display = 'none';
+    }
 </script>
 </body>
 </html>
