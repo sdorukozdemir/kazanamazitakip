@@ -274,17 +274,9 @@
         }
         .t-list-card:active { transform: scale(0.98); }
         .t-card-info { z-index: 2; flex: 1; }
-        
-        /* GÜNDÜZ İÇİN LİSTE KARTLARI (KOYU YAZI) */
-        .t-card-name { font-weight: 700; font-size: 1.1rem; color: #212529; text-shadow: none; }
-        .t-card-count { font-size: 0.9rem; color: #495057; font-weight: 600; }
-        .t-card-icon { font-size: 1.5rem; color: #495057; margin-left: 10px; z-index: 2; }
-        
-        /* GECE İÇİN LİSTE KARTLARI (AÇIK YAZI) */
-        body.dark-mode .t-card-name { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-        body.dark-mode .t-card-count { color: rgba(255,255,255,0.9); }
-        body.dark-mode .t-card-icon { color: rgba(255,255,255,0.8); }
-
+        .t-card-name { font-weight: 700; font-size: 1.1rem; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .t-card-count { font-size: 0.9rem; color: rgba(255,255,255,0.9); font-weight: 600; }
+        .t-card-icon { font-size: 1.5rem; color: rgba(255,255,255,0.8); margin-left: 10px; z-index: 2; }
         .t-card-delete {
             position: absolute; right: 45px; top: 50%; transform: translateY(-50%);
             width: 35px; height: 35px; background: rgba(255, 255, 255, 0.2); border-radius: 50%;
@@ -317,14 +309,15 @@
         .cp-swatch:active { transform: scale(1.1); }
 
         /* --- TEMA RENKLERİ --- */
-        .theme-blue { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
-        .theme-green { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
-        .theme-red { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
-        .theme-black { background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%); }
-        .theme-orange { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
-        .theme-purple { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); }
-        .theme-teal { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
-        .theme-gold { background: linear-gradient(135deg, #e6b980 0%, #eacda3 100%); }
+        /* GÜNDÜZ MODU İÇİN KOYU RENKLER (GÜNCELLENDİ) */
+        .theme-blue { background: linear-gradient(135deg, #0d47a1 0%, #42a5f5 100%); }
+        .theme-green { background: linear-gradient(135deg, #1b5e20 0%, #66bb6a 100%); }
+        .theme-red { background: linear-gradient(135deg, #b71c1c 0%, #ef5350 100%); }
+        .theme-black { background: linear-gradient(135deg, #263238 0%, #546e7a 100%); }
+        .theme-orange { background: linear-gradient(135deg, #e65100 0%, #ffa726 100%); }
+        .theme-purple { background: linear-gradient(135deg, #4a148c 0%, #ab47bc 100%); }
+        .theme-teal { background: linear-gradient(135deg, #004d40 0%, #26a69a 100%); }
+        .theme-gold { background: linear-gradient(135deg, #bf8f00 0%, #fbc02d 100%); }
 
         /* GECE MODU TEMA OVERRIDE */
         body.dark-mode .theme-blue { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
@@ -1171,6 +1164,7 @@
             localData.tesbihat.forEach(t => {
                 if(t.name === "Sübhanallah") t.name = "Subhanallah";
                 if(t.name === "Elhamdülillah") t.name = "Elhamdulillah";
+                // Eski grad-X sınıflarını yeni theme-X sınıflarına dönüştür (Geriye uyumluluk)
                 if(!t.colorTheme || t.colorTheme.startsWith('grad-')) t.colorTheme = 'theme-blue';
             });
         }
@@ -1568,6 +1562,9 @@
 
         if(!isTesbihatDetailView) {
             // --- LİSTE GÖRÜNÜMÜ ---
+            // Eğer daha önce detay görünümündeysek veya içerik boşsa full render yap
+            // Aksi halde yine full render yap çünkü liste görünümü basittir.
+            
             c.innerHTML = ""; // Temizle
             
             let listHTML = '<div class="tesbihat-list-container">';
@@ -1588,6 +1585,7 @@
                 `;
             });
 
+            // Yeni Ekle Butonu (En Altta)
             listHTML += `
                 <div class="t-add-card" onclick="openAddZikrModal()">
                     <i class="fas fa-plus me-2"></i> YENİ ZİKİR EKLE
@@ -1602,18 +1600,32 @@
             const p = currentZikr.target > 0 ? (currentZikr.current / currentZikr.target) * 100 : 0;
             const themeClass = currentZikr.colorTheme || 'theme-blue';
 
-            // EĞER DETAY KARTI ZATEN VARSA SADECE GÜNCELLE (ZIPLAMA ÖNLEME)
+            // EĞER DETAY KARTI ZATEN VARSA, KOMPLE RENDER YAPMA, SADECE DEĞERLERİ GÜNCELLE
+            // BU "ZIPLAMA" (JUMPING) ETKİSİNİ YOK EDER.
             const existingCard = document.querySelector('.tesbihat-detail-card');
             if(existingCard) {
+                // Sadece değerleri güncelle
                 document.querySelector('.zikr-count').innerText = currentZikr.current;
+                
+                // Progress bar güncelle
                 const progBar = document.querySelector('.tesbihat-detail-card .progress-bar');
                 if(progBar) progBar.style.width = `${p}%`;
+
+                // Tema Rengi güncelle (eğer değiştiyse)
+                // Mevcut classları temizleyip yenisini ekleyelim
                 existingCard.className = `tesbihat-detail-card ${themeClass}`;
+                
+                // Input değerlerini güncelle (focus yoksa)
                 const targetInput = document.querySelector('.tesbihat-inputs-row input[type="number"]');
-                if(targetInput && document.activeElement !== targetInput) targetInput.value = currentZikr.target;
-                return; 
+                if(targetInput && document.activeElement !== targetInput) {
+                    targetInput.value = currentZikr.target;
+                }
+
+                return; // Fonksiyondan çık, HTML'i yeniden oluşturma
             }
 
+            // Eğer kart yoksa (ilk açılış), HTML'i oluştur
+            // Renk Paleti İkonları
             const colors = [
                 { class: 'theme-blue', name: 'Mavi' },
                 { class: 'theme-green', name: 'Yeşil' },
@@ -1630,15 +1642,18 @@
                 paletteItems += `<div class="cp-swatch ${col.class}" onclick="changeTesbihatColor(${activeTesbihatIndex}, '${col.class}')"></div>`;
             });
 
-            c.innerHTML = ""; 
+            c.innerHTML = ""; // Temizle
             
             let detailHTML = `
                 <div class="tesbihat-detail-wrapper">
                     <div class="tesbihat-header-controls" style="position:relative;">
+                        <!-- Palet Butonu ve Açılır Menü -->
                         <div class="control-btn" onclick="togglePalette()"><i class="fas fa-palette"></i></div>
                         <div id="paletteMenu" class="color-palette-container">
                             ${paletteItems}
                         </div>
+
+                        <!-- Geri Butonu -->
                         <div class="control-btn" onclick="closeTesbihatDetail()"><i class="fas fa-arrow-left"></i></div>
                     </div>
 
@@ -1680,13 +1695,13 @@
         activeTesbihatIndex = index;
         isTesbihatDetailView = true;
         triggerHaptic();
-        renderTesbihat();
+        renderTesbihat(); // İlk açılış
     }
 
     window.closeTesbihatDetail = function() {
         isTesbihatDetailView = false;
         triggerHaptic();
-        renderTesbihat();
+        renderTesbihat(); // Listeye dön
     }
 
     window.togglePalette = function() {
@@ -1701,7 +1716,9 @@
     window.changeTesbihatColor = function(index, colorClass) {
         localData.tesbihat[index].colorTheme = colorClass;
         saveToCloud();
+        // Paleti kapat
         document.getElementById('paletteMenu').style.display = 'none';
+        // Render (DOM update yapacak, full reload yapmayacak)
         renderTesbihat(); 
     }
 
@@ -1781,25 +1798,37 @@
 
         let displayData = [];
         
+        // 1. Önce tarihe göre filtrele (varsa)
         if (filterDate) {
             const parts = filterDate.split('-'); 
             if(parts.length === 3) {
+                // Input date formatı YYYY-MM-DD olarak gelir
                 const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
             } else if(filterDate.includes('.')) {
+                // Eğer formatlı gelirse (gg.aa.yyyy)
                  displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
             }
         } else {
+            // Tarih filtresi yoksa ilk 50 kaydı al
             displayData = localData.history.slice(0, 50);
         }
 
+        // 2. Ana Kategori Filtreleme
         if (currentHistoryCategory === 'namaz') {
+            // Namaz: İçinde 'Oruç' veya 'Orucu' GEÇMEYENLER
             displayData = displayData.filter(r => !r.namaz.includes('Oruç') && !r.namaz.includes('Orucu'));
+            
+            // Namaz Alt Kategori Filtreleme
             if (currentNamazSubCat !== 'all') {
                 displayData = displayData.filter(r => r.namaz === currentNamazSubCat);
             }
+
         } else if (currentHistoryCategory === 'oruc') {
+            // Oruç: İçinde 'Oruç' veya 'Orucu' GEÇENLER
             displayData = displayData.filter(r => r.namaz.includes('Oruç') || r.namaz.includes('Orucu'));
+            
+            // Oruç Alt Kategori Filtreleme
             if (currentFastingSubCat === 'kaza') {
                 displayData = displayData.filter(r => r.namaz.includes('Kaza'));
             } else if (currentFastingSubCat === 'nafile') {
@@ -1819,6 +1848,7 @@
             const diffSign = diff > 0 ? '+' : '';
             const statusClass = diff > 0 ? 'up' : (diff < 0 ? 'down' : ''); 
 
+            // Kompakt Accordion Kart HTML
             container.innerHTML += `
             <div class="metallic-card ${statusClass}" onclick="toggleHistoryCard(this)">
                 <div class="card-summary">
@@ -1847,12 +1877,14 @@
     // YENİ: Kategori değiştirme fonksiyonu
     window.setHistoryCategory = function(cat, btn) {
         currentHistoryCategory = cat;
+        // Ana butonların aktiflik durumunu güncelle
         document.querySelectorAll('.h-main-tabs .h-tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
         const fastTabs = document.getElementById('fastingSubTabs');
         const namazTabs = document.getElementById('namazSubTabs');
 
+        // Önce hepsini kapat
         fastTabs.classList.remove('active');
         namazTabs.classList.remove('active');
 
@@ -1861,14 +1893,19 @@
             setFastingSubCategory('all', fastTabs.querySelector('.h-sub-btn:first-child'));
         } else if (cat === 'namaz') {
             namazTabs.classList.add('active');
+            // Tümü artık sonda olduğu için (lastElementChild) veya spesifik seçimle
             setNamazSubCategory('all', namazTabs.lastElementChild);
         } else {
+            // 'Tümü' seçildiyse alt filtreleri sıfırla
             currentFastingSubCat = 'all';
             currentNamazSubCat = 'all';
         }
+
+        // Listeyi yeniden render et
         renderHistory(document.getElementById('historyFilterDate').value);
     }
 
+    // YENİ: Oruç alt kategori değiştirme
     window.setFastingSubCategory = function(subCat, btn) {
         currentFastingSubCat = subCat;
         document.querySelectorAll('#fastingSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
@@ -1876,6 +1913,7 @@
         renderHistory(document.getElementById('historyFilterDate').value);
     }
 
+    // YENİ: Namaz alt kategori değiştirme
     window.setNamazSubCategory = function(subCat, btn) {
         currentNamazSubCat = subCat;
         document.querySelectorAll('#namazSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
@@ -1883,6 +1921,7 @@
         renderHistory(document.getElementById('historyFilterDate').value);
     }
 
+    // Kart açma kapama fonksiyonu
     window.toggleHistoryCard = function(el) {
         const allOpen = document.querySelectorAll('.metallic-card.open');
         allOpen.forEach(card => {
@@ -1917,7 +1956,7 @@
     window.clearHistoryFilter = function() {
         const input = document.getElementById('historyFilterDate');
         input.value = "";
-        input.type = "text"; 
+        input.type = "text"; // Placeholder geri gelsin diye
         document.getElementById('resetHistoryDateBtn').style.display = 'none';
         renderHistory();
     }
@@ -2285,7 +2324,200 @@
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    /* --- PWA YÜKLEME BUTONU MANTIĞI --- */
+    /* --- YENİ EKLENEN ORUÇ TAKİP FONKSİYONLARI --- */
+    
+    function renderFasting() {
+        if(!localData.fasting) return;
+        
+        // KAZA KISMI
+        const kaza = localData.fasting.kaza;
+        const btnToggleKaza = document.getElementById('btnToggleKazaTarget');
+        const kazaSimple = document.getElementById('kazaSimpleMode');
+        const kazaTarget = document.getElementById('kazaTargetMode');
+        const kazaBadge = document.getElementById('orucKazaBadge');
+
+        // Kaza verisi için hasTarget kontrolü (Eski verilerde yoksa false varsay)
+        const hasKazaTarget = kaza.hasTarget === true;
+
+        if(hasKazaTarget) {
+            // Hedef Modu Aktif
+            kazaSimple.style.display = 'none';
+            kazaTarget.style.display = 'block';
+            kazaBadge.style.display = 'block';
+            btnToggleKaza.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
+            btnToggleKaza.classList.replace('btn-outline-light', 'btn-outline-warning');
+
+            const kazaRem = Math.max(0, kaza.target - kaza.done);
+            const kazaPct = kaza.target > 0 ? (kaza.done / kaza.target) * 100 : 0;
+            
+            document.getElementById('inpOrucKazaTarget').value = kaza.target;
+            document.getElementById('inpOrucKazaDone').value = kaza.done;
+            kazaBadge.innerText = `Kalan: ${kazaRem}`;
+            document.getElementById('progOrucKaza').style.width = `${kazaPct}%`;
+            document.getElementById('txtOrucKaza').innerText = `%${kazaPct.toFixed(1)} Tamamlandı`;
+        } else {
+            // Basit Mod
+            kazaSimple.style.display = 'block';
+            kazaTarget.style.display = 'none';
+            kazaBadge.style.display = 'none';
+            btnToggleKaza.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
+            btnToggleKaza.classList.replace('btn-outline-warning', 'btn-outline-light');
+            document.getElementById('kazaCountSimple').innerText = kaza.done;
+        }
+
+        // NAFİLE KISMI
+        const nafile = localData.fasting.nafile;
+        const btnToggleNafile = document.getElementById('btnToggleNafileTarget');
+        const nafileSimple = document.getElementById('nafileSimpleMode');
+        const nafileTarget = document.getElementById('nafileTargetMode');
+        const nafileBadge = document.getElementById('orucNafileBadge');
+
+        if(nafile.hasTarget) {
+            // Hedef Modu Aktif
+            nafileSimple.style.display = 'none';
+            nafileTarget.style.display = 'block';
+            nafileBadge.style.display = 'block';
+            btnToggleNafile.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
+            btnToggleNafile.classList.replace('btn-outline-light', 'btn-outline-warning');
+
+            const nafRem = Math.max(0, nafile.target - nafile.done);
+            const nafPct = nafile.target > 0 ? (nafile.done / nafile.target) * 100 : 0;
+            
+            document.getElementById('inpOrucNafileTarget').value = nafile.target;
+            document.getElementById('inpOrucNafileDone').value = nafile.done;
+            document.getElementById('progOrucNafile').style.width = `${nafPct}%`;
+            document.getElementById('txtOrucNafile').innerText = `%${nafPct.toFixed(1)} Tamamlandı`;
+        } else {
+            // Basit Mod
+            nafileSimple.style.display = 'block';
+            nafileTarget.style.display = 'none';
+            nafileBadge.style.display = 'none';
+            btnToggleNafile.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
+            btnToggleNafile.classList.replace('btn-outline-warning', 'btn-outline-light');
+            document.getElementById('nafileCountSimple').innerText = nafile.done;
+        }
+    }
+
+    window.updateFastingTarget = function(type, val) {
+        const v = parseInt(val) || 0;
+        localData.fasting[type].target = v;
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.updateFastingDone = function(type, val) {
+        const v = parseInt(val) || 0;
+        if(type === 'kaza' && v > localData.fasting.kaza.target) {
+            // Kaza'da target 0 değilse ve target aşıldıysa uyar (Target 0 ise sonsuz izin verilebilir ama mantıken borç sayısı girilmeli)
+             if(localData.fasting.kaza.hasTarget && localData.fasting.kaza.target > 0) {
+                 showModal("Hata", "Tutulan oruç sayısı hedeften büyük olamaz.");
+                 renderFasting();
+                 return;
+             }
+        }
+        localData.fasting[type].done = v;
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.toggleKazaTargetMode = function() {
+        if(!localData.fasting.kaza.hasTarget) {
+             localData.fasting.kaza.hasTarget = true;
+             // Eğer hedef 0 ise varsayılan bir değer ata, değilse mevcut değeri koru
+             if(localData.fasting.kaza.target === 0) localData.fasting.kaza.target = 10;
+        } else {
+             localData.fasting.kaza.hasTarget = false;
+        }
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.changeFasting = function(type, delta) {
+        triggerHaptic();
+        const item = localData.fasting[type];
+        
+        // Kaza hedefli modda borç bittiyse uyar
+        if(type === 'kaza' && item.hasTarget && delta > 0 && item.target > 0 && item.done >= item.target) {
+            showModal("Tebrikler", "Kaza oruç borcunuz kalmadı!");
+            return;
+        }
+
+        // Nafile hedefli ise ve hedef bittiyse uyar
+        if(type === 'nafile' && item.hasTarget && delta > 0 && item.done >= item.target) {
+            showModal("Tebrikler", "Hedeflenen nafile oruç sayısı tamamlandı.");
+            return;
+        }
+
+        const newVal = item.done + delta;
+        if(newVal < 0) return;
+
+        item.done = newVal;
+        
+        // Konfeti ve Başarı Kontrolü
+        if(delta > 0) {
+            let success = false;
+            // Kaza bitişi (Hedefli modda)
+            if(type === 'kaza' && item.hasTarget && item.target > 0 && item.done === item.target) success = true;
+            // Nafile hedef bitişi
+            if(type === 'nafile' && item.hasTarget && item.done === item.target) success = true;
+
+            if(success) {
+                jsConfetti.addConfetti({
+                    emojis: ['🌙', '⭐', '✨'],
+                    emojiSize: 40,
+                    confettiNumber: 60
+                });
+                // 2-3 sn gecikmeli modal
+                setTimeout(() => {
+                    showModal("Harika!", "Hedefine ulaştın. Allah kabul etsin! 🤲");
+                }, 2500);
+            } else {
+                // Standart artışta ufak toast
+                showToast("Oruç eklendi!", "success");
+            }
+        }
+
+        // GEÇMİŞE KAYDET (Hem + hem - işlemleri için if dışına alındı)
+        const name = type === 'kaza' ? "Kaza Orucu" : "Nafile Oruç";
+        const oldVal = newVal - delta; // Eski değeri hesapla
+        addHistory(name, oldVal, newVal);
+
+        saveToCloud();
+        renderFasting();
+    };
+
+    window.toggleNafileTargetMode = function() {
+        localData.fasting.nafile.hasTarget = !localData.fasting.nafile.hasTarget;
+        if(localData.fasting.nafile.hasTarget && localData.fasting.nafile.target === 0) {
+            localData.fasting.nafile.target = 10; // Varsayılan bir hedef ata
+        }
+        saveToCloud();
+        renderFasting();
+    };
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('Service Worker başarıyla kaydedildi:', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('Service Worker kaydı başarısız:', error);
+                });
+        });
+    }
+
+    window.addEventListener('offline', () => {
+        showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "error");
+        document.body.style.filter = "grayscale(100%)";
+    });
+
+    window.addEventListener('online', () => {
+        showToast("Tekrar çevrimiçi oldunuz!", "success");
+        document.body.style.filter = "none";
+    });
+
+    // --- PWA YÜKLEME BUTONU MANTIĞI ---
     let deferredPrompt;
     const installContainer = document.getElementById('installAppContainer');
 
