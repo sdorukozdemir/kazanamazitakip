@@ -274,9 +274,17 @@
         }
         .t-list-card:active { transform: scale(0.98); }
         .t-card-info { z-index: 2; flex: 1; }
-        .t-card-name { font-weight: 700; font-size: 1.1rem; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-        .t-card-count { font-size: 0.9rem; color: rgba(255,255,255,0.9); font-weight: 600; }
-        .t-card-icon { font-size: 1.5rem; color: rgba(255,255,255,0.8); margin-left: 10px; z-index: 2; }
+        
+        /* GÜNDÜZ İÇİN LİSTE KARTLARI (KOYU YAZI) */
+        .t-card-name { font-weight: 700; font-size: 1.1rem; color: #212529; text-shadow: none; }
+        .t-card-count { font-size: 0.9rem; color: #495057; font-weight: 600; }
+        .t-card-icon { font-size: 1.5rem; color: #495057; margin-left: 10px; z-index: 2; }
+        
+        /* GECE İÇİN LİSTE KARTLARI (AÇIK YAZI) */
+        body.dark-mode .t-card-name { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        body.dark-mode .t-card-count { color: rgba(255,255,255,0.9); }
+        body.dark-mode .t-card-icon { color: rgba(255,255,255,0.8); }
+
         .t-card-delete {
             position: absolute; right: 45px; top: 50%; transform: translateY(-50%);
             width: 35px; height: 35px; background: rgba(255, 255, 255, 0.2); border-radius: 50%;
@@ -2323,200 +2331,7 @@
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    /* --- YENİ EKLENEN ORUÇ TAKİP FONKSİYONLARI --- */
-    
-    function renderFasting() {
-        if(!localData.fasting) return;
-        
-        // KAZA KISMI
-        const kaza = localData.fasting.kaza;
-        const btnToggleKaza = document.getElementById('btnToggleKazaTarget');
-        const kazaSimple = document.getElementById('kazaSimpleMode');
-        const kazaTarget = document.getElementById('kazaTargetMode');
-        const kazaBadge = document.getElementById('orucKazaBadge');
-
-        // Kaza verisi için hasTarget kontrolü (Eski verilerde yoksa false varsay)
-        const hasKazaTarget = kaza.hasTarget === true;
-
-        if(hasKazaTarget) {
-            // Hedef Modu Aktif
-            kazaSimple.style.display = 'none';
-            kazaTarget.style.display = 'block';
-            kazaBadge.style.display = 'block';
-            btnToggleKaza.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
-            btnToggleKaza.classList.replace('btn-outline-light', 'btn-outline-warning');
-
-            const kazaRem = Math.max(0, kaza.target - kaza.done);
-            const kazaPct = kaza.target > 0 ? (kaza.done / kaza.target) * 100 : 0;
-            
-            document.getElementById('inpOrucKazaTarget').value = kaza.target;
-            document.getElementById('inpOrucKazaDone').value = kaza.done;
-            kazaBadge.innerText = `Kalan: ${kazaRem}`;
-            document.getElementById('progOrucKaza').style.width = `${kazaPct}%`;
-            document.getElementById('txtOrucKaza').innerText = `%${kazaPct.toFixed(1)} Tamamlandı`;
-        } else {
-            // Basit Mod
-            kazaSimple.style.display = 'block';
-            kazaTarget.style.display = 'none';
-            kazaBadge.style.display = 'none';
-            btnToggleKaza.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
-            btnToggleKaza.classList.replace('btn-outline-warning', 'btn-outline-light');
-            document.getElementById('kazaCountSimple').innerText = kaza.done;
-        }
-
-        // NAFİLE KISMI
-        const nafile = localData.fasting.nafile;
-        const btnToggleNafile = document.getElementById('btnToggleNafileTarget');
-        const nafileSimple = document.getElementById('nafileSimpleMode');
-        const nafileTarget = document.getElementById('nafileTargetMode');
-        const nafileBadge = document.getElementById('orucNafileBadge');
-
-        if(nafile.hasTarget) {
-            // Hedef Modu Aktif
-            nafileSimple.style.display = 'none';
-            nafileTarget.style.display = 'block';
-            nafileBadge.style.display = 'block';
-            btnToggleNafile.innerHTML = '<i class="fas fa-times me-2"></i> Hedefi Kaldır';
-            btnToggleNafile.classList.replace('btn-outline-light', 'btn-outline-warning');
-
-            const nafRem = Math.max(0, nafile.target - nafile.done);
-            const nafPct = nafile.target > 0 ? (nafile.done / nafile.target) * 100 : 0;
-            
-            document.getElementById('inpOrucNafileTarget').value = nafile.target;
-            document.getElementById('inpOrucNafileDone').value = nafile.done;
-            document.getElementById('progOrucNafile').style.width = `${nafPct}%`;
-            document.getElementById('txtOrucNafile').innerText = `%${nafPct.toFixed(1)} Tamamlandı`;
-        } else {
-            // Basit Mod
-            nafileSimple.style.display = 'block';
-            nafileTarget.style.display = 'none';
-            nafileBadge.style.display = 'none';
-            btnToggleNafile.innerHTML = '<i class="fas fa-bullseye me-2"></i> Hedef Belirle';
-            btnToggleNafile.classList.replace('btn-outline-warning', 'btn-outline-light');
-            document.getElementById('nafileCountSimple').innerText = nafile.done;
-        }
-    }
-
-    window.updateFastingTarget = function(type, val) {
-        const v = parseInt(val) || 0;
-        localData.fasting[type].target = v;
-        saveToCloud();
-        renderFasting();
-    };
-
-    window.updateFastingDone = function(type, val) {
-        const v = parseInt(val) || 0;
-        if(type === 'kaza' && v > localData.fasting.kaza.target) {
-            // Kaza'da target 0 değilse ve target aşıldıysa uyar (Target 0 ise sonsuz izin verilebilir ama mantıken borç sayısı girilmeli)
-             if(localData.fasting.kaza.hasTarget && localData.fasting.kaza.target > 0) {
-                 showModal("Hata", "Tutulan oruç sayısı hedeften büyük olamaz.");
-                 renderFasting();
-                 return;
-             }
-        }
-        localData.fasting[type].done = v;
-        saveToCloud();
-        renderFasting();
-    };
-
-    window.toggleKazaTargetMode = function() {
-        if(!localData.fasting.kaza.hasTarget) {
-             localData.fasting.kaza.hasTarget = true;
-             // Eğer hedef 0 ise varsayılan bir değer ata, değilse mevcut değeri koru
-             if(localData.fasting.kaza.target === 0) localData.fasting.kaza.target = 10;
-        } else {
-             localData.fasting.kaza.hasTarget = false;
-        }
-        saveToCloud();
-        renderFasting();
-    };
-
-    window.changeFasting = function(type, delta) {
-        triggerHaptic();
-        const item = localData.fasting[type];
-        
-        // Kaza hedefli modda borç bittiyse uyar
-        if(type === 'kaza' && item.hasTarget && delta > 0 && item.target > 0 && item.done >= item.target) {
-            showModal("Tebrikler", "Kaza oruç borcunuz kalmadı!");
-            return;
-        }
-
-        // Nafile hedefli ise ve hedef bittiyse uyar
-        if(type === 'nafile' && item.hasTarget && delta > 0 && item.done >= item.target) {
-            showModal("Tebrikler", "Hedeflenen nafile oruç sayısı tamamlandı.");
-            return;
-        }
-
-        const newVal = item.done + delta;
-        if(newVal < 0) return;
-
-        item.done = newVal;
-        
-        // Konfeti ve Başarı Kontrolü
-        if(delta > 0) {
-            let success = false;
-            // Kaza bitişi (Hedefli modda)
-            if(type === 'kaza' && item.hasTarget && item.target > 0 && item.done === item.target) success = true;
-            // Nafile hedef bitişi
-            if(type === 'nafile' && item.hasTarget && item.done === item.target) success = true;
-
-            if(success) {
-                jsConfetti.addConfetti({
-                    emojis: ['🌙', '⭐', '✨'],
-                    emojiSize: 40,
-                    confettiNumber: 60
-                });
-                // 2-3 sn gecikmeli modal
-                setTimeout(() => {
-                    showModal("Harika!", "Hedefine ulaştın. Allah kabul etsin! 🤲");
-                }, 2500);
-            } else {
-                // Standart artışta ufak toast
-                showToast("Oruç eklendi!", "success");
-            }
-        }
-
-        // GEÇMİŞE KAYDET (Hem + hem - işlemleri için if dışına alındı)
-        const name = type === 'kaza' ? "Kaza Orucu" : "Nafile Oruç";
-        const oldVal = newVal - delta; // Eski değeri hesapla
-        addHistory(name, oldVal, newVal);
-
-        saveToCloud();
-        renderFasting();
-    };
-
-    window.toggleNafileTargetMode = function() {
-        localData.fasting.nafile.hasTarget = !localData.fasting.nafile.hasTarget;
-        if(localData.fasting.nafile.hasTarget && localData.fasting.nafile.target === 0) {
-            localData.fasting.nafile.target = 10; // Varsayılan bir hedef ata
-        }
-        saveToCloud();
-        renderFasting();
-    };
-
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then((registration) => {
-                    console.log('Service Worker başarıyla kaydedildi:', registration.scope);
-                })
-                .catch((error) => {
-                    console.log('Service Worker kaydı başarısız:', error);
-                });
-        });
-    }
-
-    window.addEventListener('offline', () => {
-        showToast("İnternet bağlantısı kesildi. Çevrimdışı moddasınız.", "error");
-        document.body.style.filter = "grayscale(100%)";
-    });
-
-    window.addEventListener('online', () => {
-        showToast("Tekrar çevrimiçi oldunuz!", "success");
-        document.body.style.filter = "none";
-    });
-
-    // --- PWA YÜKLEME BUTONU MANTIĞI ---
+    /* --- YENİ EKLENEN PWA YÜKLEME BUTONU MANTIĞI --- */
     let deferredPrompt;
     const installContainer = document.getElementById('installAppContainer');
 
