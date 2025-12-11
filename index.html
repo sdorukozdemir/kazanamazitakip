@@ -178,9 +178,9 @@
         .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
         .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        /* YENİ ORUÇ TEMALARI */
-        .theme-oruc-kaza { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); color: #e65100; }
-        .theme-oruc-kaza.active { background: linear-gradient(135deg, #fb8c00 0%, #ef6c00 100%); color: white; }
+        /* YENİ METALİK SİYAH-GRİ ORUÇ TEMASI */
+        .theme-oruc-kaza { background: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%); color: #212529; border: 1px solid #ced4da; }
+        .theme-oruc-kaza.active { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; border: none; }
         
         .theme-oruc-nafile { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); color: #1b5e20; }
         .theme-oruc-nafile.active { background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%); color: white; }
@@ -191,8 +191,10 @@
         body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); color: #fbe9e7; }
         body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); color: #e8eaf6; }
         body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); color: #eceff1; }
+        
         /* Gece Modu Oruç Tema Override */
-        body.dark-mode .theme-oruc-kaza.active { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); }
+        body.dark-mode .theme-oruc-kaza { background: #2c3035; color: #ced4da; border-color: #444; }
+        body.dark-mode .theme-oruc-kaza.active { background: linear-gradient(135deg, #000000 0%, #434343 100%); color: white; }
         body.dark-mode .theme-oruc-nafile.active { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); }
 
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
@@ -202,7 +204,8 @@
         .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
         .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
         
-        .bg-oruc-kaza { background: linear-gradient(135deg, #d35400 0%, #e67e22 100%); color: white; }
+        /* KAZA ORUCU METALİK RENK */
+        .bg-oruc-kaza { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; }
         .bg-oruc-nafile { background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); color: white; }
         .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; }
         .border-white-10 { border-color: rgba(255,255,255,0.2) !important; }
@@ -212,7 +215,8 @@
         body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
         body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); }
         body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
-        body.dark-mode .bg-oruc-kaza { background: linear-gradient(135deg, #a04000 0%, #d35400 100%); }
+        /* Gece Modu Kaza Orucu Rengi */
+        body.dark-mode .bg-oruc-kaza { background: linear-gradient(135deg, #000000 0%, #434343 100%); }
         body.dark-mode .bg-oruc-nafile { background: linear-gradient(135deg, #0e6655 0%, #117864 100%); }
 
         .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
@@ -220,6 +224,26 @@
         .pd-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
         .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
         .pd-remaining-badge { background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); white-space: nowrap; flex-shrink: 0; }
+        
+        /* MOBİL UYUMLULUK AYARI - BAŞLIK VE ROZET SIĞMASI İÇİN */
+        @media (max-width: 576px) {
+            .pd-header {
+                flex-wrap: wrap; /* Sığmayan içeriği aşağı at */
+                gap: 5px;
+                justify-content: center; /* Ortala */
+            }
+            .pd-title {
+                font-size: 1.4rem; /* Mobilde başlığı biraz küçült */
+                width: 100%; /* Başlık tüm satırı kaplasın */
+                justify-content: center; /* Başlığı ortala */
+            }
+            .pd-remaining-badge {
+                margin: 0 auto; /* Rozeti ortala */
+                font-size: 0.8rem;
+                padding: 4px 12px;
+            }
+        }
+
         .pd-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: auto; }
         .pd-input-group { background: var(--input-bg); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
         .pd-label { font-size: 0.75rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; color: var(--text-color); }
@@ -2173,7 +2197,7 @@
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
                 theme: "theme-oruc-kaza", bg: "bg-oruc-kaza", 
-                colorClass: "bg-warning", btnClass: "bg-warning",
+                colorClass: "bg-dark", btnClass: "btn-dark", // Metalik tema için dark
                 countLabel: "Toplam Tutulan Kaza"
             },
             { 
