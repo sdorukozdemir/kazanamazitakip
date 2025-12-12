@@ -1067,7 +1067,11 @@
         }
     });
 
-    function loginWithGoogle() { auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); }
+    function loginWithGoogle() { 
+        provider.setCustomParameters({ prompt: 'select_account' });
+        auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); 
+    }
+    
     function logout() { 
         auth.signOut().then(() => {
             localStorage.removeItem('offlineBackup');
@@ -2007,7 +2011,7 @@
             const estText = formatTime(avg > 0 ? Math.ceil(remaining/avg) : 0);
             
             gridContainer.innerHTML += `
-            <div class="stat-accordion-item">
+            <div class="stat-accordion-item" id="stat-acc-item-${index}">
                 <div class="stat-accordion-header" onclick="toggleStatDetails(${index})">
                     <div class="stat-header-content">
                         <div class="stat-icon-wrapper"><i class="fas fa-mosque"></i></div>
@@ -2153,6 +2157,14 @@
         renderStats(); 
     };
     
+    // EKLENEN FONKSİYON: Detaylı Analiz Accordion Toggle
+    window.toggleStatDetails = function(index) {
+        const item = document.getElementById(`stat-acc-item-${index}`);
+        if(item) {
+            item.classList.toggle('open');
+        }
+    }
+
     if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
     document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
     const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; this.value = formatDateTR(this.value); }; dInput.placeholder = 'gg.aa.yyyy';
