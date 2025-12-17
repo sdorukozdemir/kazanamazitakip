@@ -96,7 +96,8 @@
             font-family: 'Poppins', sans-serif; 
             transition: 0.3s; 
             overflow: hidden; /* Sayfa genelinde kaydırmayı kapat */
-            height: 100vh; 
+            height: 100vh; /* Standart fallback */
+            height: 100dvh; /* Dynamic viewport height */
             width: 100vw;
             overscroll-behavior: none;
         }
@@ -136,7 +137,6 @@
             #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } 
             #sidebar.active { margin-left: -280px; } 
             #overlay { display: none !important; } 
-            /* Desktop'ta slider yapısı farklı davranabilir ama bu kodda mobille aynı bırakıyoruz, sadece genişlik ayarı */
             #content-container { width: calc(100% - 280px); margin-left: 0; } 
         }
         @media (max-width: 768px) { #content-container { width: 100%; } }
@@ -148,30 +148,34 @@
         /* --- YENİ SNAP SLIDER LAYOUT STİLLERİ --- */
         #content-container { 
             height: 100vh;
-            overflow-x: auto; /* Yatay kaydırmaya izin ver */
-            overflow-y: hidden; /* Dikey scroll container'da olmasın */
-            scroll-snap-type: x mandatory; /* Snap özelliği */
+            height: 100dvh; /* Dynamic viewport height */
+            overflow-x: auto; 
+            overflow-y: hidden; 
+            scroll-snap-type: x mandatory; 
             scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch; /* iOS için akıcı kaydırma */
+            -webkit-overflow-scrolling: touch; 
             display: flex;
         }
 
         #main-slider {
             display: flex;
-            width: 500vw; /* 5 Bölüm */
+            width: 500vw; 
             height: 100%;
         }
 
         .app-section {
-            width: 100vw; /* Her bölüm tam ekran genişliğinde */
+            width: 100vw; 
             height: 100%;
+            height: 100dvh; /* İçeriğin de tam boy olduğundan emin ol */
             padding: 20px;
-            padding-bottom: 90px; /* Alttaki menü için boşluk */
+            /* ALT BOŞLUK ARTIRILDI - İçeriğin kesilmemesi için */
+            padding-bottom: 140px; 
             box-sizing: border-box;
             flex-shrink: 0;
-            overflow-y: auto; /* DİKEY SCROLL BURADA (Her sayfa bağımsız) */
-            scroll-snap-align: start; /* Geçişte buraya yapış */
-            /* iOS Scroll Fix */
+            overflow-y: auto; 
+            scroll-snap-align: start;
+            /* KRİTİK AYAR: TEK SEFERDE TEK SEKME GEÇİŞİ */
+            scroll-snap-stop: always;
             -webkit-overflow-scrolling: touch;
         }
         
