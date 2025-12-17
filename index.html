@@ -761,6 +761,15 @@
 
                 <!-- YENİ EKLENEN KARTLAR -->
                 <div class="analysis-box mb-4">
+                    <!-- EN VERİMLİ GÜN SATIRI EKLENDİ -->
+                    <div class="analysis-row">
+                        <div class="analysis-icon" style="background: #20c997; color: white;"><i class="fas fa-calendar-day"></i></div>
+                        <div class="analysis-text">
+                            <span class="analysis-title">En Verimli Gün</span>
+                            <span class="analysis-value" id="bestDayVal">Hesaplanıyor...</span>
+                        </div>
+                    </div>
+                    
                     <div class="analysis-row">
                         <div class="analysis-icon icon-blue"><i class="fas fa-calendar-week"></i></div>
                         <div class="analysis-text">
@@ -1917,14 +1926,22 @@
     function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
     
     function calculateBestPeriods() {
-        if (!localData.logs) return { week: "-", month: "-" };
+        if (!localData.logs) return { week: "-", month: "-", day: "-" };
         
         const weeklySums = {};
         const monthlySums = {};
+        let maxDayVal = 0;
+        let maxDayDate = "";
 
         Object.keys(localData.logs).forEach(date => {
             const val = localData.logs[date];
             if(val === 0) return;
+            
+            // En verimli gün hesaplama
+            if(val > maxDayVal) {
+                maxDayVal = val;
+                maxDayDate = date;
+            }
             
             const d = new Date(date);
             const mKey = d.toLocaleString('tr-TR', { month: 'long', year: 'numeric' });
@@ -1956,9 +1973,16 @@
             weekStr = `${m.getDate()} ${m.toLocaleString('tr-TR',{month:'short'})} - ${s.getDate()} ${s.toLocaleString('tr-TR',{month:'short'})} (${maxW})`;
         }
 
+        let dayStr = "-";
+        if(maxDayDate) {
+             const d = new Date(maxDayDate);
+             dayStr = `${d.getDate()} ${d.toLocaleString('tr-TR', {month:'long'})} (${maxDayVal})`;
+        }
+
         return {
             week: weekStr,
-            month: maxM > 0 ? `${bestMName} (${maxM})` : "-"
+            month: maxM > 0 ? `${bestMName} (${maxM})` : "-",
+            day: dayStr
         };
     }
 
@@ -2061,6 +2085,9 @@
         
         const bestPeriods = calculateBestPeriods();
         const maxStreakVal = calculateMaxStreak();
+        
+        // EKLENDİ: En verimli gün
+        document.getElementById('bestDayVal').innerText = bestPeriods.day;
         
         document.getElementById('bestWeekVal').innerText = bestPeriods.week;
         document.getElementById('bestMonthVal').innerText = bestPeriods.month;
