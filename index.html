@@ -95,8 +95,9 @@
             color: var(--text-color); 
             font-family: 'Poppins', sans-serif; 
             transition: 0.3s; 
-            overflow: hidden; /* Sayfa genelinde kaydırmayı kapat */
-            height: 100vh; 
+            overflow: hidden; 
+            height: 100vh;
+            height: 100dvh; 
             width: 100vw;
             overscroll-behavior: none;
         }
@@ -144,14 +145,14 @@
         .user-info-male { background: var(--user-box-bg-male); }
         .user-info-female { background: var(--user-box-bg-female); }
         
-        /* --- YENİ SNAP SLIDER LAYOUT STİLLERİ --- */
+        /* --- SCROLL SNAP SLIDER LAYOUT --- */
         #content-container { 
             height: 100vh;
-            height: 100dvh; /* Dynamic viewport height */
+            height: 100dvh; 
             overflow-x: auto; 
             overflow-y: hidden; 
             scroll-snap-type: x mandatory; 
-            scroll-behavior: smooth;
+            /* scroll-behavior: smooth; <- BU KALDIRILDI! JS ile kontrol edeceğiz */
             -webkit-overflow-scrolling: touch; 
             display: flex;
         }
@@ -167,7 +168,7 @@
             height: 100%;
             height: 100dvh;
             padding: 20px;
-            padding-bottom: 140px; /* ALT MENÜ İÇİN EKSTRA BOŞLUK */
+            padding-bottom: 140px; 
             box-sizing: border-box;
             flex-shrink: 0;
             overflow-y: auto; 
@@ -176,7 +177,6 @@
             -webkit-overflow-scrolling: touch;
         }
         
-        /* Masaüstü düzeltmesi */
         @media (min-width: 769px) {
             .app-section { width: calc(100vw - 280px); }
             #main-slider { width: calc((100vw - 280px) * 5); }
