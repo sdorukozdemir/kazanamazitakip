@@ -2530,6 +2530,64 @@
     if (window.matchMedia('(display-mode: standalone)').matches) {
         if(installContainer) installContainer.style.display = 'none';
     }
+
+    // --- KAYDIRMA (SWIPE) İLE GEZİNME ÖZELLİĞİ ---
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    const gestureZone = document.getElementById('content');
+
+    // Dokunma başladığında
+    gestureZone.addEventListener('touchstart', function(event) {
+        touchStartX = event.changedTouches[0].screenX;
+        touchStartY = event.changedTouches[0].screenY;
+    }, {passive: true});
+
+    // Dokunma bittiğinde
+    gestureZone.addEventListener('touchend', function(event) {
+        touchEndX = event.changedTouches[0].screenX;
+        touchEndY = event.changedTouches[0].screenY;
+        handleGesture();
+    }, {passive: true});
+
+    function handleGesture() {
+        const sections = ['dashboard', 'stats', 'fasting', 'tesbihat', 'calculator'];
+        // Şu an hangi bölüm aktif?
+        let currentSectionId = '';
+        sections.forEach(sec => {
+            const el = document.getElementById('section-' + sec);
+            if(el && el.style.display === 'block') {
+                currentSectionId = sec;
+            }
+        });
+
+        if(!currentSectionId) return;
+
+        let currentIndex = sections.indexOf(currentSectionId);
+        
+        const xDiff = touchEndX - touchStartX;
+        const yDiff = touchEndY - touchStartY;
+
+        // Yatay kaydırma dikeyden büyük olmalı (Scroll ile karışmasın)
+        if (Math.abs(xDiff) > Math.abs(yDiff)) {
+            // En az 50px kaydırma hassasiyeti
+            if (Math.abs(xDiff) > 50) { 
+                if (xDiff > 0) {
+                    // Sağa Kaydırma (-->) -> Önceki Sekmeye Git
+                    if(currentIndex > 0) {
+                        showSection(sections[currentIndex - 1]);
+                    }
+                } else {
+                    // Sola Kaydırma (<--) -> Sonraki Sekmeye Git
+                    if(currentIndex < sections.length - 1) {
+                        showSection(sections[currentIndex + 1]);
+                    }
+                }
+            }
+        }
+    }
 </script>
 </body>
 </html>
