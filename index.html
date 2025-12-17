@@ -96,8 +96,7 @@
             font-family: 'Poppins', sans-serif; 
             transition: 0.3s; 
             overflow: hidden; /* Sayfa genelinde kaydırmayı kapat */
-            height: 100vh; /* Standart fallback */
-            height: 100dvh; /* Dynamic viewport height */
+            height: 100vh; 
             width: 100vw;
             overscroll-behavior: none;
         }
@@ -166,16 +165,14 @@
         .app-section {
             width: 100vw; 
             height: 100%;
-            height: 100dvh; /* İçeriğin de tam boy olduğundan emin ol */
+            height: 100dvh;
             padding: 20px;
-            /* ALT BOŞLUK ARTIRILDI - İçeriğin kesilmemesi için */
-            padding-bottom: 140px; 
+            padding-bottom: 140px; /* ALT MENÜ İÇİN EKSTRA BOŞLUK */
             box-sizing: border-box;
             flex-shrink: 0;
             overflow-y: auto; 
             scroll-snap-align: start;
-            /* KRİTİK AYAR: TEK SEFERDE TEK SEKME GEÇİŞİ */
-            scroll-snap-stop: always;
+            scroll-snap-stop: always; /* TEK SEFERDE BİR SAYFA ATLA */
             -webkit-overflow-scrolling: touch;
         }
         
@@ -1129,11 +1126,13 @@
                     applyGenderSettings();
                 }
 
+                // --- DÜZELTME 3: TÜM SAYFALARI BAŞLANGIÇTA RENDER ET ---
                 try {
                     renderCalculatorRows();
                     renderApp();
                     renderStats();
                     renderFasting(); 
+                    renderTesbihat(); // Tesbihat sayfasını da başlangıçta render et
                 } catch(e) {
                     console.error("Render hatası:", e);
                 }
@@ -1274,10 +1273,11 @@
         
         if(index !== -1) {
             const sectionWidth = window.innerWidth;
-            // Scroll to the specific section
+            // --- DÜZELTME 2: ANINDA GEÇİŞ (Instant Jump) ---
+            // 'smooth' yerine 'auto' kullanarak ara sayfaların görünmesini engelliyoruz.
             contentContainer.scrollTo({
                 left: index * sectionWidth,
-                behavior: 'smooth'
+                behavior: 'auto' 
             });
             
             // Perform render for specific sections
