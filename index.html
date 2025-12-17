@@ -800,7 +800,25 @@
 
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
-                    <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Performans Analizi</h5><div class="d-flex justify-content-center mb-2"><div class="btn-group btn-group-sm" role="group"><input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')"><label class="btn btn-outline-success" for="btnradio1">Haftalık</label><input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')"><label class="btn btn-outline-success" for="btnradio2">Aylık</label></div></div><canvas id="lineChart" style="max-height: 250px;"></canvas></div></div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')">
+                                    <label class="btn btn-outline-success" for="btnradio1">Haftalık</label>
+                                    
+                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')">
+                                    <label class="btn btn-outline-success" for="btnradio2">Aylık</label>
+
+                                    <!-- EKLENEN 3 AY BUTONU -->
+                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="switchChartPeriod('3months')">
+                                    <label class="btn btn-outline-success" for="btnradio3">3 Ay</label>
+                                </div>
+                            </div>
+                            <canvas id="lineChart" style="max-height: 250px;"></canvas>
+                        </div>
+                    </div>
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
             </div>
@@ -1923,7 +1941,38 @@
         }
     }
 
-    function updatePerformanceChart() { const periodStats = calculatePeriodStats(); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } if (lineChart) { lineChart.data.labels = chartLabels; lineChart.data.datasets[0].data = chartData; lineChart.data.datasets[0].label = currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)'; lineChart.data.datasets[0].pointRadius = pointRadiusVal; lineChart.update(); } }
+    function updatePerformanceChart() { 
+        const periodStats = calculatePeriodStats(); 
+        let chartLabels = []; 
+        let chartData = []; 
+        let pointRadiusVal = 3; 
+        let labelText = "";
+
+        if(currentChartPeriod === 'weekly') { 
+            chartLabels = periodStats.last7Labels; 
+            chartData = periodStats.last7Data; 
+            pointRadiusVal = 3; 
+            labelText = 'Günlük Kılınan (Son 7 Gün)';
+        } else if (currentChartPeriod === 'monthly') { 
+            chartLabels = periodStats.last30Labels; 
+            chartData = periodStats.last30Data; 
+            pointRadiusVal = 2; 
+            labelText = 'Günlük Kılınan (Son 30 Gün)';
+        } else { // 3months
+            chartLabels = periodStats.last90Labels;
+            chartData = periodStats.last90Data;
+            pointRadiusVal = 1; // 3 Ay için nokta boyutu küçük
+            labelText = 'Günlük Kılınan (Son 90 Gün)';
+        } 
+        
+        if (lineChart) { 
+            lineChart.data.labels = chartLabels; 
+            lineChart.data.datasets[0].data = chartData; 
+            lineChart.data.datasets[0].label = labelText; 
+            lineChart.data.datasets[0].pointRadius = pointRadiusVal; 
+            lineChart.update(); 
+        } 
+    }
     
     function calculateBestPeriods() {
         if (!localData.logs) return { week: "-", month: "-", day: "-" };
@@ -2099,7 +2148,7 @@
     }
     
     function calculatePeriodStats() { 
-        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [] }; 
+        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [], last90Data: [], last90Labels: [] }; 
         const today = new Date(); 
         
         const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -2108,7 +2157,8 @@
         let weeklyTotal = 0, m3 = 0, m6 = 0, y1 = 0; 
         let last7Data = [], last7Labels = []; 
         let last30Data = [], last30Labels = []; 
-        
+        let last90Data = [], last90Labels = []; // 3 AYLIK VERİ
+
         for(let i=6; i>=0; i--) { 
             const d = new Date(); 
             d.setDate(today.getDate() - i); 
@@ -2125,7 +2175,16 @@
             last30Data.push(val); 
             last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
         } 
-        
+        // 3 AYLIK GRAFİK HESAPLAMASI
+        for(let i=89; i>=0; i--) { 
+            const d = new Date(); 
+            d.setDate(today.getDate() - i); 
+            const iso = getIsoDate(d); 
+            const val = localData.logs[iso] || 0; 
+            last90Data.push(val); 
+            last90Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
+        }
+
         const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3); 
         const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6); 
         const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1); 
@@ -2139,7 +2198,7 @@
             if(d >= oneYearAgo) y1 += val; 
         }); 
         
-        return { monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels }; 
+        return { monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels, last90Data, last90Labels }; 
     }
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
