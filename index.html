@@ -95,9 +95,9 @@
             color: var(--text-color); 
             font-family: 'Poppins', sans-serif; 
             transition: 0.3s; 
-            overflow: hidden; 
-            height: 100vh;
-            height: 100dvh; 
+            overflow: hidden; /* Sayfa genelinde kaydırmayı kapat */
+            height: 100vh; /* Standart fallback */
+            height: 100dvh; /* Dynamic viewport height */
             width: 100vw;
             overscroll-behavior: none;
         }
@@ -145,14 +145,14 @@
         .user-info-male { background: var(--user-box-bg-male); }
         .user-info-female { background: var(--user-box-bg-female); }
         
-        /* --- SCROLL SNAP SLIDER LAYOUT --- */
+        /* --- YENİ SNAP SLIDER LAYOUT STİLLERİ --- */
         #content-container { 
             height: 100vh;
-            height: 100dvh; 
+            height: 100dvh; /* Dynamic viewport height */
             overflow-x: auto; 
             overflow-y: hidden; 
             scroll-snap-type: x mandatory; 
-            /* scroll-behavior: smooth; <- BU KALDIRILDI! JS ile kontrol edeceğiz */
+            scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch; 
             display: flex;
         }
@@ -168,7 +168,7 @@
             height: 100%;
             height: 100dvh;
             padding: 20px;
-            padding-bottom: 140px; 
+            padding-bottom: 140px; /* ALT MENÜ İÇİN EKSTRA BOŞLUK */
             box-sizing: border-box;
             flex-shrink: 0;
             overflow-y: auto; 
@@ -177,6 +177,7 @@
             -webkit-overflow-scrolling: touch;
         }
         
+        /* Masaüstü düzeltmesi */
         @media (min-width: 769px) {
             .app-section { width: calc(100vw - 280px); }
             #main-slider { width: calc((100vw - 280px) * 5); }
@@ -1273,12 +1274,21 @@
         
         if(index !== -1) {
             const sectionWidth = window.innerWidth;
-            // --- DÜZELTME 2: ANINDA GEÇİŞ (Instant Jump) ---
-            // 'smooth' yerine 'auto' kullanarak ara sayfaların görünmesini engelliyoruz.
+            
+            // --- CRITICAL FIX: INSTANT JUMP (TELEPORT) ---
+            // 1. Snap özelliğini geçici kapat (Fizik motorunu durdur)
+            contentContainer.style.scrollSnapType = 'none';
+            
+            // 2. Anında hedef noktaya git
             contentContainer.scrollTo({
                 left: index * sectionWidth,
-                behavior: 'auto' 
+                behavior: 'auto'
             });
+            
+            // 3. Snap özelliğini küçük bir gecikmeyle geri aç (Kaydırma bitince)
+            setTimeout(() => {
+                contentContainer.style.scrollSnapType = 'x mandatory';
+            }, 50);
             
             // Perform render for specific sections
             try { 
