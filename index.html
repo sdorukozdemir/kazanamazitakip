@@ -94,12 +94,10 @@
             background-color: var(--bg-color); 
             color: var(--text-color); 
             font-family: 'Poppins', sans-serif; 
-            transition: 0.3s; 
-            overflow: hidden; /* Sayfa genelinde kaydırmayı kapat */
-            height: 100vh; /* Standart fallback */
-            height: 100dvh; /* Dynamic viewport height */
-            width: 100vw;
-            overscroll-behavior: none;
+            transition: background-color 0.3s, color 0.3s; 
+            overflow-x: hidden; 
+            min-height: 100vh; 
+            overscroll-behavior-y: contain; 
         }
         
         /* Loading Overlay */
@@ -110,7 +108,7 @@
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
         /* Layout Wrapper */
-        .wrapper { display: flex; width: 100%; height: 100%; }
+        .wrapper { display: flex; width: 100%; }
         
         /* --- SIDEBAR --- */
         #sidebar { 
@@ -137,51 +135,46 @@
             #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } 
             #sidebar.active { margin-left: -280px; } 
             #overlay { display: none !important; } 
-            #content-container { width: calc(100% - 280px); margin-left: 0; } 
+            #content { width: calc(100% - 280px); margin-left: 0; } 
         }
-        @media (max-width: 768px) { #content-container { width: 100%; } }
+        @media (max-width: 768px) { #content { width: 100%; } }
         
         .user-info-box { margin: 10px auto; width: 100%; padding: 15px 10px; border-radius: 12px; color: var(--user-box-text); box-shadow: var(--user-box-shadow); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; transition: 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .user-info-male { background: var(--user-box-bg-male); }
         .user-info-female { background: var(--user-box-bg-female); }
         
-        /* --- YENİ SNAP SLIDER LAYOUT STİLLERİ --- */
-        #content-container { 
-            height: 100vh;
-            height: 100dvh; /* Dynamic viewport height */
-            overflow-x: auto; 
-            overflow-y: hidden; 
-            scroll-snap-type: x mandatory; 
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch; 
-            display: flex;
+        #content { 
+            padding: 20px; 
+            min-height: 100vh; 
+            width: 100%; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            position: relative; /* Animasyonlar için gerekli */
+            overflow-x: hidden; /* Yan kaymaları gizle */
         }
 
-        #main-slider {
-            display: flex;
-            width: 500vw; 
-            height: 100%;
-        }
-
+        /* --- SWIPE ANIMATION CLASSES --- */
         .app-section {
-            width: 100vw; 
-            height: 100%;
-            height: 100dvh;
-            padding: 20px;
-            padding-bottom: 140px; /* ALT MENÜ İÇİN EKSTRA BOŞLUK */
-            box-sizing: border-box;
-            flex-shrink: 0;
-            overflow-y: auto; 
-            scroll-snap-align: start;
-            scroll-snap-stop: always; /* TEK SEFERDE BİR SAYFA ATLA */
-            -webkit-overflow-scrolling: touch;
+            display: none;
+            width: 100%;
+            animation-duration: 0.3s;
+            animation-fill-mode: both;
+            animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
         }
-        
-        /* Masaüstü düzeltmesi */
-        @media (min-width: 769px) {
-            .app-section { width: calc(100vw - 280px); }
-            #main-slider { width: calc((100vw - 280px) * 5); }
-        }
+
+        .app-section.active { display: block; }
+        .app-section.animating { position: absolute; top: 20px; left: 0; width: 100%; z-index: 100; }
+
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutLeft { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-100%); opacity: 0; } }
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+        .anim-slide-in-right { display: block !important; animation-name: slideInRight; }
+        .anim-slide-out-left { display: block !important; animation-name: slideOutLeft; pointer-events: none; }
+        .anim-slide-in-left { display: block !important; animation-name: slideInLeft; }
+        .anim-slide-out-right { display: block !important; animation-name: slideOutRight; pointer-events: none; }
+        /* ------------------------------- */
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         body.dark-mode .app-header { background: -webkit-linear-gradient(45deg, #20c997, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -264,23 +257,10 @@
         .pd-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-color); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
         .pd-remaining-badge { background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); white-space: nowrap; flex-shrink: 0; }
         
-        /* MOBİL UYUMLULUK AYARI - BAŞLIK VE ROZET SIĞMASI İÇİN */
         @media (max-width: 576px) {
-            .pd-header {
-                flex-wrap: wrap; /* Sığmayan içeriği aşağı at */
-                gap: 5px;
-                justify-content: center; /* Ortala */
-            }
-            .pd-title {
-                font-size: 1.4rem; /* Mobilde başlığı biraz küçült */
-                width: 100%; /* Başlık tüm satırı kaplasın */
-                justify-content: center; /* Başlığı ortala */
-            }
-            .pd-remaining-badge {
-                margin: 0 auto; /* Rozeti ortala */
-                font-size: 0.8rem;
-                padding: 4px 12px;
-            }
+            .pd-header { flex-wrap: wrap; gap: 5px; justify-content: center; }
+            .pd-title { font-size: 1.4rem; width: 100%; justify-content: center; }
+            .pd-remaining-badge { margin: 0 auto; font-size: 0.8rem; padding: 4px 12px; }
         }
 
         .pd-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: auto; }
@@ -382,7 +362,6 @@
         .cp-swatch:active { transform: scale(1.1); }
 
         /* --- TEMA RENKLERİ --- */
-        /* GÜNDÜZ MODU İÇİN KOYU RENKLER (GÜNCELLENDİ) */
         .theme-blue { background: linear-gradient(135deg, #0d47a1 0%, #42a5f5 100%); }
         .theme-green { background: linear-gradient(135deg, #1b5e20 0%, #66bb6a 100%); }
         .theme-red { background: linear-gradient(135deg, #b71c1c 0%, #ef5350 100%); }
@@ -392,7 +371,6 @@
         .theme-teal { background: linear-gradient(135deg, #004d40 0%, #26a69a 100%); }
         .theme-gold { background: linear-gradient(135deg, #bf8f00 0%, #fbc02d 100%); }
 
-        /* GECE MODU TEMA OVERRIDE */
         body.dark-mode .theme-blue { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
         body.dark-mode .theme-green { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
         body.dark-mode .theme-red { background: linear-gradient(135deg, #870000 0%, #190a05 100%); }
@@ -402,10 +380,8 @@
         body.dark-mode .theme-teal { background: linear-gradient(135deg, #004d40 0%, #00695c 100%); }
         body.dark-mode .theme-gold { background: linear-gradient(135deg, #603813 0%, #b29f94 100%); }
 
-        /* Detay kartı için stil */
         .tesbihat-detail-card {
             border-radius: 25px; padding: 20px;
-            /* GÜNDÜZ MODU: Koyu Metin */
             color: #333; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center;
             min-height: 420px; display: flex; flex-direction: column; justify-content: center; position: relative;
@@ -413,20 +389,17 @@
         
         .zikr-card { padding: 15px 20px; text-align: center; border-radius: 25px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; border: none; }
         
-        /* GÜNDÜZ MODU: ARABIC TEXT KOYU */
         .arabic-text { 
             font-family: 'Amiri', serif; font-size: 2.2rem; margin: 10px 0 5px 0; line-height: 1.3; 
             color: #2c3e50; text-shadow: none;
         }
         
-        /* GÜNDÜZ MODU: SAYAÇ KOYU */
         .zikr-count { 
             font-size: 3.5rem; font-weight: 800; margin: 10px 0; 
             color: #212529; text-shadow: 0 2px 5px rgba(0,0,0,0.1);
             font-variant-numeric: tabular-nums; 
         }
         
-        /* GECE MODU OVERRIDES */
         body.dark-mode .tesbihat-detail-card { color: white; }
         body.dark-mode .arabic-text { color: rgba(255,255,255,0.95); text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         body.dark-mode .zikr-count { color: white; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
@@ -442,7 +415,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        /* BÜYÜTÜLMÜŞ YEŞİL ARTI BUTONU */
         .z-plus { 
             width: 110px; height: 110px; border-radius: 35px; 
             background: linear-gradient(145deg, #609979, #3e6b53); 
@@ -462,18 +434,16 @@
         
         .tesbihat-inputs-row { display: flex; justify-content: center; align-items: stretch; gap: 15px; width: 100%; margin-top: 15px; flex-wrap: nowrap; }
         
-        /* GÜNDÜZ MODU: INPUT KUTULARI */
         .tesbihat-box-style { 
             background: rgba(255, 255, 255, 0.4); 
             border: 1px solid rgba(0,0,0,0.1); 
             border-radius: 20px; padding: 8px 10px; 
             display: flex; align-items: center; justify-content: space-between; flex: 1; min-width: 0; backdrop-filter: blur(5px); 
-            color: #333; /* Dark text */
+            color: #333; 
         }
         .t-input { color: #333; width: 100%; font-size: 1.4rem; text-align: center; border: none; background: transparent; font-weight: bold; outline: none; padding: 0; }
         .t-input::placeholder { color: rgba(0,0,0,0.5); opacity: 1; font-size: 0.9rem; font-weight: 700; }
 
-        /* GECE MODU: INPUT KUTULARI */
         body.dark-mode .tesbihat-box-style { background: rgba(255, 255, 255, 0.15); border-color: rgba(255,255,255,0.2); color: white; }
         body.dark-mode .t-input { color: white; }
         body.dark-mode .t-input::placeholder { color: rgba(255,255,255,0.6); }
@@ -706,9 +676,8 @@
         <ul class="list-unstyled components">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
-            <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
-            <!-- Oruç Menü (EKLENDİ) -->
             <li id="menu-fasting" onclick="showSection('fasting')"><i class="fas fa-utensils me-3"></i> Oruç Takip</li>
+            <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
             <li id="menu-settings" onclick="showSection('settings')"><i class="fas fa-cog me-3"></i> Yedekleme & Ayarlar</li>
             <li onclick="toggleDarkMode()"><i class="fas fa-moon me-3"></i> <span id="darkModeText">Gece Modu</span></li>
@@ -716,266 +685,245 @@
         </ul>
     </nav>
 
-    <!-- ANA İÇERİK - YENİ SCROLL SNAP SLIDER YAPISI -->
-    <div id="content-container">
-        <div id="main-slider">
-            
-            <!-- 1. BÖLÜM: DASHBOARD -->
-            <div id="section-dashboard" class="app-section">
-                <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
-                    <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
-                    <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
-                </div>
-                <div class="row justify-content-center mb-4">
-                    <div class="col-md-8 col-lg-6">
-                        <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
-                        <div id="goalCard" class="goal-card">
-                            <h4>🎯 Günlük Hedef</h4>
-                            <div class="goal-content">
-                                <span class="fs-5">Bugün</span><strong class="fs-1" id="dailyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)"><span class="fs-5">Kaza</span>
-                            </div>
-                            <div class="progress mt-2" style="height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
-                            <div id="goalSuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🎉 Harika! Hedefe Ulaşıldı!</div>
-                            <div class="mt-2 streak-box"><i class="fas fa-fire text-warning"></i> <span>Zincir:</span><span id="streakValue" class="fw-bold text-warning">0</span> <span>Gün</span></div>
+    <div id="content">
+        <!-- BÖLÜMLER ARTIK "app-section" SINIFINA SAHİP -->
+        <div id="section-dashboard" class="app-section active">
+            <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
+                <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
+                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
+            </div>
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8 col-lg-6">
+                    <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
+                    <div id="goalCard" class="goal-card">
+                        <h4>🎯 Günlük Hedef</h4>
+                        <div class="goal-content">
+                            <span class="fs-5">Bugün</span><strong class="fs-1" id="dailyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)"><span class="fs-5">Kaza</span>
                         </div>
-                        <div id="weeklyCard" class="goal-card" style="background: linear-gradient(135deg, #0d6efd, #0dcaf0); margin-top: 20px;">
-                            <h4>🏆 Haftalık Meydan Okuma</h4>
-                            <div class="goal-content">
-                                <span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)">
-                            </div>
-                            <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="weeklyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
-                            <div id="weeklySuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
-                            <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
+                        <div class="progress mt-2" style="height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
+                        <div id="goalSuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🎉 Harika! Hedefe Ulaşıldı!</div>
+                        <div class="mt-2 streak-box"><i class="fas fa-fire text-warning"></i> <span>Zincir:</span><span id="streakValue" class="fw-bold text-warning">0</span> <span>Gün</span></div>
+                    </div>
+                    <div id="weeklyCard" class="goal-card" style="background: linear-gradient(135deg, #0d6efd, #0dcaf0); margin-top: 20px;">
+                        <h4>🏆 Haftalık Meydan Okuma</h4>
+                        <div class="goal-content">
+                            <span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)">
+                        </div>
+                        <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="weeklyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
+                        <div id="weeklySuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
+                        <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-4 justify-content-center">
+                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
+                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
+            </div>
+            
+            <div id="prayerSplitContainer" class="prayer-split-layout">
+                <!-- Javascript ile doldurulacak -->
+            </div>
+            
+            <div id="summaryBar" class="summary-bar">
+                <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
+                <div class="summary-item"><div class="summary-val text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
+                <div class="summary-item"><div class="summary-val" id="sumRemaining">0</div><div class="summary-lbl">Kalan</div></div>
+            </div>
+
+            <div class="row mt-4 justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="prediction-card h-100">
+                        <i class="fas fa-hourglass-half prediction-icon"></i><h5 class="fw-bold">Ne Zaman Biter?</h5>
+                        <div id="prediction-container">
+                            <div class="mt-3"><div class="prediction-date" id="estFinishDate">Hesaplanıyor...</div><div class="prediction-days" id="estDaysLeft">...</div><span class="prediction-sub-label">Günlük Hedefe Göre</span></div>
+                            <div class="prediction-secondary"><div class="date-small" id="estFinishDateAvg">Hesaplanıyor...</div><div class="prediction-days" id="estDaysLeftAvg">...</div><span class="prediction-sub-label">Günlük Ortalamanıza Göre</span></div>
+                        </div>
+                        <div id="prediction-success" class="text-success fw-bold mt-2" style="display:none;">🎉 Borcunuz bulunmamaktadır!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4"><h5 class="fw-bold text-secondary"><i class="fas fa-trophy text-warning me-2"></i>Rozet Müzesi</h5></div>
+            <div id="badgeContainer" class="badge-container"></div>
+        </div>
+
+        <div id="section-stats" class="app-section">
+            <h3 class="app-header">İstatistikler</h3>
+            <div class="stats-tab-container">
+                <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
+                <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
+            </div>
+            <div id="stats-view-analysis">
+                <div class="scrolling-wrapper mb-4">
+                    <div class="stat-card-scroll"><div class="stat-number text-primary" id="statToday">0</div><div class="stat-label">Bugün</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-success" id="statWeekly">0</div><div class="stat-label">Bu Hafta</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-info" id="statMonthly">0</div><div class="stat-label">Bu Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-warning" id="stat3Months">0</div><div class="stat-label">Son 3 Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-danger" id="stat6Months">0</div><div class="stat-label">Son 6 Ay</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-secondary" id="statYearly">0</div><div class="stat-label">Son 1 Yıl</div></div>
+                     <div class="stat-card-scroll"><div class="stat-number" id="statAverage">0</div><div class="stat-label">Günlük Ort.</div></div>
+                </div>
+
+                <div class="analysis-box mb-4">
+                    <div class="analysis-row"><div class="analysis-icon icon-good"><i class="fas fa-check"></i></div><div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div></div>
+                    <div class="analysis-row"><div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div><div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div></div>
+                </div>
+
+                <div class="analysis-box mb-4">
+                    <div class="analysis-row">
+                        <div class="analysis-icon" style="background: #20c997; color: white;"><i class="fas fa-calendar-day"></i></div>
+                        <div class="analysis-text">
+                            <span class="analysis-title">En Verimli Gün</span>
+                            <span class="analysis-value" id="bestDayVal">Hesaplanıyor...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-row">
+                        <div class="analysis-icon icon-blue"><i class="fas fa-calendar-week"></i></div>
+                        <div class="analysis-text">
+                            <span class="analysis-title">En Verimli Hafta</span>
+                            <span class="analysis-value" id="bestWeekVal">Hesaplanıyor...</span>
+                        </div>
+                    </div>
+                    <div class="analysis-row">
+                        <div class="analysis-icon icon-orange"><i class="fas fa-calendar-alt"></i></div>
+                        <div class="analysis-text">
+                            <span class="analysis-title">En Verimli Ay</span>
+                            <span class="analysis-value" id="bestMonthVal">Hesaplanıyor...</span>
+                        </div>
+                    </div>
+                     <div class="analysis-row">
+                        <div class="analysis-icon icon-purple"><i class="fas fa-fire-alt"></i></div>
+                        <div class="analysis-text">
+                            <span class="analysis-title">En Güçlü Zincir</span>
+                            <span class="analysis-value" id="longestStreakVal">Hesaplanıyor...</span>
                         </div>
                     </div>
                 </div>
-                <div class="row g-3 mb-4 justify-content-center">
-                    <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
-                    <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
-                </div>
-                
-                <div id="prayerSplitContainer" class="prayer-split-layout">
+
+                <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
+                <div id="prayer-analysis-grid" class="mb-4">
                     <!-- Javascript ile doldurulacak -->
                 </div>
-                
-                <div id="summaryBar" class="summary-bar">
-                    <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
-                    <div class="summary-item"><div class="summary-val text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
-                    <div class="summary-item"><div class="summary-val" id="sumRemaining">0</div><div class="summary-lbl">Kalan</div></div>
-                </div>
 
-                <div class="row mt-4 justify-content-center">
-                    <div class="col-md-8 col-lg-6">
-                        <div class="prediction-card h-100">
-                            <i class="fas fa-hourglass-half prediction-icon"></i><h5 class="fw-bold">Ne Zaman Biter?</h5>
-                            <div id="prediction-container">
-                                <div class="mt-3"><div class="prediction-date" id="estFinishDate">Hesaplanıyor...</div><div class="prediction-days" id="estDaysLeft">...</div><span class="prediction-sub-label">Günlük Hedefe Göre</span></div>
-                                <div class="prediction-secondary"><div class="date-small" id="estFinishDateAvg">Hesaplanıyor...</div><div class="prediction-days" id="estDaysLeftAvg">...</div><span class="prediction-sub-label">Günlük Ortalamanıza Göre</span></div>
-                            </div>
-                            <div id="prediction-success" class="text-success fw-bold mt-2" style="display:none;">🎉 Borcunuz bulunmamaktadır!</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center mt-4"><h5 class="fw-bold text-secondary"><i class="fas fa-trophy text-warning me-2"></i>Rozet Müzesi</h5></div>
-                <div id="badgeContainer" class="badge-container"></div>
-            </div>
+                <div class="row g-4">
+                    <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')">
+                                    <label class="btn btn-outline-success" for="btnradio1">Haftalık</label>
+                                    
+                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')">
+                                    <label class="btn btn-outline-success" for="btnradio2">Aylık</label>
 
-            <!-- 2. BÖLÜM: İSTATİSTİKLER -->
-            <div id="section-stats" class="app-section">
-                <h3 class="app-header">İstatistikler</h3>
-                <div class="stats-tab-container">
-                    <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
-                    <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
-                </div>
-                <div id="stats-view-analysis">
-                    <div class="scrolling-wrapper mb-4">
-                        <div class="stat-card-scroll"><div class="stat-number text-primary" id="statToday">0</div><div class="stat-label">Bugün</div></div>
-                        <div class="stat-card-scroll"><div class="stat-number text-success" id="statWeekly">0</div><div class="stat-label">Bu Hafta</div></div>
-                        <div class="stat-card-scroll"><div class="stat-number text-info" id="statMonthly">0</div><div class="stat-label">Bu Ay</div></div>
-                        <div class="stat-card-scroll"><div class="stat-number text-warning" id="stat3Months">0</div><div class="stat-label">Son 3 Ay</div></div>
-                        <div class="stat-card-scroll"><div class="stat-number text-danger" id="stat6Months">0</div><div class="stat-label">Son 6 Ay</div></div>
-                        <div class="stat-card-scroll"><div class="stat-number text-secondary" id="statYearly">0</div><div class="stat-label">Son 1 Yıl</div></div>
-                        <div class="stat-card-scroll"><div class="stat-number" id="statAverage">0</div><div class="stat-label">Günlük Ort.</div></div>
-                    </div>
-
-                    <div class="analysis-box mb-4">
-                        <div class="analysis-row"><div class="analysis-icon icon-good"><i class="fas fa-check"></i></div><div class="analysis-text"><span class="analysis-title">En İyi Performans</span><span class="analysis-value" id="bestPrayer">Hesaplanıyor...</span></div></div>
-                        <div class="analysis-row"><div class="analysis-icon icon-bad"><i class="fas fa-exclamation"></i></div><div class="analysis-text"><span class="analysis-title">En Çok Borç</span><span class="analysis-value" id="worstPrayer">Hesaplanıyor...</span></div></div>
-                    </div>
-
-                    <!-- YENİ EKLENEN KARTLAR -->
-                    <div class="analysis-box mb-4">
-                        <!-- EN VERİMLİ GÜN SATIRI EKLENDİ -->
-                        <div class="analysis-row">
-                            <div class="analysis-icon" style="background: #20c997; color: white;"><i class="fas fa-calendar-day"></i></div>
-                            <div class="analysis-text">
-                                <span class="analysis-title">En Verimli Gün</span>
-                                <span class="analysis-value" id="bestDayVal">Hesaplanıyor...</span>
-                            </div>
-                        </div>
-                        
-                        <div class="analysis-row">
-                            <div class="analysis-icon icon-blue"><i class="fas fa-calendar-week"></i></div>
-                            <div class="analysis-text">
-                                <span class="analysis-title">En Verimli Hafta</span>
-                                <span class="analysis-value" id="bestWeekVal">Hesaplanıyor...</span>
-                            </div>
-                        </div>
-                        <div class="analysis-row">
-                            <div class="analysis-icon icon-orange"><i class="fas fa-calendar-alt"></i></div>
-                            <div class="analysis-text">
-                                <span class="analysis-title">En Verimli Ay</span>
-                                <span class="analysis-value" id="bestMonthVal">Hesaplanıyor...</span>
-                            </div>
-                        </div>
-                        <div class="analysis-row">
-                            <div class="analysis-icon icon-purple"><i class="fas fa-fire-alt"></i></div>
-                            <div class="analysis-text">
-                                <span class="analysis-title">En Güçlü Zincir</span>
-                                <span class="analysis-value" id="longestStreakVal">Hesaplanıyor...</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
-                    <div id="prayer-analysis-grid" class="mb-4">
-                        <!-- Javascript ile doldurulacak -->
-                    </div>
-
-                    <div class="row g-4">
-                        <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
-                        <div class="col-md-6">
-                            <div class="chart-container">
-                                <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
-                                <div class="d-flex justify-content-center mb-2">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')">
-                                        <label class="btn btn-outline-success" for="btnradio1">Haftalık</label>
-                                        
-                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')">
-                                        <label class="btn btn-outline-success" for="btnradio2">Aylık</label>
-
-                                        <!-- EKLENEN 3 AY BUTONU -->
-                                        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="switchChartPeriod('3months')">
-                                        <label class="btn btn-outline-success" for="btnradio3">3 Ay</label>
-                                    </div>
+                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="switchChartPeriod('3months')">
+                                    <label class="btn btn-outline-success" for="btnradio3">3 Ay</label>
                                 </div>
-                                <canvas id="lineChart" style="max-height: 250px;"></canvas>
                             </div>
+                            <canvas id="lineChart" style="max-height: 250px;"></canvas>
                         </div>
-                        <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                     </div>
+                    <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
+            </div>
+            
+            <div id="stats-view-history" style="display: none;">
+                <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
                 
-                <div id="stats-view-history" style="display: none;">
-                    <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
+                <div class="history-filter-tabs">
+                    <div class="h-main-tabs">
+                        <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
+                        <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
+                        <button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button>
+                    </div>
                     
-                    <!-- YENİ HISTORY FİLTRELEME BUTONLARI -->
-                    <div class="history-filter-tabs">
-                        <div class="h-main-tabs">
-                            <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
-                            <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
-                            <button class="h-tab-btn" onclick="setHistoryCategory('oruc', this)">Oruç</button>
-                        </div>
-                        
-                        <!-- Namaz Alt Sekmeler -->
-                        <div id="namazSubTabs" class="h-sub-tabs">
-                            <button class="h-sub-btn" onclick="setNamazSubCategory('Sabah', this)">Sabah</button>
-                            <button class="h-sub-btn" onclick="setNamazSubCategory('Öğle', this)">Öğle</button>
-                            <button class="h-sub-btn" onclick="setNamazSubCategory('İkindi', this)">İkindi</button>
-                            <button class="h-sub-btn" onclick="setNamazSubCategory('Akşam', this)">Akşam</button>
-                            <button class="h-sub-btn" onclick="setNamazSubCategory('Yatsı', this)">Yatsı</button>
-                            <button class="h-sub-btn active" onclick="setNamazSubCategory('all', this)">Tümü</button>
-                        </div>
-
-                        <!-- Oruç Alt Sekmeler -->
-                        <div id="fastingSubTabs" class="h-sub-tabs">
-                            <button class="h-sub-btn active" onclick="setFastingSubCategory('all', this)">Tümü</button>
-                            <button class="h-sub-btn" onclick="setFastingSubCategory('kaza', this)">Kaza</button>
-                            <button class="h-sub-btn" onclick="setFastingSubCategory('nafile', this)">Nafile</button>
-                        </div>
+                    <div id="namazSubTabs" class="h-sub-tabs">
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('Sabah', this)">Sabah</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('Öğle', this)">Öğle</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('İkindi', this)">İkindi</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('Akşam', this)">Akşam</button>
+                        <button class="h-sub-btn" onclick="setNamazSubCategory('Yatsı', this)">Yatsı</button>
+                        <button class="h-sub-btn active" onclick="setNamazSubCategory('all', this)">Tümü</button>
                     </div>
 
-                    <!-- TARİH FİLTRESİ KAPSÜLÜ -->
-                    <div class="date-filter-capsule">
-                        <span class="capsule-label">İŞLEM TARİHİ</span>
-                        <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
-                            ontouchstart="(this.type='date');"
-                            onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
-                            onblur="if(!this.value) this.type='text'"
-                            onchange="filterHistoryByDate()">
-                        <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
+                    <div id="fastingSubTabs" class="h-sub-tabs">
+                        <button class="h-sub-btn active" onclick="setFastingSubCategory('all', this)">Tümü</button>
+                        <button class="h-sub-btn" onclick="setFastingSubCategory('kaza', this)">Kaza</button>
+                        <button class="h-sub-btn" onclick="setFastingSubCategory('nafile', this)">Nafile</button>
                     </div>
-
-                    <!-- Tablo yerine ACCORDION listesi -->
-                    <div id="historyListContainer" class="px-2"></div>
                 </div>
-            </div>
 
-            <!-- 3. BÖLÜM: ORUÇ TAKİP -->
-            <div id="section-fasting" class="app-section">
-                <h3 class="app-header">Oruç Takip</h3>
-                <!-- Dinamik olarak JS ile doldurulacak -->
-                <div id="fastingContainer"></div>
-            </div>
+                <div class="date-filter-capsule">
+                    <span class="capsule-label">İŞLEM TARİHİ</span>
+                    <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
+                           ontouchstart="(this.type='date');"
+                           onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
+                           onblur="if(!this.value) this.type='text'"
+                           onchange="filterHistoryByDate()">
+                    <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
+                </div>
 
-            <!-- 4. BÖLÜM: TESBİHAT -->
-            <div id="section-tesbihat" class="app-section">
-                <h3 class="app-header">Tesbihat ve Zikir</h3>
-                <!-- Tesbihat bölümü JS ile dinamik doldurulacak -->
-                <div id="tesbihatContainer"></div>
+                <div id="historyListContainer" class="px-2"></div>
             </div>
+        </div>
 
-            <!-- 5. BÖLÜM: HESAPLAMA -->
-            <div id="section-calculator" class="app-section">
-                <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
-                <div class="row justify-content-center">
-                    <div class="col-lg-10">
-                        <div class="calculator-card">
-                            <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
-                                <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
-                                <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
-                            </div>
-                            <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
-                            <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap"><button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button><button class="btn btn-sm btn-outline-secondary" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button></div>
-                            <div id="calcRowsContainer"></div>
-                            <hr class="my-4">
-                            <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar</button>
+        <div id="section-fasting" class="app-section">
+            <h3 class="app-header">Oruç Takip</h3>
+            <div id="fastingContainer"></div>
+        </div>
+
+        <div id="section-tesbihat" class="app-section">
+            <h3 class="app-header">Tesbihat ve Zikir</h3>
+            <div id="tesbihatContainer"></div>
+        </div>
+
+        <div id="section-calculator" class="app-section">
+            <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="calculator-card">
+                        <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
+                            <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
+                            <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
                         </div>
+                        <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
+                        <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap"><button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button><button class="btn btn-sm btn-outline-secondary" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button></div>
+                        <div id="calcRowsContainer"></div>
+                        <hr class="my-4">
+                        <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar</button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 6. BÖLÜM: AYARLAR (Bu bölüm için slidera ekleme yapılmadı, menüden erişilir) -->
-            <div id="section-settings" class="app-section">
-                <h3 class="app-header">Yedekleme ve Ayarlar</h3>
-                <div class="row justify-content-center g-4">
-                    <div class="col-12">
-                        <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center"><i class="fas fa-venus-mars fs-2 me-3" style="opacity: 0.8;"></i><div><div class="settings-title mb-0">Cinsiyet Ayarı</div><div class="settings-desc mb-0" id="currentGenderDisplay">Seçilmedi</div></div></div>
-                            <button class="btn btn-light btn-sm fw-bold shadow-sm" onclick="openGenderModal(true)">Değiştir</button>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-download settings-icon"></i><div class="settings-title">Yedek Al</div><div class="settings-desc">Verileri indir.</div><button class="btn btn-success w-100" onclick="downloadBackupJSON()"><i class="fas fa-file-export me-2"></i> Yedek İndir (.json)</button></div></div>
-                    <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-upload settings-icon text-primary"></i><div class="settings-title">Yedekten Dön</div><div class="settings-desc">Yedek dosyasını yükle.</div><button class="btn btn-primary w-100" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i> Yedek Yükle</button><input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupJSON(this)"></div></div>
-                    <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-file-csv settings-icon text-warning"></i><div class="settings-title">Excel Raporu</div><div class="settings-desc">Excel (.csv) formatında indir.</div><button class="btn btn-warning w-100 text-white" onclick="downloadDataAsCSV()"><i class="fas fa-table me-2"></i> Rapor İndir (.csv)</button></div></div>
-                    
-                    <!-- PWA YÜKLEME KARTI -->
-                    <div id="installAppContainer" class="col-md-6 col-lg-4" style="display: none;">
-                        <div class="settings-card text-center h-100" style="border: 2px solid #609979; background: linear-gradient(135deg, rgba(96, 153, 121, 0.1), rgba(255, 255, 255, 0.5));">
-                            <i class="fas fa-mobile-alt settings-icon text-success"></i>
-                            <div class="settings-title">Uygulamayı İndir</div>
-                            <div class="settings-desc">İnternetsiz erişim için yükle.</div>
-                            <button class="btn btn-success w-100 fw-bold shadow-sm" onclick="installPWA()">
-                                <i class="fas fa-download me-2"></i> Ana Ekrana Ekle
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="col-12"><div class="settings-card text-center border-danger"><i class="fas fa-exclamation-triangle settings-icon text-danger"></i><div class="settings-title text-danger">Verileri Sıfırla</div><div class="settings-desc">Her şeyi siler.</div><button class="btn btn-danger py-2 px-5" onclick="confirmResetData()"><i class="fas fa-trash-alt me-2"></i> Her Şeyi Sil ve Sıfırla</button></div></div>
+        <div id="section-settings" class="app-section">
+            <h3 class="app-header">Yedekleme ve Ayarlar</h3>
+            <div class="row justify-content-center g-4">
+                <div class="col-12">
+                     <div id="genderSettingsCard" class="settings-card d-flex align-items-center justify-content-between">
+                         <div class="d-flex align-items-center"><i class="fas fa-venus-mars fs-2 me-3" style="opacity: 0.8;"></i><div><div class="settings-title mb-0">Cinsiyet Ayarı</div><div class="settings-desc mb-0" id="currentGenderDisplay">Seçilmedi</div></div></div>
+                         <button class="btn btn-light btn-sm fw-bold shadow-sm" onclick="openGenderModal(true)">Değiştir</button>
+                     </div>
                 </div>
-            </div>
+                <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-download settings-icon"></i><div class="settings-title">Yedek Al</div><div class="settings-desc">Verileri indir.</div><button class="btn btn-success w-100" onclick="downloadBackupJSON()"><i class="fas fa-file-export me-2"></i> Yedek İndir (.json)</button></div></div>
+                <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-upload settings-icon text-primary"></i><div class="settings-title">Yedekten Dön</div><div class="settings-desc">Yedek dosyasını yükle.</div><button class="btn btn-primary w-100" onclick="document.getElementById('importFile').click()"><i class="fas fa-file-import me-2"></i> Yedek Yükle</button><input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackupJSON(this)"></div></div>
+                <div class="col-md-6 col-lg-4"><div class="settings-card text-center h-100"><i class="fas fa-file-csv settings-icon text-warning"></i><div class="settings-title">Excel Raporu</div><div class="settings-desc">Excel (.csv) formatında indir.</div><button class="btn btn-warning w-100 text-white" onclick="downloadDataAsCSV()"><i class="fas fa-table me-2"></i> Rapor İndir (.csv)</button></div></div>
+                
+                <div id="installAppContainer" class="col-md-6 col-lg-4" style="display: none;">
+                    <div class="settings-card text-center h-100" style="border: 2px solid #609979; background: linear-gradient(135deg, rgba(96, 153, 121, 0.1), rgba(255, 255, 255, 0.5));">
+                        <i class="fas fa-mobile-alt settings-icon text-success"></i>
+                        <div class="settings-title">Uygulamayı İndir</div>
+                        <div class="settings-desc">İnternetsiz erişim için yükle.</div>
+                        <button class="btn btn-success w-100 fw-bold shadow-sm" onclick="installPWA()">
+                            <i class="fas fa-download me-2"></i> Ana Ekrana Ekle
+                        </button>
+                    </div>
+                </div>
 
+                <div class="col-12"><div class="settings-card text-center border-danger"><i class="fas fa-exclamation-triangle settings-icon text-danger"></i><div class="settings-title text-danger">Verileri Sıfırla</div><div class="settings-desc">Her şeyi siler.</div><button class="btn btn-danger py-2 px-5" onclick="confirmResetData()"><i class="fas fa-trash-alt me-2"></i> Her Şeyi Sil ve Sıfırla</button></div></div>
+            </div>
         </div>
     </div>
 </div>
@@ -983,7 +931,6 @@
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
     <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>İstatistik</span></div>
-    <!-- Oruç Menü (EKLENDİ) -->
     <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-utensils"></i><span>Oruç</span></div>
     <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
     <div class="nav-item" onclick="showSection('calculator'); activateNav(this)"><i class="fas fa-calculator"></i><span>Hesap</span></div>
@@ -999,11 +946,7 @@
     let currentNamazSubCat = 'all'; 
     let activeTesbihatIndex = 0; 
     let isTesbihatDetailView = false;
-    let activeFastingIndex = 0; // 0: Kaza, 1: Nafile (YENİ)
-
-    // --- YENİ BÖLÜM MAP ---
-    // Ayarlar (settings) sliderın sonuna eklendi
-    const sectionMap = ['dashboard', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
+    let activeFastingIndex = 0; 
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
@@ -1127,13 +1070,11 @@
                     applyGenderSettings();
                 }
 
-                // --- DÜZELTME 3: TÜM SAYFALARI BAŞLANGIÇTA RENDER ET ---
                 try {
                     renderCalculatorRows();
                     renderApp();
                     renderStats();
                     renderFasting(); 
-                    renderTesbihat(); // Tesbihat sayfasını da başlangıçta render et
                 } catch(e) {
                     console.error("Render hatası:", e);
                 }
@@ -1253,84 +1194,131 @@
     function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
-    // --- YENİ NAVİGASYON (SCROLL SNAP) ---
-    const contentContainer = document.getElementById('content-container');
-
-    window.showSection = function(id) {
-        if(!id) id = 'dashboard';
+    /* --- GÜNCELLENMİŞ SHOWSECTION VE SWIPE MANTIĞI --- */
+    
+    // Bölüm ID'lerini sırayla tutan dizi
+    const SECTION_IDS = ['dashboard', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
+    
+    // Geçiş Animasyonlu ShowSection
+    window.showSection = function(targetId) {
+        if(!targetId) targetId = 'dashboard';
         
-        // 1. Sidebar Active State
+        // Menü Aktifliği
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
-        const menuItem = document.getElementById('menu-' + id);
+        const menuItem = document.getElementById('menu-' + targetId);
         if(menuItem) menuItem.classList.add('active');
 
-        // 2. Bottom Nav Active State
+        // Alt Nav Aktifliği
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
-        if (navMap[id] !== undefined) document.querySelectorAll('.nav-item')[navMap[id]].classList.add('active');
+        if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
-        // 3. SCROLL SNAP ANIMATION
-        const index = sectionMap.indexOf(id);
-        
-        if(index !== -1) {
-            const sectionWidth = window.innerWidth;
-            
-            // --- CRITICAL FIX: INSTANT JUMP (TELEPORT) ---
-            // 1. Snap özelliğini geçici kapat (Fizik motorunu durdur)
-            contentContainer.style.scrollSnapType = 'none';
-            
-            // 2. Anında hedef noktaya git
-            contentContainer.scrollTo({
-                left: index * sectionWidth,
-                behavior: 'auto'
-            });
-            
-            // 3. Snap özelliğini küçük bir gecikmeyle geri aç (Kaydırma bitince)
-            setTimeout(() => {
-                contentContainer.style.scrollSnapType = 'x mandatory';
-            }, 50);
-            
-            // Perform render for specific sections
-            try { 
-                if(id === 'dashboard') renderApp(); 
-                if(id === 'stats') renderStats(); 
-                if(id === 'tesbihat') renderTesbihat(); 
-                if(id === 'calculator') renderCalculatorRows(); 
-                if(id === 'fasting') renderFasting(); 
-            } catch(e) { console.log("Render error:", e); }
+        // Sidebar kapama
+        if(window.innerWidth < 768) { 
+            document.getElementById('sidebar').classList.remove('active'); 
+            document.getElementById('overlay').classList.remove('active'); 
         }
 
-        if(window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
+        // Hangi bölüm aktif bul
+        const currentActive = document.querySelector('.app-section.active');
+        const targetSection = document.getElementById('section-' + targetId);
+        
+        if (!currentActive || currentActive.id === targetSection.id) {
+            // Zaten oradaysak veya ilk açılışsa sadece göster
+            document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
+            if(targetSection) targetSection.classList.add('active');
+            triggerLogic(targetId);
+            return;
+        }
+
+        // Yön Belirleme (Direkt geçiş için indeks farkı)
+        const currentIdShort = currentActive.id.replace('section-', '');
+        const currentIndex = SECTION_IDS.indexOf(currentIdShort);
+        const targetIndex = SECTION_IDS.indexOf(targetId);
+
+        let outClass = '', inClass = '';
+
+        if (targetIndex > currentIndex) {
+            // İleri gidiyoruz: Eskisi sola kaysın, yenisi sağdan gelsin
+            outClass = 'anim-slide-out-left';
+            inClass = 'anim-slide-in-right';
+        } else {
+            // Geri geliyoruz: Eskisi sağa kaysın, yenisi soldan gelsin
+            outClass = 'anim-slide-out-right';
+            inClass = 'anim-slide-in-left';
+        }
+
+        // Animasyon Uygulama
+        currentActive.classList.add(outClass, 'animating');
+        targetSection.classList.add('active', inClass, 'animating');
+        
+        // Logic Trigger (Data Render)
+        triggerLogic(targetId);
+
+        // Temizlik (Animasyon süresi 300ms + pay)
+        setTimeout(() => {
+            currentActive.classList.remove('active', 'animating', outClass);
+            targetSection.classList.remove('animating', inClass);
+        }, 350);
     };
 
-    function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
-    function activateNav(element) { triggerHaptic(); /* Active class handled in showSection now */ }
+    function triggerLogic(id) {
+        try { 
+            if(id === 'dashboard') renderApp(); 
+            if(id === 'stats') renderStats(); 
+            if(id === 'tesbihat') renderTesbihat(); 
+            if(id === 'calculator') renderCalculatorRows(); 
+            if(id === 'fasting') renderFasting(); 
+        } catch(e) { console.log("Render error:", e); }
+    }
 
-    // Scroll Listener for Active State Updates on Swipe
-    let scrollTimeout;
-    contentContainer.addEventListener('scroll', () => {
-        clearTimeout(scrollTimeout);
-        // Debounce scroll event to update UI only when scrolling stops/pauses
-        scrollTimeout = setTimeout(() => {
-            const scrollLeft = contentContainer.scrollLeft;
-            const sectionWidth = window.innerWidth;
-            const index = Math.round(scrollLeft / sectionWidth);
-            
-            if(index >= 0 && index < sectionMap.length) {
-                const currentId = sectionMap[index];
-                
-                // Update Sidebar
-                document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
-                const menuItem = document.getElementById('menu-' + currentId);
-                if(menuItem) menuItem.classList.add('active');
+    /* --- SWIPE (KAYDIRMA) MANTIĞI --- */
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const contentArea = document.getElementById('content');
 
-                // Update Bottom Nav
-                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-                const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
-                if (navMap[currentId] !== undefined) document.querySelectorAll('.nav-item')[navMap[currentId]].classList.add('active');
+    contentArea.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, {passive: true});
+
+    contentArea.addEventListener('touchend', e => {
+        const touchEndX = e.changedTouches[0].screenX;
+        const touchEndY = e.changedTouches[0].screenY;
+        handleSwipeGesture(touchStartX, touchStartY, touchEndX, touchEndY);
+    }, {passive: true});
+
+    function handleSwipeGesture(startX, startY, endX, endY) {
+        const diffX = endX - startX;
+        const diffY = endY - startY;
+
+        // Yatay hareket dikeyden fazlaysa ve belirli bir eşiği geçtiyse (50px)
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+            // Aktif bölümü bul
+            const currentActive = document.querySelector('.app-section.active');
+            if (!currentActive) return;
+
+            const currentIdShort = currentActive.id.replace('section-', '');
+            const currentIndex = SECTION_IDS.indexOf(currentIdShort);
+            if (currentIndex === -1) return;
+
+            if (diffX < 0) {
+                // Sola kaydırıldı -> Sonraki Bölüm
+                if (currentIndex < SECTION_IDS.length - 1) { // Son eleman değilse (Settings hariç)
+                     // Settings'e swipe ile geçmek istemiyorsan -2 yapabilirsin, şimdilik hepsi açık.
+                     showSection(SECTION_IDS[currentIndex + 1]);
+                }
+            } else {
+                // Sağa kaydırıldı -> Önceki Bölüm
+                if (currentIndex > 0) {
+                    showSection(SECTION_IDS[currentIndex - 1]);
+                }
             }
-        }, 100);
-    });
+        }
+    }
+
+    function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
+    function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
 
     function renderApp() {
         if(!localData.counts) return;
@@ -2404,7 +2392,7 @@
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
                 theme: "theme-oruc-kaza", bg: "bg-oruc-kaza", 
-                colorClass: "bg-dark", btnClass: "btn-dark", // Metalik tema için dark
+                colorClass: "bg-dark", btnClass: "btn-dark", 
                 countLabel: "Toplam Tutulan Kaza"
             },
             { 
@@ -2585,8 +2573,6 @@
         renderFasting();
     };
 
-    // --- ESKİ FONKSİYONLAR SİLİNDİ, YERİNE YUKARIDAKİLER GEÇTİ ---
-
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -2642,4 +2628,3 @@
 </script>
 </body>
 </html>
-
