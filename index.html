@@ -95,9 +95,10 @@
             color: var(--text-color); 
             font-family: 'Poppins', sans-serif; 
             transition: 0.3s; 
-            overflow-x: hidden; /* Dikey scroll kalsın, yatayı gizle */
-            min-height: 100vh; 
-            overscroll-behavior-y: contain; 
+            overflow: hidden; /* Sayfa genelinde kaydırmayı kapat */
+            height: 100vh; 
+            width: 100vw;
+            overscroll-behavior: none;
         }
         
         /* Loading Overlay */
@@ -108,7 +109,7 @@
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
         /* Layout Wrapper */
-        .wrapper { display: flex; width: 100%; }
+        .wrapper { display: flex; width: 100%; height: 100%; }
         
         /* --- SIDEBAR --- */
         #sidebar { 
@@ -135,38 +136,49 @@
             #sidebar { position: sticky; margin-left: 0; height: 100vh; z-index: 1050; border-top-right-radius: 20px; border-bottom-right-radius: 20px; } 
             #sidebar.active { margin-left: -280px; } 
             #overlay { display: none !important; } 
-            #content { width: calc(100% - 280px); margin-left: 0; } 
+            /* Desktop'ta slider yapısı farklı davranabilir ama bu kodda mobille aynı bırakıyoruz, sadece genişlik ayarı */
+            #content-container { width: calc(100% - 280px); margin-left: 0; } 
         }
-        @media (max-width: 768px) { #content { width: 100%; } }
+        @media (max-width: 768px) { #content-container { width: 100%; } }
         
         .user-info-box { margin: 10px auto; width: 100%; padding: 15px 10px; border-radius: 12px; color: var(--user-box-text); box-shadow: var(--user-box-shadow); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; transition: 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .user-info-male { background: var(--user-box-bg-male); }
         .user-info-female { background: var(--user-box-bg-female); }
         
-        /* --- YENİ SLIDER LAYOUT STİLLERİ --- */
-        #content { 
-            padding: 0; /* İçeriği sıfırla, padding'i iç div'lere verelim */
-            min-height: 100vh; 
-            transition: 0.3s; 
-            width: 100%; 
-            max-width: 900px; 
-            margin: 0 auto; 
-            overflow: hidden; /* Yatay scroll'u gizle */
+        /* --- YENİ SNAP SLIDER LAYOUT STİLLERİ --- */
+        #content-container { 
+            height: 100vh;
+            overflow-x: auto; /* Yatay kaydırmaya izin ver */
+            overflow-y: hidden; /* Dikey scroll container'da olmasın */
+            scroll-snap-type: x mandatory; /* Snap özelliği */
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* iOS için akıcı kaydırma */
+            display: flex;
         }
 
         #main-slider {
             display: flex;
-            width: 500%; /* 5 Bölüm olduğu için %500 genişlik */
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth Transition */
-            will-change: transform;
+            width: 500vw; /* 5 Bölüm */
+            height: 100%;
         }
 
         .app-section {
-            width: 20%; /* Her bölüm %20 genişlik (100/5) */
+            width: 100vw; /* Her bölüm tam ekran genişliğinde */
+            height: 100%;
             padding: 20px;
+            padding-bottom: 90px; /* Alttaki menü için boşluk */
             box-sizing: border-box;
-            flex-shrink: 0; /* Küçülmeyi engelle */
-            /* Yükseklik içeriğe göre olsun */
+            flex-shrink: 0;
+            overflow-y: auto; /* DİKEY SCROLL BURADA (Her sayfa bağımsız) */
+            scroll-snap-align: start; /* Geçişte buraya yapış */
+            /* iOS Scroll Fix */
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Masaüstü düzeltmesi */
+        @media (min-width: 769px) {
+            .app-section { width: calc(100vw - 280px); }
+            #main-slider { width: calc((100vw - 280px) * 5); }
         }
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -702,12 +714,12 @@
         </ul>
     </nav>
 
-    <!-- ANA İÇERİK - YENİ SLIDER YAPISI -->
-    <div id="content">
+    <!-- ANA İÇERİK - YENİ SCROLL SNAP SLIDER YAPISI -->
+    <div id="content-container">
         <div id="main-slider">
             
             <!-- 1. BÖLÜM: DASHBOARD -->
-            <div id="section-dashboard" class="app-section" style="display: block;">
+            <div id="section-dashboard" class="app-section">
                 <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                     <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
                     <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
@@ -767,7 +779,7 @@
             </div>
 
             <!-- 2. BÖLÜM: İSTATİSTİKLER -->
-            <div id="section-stats" class="app-section" style="display: block;">
+            <div id="section-stats" class="app-section">
                 <h3 class="app-header">İstatistikler</h3>
                 <div class="stats-tab-container">
                     <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
@@ -899,21 +911,21 @@
             </div>
 
             <!-- 3. BÖLÜM: ORUÇ TAKİP -->
-            <div id="section-fasting" class="app-section" style="display: block;">
+            <div id="section-fasting" class="app-section">
                 <h3 class="app-header">Oruç Takip</h3>
                 <!-- Dinamik olarak JS ile doldurulacak -->
                 <div id="fastingContainer"></div>
             </div>
 
             <!-- 4. BÖLÜM: TESBİHAT -->
-            <div id="section-tesbihat" class="app-section" style="display: block;">
+            <div id="section-tesbihat" class="app-section">
                 <h3 class="app-header">Tesbihat ve Zikir</h3>
                 <!-- Tesbihat bölümü JS ile dinamik doldurulacak -->
                 <div id="tesbihatContainer"></div>
             </div>
 
             <!-- 5. BÖLÜM: HESAPLAMA -->
-            <div id="section-calculator" class="app-section" style="display: block;">
+            <div id="section-calculator" class="app-section">
                 <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
@@ -933,7 +945,7 @@
             </div>
 
             <!-- 6. BÖLÜM: AYARLAR (Bu bölüm için slidera ekleme yapılmadı, menüden erişilir) -->
-            <div id="section-settings" class="app-section" style="display: block;">
+            <div id="section-settings" class="app-section">
                 <h3 class="app-header">Yedekleme ve Ayarlar</h3>
                 <div class="row justify-content-center g-4">
                     <div class="col-12">
@@ -988,8 +1000,7 @@
     let activeFastingIndex = 0; // 0: Kaza, 1: Nafile (YENİ)
 
     // --- YENİ BÖLÜM MAP ---
-    // Ayarlar (settings) sliderın sonuna eklendi ama navbarda ayrı.
-    // Sıralama: Dashboard, Stats, Fasting, Tesbihat, Calculator, Settings
+    // Ayarlar (settings) sliderın sonuna eklendi
     const sectionMap = ['dashboard', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
 
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
@@ -1238,7 +1249,9 @@
     function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
-    // --- YENİ NAVİGASYON (SMOOTH SLIDE) ---
+    // --- YENİ NAVİGASYON (SCROLL SNAP) ---
+    const contentContainer = document.getElementById('content-container');
+
     window.showSection = function(id) {
         if(!id) id = 'dashboard';
         
@@ -1252,17 +1265,18 @@
         const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
         if (navMap[id] !== undefined) document.querySelectorAll('.nav-item')[navMap[id]].classList.add('active');
 
-        // 3. SLIDE ANIMATION LOGIC
-        const slider = document.getElementById('main-slider');
+        // 3. SCROLL SNAP ANIMATION
         const index = sectionMap.indexOf(id);
         
         if(index !== -1) {
-            // Genişlik %500 olduğu için her bölüm %20 yer kaplar.
-            // Index 0 -> 0%, Index 1 -> -20%, Index 2 -> -40% vb.
-            const translateVal = index * -20;
-            slider.style.transform = `translateX(${translateVal}%)`;
+            const sectionWidth = window.innerWidth;
+            // Scroll to the specific section
+            contentContainer.scrollTo({
+                left: index * sectionWidth,
+                behavior: 'smooth'
+            });
             
-            // Perform render for specific sections just in case
+            // Perform render for specific sections
             try { 
                 if(id === 'dashboard') renderApp(); 
                 if(id === 'stats') renderStats(); 
@@ -1270,9 +1284,6 @@
                 if(id === 'calculator') renderCalculatorRows(); 
                 if(id === 'fasting') renderFasting(); 
             } catch(e) { console.log("Render error:", e); }
-
-            // Scroll to top smoothly when changing section
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         if(window.innerWidth < 768) { document.getElementById('sidebar').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); }
@@ -1280,6 +1291,32 @@
 
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); /* Active class handled in showSection now */ }
+
+    // Scroll Listener for Active State Updates on Swipe
+    let scrollTimeout;
+    contentContainer.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        // Debounce scroll event to update UI only when scrolling stops/pauses
+        scrollTimeout = setTimeout(() => {
+            const scrollLeft = contentContainer.scrollLeft;
+            const sectionWidth = window.innerWidth;
+            const index = Math.round(scrollLeft / sectionWidth);
+            
+            if(index >= 0 && index < sectionMap.length) {
+                const currentId = sectionMap[index];
+                
+                // Update Sidebar
+                document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
+                const menuItem = document.getElementById('menu-' + currentId);
+                if(menuItem) menuItem.classList.add('active');
+
+                // Update Bottom Nav
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
+                if (navMap[currentId] !== undefined) document.querySelectorAll('.nav-item')[navMap[currentId]].classList.add('active');
+            }
+        }, 100);
+    });
 
     function renderApp() {
         if(!localData.counts) return;
@@ -2587,68 +2624,6 @@
 
     if (window.matchMedia('(display-mode: standalone)').matches) {
         if(installContainer) installContainer.style.display = 'none';
-    }
-
-    // --- KAYDIRMA (SWIPE) İLE GEZİNME ÖZELLİĞİ ---
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
-
-    const gestureZone = document.getElementById('content');
-
-    // Dokunma başladığında
-    gestureZone.addEventListener('touchstart', function(event) {
-        touchStartX = event.changedTouches[0].screenX;
-        touchStartY = event.changedTouches[0].screenY;
-    }, {passive: true});
-
-    // Dokunma bittiğinde
-    gestureZone.addEventListener('touchend', function(event) {
-        touchEndX = event.changedTouches[0].screenX;
-        touchEndY = event.changedTouches[0].screenY;
-        handleGesture();
-    }, {passive: true});
-
-    function handleGesture() {
-        const sections = ['dashboard', 'stats', 'fasting', 'tesbihat', 'calculator'];
-        // Şu an hangi bölüm aktif?
-        let currentSectionId = '';
-        sections.forEach(sec => {
-            const el = document.getElementById('section-' + sec);
-            // Sliding yapısında display:block olsalar bile hangisi viewda ona bakmak yerine
-            // showSection fonksiyonu içindeki state'i kullanmak daha iyi olur ama
-            // menüden "active" class kontrolü yapabiliriz.
-            if(document.getElementById('menu-' + sec) && document.getElementById('menu-' + sec).classList.contains('active')) {
-                currentSectionId = sec;
-            }
-        });
-
-        // Eğer menüden bulamadıysak (ilk açılış vs) dashboard varsayalım
-        if(!currentSectionId) currentSectionId = 'dashboard';
-
-        let currentIndex = sections.indexOf(currentSectionId);
-        
-        const xDiff = touchEndX - touchStartX;
-        const yDiff = touchEndY - touchStartY;
-
-        // Yatay kaydırma dikeyden büyük olmalı (Scroll ile karışmasın)
-        if (Math.abs(xDiff) > Math.abs(yDiff)) {
-            // En az 50px kaydırma hassasiyeti
-            if (Math.abs(xDiff) > 50) { 
-                if (xDiff > 0) {
-                    // Sağa Kaydırma (-->) -> Önceki Sekmeye Git
-                    if(currentIndex > 0) {
-                        showSection(sections[currentIndex - 1]);
-                    }
-                } else {
-                    // Sola Kaydırma (<--) -> Sonraki Sekmeye Git
-                    if(currentIndex < sections.length - 1) {
-                        showSection(sections[currentIndex + 1]);
-                    }
-                }
-            }
-        }
     }
 </script>
 </body>
