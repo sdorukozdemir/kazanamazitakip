@@ -99,17 +99,14 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* Loading Overlay */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #609979; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
-        /* Layout Wrapper */
         .wrapper { display: flex; width: 100%; }
         
-        /* --- SIDEBAR --- */
         #sidebar { 
             min-width: 280px; max-width: 280px; 
             background: var(--sidebar-bg); color: #fff; 
@@ -148,58 +145,48 @@
             width: 100%; 
             max-width: 900px; 
             margin: 0 auto; 
-            position: relative; /* Animasyonlar için gerekli */
+            position: relative; 
             overflow-x: hidden; 
-            box-sizing: border-box; /* Padding içe dahil edilsin */
+            box-sizing: border-box; 
+            touch-action: pan-y; /* Yatay kaydırmayı JS'e bırak, dikey browser'da */
         }
 
-        /* --- SWIPE ANIMATION CLASSES (SMOOTH & GPU ACCELERATED) --- */
+        /* --- SLIDER STRUCTURE (ABSOLUTE OVERLAY) --- */
         .app-section {
             display: none;
             width: 100%;
-            /* Daha akıcı ve doğal bir his için süre ve bezier eğrisi güncellendi */
-            animation-duration: 0.45s; 
-            animation-fill-mode: both;
-            /* iOS tarzı 'ease-out-quint' efekti: Başta hızlı, sonda yavaşça durur */
-            animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
-            backface-visibility: hidden; /* Titremeyi önler */
-            perspective: 1000px;
-        }
-
-        .app-section.active { display: block; }
-        
-        /* Animasyon sırasındaki durum */
-        .app-section.animating { 
-            position: absolute; 
-            top: 20px; 
+            height: 100%;
+            position: absolute; /* Üst üste binmeleri için */
+            top: 20px; /* Content padding */
             left: 20px; 
-            width: calc(100% - 40px); /* Padding düşüldü */
-            z-index: 100;
-            will-change: transform; /* Tarayıcıya önceden haber ver */
+            /* Genişlik ayarı önemli: parent padding çıkarıldı */
+            width: calc(100% - 40px);
+            will-change: transform;
+            backface-visibility: hidden;
         }
 
-        /* translate3d kullanarak GPU'yu zorla, bu 'yağ gibi' akmasını sağlar */
-        @keyframes slideInRight { 
-            from { transform: translate3d(100%, 0, 0); opacity: 0; box-shadow: -10px 0 25px rgba(0,0,0,0.1); } 
-            to { transform: translate3d(0, 0, 0); opacity: 1; box-shadow: none; } 
-        }
-        @keyframes slideOutLeft { 
-            from { transform: translate3d(0, 0, 0); opacity: 1; } 
-            to { transform: translate3d(-30%, 0, 0); opacity: 0; } /* Hafif parallax etkisi */ 
-        }
-        @keyframes slideInLeft { 
-            from { transform: translate3d(-100%, 0, 0); opacity: 0; box-shadow: 10px 0 25px rgba(0,0,0,0.1); } 
-            to { transform: translate3d(0, 0, 0); opacity: 1; box-shadow: none; } 
-        }
-        @keyframes slideOutRight { 
-            from { transform: translate3d(0, 0, 0); opacity: 1; } 
-            to { transform: translate3d(30%, 0, 0); opacity: 0; } /* Hafif parallax etkisi */ 
+        .app-section.active { 
+            display: block; 
+            position: relative; /* Aktif olan akışta kalsın */
+            top: 0; left: 0; width: 100%; /* Reset */
+            z-index: 5;
         }
 
-        .anim-slide-in-right { display: block !important; animation-name: slideInRight; }
-        .anim-slide-out-left { display: block !important; animation-name: slideOutLeft; pointer-events: none; }
-        .anim-slide-in-left { display: block !important; animation-name: slideInLeft; }
-        .anim-slide-out-right { display: block !important; animation-name: slideOutRight; pointer-events: none; }
+        /* Kaydırma sırasında görünür olması gerekenler */
+        .app-section.sliding {
+            display: block !important;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: calc(100% - 40px);
+            z-index: 10;
+        }
+
+        /* Geçiş Animasyonu Class'ı */
+        .animate-transition {
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
         /* ------------------------------- */
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -1220,72 +1207,52 @@
     function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
-    /* --- GÜNCELLENMİŞ SHOWSECTION VE SWIPE MANTIĞI --- */
+    /* --- REAL-TIME TOUCH SWIPE LOGIC (TWITTER STYLE) --- */
     
-    // Bölüm ID'lerini sırayla tutan dizi
+    // Bölüm ID'leri sıralı
     const SECTION_IDS = ['dashboard', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
     
-    // Geçiş Animasyonlu ShowSection
+    // DOM Elementlerini ve indexleri bulmak için yardımcı
+    function getSectionIndex(id) {
+        return SECTION_IDS.indexOf(id.replace('section-', ''));
+    }
+
+    // Normal geçiş fonksiyonu (Menüden tıklandığında)
     window.showSection = function(targetId) {
         if(!targetId) targetId = 'dashboard';
         
-        // Menü Aktifliği
+        // 1. Menü Aktifliği
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         const menuItem = document.getElementById('menu-' + targetId);
         if(menuItem) menuItem.classList.add('active');
 
-        // Alt Nav Aktifliği
+        // 2. Alt Nav Aktifliği
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
         if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
-        // Sidebar kapama
+        // 3. Logic Trigger
+        triggerLogic(targetId);
+
+        // 4. Görünüm Değiştirme (Animasyonsuz direkt geçiş - menüden tıklandığı için)
+        // Eğer bir önceki sayfadan geçiş efekti istenirse burası modifiye edilebilir, 
+        // ama menüden tıklamalarda genellikle direkt geçiş tercih edilir veya basit fade.
+        // Biz burada swipe mantığını bozmamak için basitçe active class'ı değiştiriyoruz.
+        
+        document.querySelectorAll('.app-section').forEach(sec => {
+            sec.classList.remove('active');
+            sec.style.transform = ''; // Varsa inline style temizle
+            sec.classList.remove('sliding', 'animate-transition'); // Temizlik
+        });
+        
+        const targetSection = document.getElementById('section-' + targetId);
+        if(targetSection) targetSection.classList.add('active');
+
+        // Sidebar mobilde kapansın
         if(window.innerWidth < 768) { 
             document.getElementById('sidebar').classList.remove('active'); 
             document.getElementById('overlay').classList.remove('active'); 
         }
-
-        // Hangi bölüm aktif bul
-        const currentActive = document.querySelector('.app-section.active');
-        const targetSection = document.getElementById('section-' + targetId);
-        
-        if (!currentActive || currentActive.id === targetSection.id) {
-            // Zaten oradaysak veya ilk açılışsa sadece göster
-            document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
-            if(targetSection) targetSection.classList.add('active');
-            triggerLogic(targetId);
-            return;
-        }
-
-        // Yön Belirleme (Direkt geçiş için indeks farkı)
-        const currentIdShort = currentActive.id.replace('section-', '');
-        const currentIndex = SECTION_IDS.indexOf(currentIdShort);
-        const targetIndex = SECTION_IDS.indexOf(targetId);
-
-        let outClass = '', inClass = '';
-
-        if (targetIndex > currentIndex) {
-            // İleri gidiyoruz: Eskisi sola kaysın, yenisi sağdan gelsin
-            outClass = 'anim-slide-out-left';
-            inClass = 'anim-slide-in-right';
-        } else {
-            // Geri geliyoruz: Eskisi sağa kaysın, yenisi soldan gelsin
-            outClass = 'anim-slide-out-right';
-            inClass = 'anim-slide-in-left';
-        }
-
-        // Animasyon Uygulama
-        currentActive.classList.add(outClass, 'animating');
-        targetSection.classList.add('active', inClass, 'animating');
-        
-        // Logic Trigger (Data Render)
-        triggerLogic(targetId);
-
-        // Temizlik (Animasyon süresi 450ms + pay)
-        setTimeout(() => {
-            currentActive.classList.remove('active', 'animating', outClass);
-            targetSection.classList.remove('animating', inClass);
-        }, 460);
     };
 
     function triggerLogic(id) {
@@ -1298,62 +1265,177 @@
         } catch(e) { console.log("Render error:", e); }
     }
 
-    /* --- SWIPE (KAYDIRMA) MANTIĞI --- */
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchStartTarget = null; // Dokunulan hedefi sakla
+    // --- SWIPE VARIABLES ---
+    let startX = 0;
+    let startY = 0;
+    let currentTranslate = 0;
+    let isDragging = false;
+    let activeSection = null;
+    let prevSection = null;
+    let nextSection = null;
+    let touchStartTime = 0;
+
     const contentArea = document.getElementById('content');
 
+    // --- TOUCH START ---
     contentArea.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
-        touchStartTarget = e.target; // Hedefi yakala
-    }, {passive: true});
+        // Yatay kaydırma içerebilecek elemanlarda swipe'ı engelle
+        if (e.target.closest('.scrolling-wrapper, .prayer-side-menu, canvas')) return;
 
-    contentArea.addEventListener('touchend', e => {
-        const touchEndX = e.changedTouches[0].screenX;
-        const touchEndY = e.changedTouches[0].screenY;
-        
-        // Eğer dokunulan yer yatay kaydırma içeriyorsa global swipe'ı iptal et
-        if (shouldIgnoreSwipe(touchStartTarget)) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        touchStartTime = Date.now();
+        isDragging = true;
 
-        handleSwipeGesture(touchStartX, touchStartY, touchEndX, touchEndY);
-    }, {passive: true});
+        // Aktif bölümü bul
+        activeSection = document.querySelector('.app-section.active');
+        if(!activeSection) return;
 
-    // Swipe'ı engellemesi gereken elemanları kontrol eden fonksiyon
-    function shouldIgnoreSwipe(target) {
-        if (!target) return false;
-        // .scrolling-wrapper (istatistik kartları), .prayer-side-menu (mobil ikonlar), canvas (grafikler)
-        return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas');
-    }
+        // Mevcut indexi bul
+        const currentIndex = getSectionIndex(activeSection.id);
 
-    function handleSwipeGesture(startX, startY, endX, endY) {
-        const diffX = endX - startX;
-        const diffY = endY - startY;
+        // Önceki ve Sonraki bölümleri hazırla
+        prevSection = currentIndex > 0 ? document.getElementById('section-' + SECTION_IDS[currentIndex - 1]) : null;
+        nextSection = currentIndex < SECTION_IDS.length - 1 ? document.getElementById('section-' + SECTION_IDS[currentIndex + 1]) : null;
 
-        // Yatay hareket dikeyden fazlaysa ve belirli bir eşiği geçtiyse (50px)
-        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-            // Aktif bölümü bul
-            const currentActive = document.querySelector('.app-section.active');
-            if (!currentActive) return;
-
-            const currentIdShort = currentActive.id.replace('section-', '');
-            const currentIndex = SECTION_IDS.indexOf(currentIdShort);
-            if (currentIndex === -1) return;
-
-            if (diffX < 0) {
-                // Sola kaydırıldı -> Sonraki Bölüm
-                if (currentIndex < SECTION_IDS.length - 1) { 
-                     showSection(SECTION_IDS[currentIndex + 1]);
-                }
-            } else {
-                // Sağa kaydırıldı -> Önceki Bölüm
-                if (currentIndex > 0) {
-                    showSection(SECTION_IDS[currentIndex - 1]);
-                }
-            }
+        // Hazırlık: Animasyon classlarını kaldır (manuel kontrol bizde)
+        activeSection.classList.remove('animate-transition');
+        if(prevSection) {
+            prevSection.classList.remove('animate-transition');
+            prevSection.classList.add('sliding'); // Görünür yap
+            prevSection.style.transform = 'translateX(-100%)';
+            triggerLogic(SECTION_IDS[currentIndex - 1]); // İçeriği renderla
         }
+        if(nextSection) {
+            nextSection.classList.remove('animate-transition');
+            nextSection.classList.add('sliding'); // Görünür yap
+            nextSection.style.transform = 'translateX(100%)';
+            triggerLogic(SECTION_IDS[currentIndex + 1]); // İçeriği renderla
+        }
+
+    }, {passive: true});
+
+    // --- TOUCH MOVE ---
+    contentArea.addEventListener('touchmove', e => {
+        if (!isDragging || !activeSection) return;
+
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const diffX = currentX - startX;
+        const diffY = currentY - startY;
+
+        // Dikey kaydırma dominantsa swipe'ı iptal et (Scroll'a izin ver)
+        if (Math.abs(diffY) > Math.abs(diffX)) {
+            isDragging = false;
+            // Temizlik yap
+            resetStyles();
+            return;
+        }
+
+        // Tarayıcı geri/ileri hareketini engellemek için (gerekirse)
+        if(e.cancelable) e.preventDefault(); 
+
+        currentTranslate = diffX;
+
+        // 1:1 Hareket
+        activeSection.style.transform = `translateX(${diffX}px)`;
+        
+        if (prevSection) {
+            prevSection.style.transform = `translateX(${diffX - contentArea.offsetWidth}px)`;
+        }
+        if (nextSection) {
+            nextSection.style.transform = `translateX(${diffX + contentArea.offsetWidth}px)`;
+        }
+
+    }, {passive: false});
+
+    // --- TOUCH END ---
+    contentArea.addEventListener('touchend', e => {
+        if (!isDragging || !activeSection) return;
+        isDragging = false;
+
+        const movedBy = currentTranslate;
+        const contentWidth = contentArea.offsetWidth;
+        const threshold = contentWidth * 0.25; // %25 kaydırma yeterli
+        const duration = Date.now() - touchStartTime;
+        
+        // Hızlı kaydırma (Flick) kontrolü
+        const isFastSwipe = duration < 200 && Math.abs(movedBy) > 50;
+
+        // Karar Anı
+        if ((movedBy < -threshold || (isFastSwipe && movedBy < 0)) && nextSection) {
+            // İLERİ GİT (Sola Kaydırıldı)
+            finishTransition(activeSection, -contentWidth);
+            finishTransition(nextSection, 0);
+            updateActiveState(nextSection);
+        } else if ((movedBy > threshold || (isFastSwipe && movedBy > 0)) && prevSection) {
+            // GERİ GİT (Sağa Kaydırıldı)
+            finishTransition(activeSection, contentWidth);
+            finishTransition(prevSection, 0);
+            updateActiveState(prevSection);
+        } else {
+            // İPTAL (Geri Yerine Otur)
+            snapBack();
+        }
+    });
+
+    function finishTransition(element, targetX) {
+        if(!element) return;
+        element.classList.add('animate-transition');
+        element.style.transform = `translateX(${targetX}px)`;
     }
+
+    function snapBack() {
+        if(activeSection) finishTransition(activeSection, 0);
+        if(prevSection) finishTransition(prevSection, -contentArea.offsetWidth);
+        if(nextSection) finishTransition(nextSection, contentArea.offsetWidth);
+        
+        // Animasyon bitince temizlik
+        setTimeout(resetStyles, 300);
+    }
+
+    function updateActiveState(newActiveSection) {
+        // Animasyonun bitmesini bekle sonra classları güncelle
+        setTimeout(() => {
+            document.querySelectorAll('.app-section').forEach(s => {
+                s.classList.remove('active', 'sliding', 'animate-transition');
+                s.style.transform = '';
+            });
+            newActiveSection.classList.add('active');
+            
+            // Menüleri güncelle
+            const newId = newActiveSection.id.replace('section-', '');
+            
+            // Navigasyon güncelleme (görsel)
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
+            if (navMap[newId] !== undefined) document.querySelectorAll('.nav-item')[navMap[newId]].classList.add('active');
+            
+            document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
+            const menuItem = document.getElementById('menu-' + newId);
+            if(menuItem) menuItem.classList.add('active');
+
+        }, 300); // CSS transition süresiyle aynı olmalı
+    }
+
+    function resetStyles() {
+        // Sadece yardımcı (sliding) classları temizle, active kalsın
+        if(prevSection) {
+            prevSection.classList.remove('sliding', 'animate-transition');
+            prevSection.style.transform = '';
+        }
+        if(nextSection) {
+            nextSection.classList.remove('sliding', 'animate-transition');
+            nextSection.style.transform = '';
+        }
+        if(activeSection) {
+            activeSection.classList.remove('animate-transition');
+            activeSection.style.transform = '';
+        }
+        currentTranslate = 0;
+    }
+
+    // --- ESKİ MANTIK VE DİĞER FONKSİYONLAR AYNI KALDI ---
 
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
