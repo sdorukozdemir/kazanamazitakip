@@ -99,7 +99,6 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* Loading Overlay */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -1273,17 +1272,26 @@
     let prevSection = null;
     let nextSection = null;
     let touchStartTime = 0;
+    
+    // YENİ DEĞİŞKENLER: Kaydırmayı kontrol etmek için flag'ler
+    let isHorizontalMove = false;
+    let isVerticalMove = false;
 
     const contentArea = document.getElementById('content');
 
     // --- TOUCH START ---
     contentArea.addEventListener('touchstart', e => {
-        // Yatay kaydırma içerebilecek elemanlarda VE İSTATİSTİK BUTONLARINDA swipe'ı engelle
+        // Yatay kaydırma içerebilecek elemanlarda swipe'ı engelle
         if (shouldIgnoreSwipe(e.target)) return;
 
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         touchStartTime = Date.now();
+        
+        // Flag'leri sıfırla
+        isHorizontalMove = false;
+        isVerticalMove = false;
+        
         isDragging = true;
 
         // Aktif bölümü bul
@@ -1297,19 +1305,19 @@
         prevSection = currentIndex > 0 ? document.getElementById('section-' + SECTION_IDS[currentIndex - 1]) : null;
         nextSection = currentIndex < SECTION_IDS.length - 1 ? document.getElementById('section-' + SECTION_IDS[currentIndex + 1]) : null;
 
-        // Hazırlık: Animasyon classlarını kaldır (manuel kontrol bizde)
+        // Hazırlık: Animasyon classlarını kaldır
         activeSection.classList.remove('animate-transition');
         if(prevSection) {
             prevSection.classList.remove('animate-transition');
-            prevSection.classList.add('sliding'); // Görünür yap
+            prevSection.classList.add('sliding'); 
             prevSection.style.transform = 'translateX(-100%)';
-            triggerLogic(SECTION_IDS[currentIndex - 1]); // İçeriği renderla
+            triggerLogic(SECTION_IDS[currentIndex - 1]); 
         }
         if(nextSection) {
             nextSection.classList.remove('animate-transition');
-            nextSection.classList.add('sliding'); // Görünür yap
+            nextSection.classList.add('sliding'); 
             nextSection.style.transform = 'translateX(100%)';
-            triggerLogic(SECTION_IDS[currentIndex + 1]); // İçeriği renderla
+            triggerLogic(SECTION_IDS[currentIndex + 1]); 
         }
 
     }, {passive: true});
@@ -1323,27 +1331,49 @@
         const diffX = currentX - startX;
         const diffY = currentY - startY;
 
-        // Dikey kaydırma dominantsa swipe'ı iptal et (Scroll'a izin ver)
-        if (Math.abs(diffY) > Math.abs(diffX)) {
+        // 1. Eğer zaten dikey kaydırma olarak işaretlendiyse, swipe yapma (return)
+        if (isVerticalMove) {
             isDragging = false;
-            // Temizlik yap
             resetStyles();
             return;
         }
 
-        // Tarayıcı geri/ileri hareketini engellemek için (gerekirse)
-        if(e.cancelable) e.preventDefault(); 
+        // 2. Eğer henüz yatay kaydırma kararı verilmediyse kontrol et
+        if (!isHorizontalMove) {
+            // Dikey hareket yataydan çok daha fazlaysa -> Bu bir SCROLL işlemidir
+            if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 5) {
+                isVerticalMove = true;
+                isDragging = false;
+                resetStyles();
+                return;
+            }
 
-        currentTranslate = diffX;
-
-        // 1:1 Hareket
-        activeSection.style.transform = `translateX(${diffX}px)`;
-        
-        if (prevSection) {
-            prevSection.style.transform = `translateX(${diffX - contentArea.offsetWidth}px)`;
+            // Yatay hareket dikeyden fazlaysa VE belirli bir eşiği (10px) geçtiyse -> Bu bir SWIPE işlemidir
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+                isHorizontalMove = true;
+                // Tarayıcı scroll'unu engelle
+                if(e.cancelable) e.preventDefault();
+            } else {
+                // Henüz yeterince hareket edilmedi (Threshold/Ölü Bölge), hiçbir şey yapma
+                return;
+            }
         }
-        if (nextSection) {
-            nextSection.style.transform = `translateX(${diffX + contentArea.offsetWidth}px)`;
+
+        // 3. Eğer buraya geldiysek ve isHorizontalMove true ise kaydırmayı uygula
+        if (isHorizontalMove) {
+            if(e.cancelable) e.preventDefault(); 
+
+            currentTranslate = diffX;
+
+            // 1:1 Hareket
+            activeSection.style.transform = `translateX(${diffX}px)`;
+            
+            if (prevSection) {
+                prevSection.style.transform = `translateX(${diffX - contentArea.offsetWidth}px)`;
+            }
+            if (nextSection) {
+                nextSection.style.transform = `translateX(${diffX + contentArea.offsetWidth}px)`;
+            }
         }
 
     }, {passive: false});
@@ -1353,27 +1383,28 @@
         if (!isDragging || !activeSection) return;
         isDragging = false;
 
+        // Eğer yatay hareket hiç başlamadıysa (micro-movement) reset at
+        if (!isHorizontalMove) {
+            resetStyles();
+            return;
+        }
+
         const movedBy = currentTranslate;
         const contentWidth = contentArea.offsetWidth;
-        const threshold = contentWidth * 0.25; // %25 kaydırma yeterli
+        const threshold = contentWidth * 0.25; 
         const duration = Date.now() - touchStartTime;
         
-        // Hızlı kaydırma (Flick) kontrolü - Biraz daha hassasiyeti azalttım (50 -> 60)
         const isFastSwipe = duration < 200 && Math.abs(movedBy) > 60;
 
-        // Karar Anı
         if ((movedBy < -threshold || (isFastSwipe && movedBy < 0)) && nextSection) {
-            // İLERİ GİT (Sola Kaydırıldı)
             finishTransition(activeSection, -contentWidth);
             finishTransition(nextSection, 0);
             updateActiveState(nextSection);
         } else if ((movedBy > threshold || (isFastSwipe && movedBy > 0)) && prevSection) {
-            // GERİ GİT (Sağa Kaydırıldı)
             finishTransition(activeSection, contentWidth);
             finishTransition(prevSection, 0);
             updateActiveState(prevSection);
         } else {
-            // İPTAL (Geri Yerine Otur)
             snapBack();
         }
     });
@@ -1381,7 +1412,6 @@
     // Swipe'ı engellemesi gereken elemanları kontrol eden fonksiyon
     function shouldIgnoreSwipe(target) {
         if (!target) return false;
-        // İstatistik butonlarını ve filtre butonlarını da ekledim (.stats-tab-container, .history-filter-tabs vb.)
         return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas, .stats-tab-container, .history-filter-tabs, .date-filter-capsule');
     }
 
@@ -1401,7 +1431,6 @@
     }
 
     function updateActiveState(newActiveSection) {
-        // Animasyonun bitmesini bekle sonra classları güncelle
         setTimeout(() => {
             document.querySelectorAll('.app-section').forEach(s => {
                 s.classList.remove('active', 'sliding', 'animate-transition');
@@ -1409,10 +1438,8 @@
             });
             newActiveSection.classList.add('active');
             
-            // Menüleri güncelle
             const newId = newActiveSection.id.replace('section-', '');
             
-            // Navigasyon güncelleme (görsel)
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
             if (navMap[newId] !== undefined) document.querySelectorAll('.nav-item')[navMap[newId]].classList.add('active');
@@ -1421,11 +1448,10 @@
             const menuItem = document.getElementById('menu-' + newId);
             if(menuItem) menuItem.classList.add('active');
 
-        }, 300); // CSS transition süresiyle aynı olmalı
+        }, 300); 
     }
 
     function resetStyles() {
-        // Sadece yardımcı (sliding) classları temizle, active kalsın
         if(prevSection) {
             prevSection.classList.remove('sliding', 'animate-transition');
             prevSection.style.transform = '';
@@ -1439,6 +1465,8 @@
             activeSection.style.transform = '';
         }
         currentTranslate = 0;
+        isHorizontalMove = false; // Flag reset
+        isVerticalMove = false; // Flag reset
     }
 
     // --- ESKİ MANTIK VE DİĞER FONKSİYONLAR AYNI KALDI ---
