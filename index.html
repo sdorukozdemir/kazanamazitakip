@@ -12,11 +12,13 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
@@ -98,7 +100,7 @@
             overscroll-behavior-y: contain; 
             -webkit-tap-highlight-color: transparent;
         }
-
+        
         /* Loading Overlay */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
@@ -148,32 +150,29 @@
             width: 100%; 
             max-width: 900px; 
             margin: 0 auto; 
-            position: relative; /* Animasyonlar için konumlandırma bağlamı */
+            position: relative; /* Animasyonlar için gerekli */
             overflow-x: hidden; 
             box-sizing: border-box; /* Padding içe dahil edilsin */
         }
 
-        /* --- SWIPE & TRANSITION ANIMATIONS --- */
-        /* Bölümler varsayılan olarak gizli */
+        /* --- SWIPE ANIMATION CLASSES --- */
         .app-section {
             display: none;
             width: 100%;
-            /* Statik durumdayken genişlik, parent padding'e göre otomatik ayarlanır */
-            animation-duration: 0.35s; 
+            animation-duration: 0.35s;
             animation-fill-mode: both;
             animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .app-section.active { display: block; }
-
-        /* Animasyon sırasındaki durum (Absolute) */
-        .app-section.animating {
-            position: absolute;
-            top: 20px; /* #content padding-top ile aynı */
-            left: 20px; /* #content padding-left ile aynı */
-            /* SAĞ TARAFTAN DARALMAYI ÖNLEYEN KOD: */
-            width: calc(100% - 40px); /* 100% - (padding-left + padding-right) */
-            z-index: 100;
+        
+        /* Animasyon sırasındaki durum */
+        .app-section.animating { 
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            width: calc(100% - 40px); /* Padding düşüldü */
+            z-index: 100; 
         }
 
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -1286,18 +1285,31 @@
     /* --- SWIPE (KAYDIRMA) MANTIĞI --- */
     let touchStartX = 0;
     let touchStartY = 0;
+    let touchStartTarget = null; // Dokunulan hedefi sakla
     const contentArea = document.getElementById('content');
 
     contentArea.addEventListener('touchstart', e => {
         touchStartX = e.changedTouches[0].screenX;
         touchStartY = e.changedTouches[0].screenY;
+        touchStartTarget = e.target; // Hedefi yakala
     }, {passive: true});
 
     contentArea.addEventListener('touchend', e => {
         const touchEndX = e.changedTouches[0].screenX;
         const touchEndY = e.changedTouches[0].screenY;
+        
+        // Eğer dokunulan yer yatay kaydırma içeriyorsa global swipe'ı iptal et
+        if (shouldIgnoreSwipe(touchStartTarget)) return;
+
         handleSwipeGesture(touchStartX, touchStartY, touchEndX, touchEndY);
     }, {passive: true});
+
+    // Swipe'ı engellemesi gereken elemanları kontrol eden fonksiyon
+    function shouldIgnoreSwipe(target) {
+        if (!target) return false;
+        // .scrolling-wrapper (istatistik kartları), .prayer-side-menu (mobil ikonlar), canvas (grafikler)
+        return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas');
+    }
 
     function handleSwipeGesture(startX, startY, endX, endY) {
         const diffX = endX - startX;
@@ -1315,8 +1327,7 @@
 
             if (diffX < 0) {
                 // Sola kaydırıldı -> Sonraki Bölüm
-                if (currentIndex < SECTION_IDS.length - 1) { // Son eleman değilse (Settings hariç)
-                     // Settings'e swipe ile geçmek istemiyorsan -2 yapabilirsin, şimdilik hepsi açık.
+                if (currentIndex < SECTION_IDS.length - 1) { 
                      showSection(SECTION_IDS[currentIndex + 1]);
                 }
             } else {
