@@ -2022,7 +2022,7 @@
         
         if (lineChart) { 
             const ctx = lineChart.ctx;
-            const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400); // 400px height for better fill
             gradient.addColorStop(0, 'rgba(96, 153, 121, 0.5)');
             gradient.addColorStop(1, 'rgba(96, 153, 121, 0.0)');
 
@@ -2185,7 +2185,7 @@
         const isDark = document.body.classList.contains('dark-mode'); 
         const lc = isDark ? '#fff' : '#666';
 
-        // --- NEW DOUGHNUT CHART WITH CENTER TEXT ---
+        // --- NEW DOUGHNUT CHART WITH BETTER TEXT ---
         const centerTextPlugin = {
             id: 'centerText',
             beforeDraw: function(chart) {
@@ -2196,21 +2196,24 @@
                 var percentage = 0;
                 if(totalTarget > 0) percentage = Math.round((totalDone / totalTarget) * 100);
                 
-                var fontSize = (height / 120).toFixed(2);
-                ctx.font = "bold " + (fontSize * 2.5) + "em Poppins";
+                var fontSize = (height / 100).toFixed(2);
+                
+                // Percentage Text - Smaller & Higher up
+                ctx.font = "bold " + (fontSize * 2.0) + "em Poppins";
                 ctx.textBaseline = "middle";
                 ctx.fillStyle = document.body.classList.contains('dark-mode') ? "#fff" : "#212529";
                 
                 var text = percentage + "%",
                     textX = Math.round((width - ctx.measureText(text).width) / 2),
-                    textY = height / 2 - 10;
+                    textY = height / 2 - (height * 0.1); // Move up dynamically
                 ctx.fillText(text, textX, textY);
                 
-                ctx.font = "bold " + (fontSize * 0.8) + "em Poppins";
+                // Label Text - Smaller & Lower down
+                ctx.font = "600 " + (fontSize * 0.7) + "em Poppins";
                 ctx.fillStyle = document.body.classList.contains('dark-mode') ? "#adb5bd" : "#6c757d";
                 var subText = "Tamamlanan",
                     subTextX = Math.round((width - ctx.measureText(subText).width) / 2),
-                    subTextY = height / 2 + 15;
+                    subTextY = height / 2 + (height * 0.15); // Move down dynamically
                 ctx.fillText(subText, subTextX, subTextY);
                 ctx.save();
             }
@@ -2248,8 +2251,9 @@
         
         const ctx3 = document.getElementById('lineChart').getContext('2d'); 
         if (lineChart) lineChart.destroy(); 
+        
         // Initial gradient creation
-        const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); 
+        const gradientLine = ctx3.createLinearGradient(0, 0, 0, 400); 
         gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); 
         gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); 
 
