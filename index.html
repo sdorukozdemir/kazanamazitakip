@@ -161,7 +161,6 @@
             position: absolute; /* Üst üste binmeleri için */
             top: 20px; /* Content padding */
             left: 20px; 
-            /* Genişlik ayarı önemli: parent padding çıkarıldı */
             width: calc(100% - 40px);
             will-change: transform;
             backface-visibility: hidden;
@@ -1276,12 +1275,13 @@
     // YENİ DEĞİŞKENLER: Kaydırmayı kontrol etmek için flag'ler
     let isHorizontalMove = false;
     let isVerticalMove = false;
+    let isSwipeInitialized = false; // DOM'un hazır olup olmadığını tutar
 
     const contentArea = document.getElementById('content');
 
     // --- TOUCH START ---
     contentArea.addEventListener('touchstart', e => {
-        // Yatay kaydırma içerebilecek elemanlarda swipe'ı engelle
+        // Yatay kaydırma içerebilecek elemanlarda VE İSTATİSTİK BUTONLARINDA swipe'ı engelle
         if (shouldIgnoreSwipe(e.target)) return;
 
         startX = e.touches[0].clientX;
@@ -1291,6 +1291,7 @@
         // Flag'leri sıfırla
         isHorizontalMove = false;
         isVerticalMove = false;
+        isSwipeInitialized = false;
         
         isDragging = true;
 
@@ -1298,27 +1299,8 @@
         activeSection = document.querySelector('.app-section.active');
         if(!activeSection) return;
 
-        // Mevcut indexi bul
-        const currentIndex = getSectionIndex(activeSection.id);
-
-        // Önceki ve Sonraki bölümleri hazırla
-        prevSection = currentIndex > 0 ? document.getElementById('section-' + SECTION_IDS[currentIndex - 1]) : null;
-        nextSection = currentIndex < SECTION_IDS.length - 1 ? document.getElementById('section-' + SECTION_IDS[currentIndex + 1]) : null;
-
-        // Hazırlık: Animasyon classlarını kaldır
+        // Hazırlık: Animasyon classlarını temizle
         activeSection.classList.remove('animate-transition');
-        if(prevSection) {
-            prevSection.classList.remove('animate-transition');
-            prevSection.classList.add('sliding'); 
-            prevSection.style.transform = 'translateX(-100%)';
-            triggerLogic(SECTION_IDS[currentIndex - 1]); 
-        }
-        if(nextSection) {
-            nextSection.classList.remove('animate-transition');
-            nextSection.classList.add('sliding'); 
-            nextSection.style.transform = 'translateX(100%)';
-            triggerLogic(SECTION_IDS[currentIndex + 1]); 
-        }
 
     }, {passive: true});
 
@@ -1348,20 +1330,39 @@
                 return;
             }
 
-            // Yatay hareket dikeyden fazlaysa VE belirli bir eşiği (10px) geçtiyse -> Bu bir SWIPE işlemidir
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+            // Yatay hareket dikeyden fazlaysa VE belirli bir eşiği (15px) geçtiyse -> Bu bir SWIPE işlemidir
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 15) {
                 isHorizontalMove = true;
-                // Tarayıcı scroll'unu engelle
                 if(e.cancelable) e.preventDefault();
             } else {
-                // Henüz yeterince hareket edilmedi (Threshold/Ölü Bölge), hiçbir şey yapma
                 return;
             }
         }
 
-        // 3. Eğer buraya geldiysek ve isHorizontalMove true ise kaydırmayı uygula
+        // 3. Eğer buraya geldiysek ve isHorizontalMove true ise
         if (isHorizontalMove) {
             if(e.cancelable) e.preventDefault(); 
+
+            // Eğer DOM henüz hazırlanmadıysa (Lazy Initialization) şimdi hazırla
+            if (!isSwipeInitialized) {
+                const currentIndex = getSectionIndex(activeSection.id);
+                prevSection = currentIndex > 0 ? document.getElementById('section-' + SECTION_IDS[currentIndex - 1]) : null;
+                nextSection = currentIndex < SECTION_IDS.length - 1 ? document.getElementById('section-' + SECTION_IDS[currentIndex + 1]) : null;
+                
+                if(prevSection) {
+                    prevSection.classList.remove('animate-transition');
+                    prevSection.classList.add('sliding'); 
+                    prevSection.style.transform = 'translateX(-100%)';
+                    triggerLogic(SECTION_IDS[currentIndex - 1]); 
+                }
+                if(nextSection) {
+                    nextSection.classList.remove('animate-transition');
+                    nextSection.classList.add('sliding'); 
+                    nextSection.style.transform = 'translateX(100%)';
+                    triggerLogic(SECTION_IDS[currentIndex + 1]); 
+                }
+                isSwipeInitialized = true;
+            }
 
             currentTranslate = diffX;
 
@@ -1383,7 +1384,7 @@
         if (!isDragging || !activeSection) return;
         isDragging = false;
 
-        // Eğer yatay hareket hiç başlamadıysa (micro-movement) reset at
+        // Eğer yatay hareket hiç başlamadıysa reset at
         if (!isHorizontalMove) {
             resetStyles();
             return;
@@ -1465,8 +1466,11 @@
             activeSection.style.transform = '';
         }
         currentTranslate = 0;
-        isHorizontalMove = false; // Flag reset
-        isVerticalMove = false; // Flag reset
+        isHorizontalMove = false; 
+        isVerticalMove = false; 
+        isSwipeInitialized = false;
+        prevSection = null;
+        nextSection = null;
     }
 
     // --- ESKİ MANTIK VE DİĞER FONKSİYONLAR AYNI KALDI ---
@@ -2287,27 +2291,35 @@
     }
 
     function calculateMaxStreak() {
-        if (!localData.calendar) return 0;
+        if (!localData.calendar) return { current: 0, max: 0 };
         const dates = Object.keys(localData.calendar).sort();
-        if (dates.length === 0) return 0;
+        if (dates.length === 0) return { current: 0, max: 0 };
 
-        let maxStreak = 1;
-        let currentStreak = 1;
-
-        for (let i = 1; i < dates.length; i++) {
-            const prev = new Date(dates[i-1]);
-            const curr = new Date(dates[i]);
-            
-            const diffTime = Math.abs(curr - prev);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays === 1) {
-                currentStreak++;
+        let maxStreak = 0;
+        let currentStreak = 0;
+        
+        // Basit bir streak hesaplama
+        let streak = 0;
+        let lastDate = null;
+        
+        dates.forEach(d => {
+            const date = new Date(d);
+            if (!lastDate) {
+                streak = 1;
             } else {
-                currentStreak = 1;
+                const diffTime = Math.abs(date - lastDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                if (diffDays === 1) {
+                    streak++;
+                } else {
+                    if (streak > maxStreak) maxStreak = streak;
+                    streak = 1;
+                }
             }
-            if (currentStreak > maxStreak) maxStreak = currentStreak;
-        }
+            lastDate = date;
+        });
+        if (streak > maxStreak) maxStreak = streak;
+        
         return maxStreak;
     }
 
