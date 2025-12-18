@@ -12,13 +12,11 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
@@ -155,13 +153,17 @@
             box-sizing: border-box; /* Padding içe dahil edilsin */
         }
 
-        /* --- SWIPE ANIMATION CLASSES --- */
+        /* --- SWIPE ANIMATION CLASSES (SMOOTH & GPU ACCELERATED) --- */
         .app-section {
             display: none;
             width: 100%;
-            animation-duration: 0.35s;
+            /* Daha akıcı ve doğal bir his için süre ve bezier eğrisi güncellendi */
+            animation-duration: 0.45s; 
             animation-fill-mode: both;
-            animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+            /* iOS tarzı 'ease-out-quint' efekti: Başta hızlı, sonda yavaşça durur */
+            animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+            backface-visibility: hidden; /* Titremeyi önler */
+            perspective: 1000px;
         }
 
         .app-section.active { display: block; }
@@ -172,13 +174,27 @@
             top: 20px; 
             left: 20px; 
             width: calc(100% - 40px); /* Padding düşüldü */
-            z-index: 100; 
+            z-index: 100;
+            will-change: transform; /* Tarayıcıya önceden haber ver */
         }
 
-        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOutLeft { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-100%); opacity: 0; } }
-        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        /* translate3d kullanarak GPU'yu zorla, bu 'yağ gibi' akmasını sağlar */
+        @keyframes slideInRight { 
+            from { transform: translate3d(100%, 0, 0); opacity: 0; box-shadow: -10px 0 25px rgba(0,0,0,0.1); } 
+            to { transform: translate3d(0, 0, 0); opacity: 1; box-shadow: none; } 
+        }
+        @keyframes slideOutLeft { 
+            from { transform: translate3d(0, 0, 0); opacity: 1; } 
+            to { transform: translate3d(-30%, 0, 0); opacity: 0; } /* Hafif parallax etkisi */ 
+        }
+        @keyframes slideInLeft { 
+            from { transform: translate3d(-100%, 0, 0); opacity: 0; box-shadow: 10px 0 25px rgba(0,0,0,0.1); } 
+            to { transform: translate3d(0, 0, 0); opacity: 1; box-shadow: none; } 
+        }
+        @keyframes slideOutRight { 
+            from { transform: translate3d(0, 0, 0); opacity: 1; } 
+            to { transform: translate3d(30%, 0, 0); opacity: 0; } /* Hafif parallax etkisi */ 
+        }
 
         .anim-slide-in-right { display: block !important; animation-name: slideInRight; }
         .anim-slide-out-left { display: block !important; animation-name: slideOutLeft; pointer-events: none; }
@@ -1265,11 +1281,11 @@
         // Logic Trigger (Data Render)
         triggerLogic(targetId);
 
-        // Temizlik (Animasyon süresi 350ms + pay)
+        // Temizlik (Animasyon süresi 450ms + pay)
         setTimeout(() => {
             currentActive.classList.remove('active', 'animating', outClass);
             targetSection.classList.remove('animating', inClass);
-        }, 360);
+        }, 460);
     };
 
     function triggerLogic(id) {
