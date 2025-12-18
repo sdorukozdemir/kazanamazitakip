@@ -99,14 +99,17 @@
             -webkit-tap-highlight-color: transparent;
         }
         
+        /* Loading Overlay */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { margin-top: 15px; font-weight: 600; color: #609979; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
+        /* Layout Wrapper */
         .wrapper { display: flex; width: 100%; }
         
+        /* --- SIDEBAR --- */
         #sidebar { 
             min-width: 280px; max-width: 280px; 
             background: var(--sidebar-bg); color: #fff; 
@@ -1235,10 +1238,6 @@
         triggerLogic(targetId);
 
         // 4. Görünüm Değiştirme (Animasyonsuz direkt geçiş - menüden tıklandığı için)
-        // Eğer bir önceki sayfadan geçiş efekti istenirse burası modifiye edilebilir, 
-        // ama menüden tıklamalarda genellikle direkt geçiş tercih edilir veya basit fade.
-        // Biz burada swipe mantığını bozmamak için basitçe active class'ı değiştiriyoruz.
-        
         document.querySelectorAll('.app-section').forEach(sec => {
             sec.classList.remove('active');
             sec.style.transform = ''; // Varsa inline style temizle
@@ -1279,8 +1278,8 @@
 
     // --- TOUCH START ---
     contentArea.addEventListener('touchstart', e => {
-        // Yatay kaydırma içerebilecek elemanlarda swipe'ı engelle
-        if (e.target.closest('.scrolling-wrapper, .prayer-side-menu, canvas')) return;
+        // Yatay kaydırma içerebilecek elemanlarda VE İSTATİSTİK BUTONLARINDA swipe'ı engelle
+        if (shouldIgnoreSwipe(e.target)) return;
 
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
@@ -1359,8 +1358,8 @@
         const threshold = contentWidth * 0.25; // %25 kaydırma yeterli
         const duration = Date.now() - touchStartTime;
         
-        // Hızlı kaydırma (Flick) kontrolü
-        const isFastSwipe = duration < 200 && Math.abs(movedBy) > 50;
+        // Hızlı kaydırma (Flick) kontrolü - Biraz daha hassasiyeti azalttım (50 -> 60)
+        const isFastSwipe = duration < 200 && Math.abs(movedBy) > 60;
 
         // Karar Anı
         if ((movedBy < -threshold || (isFastSwipe && movedBy < 0)) && nextSection) {
@@ -1378,6 +1377,13 @@
             snapBack();
         }
     });
+
+    // Swipe'ı engellemesi gereken elemanları kontrol eden fonksiyon
+    function shouldIgnoreSwipe(target) {
+        if (!target) return false;
+        // İstatistik butonlarını ve filtre butonlarını da ekledim (.stats-tab-container, .history-filter-tabs vb.)
+        return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas, .stats-tab-container, .history-filter-tabs, .date-filter-capsule');
+    }
 
     function finishTransition(element, targetX) {
         if(!element) return;
