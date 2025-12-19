@@ -22,6 +22,18 @@
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
 
     <style>
+        /* --- KAYDIRMA ÇUBUĞU DÜZELTMESİ VE TEMEL AYARLAR --- */
+        *, *::before, *::after {
+            box-sizing: border-box; /* Genişlik taşmalarını engeller */
+        }
+
+        /* Tarayıcı scrollbarlarını gizle (Uygulama hissi için) */
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+            background: transparent;
+        }
+        
         /* --- TEMEL DEĞİŞKENLER --- */
         :root { 
             --bg-color: #e3e6ec; 
