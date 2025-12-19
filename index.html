@@ -150,7 +150,7 @@
             position: relative; 
             overflow-x: hidden; 
             box-sizing: border-box; 
-            touch-action: pan-y; /* Yatay kaydırmayı JS'e bırak, dikey browser'da */
+            touch-action: pan-y; 
         }
 
         /* --- SLIDER STRUCTURE (ABSOLUTE OVERLAY) --- */
@@ -158,8 +158,8 @@
             display: none;
             width: 100%;
             height: 100%;
-            position: absolute; /* Üst üste binmeleri için */
-            top: 20px; /* Content padding */
+            position: absolute; 
+            top: 20px; 
             left: 20px; 
             width: calc(100% - 40px);
             will-change: transform;
@@ -168,12 +168,11 @@
 
         .app-section.active { 
             display: block; 
-            position: relative; /* Aktif olan akışta kalsın */
-            top: 0; left: 0; width: 100%; /* Reset */
+            position: relative; 
+            top: 0; left: 0; width: 100%; 
             z-index: 5;
         }
 
-        /* Kaydırma sırasında görünür olması gerekenler */
         .app-section.sliding {
             display: block !important;
             position: absolute;
@@ -183,12 +182,9 @@
             z-index: 10;
         }
 
-        /* Geçiş Animasyonu Class'ı */
         .animate-transition {
             transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
-
-        /* ------------------------------- */
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         body.dark-mode .app-header { background: -webkit-linear-gradient(45deg, #20c997, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -224,7 +220,6 @@
         .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
         .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        /* YENİ METALİK SİYAH-GRİ ORUÇ TEMASI */
         .theme-oruc-kaza { background: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%); color: #212529; border: 1px solid #ced4da; }
         .theme-oruc-kaza.active { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; border: none; }
         
@@ -238,7 +233,6 @@
         body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); color: #e8eaf6; }
         body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); color: #eceff1; }
         
-        /* Gece Modu Oruç Tema Override */
         body.dark-mode .theme-oruc-kaza { background: #2c3035; color: #ced4da; border-color: #444; }
         body.dark-mode .theme-oruc-kaza.active { background: linear-gradient(135deg, #000000 0%, #434343 100%); color: white; }
         body.dark-mode .theme-oruc-nafile.active { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); }
@@ -250,7 +244,6 @@
         .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
         .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
         
-        /* KAZA ORUCU METALİK RENK */
         .bg-oruc-kaza { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; }
         .bg-oruc-nafile { background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); color: white; }
         .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; }
@@ -261,7 +254,6 @@
         body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
         body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); }
         body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
-        /* Gece Modu Kaza Orucu Rengi */
         body.dark-mode .bg-oruc-kaza { background: linear-gradient(135deg, #000000 0%, #434343 100%); }
         body.dark-mode .bg-oruc-nafile { background: linear-gradient(135deg, #0e6655 0%, #117864 100%); }
 
@@ -614,6 +606,38 @@
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
+        /* --- YENİ CHART BUTON STİLİ --- */
+        .chart-period-selector {
+            display: flex;
+            background: var(--input-bg);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 5px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+        .chart-period-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+            background: transparent;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chart-period-btn.active {
+            background: linear-gradient(135deg, #609979, #3e6b53);
+            color: white;
+            box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3);
+        }
+
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
     </style>
@@ -825,15 +849,10 @@
                         <div class="chart-container">
                             <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
                             <div class="d-flex justify-content-center mb-2">
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked onclick="switchChartPeriod('weekly')">
-                                    <label class="btn btn-outline-success" for="btnradio1">Haftalık</label>
-                                    
-                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="switchChartPeriod('monthly')">
-                                    <label class="btn btn-outline-success" for="btnradio2">Aylık</label>
-
-                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="switchChartPeriod('3months')">
-                                    <label class="btn btn-outline-success" for="btnradio3">3 Ay</label>
+                                <div class="chart-period-selector">
+                                    <div class="chart-period-btn active" id="btn-period-weekly" onclick="switchChartPeriod('weekly', this)">Haftalık</div>
+                                    <div class="chart-period-btn" id="btn-period-monthly" onclick="switchChartPeriod('monthly', this)">Aylık</div>
+                                    <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
                                 </div>
                             </div>
                             <canvas id="lineChart" style="max-height: 250px;"></canvas>
@@ -2183,7 +2202,16 @@
     
     window.resTes = function(i) { showModal("Sıfırla", "Sıfırlansın mı?", () => { localData.tesbihat[i].current = 0; saveToCloud(); renderTesbihat(); }); };
     window.setTesTarget = function(i, v) { localData.tesbihat[i].target = parseInt(v)||33; saveToCloud(); renderTesbihat(); };
-    window.switchChartPeriod = function(period) { currentChartPeriod = period; updatePerformanceChart(); }
+    window.switchChartPeriod = function(period, btn) { 
+        currentChartPeriod = period; 
+        
+        // Buton stillerini güncelle
+        const buttons = document.querySelectorAll('.chart-period-btn');
+        buttons.forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+
+        updatePerformanceChart(); 
+    }
     
     window.switchStatsTab = function(tab) {
         document.querySelectorAll('.stats-tab-btn').forEach(b => b.classList.remove('active'));
@@ -2405,7 +2433,63 @@
         document.getElementById('bestMonthVal').innerText = bestPeriods.month;
         document.getElementById('longestStreakVal').innerText = maxStreakVal + " Gün";
 
-        const ctx1 = document.getElementById('completionChart').getContext('2d'); if (chartCompletion) chartCompletion.destroy(); const isDark = document.body.classList.contains('dark-mode'); const lc = isDark ? '#fff' : '#666'; chartCompletion = new Chart(ctx1, { type: 'doughnut', data: { labels: ['Kılınan', 'Kalan'], datasets: [{ data: [totalDone, totalTarget - totalDone], backgroundColor: ['#609979', '#d9534f'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: lc, font: { family: 'Poppins' } } }, datalabels: { color: '#fff', font: { weight: 'bold', family: 'Poppins' }, formatter: (v, c) => (v*100 / (totalTarget||1)).toFixed(1)+"%" } } } }); const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
+        const ctx1 = document.getElementById('completionChart').getContext('2d');
+        if (chartCompletion) chartCompletion.destroy();
+        
+        // Gradient Renkler
+        const gradDone = ctx1.createLinearGradient(0, 0, 0, 200);
+        gradDone.addColorStop(0, '#2ecc71'); // Açık Yeşil
+        gradDone.addColorStop(1, '#27ae60'); // Koyu Yeşil
+
+        const gradRem = ctx1.createLinearGradient(0, 0, 0, 200);
+        gradRem.addColorStop(0, '#e74c3c'); // Kırmızı
+        gradRem.addColorStop(1, '#c0392b'); // Koyu Kırmızı
+
+        const isDark = document.body.classList.contains('dark-mode'); 
+        const lc = isDark ? '#fff' : '#666'; 
+        
+        chartCompletion = new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Kılınan', 'Kalan'],
+                datasets: [{
+                    data: [totalDone, totalTarget - totalDone],
+                    backgroundColor: [gradDone, gradRem],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%', // Biraz daha ince halka
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: lc,
+                            usePointStyle: true,
+                            font: { family: 'Poppins' }
+                        }
+                    },
+                    datalabels: {
+                        color: '#fff',
+                        font: { weight: 'bold', family: 'Poppins', size: 14 },
+                        formatter: (val, ctx) => {
+                            let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                            let percentage = (val * 100 / sum).toFixed(1) + "%";
+                            if(percentage === "0.0%") return "";
+                            return percentage;
+                        },
+                        textShadowBlur: 5,
+                        textShadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        }); 
+
+        const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
         
         renderHistory();
     }
@@ -2794,5 +2878,3 @@
 </script>
 </body>
 </html>
-
-
