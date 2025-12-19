@@ -577,17 +577,140 @@
         .h-sub-btn.active { background: #fd7e14; color: white; border-color: #fd7e14; opacity: 1; box-shadow: 0 3px 8px rgba(253, 126, 20, 0.3); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%; margin: 20px auto 40px auto; }
-        .badge-item { width: 125px; padding: 15px 10px; border-radius: 18px; text-align: center; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .badge-item.unlocked { border: 2px solid #20c997; background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); box-shadow: 0 8px 20px rgba(32, 201, 151, 0.25); transform: scale(1.05); color: #004d40; }
-        body.dark-mode .badge-item.unlocked { background: linear-gradient(135deg, #004d40 0%, #00695c 100%); border-color: #4db6ac; color: #e0f2f1; box-shadow: 0 8px 20px rgba(77, 182, 172, 0.2); }
-        .badge-item.locked { filter: grayscale(100%); opacity: 0.6; background: var(--input-bg); }
-        .badge-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .badge-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1rem; color: #00695c; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .badge-item.unlocked .badge-title { color: #004d40; text-shadow: 0 1px 1px rgba(255,255,255,0.4); }
-        body.dark-mode .badge-item.unlocked .badge-title { color: #b2dfdb; text-shadow: none; }
-        .badge-desc { font-size: 0.65rem; color: var(--text-color); opacity: 0.8; font-family: 'Poppins', sans-serif; font-weight: 600; }
-        body.dark-mode .badge-item.unlocked .badge-desc { color: #80cbc4; opacity: 0.9; }
+        /* --- YENİ ROZET MÜZESİ (GLASSMORPHISM & 3D FLIP) --- */
+        .badge-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin: 20px auto 40px auto;
+            perspective: 1000px; /* 3D derinlik için şart */
+        }
+
+        .badge-perspective {
+            background-color: transparent;
+            width: 100%;
+            height: 140px; /* Kart yüksekliği */
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .badge-glass-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            border-radius: 16px;
+        }
+
+        /* Kilitli değilse üzerine gelince veya tıklayınca dönsün */
+        .badge-perspective.unlocked:hover .badge-glass-card,
+        .badge-perspective.unlocked:active .badge-glass-card {
+            transform: rotateY(180deg);
+        }
+
+        /* Ön ve Arka Yüz Ortak Özellikleri */
+        .badge-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* Safari */
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            /* Glassmorphism Efekti */
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- ÖN YÜZ (Front) --- */
+        .badge-face-front {
+            color: var(--text-color);
+        }
+
+        /* Kilitli Rozet Stili */
+        .badge-locked .badge-face-front {
+            background: rgba(200, 200, 200, 0.15); /* Daha sönük */
+            filter: grayscale(100%);
+            opacity: 0.7;
+            border: 1px dashed rgba(0,0,0,0.1);
+        }
+
+        /* Açık Rozet Stili (Parlak) */
+        .badge-unlocked .badge-face-front {
+            background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 100%);
+            border: 1px solid rgba(96, 153, 121, 0.3);
+            box-shadow: 0 8px 20px rgba(96, 153, 121, 0.2);
+        }
+
+        /* Gece Modu Ayarları */
+        body.dark-mode .badge-face {
+            background: rgba(40, 40, 40, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+        body.dark-mode .badge-unlocked .badge-face-front {
+            background: linear-gradient(135deg, rgba(96, 153, 121, 0.2) 0%, rgba(0,0,0,0) 100%);
+            border-color: rgba(96, 153, 121, 0.4);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        /* --- ARKA YÜZ (Back - Bilgi) --- */
+        .badge-face-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #609979, #3e6b53);
+            color: white;
+            border: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* İkon ve Yazı Stilleri */
+        .b-icon { font-size: 2.5rem; margin-bottom: 5px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); transition: transform 0.3s; }
+        .badge-perspective:hover .b-icon { transform: scale(1.1); }
+
+        .b-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 0.95rem; margin-bottom: 2px; letter-spacing: 0.5px; }
+        .b-desc { font-size: 0.65rem; font-weight: 600; opacity: 0.8; font-family: 'Poppins', sans-serif; }
+
+        /* Kilit İkonu */
+        .lock-overlay {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* SHIMMER (Parlama) Animasyonu */
+        @keyframes shimmer {
+            0% { transform: translateX(-150%) skewX(-20deg); }
+            100% { transform: translateX(200%) skewX(-20deg); }
+        }
+
+        .shimmer-wrapper {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            border-radius: 16px;
+            pointer-events: none;
+        }
+
+        .badge-unlocked .shimmer-line {
+            position: absolute;
+            top: 0; left: 0;
+            width: 30px; height: 100%;
+            background: rgba(255,255,255, 0.4);
+            filter: blur(5px);
+            animation: shimmer 4s infinite;
+        }
 
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
@@ -2056,20 +2179,52 @@
         {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} 
     ];
     
+    // ROZETLER İÇİN GÜNCELLENMİŞ RENDER FONKSİYONU (VİTRİN TARZI)
     function renderBadges(total) { 
         const c = document.getElementById('badgeContainer'); 
         c.innerHTML = ""; 
-        let next=false; 
+        let next = false; 
+        
         BADGES.forEach(b => { 
-            let unlockedClass = '';
-            if(total >= b.id) { 
-                if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } 
-                unlockedClass = 'unlocked';
-                c.innerHTML += `<div class="badge-item ${unlockedClass}"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; 
-            } else if (!next) { 
-                c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; 
-                next=true; 
-            } 
+            let isUnlocked = total >= b.id;
+            let statusClass = isUnlocked ? 'badge-unlocked unlocked' : 'badge-locked locked';
+            let shimmerHTML = isUnlocked ? '<div class="shimmer-wrapper"><div class="shimmer-line"></div></div>' : '';
+            let lockIcon = isUnlocked ? '' : '<i class="fas fa-lock lock-overlay"></i>';
+            let iconDisplay = isUnlocked ? b.icon : b.icon; // İstersen kilitliyken ikon göstermeyebilirsin
+            
+            // Eğer yeni kazanıldıysa konfetiyi patlat ve kaydet
+            if(isUnlocked && !localData.earnedBadges.includes(b.id)) { 
+                localData.earnedBadges.push(b.id); 
+                jsConfetti.addConfetti(); 
+                saveToCloud(); 
+            }
+
+            // Henüz bu rozete gelinmediyse ve bir önceki hedeften sonraysa (next mantığı)
+            if (!isUnlocked && next) return; // Sadece sıradaki 1 kilitli hedefi göster
+            if (!isUnlocked) next = true;
+
+            const cardHTML = `
+            <div class="badge-perspective ${statusClass}" onclick="triggerHaptic()">
+                <div class="badge-glass-card">
+                    <!-- ÖN YÜZ -->
+                    <div class="badge-face badge-face-front">
+                        ${shimmerHTML}
+                        ${lockIcon}
+                        <div class="b-icon">${iconDisplay}</div>
+                        <div class="b-title">${b.title}</div>
+                        <div class="b-desc">${isUnlocked ? 'Kazanıldı' : b.desc}</div>
+                    </div>
+                    
+                    <!-- ARKA YÜZ (Sadece kazanılanlarda döner) -->
+                    <div class="badge-face badge-face-back">
+                        <i class="fas fa-check-circle mb-2 fs-4"></i>
+                        <div class="fw-bold small">Tebrikler!</div>
+                        <div class="b-desc text-white mt-1">${b.desc} tamamlandı.</div>
+                    </div>
+                </div>
+            </div>`;
+            
+            c.innerHTML += cardHTML;
         }); 
     }
     
