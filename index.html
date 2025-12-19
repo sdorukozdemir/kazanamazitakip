@@ -623,8 +623,8 @@
         }
         .chart-period-btn {
             text-align: center;
-            padding: 8px 2px; /* Padding küçültüldü */
-            font-size: 0.75rem; /* Font küçültüldü */
+            padding: 8px 4px; /* Padding ayarlandı */
+            font-size: 0.8rem; /* Font hafif büyüdü */
             font-weight: 600;
             cursor: pointer;
             border-radius: 8px;
@@ -2440,14 +2440,14 @@
         const ctx1 = document.getElementById('completionChart').getContext('2d');
         if (chartCompletion) chartCompletion.destroy();
         
-        // Gradient Renkler (Pastel)
+        // Gradient Renkler (Daha Parlak ve Uyumlu)
         const gradDone = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradDone.addColorStop(0, '#88cbb9'); // Pastel Mint
-        gradDone.addColorStop(1, '#609979'); // Tema Rengi
+        gradDone.addColorStop(0, '#609979'); // Tema Yeşili (Koyu)
+        gradDone.addColorStop(1, '#a8e6cf'); // Mint Yeşili (Açık)
 
         const gradRem = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradRem.addColorStop(0, '#ffb74d'); // Pastel Turuncu
-        gradRem.addColorStop(1, '#fb8c00'); // Koyu Pastel Turuncu
+        gradRem.addColorStop(0, '#ff9966'); // Somon
+        gradRem.addColorStop(1, '#ff5e62'); // Gül Rengi
 
         const isDark = document.body.classList.contains('dark-mode'); 
         const lc = isDark ? '#fff' : '#666'; 
@@ -2477,9 +2477,9 @@
                         }
                     },
                     datalabels: {
-                        color: '#000', // Siyah yazı
-                        backgroundColor: '#fff', // Beyaz arka plan (okunurluk için)
-                        borderRadius: 4,
+                        color: '#fff', // Beyaz Yazı
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Yarı saydam siyah arka plan
+                        borderRadius: 6,
                         font: { weight: 'bold', family: 'Poppins', size: 11 },
                         formatter: (val, ctx) => {
                             let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
@@ -2487,13 +2487,11 @@
                             if(percentage === "0.0%") return "";
                             return percentage;
                         },
-                        padding: 4
+                        padding: 6
                     },
                     tooltip: {
                         enabled: true,
-                        // Tooltip'in çakışmasını engellemek için basit bir offset veya stil değişikliği yapılamaz 
-                        // ama datalabel'ı "center" yerine "end" veya "start" anchor ile düzeltebiliriz.
-                        // Şimdilik datalabel kapsül içinde olduğu için karışıklık minimum olacaktır.
+                        yAlign: 'bottom', // Tooltip'i yukarı iter, böylece aşağıdaki etiketle çakışmaz
                     }
                 }
             },
