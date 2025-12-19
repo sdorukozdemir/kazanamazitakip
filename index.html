@@ -112,12 +112,9 @@
             height: 36px;
             margin-left: -18px; /* Tam ortalamak için genişliğin yarısı kadar sola çek */
             z-index: 1000;
-            
-            /* KARE GÖRÜNÜM AYARLARI */
             border: 4px solid rgba(96, 153, 121, 0.3);
             border-top-color: #609979;
-            border-radius: 12px; /* Köşeleri hafif yuvarlatılmış kare */
-            
+            border-radius: 12px; 
             display: none;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             background-color: var(--card-bg);
@@ -741,6 +738,7 @@
         <ul class="list-unstyled components">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
+            <li id="menu-achievements" onclick="showSection('achievements')"><i class="fas fa-medal me-3"></i> Başarılar & Ödül</li>
             <li id="menu-fasting" onclick="showSection('fasting')"><i class="fas fa-utensils me-3"></i> Oruç Takip</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
@@ -807,8 +805,29 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center mt-4"><h5 class="fw-bold text-secondary"><i class="fas fa-trophy text-warning me-2"></i>Rozet Müzesi</h5></div>
-            <div id="badgeContainer" class="badge-container"></div>
+        </div>
+
+        <div id="section-achievements" class="app-section">
+            <h3 class="app-header">Başarılarım & Rozetler</h3>
+            
+            <!-- Üst Bilgi Kartı: Toplam Seviye -->
+            <div class="card mb-4 shadow-lg border-0" style="border-radius: 20px; background: linear-gradient(135deg, #2c3e50, #4ca1af); color: white;">
+                <div class="card-body p-4 text-center">
+                    <h5 class="text-white-50 text-uppercase small fw-bold">Toplam Skor</h5>
+                    <h1 class="display-4 fw-bold mb-0" id="totalScoreDisplay">0</h1>
+                    <div class="badge bg-warning text-dark mt-2 fs-6">Seviye: <span id="userLevelDisplay">Başlangıç</span></div>
+                </div>
+            </div>
+        
+            <!-- Kategoriler -->
+            <h5 class="fw-bold text-secondary mb-3 ms-2"><i class="fas fa-mosque me-2"></i>Namaz Rozetleri</h5>
+            <div id="badgeListNamaz" class="badge-container justify-content-start"></div>
+        
+            <h5 class="fw-bold text-secondary mb-3 ms-2 mt-4"><i class="fas fa-fire me-2"></i>Zincir ve Devamlılık</h5>
+            <div id="badgeListStreak" class="badge-container justify-content-start"></div>
+            
+            <h5 class="fw-bold text-secondary mb-3 ms-2 mt-4"><i class="fas fa-star me-2"></i>Özel Görevler</h5>
+            <div id="badgeListSpecial" class="badge-container justify-content-start"></div>
         </div>
 
         <div id="section-stats" class="app-section">
@@ -990,10 +1009,10 @@
 
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
-    <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>İstatistik</span></div>
+    <div class="nav-item" onclick="showSection('achievements'); activateNav(this)"><i class="fas fa-medal"></i><span style="font-size: 0.65rem;">Ödül</span></div>
+    <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>Analiz</span></div>
     <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-utensils"></i><span>Oruç</span></div>
-    <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Tesbihat</span></div>
-    <div class="nav-item" onclick="showSection('calculator'); activateNav(this)"><i class="fas fa-calculator"></i><span>Hesap</span></div>
+    <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Zikir</span></div>
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
 </div>
 
@@ -1257,7 +1276,7 @@
     /* --- REAL-TIME TOUCH SWIPE & PULL TO REFRESH LOGIC --- */
     
     // Bölüm ID'leri sıralı
-    const SECTION_IDS = ['dashboard', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
+    const SECTION_IDS = ['dashboard', 'achievements', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
     
     // DOM Elementlerini ve indexleri bulmak için yardımcı
     function getSectionIndex(id) {
@@ -1275,7 +1294,7 @@
 
         // 2. Alt Nav Aktifliği
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
+        const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
         if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
         // 3. Logic Trigger
@@ -1304,6 +1323,7 @@
             if(id === 'tesbihat') renderTesbihat(); 
             if(id === 'calculator') renderCalculatorRows(); 
             if(id === 'fasting') renderFasting(); 
+            if(id === 'achievements') renderAchievements(); 
         } catch(e) { console.log("Render error:", e); }
     }
 
@@ -1536,7 +1556,7 @@
             const newId = newActiveSection.id.replace('section-', '');
             
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'calculator': 4 };
+            const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
             if (navMap[newId] !== undefined) document.querySelectorAll('.nav-item')[navMap[newId]].classList.add('active');
             
             document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
@@ -1680,7 +1700,7 @@
         document.getElementById('sumDone').innerText = td;
         document.getElementById('sumRemaining').innerText = tt - td;
 
-        renderBadges(td); calculateEstFinish(td, days); 
+        calculateEstFinish(td, days); 
     }
     
     function updateCardUI(index) {
@@ -2045,32 +2065,129 @@
 
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     
-    // ROZETLER: ESKİ EMOJİLERE DÖNÜŞ & GAYRET ATEŞ EMOJİSİ
-    const BADGES = [ 
-        {id:100,title:"Bismillah",icon:"🤲", desc:"100 Namaz"}, 
-        {id:500,title:"Gayret",icon:"🔥", desc:"500 Namaz"}, 
-        {id:1000,title:"Sebat",icon:"🏔️", desc:"1.000 Namaz"}, 
-        {id:2500,title:"İstikrar",icon:"💎", desc:"2.500 Namaz"}, 
-        {id:5000,title:"Sadakat",icon:"🌹", desc:"5.000 Namaz"}, 
-        {id:10000,title:"Huzur",icon:"🕊️", desc:"10.000 Namaz"}, 
-        {id:15000,title:"Vuslat",icon:"🕌", desc:"15.000 Namaz"} 
+    // YENİ: GELİŞMİŞ ROZET SİSTEMİ VERİLERİ
+    const BADGES = [
+        // NAMAZ ROZETLERİ (Kategori: namaz)
+        {id: 100, title: "Bismillah", icon: "🌱", desc: "100 Namaz Kılındı", category: "namaz", threshold: 100},
+        {id: 500, title: "Gayret", icon: "🔥", desc: "500 Namaz Kılındı", category: "namaz", threshold: 500},
+        {id: 1000, title: "Sebat", icon: "🏔️", desc: "1.000 Namaz Kılındı", category: "namaz", threshold: 1000},
+        {id: 2500, title: "İstikrar", icon: "💎", desc: "2.500 Namaz Kılındı", category: "namaz", threshold: 2500},
+        {id: 5000, title: "Sadakat", icon: "🌹", desc: "5.000 Namaz Kılındı", category: "namaz", threshold: 5000},
+        
+        // ZİNCİR ROZETLERİ (Kategori: streak)
+        {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün Aralıksız", category: "streak", threshold: 7},
+        {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün Aralıksız", category: "streak", threshold: 30},
+        {id: 's100', title: "Efsane", icon: "👑", desc: "100 Gün Aralıksız", category: "streak", threshold: 100},
+
+        // TESBİHAT/ORUÇ (Kategori: special)
+        {id: 'z1000', title: "Zikir Ehli", icon: "📿", desc: "Toplam 1.000 Zikir", category: "special", threshold: 1000} 
     ];
-    
-    function renderBadges(total) { 
-        const c = document.getElementById('badgeContainer'); 
-        c.innerHTML = ""; 
-        let next=false; 
-        BADGES.forEach(b => { 
-            let unlockedClass = '';
-            if(total >= b.id) { 
-                if(!localData.earnedBadges.includes(b.id)) { localData.earnedBadges.push(b.id); jsConfetti.addConfetti(); saveToCloud(); } 
-                unlockedClass = 'unlocked';
-                c.innerHTML += `<div class="badge-item ${unlockedClass}"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">${b.desc}</div></div>`; 
-            } else if (!next) { 
-                c.innerHTML += `<div class="badge-item locked"><span class="badge-icon">${b.icon}</span><div class="badge-title">${b.title}</div><div class="badge-desc">Hedef: ${b.id.toLocaleString()}</div></div>`; 
-                next=true; 
-            } 
-        }); 
+
+    function calculateMaxStreak() {
+        if (!localData.calendar) return 0;
+        const dates = Object.keys(localData.calendar).sort();
+        if (dates.length === 0) return 0;
+
+        let maxStreak = 0;
+        let streak = 0;
+        let lastDate = null;
+        
+        dates.forEach(d => {
+            const date = new Date(d);
+            if (!lastDate) {
+                streak = 1;
+            } else {
+                const diffTime = Math.abs(date - lastDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                if (diffDays === 1) {
+                    streak++;
+                } else {
+                    if (streak > maxStreak) maxStreak = streak;
+                    streak = 1;
+                }
+            }
+            lastDate = date;
+        });
+        if (streak > maxStreak) maxStreak = streak;
+        
+        return maxStreak;
+    }
+
+    // YENİ: Başarılar Sayfası Render Fonksiyonu
+    function renderAchievements() {
+        // Toplam kılınan namaz sayısı
+        let totalPrayers = 0;
+        if(localData.counts) localData.counts.forEach(c => totalPrayers += c.done);
+
+        // En yüksek zincir
+        let maxStreak = calculateMaxStreak(); 
+        if(maxStreak < localData.streak.current) maxStreak = localData.streak.current;
+        
+        // Toplam Zikir 
+        let totalZikr = localData.tesbihat ? localData.tesbihat.reduce((acc, curr) => acc + curr.current, 0) : 0;
+
+        // Kapsayıcıları temizle
+        document.getElementById('badgeListNamaz').innerHTML = "";
+        document.getElementById('badgeListStreak').innerHTML = "";
+        document.getElementById('badgeListSpecial').innerHTML = "";
+
+        // Seviye Hesaplama (Basit Örnek)
+        const score = (totalPrayers * 10) + (maxStreak * 50) + Math.floor(totalZikr/10);
+        document.getElementById('totalScoreDisplay').innerText = score.toLocaleString();
+        
+        let levelTitle = "Başlangıç";
+        if(score > 1000) levelTitle = "Gayretli";
+        if(score > 5000) levelTitle = "İstikrarlı";
+        if(score > 10000) levelTitle = "Adanmış";
+        if(score > 50000) levelTitle = "Üstad";
+        document.getElementById('userLevelDisplay').innerText = levelTitle;
+
+        BADGES.forEach(badge => {
+            let currentValue = 0;
+            let isUnlocked = false;
+
+            // Kategoriye göre hangi veriyi kontrol edeceğiz?
+            if (badge.category === 'namaz') currentValue = totalPrayers;
+            else if (badge.category === 'streak') currentValue = maxStreak;
+            else if (badge.category === 'special') currentValue = totalZikr;
+
+            // Rozet kazanıldı mı?
+            if (currentValue >= badge.threshold) {
+                isUnlocked = true;
+                if (!localData.earnedBadges.includes(badge.id)) {
+                    // Yeni kazanıldıysa veritabanına ekle ve konfeti patlat
+                    localData.earnedBadges.push(badge.id);
+                    saveToCloud();
+                    jsConfetti.addConfetti();
+                    showToast(`Yeni Rozet: ${badge.title}`, "success");
+                }
+            }
+
+            // Progress Bar Yüzdesi
+            let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
+            
+            // HTML Oluşturma
+            let badgeHTML = `
+                <div class="badge-item ${isUnlocked ? 'unlocked' : 'locked'}" style="width: 140px; margin-bottom:10px;">
+                    <span class="badge-icon">${badge.icon}</span>
+                    <div class="badge-title">${badge.title}</div>
+                    <div class="badge-desc" style="font-size:0.6rem;">${badge.desc}</div>
+                    
+                    <!-- İlerleme Çubuğu -->
+                    <div class="progress mt-2" style="height: 6px; background: rgba(0,0,0,0.1);">
+                        <div class="progress-bar ${isUnlocked ? 'bg-success' : 'bg-warning'}" style="width: ${progressPct}%"></div>
+                    </div>
+                    <div class="text-center mt-1" style="font-size: 0.6rem; opacity: 0.7;">
+                        ${currentValue} / ${badge.threshold}
+                    </div>
+                </div>
+            `;
+
+            // İlgili container'a ekle
+            if (badge.category === 'namaz') document.getElementById('badgeListNamaz').innerHTML += badgeHTML;
+            else if (badge.category === 'streak') document.getElementById('badgeListStreak').innerHTML += badgeHTML;
+            else document.getElementById('badgeListSpecial').innerHTML += badgeHTML;
+        });
     }
     
     // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
@@ -2391,39 +2508,6 @@
             month: maxM > 0 ? `${bestMName} (${maxM})` : "-",
             day: dayStr
         };
-    }
-
-    function calculateMaxStreak() {
-        if (!localData.calendar) return { current: 0, max: 0 };
-        const dates = Object.keys(localData.calendar).sort();
-        if (dates.length === 0) return { current: 0, max: 0 };
-
-        let maxStreak = 0;
-        let currentStreak = 0;
-        
-        // Basit bir streak hesaplama
-        let streak = 0;
-        let lastDate = null;
-        
-        dates.forEach(d => {
-            const date = new Date(d);
-            if (!lastDate) {
-                streak = 1;
-            } else {
-                const diffTime = Math.abs(date - lastDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                if (diffDays === 1) {
-                    streak++;
-                } else {
-                    if (streak > maxStreak) maxStreak = streak;
-                    streak = 1;
-                }
-            }
-            lastDate = date;
-        });
-        if (streak > maxStreak) maxStreak = streak;
-        
-        return maxStreak;
     }
 
     function renderStats() { 
@@ -2964,4 +3048,3 @@
 </script>
 </body>
 </html>
-
