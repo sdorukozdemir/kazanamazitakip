@@ -24,10 +24,10 @@
     <style>
         /* --- KAYDIRMA ÇUBUĞU DÜZELTMESİ VE TEMEL AYARLAR --- */
         *, *::before, *::after {
-            box-sizing: border-box; /* Genişlik taşmalarını engeller */
+            box-sizing: border-box; 
         }
 
-        /* Tarayıcı scrollbarlarını gizle (Uygulama hissi için) */
+        /* Tarayıcı scrollbarlarını gizle */
         ::-webkit-scrollbar {
             width: 0px;
             height: 0px;
@@ -198,7 +198,8 @@
             backface-visibility: hidden;
             overflow-y: auto; 
             overflow-x: hidden;
-            padding: 20px 20px 90px 20px; 
+            /* Alt boşluk artırıldı (90px -> 100px) */
+            padding: 20px 20px 100px 20px; 
         }
 
         .app-section.active { 
@@ -645,7 +646,26 @@
         .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
         .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: 1px solid var(--border-color); z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
+        
+        /* --- DÜZELTİLEN ALT MENÜ --- */
+        .bottom-nav { 
+            display: none; 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 70px; 
+            background: var(--card-bg); 
+            /* KENARLIK KALDIRILDI */
+            border-top: none; 
+            /* YUMUŞAK GÖLGE EKLENDİ */
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            z-index: 1060; 
+            justify-content: space-around; 
+            align-items: center; 
+            padding-bottom: 10px; 
+        }
+        
         .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
