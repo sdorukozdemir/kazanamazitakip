@@ -1238,6 +1238,10 @@
 
     window.showSection = function(targetId) {
         if(!targetId) targetId = 'dashboard';
+        
+        // --- SCROLL FIX: Immediate Reset ---
+        window.scrollTo({ top: 0, behavior: 'auto' });
+
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         const menuItem = document.getElementById('menu-' + targetId);
         if(menuItem) menuItem.classList.add('active');
@@ -1365,6 +1369,9 @@
     }
 
     function updateActiveState(newActiveSection) {
+        // --- SCROLL FIX: Reset Scroll on Swipe ---
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         setTimeout(() => {
             document.querySelectorAll('.app-section').forEach(s => { s.classList.remove('active', 'sliding', 'animate-transition'); s.style.transform = ''; });
             newActiveSection.classList.add('active');
@@ -2185,7 +2192,7 @@
         const isDark = document.body.classList.contains('dark-mode'); 
         const lc = isDark ? '#fff' : '#666';
 
-        // --- FIXED DOUGHNUT CHART WITH BETTER ALIGNMENT ---
+        // --- NEW DOUGHNUT CHART WITH BETTER TEXT ---
         const centerTextPlugin = {
             id: 'centerText',
             beforeDraw: function(chart) {
@@ -2230,7 +2237,7 @@
                 labels: ['Kılınan', 'Kalan'], 
                 datasets: [{ 
                     data: [totalDone, totalTarget - totalDone], 
-                    backgroundColor: ['#609979', '#f8f9fa'], 
+                    backgroundColor: ['#609979', isDark ? '#2c3035' : '#e9ecef'], 
                     borderWidth: 0,
                     hoverOffset: 4
                 }] 
