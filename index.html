@@ -103,20 +103,23 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* PULL TO REFRESH INDIKATORU */
+        /* --- PULL TO REFRESH INDIKATORU (DÜZELTİLDİ) --- */
         #ptr-spinner {
-            position: absolute;
+            position: fixed;
             top: 25px;
             left: 50%;
-            transform: translateX(-50%);
+            width: 35px;
+            height: 35px;
+            /* transform yerine margin ile ortalama: Kaymayı önler */
+            margin-left: -17.5px; 
             z-index: 1000;
-            width: 30px;
-            height: 30px;
             border: 3px solid rgba(96, 153, 121, 0.3);
             border-top-color: #609979;
             border-radius: 50%;
             display: none;
-            animation: spin 1s linear infinite;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-color: var(--card-bg);
+            /* Transform sadece rotate için kullanılacak */
         }
 
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
@@ -1361,7 +1364,8 @@
                 isPulling = true;
                 // Spinner'ı göster ve döndür
                 ptrSpinner.style.display = 'block';
-                ptrSpinner.style.transform = `translateX(-50%) rotate(${diffY * 3}deg)`;
+                // translateX(-50%) yerine margin-left ile ortaladığımız için, transform sadece rotate için
+                ptrSpinner.style.transform = `rotate(${diffY * 3}deg)`;
                 
                 // Opaklık artır
                 let opacity = Math.min(1, diffY / ptrThreshold);
@@ -1496,7 +1500,6 @@
 
     function resetPtr() {
         ptrSpinner.style.display = 'none';
-        ptrSpinner.style.transform = 'translateX(-50%)';
         ptrSpinner.style.opacity = 0;
     }
 
@@ -2506,14 +2509,14 @@
         const ctx1 = document.getElementById('completionChart').getContext('2d');
         if (chartCompletion) chartCompletion.destroy();
         
-        // YENİ GRADIENT RENKLER
+        // Gradient Renkler (Pastel)
         const gradDone = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradDone.addColorStop(0, '#42e695'); 
-        gradDone.addColorStop(1, '#3bb2b8'); 
+        gradDone.addColorStop(0, '#88cbb9'); // Pastel Mint
+        gradDone.addColorStop(1, '#609979'); // Tema Rengi
 
         const gradRem = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradRem.addColorStop(0, '#ff9a9e'); 
-        gradRem.addColorStop(1, '#fecfef'); 
+        gradRem.addColorStop(0, '#ffb74d'); // Pastel Turuncu
+        gradRem.addColorStop(1, '#fb8c00'); // Koyu Pastel Turuncu
 
         const isDark = document.body.classList.contains('dark-mode'); 
         const lc = isDark ? '#fff' : '#666'; 
@@ -2533,9 +2536,6 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '60%', 
-                layout: {
-                    padding: { top: 20, bottom: 20 }
-                },
                 plugins: {
                     legend: {
                         position: 'bottom',
@@ -2546,26 +2546,27 @@
                         }
                     },
                     datalabels: {
-                        color: '#fff', 
-                        backgroundColor: 'rgba(0, 0, 0, 0.6)', 
+                        color: '#fff', // Beyaz Yazı
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Yarı saydam siyah arka plan
                         borderRadius: 6,
-                        font: { weight: 'bold', family: 'Poppins', size: 12 },
-                        anchor: 'end',
-                        align: 'end',
-                        offset: 5,
+                        font: { weight: 'bold', family: 'Poppins', size: 11 },
                         formatter: (val, ctx) => {
                             let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
                             let percentage = (val * 100 / sum).toFixed(1) + "%";
-                            let label = ctx.chart.data.labels[ctx.dataIndex];
                             if(percentage === "0.0%") return "";
+                            // ETIKETLERI YÜZDENİN ÜZERİNE YAZDIR
+                            let label = ctx.chart.data.labels[ctx.dataIndex];
                             return label + "\n" + percentage;
                         },
                         padding: 6,
+                        anchor: 'end',
+                        align: 'end',
+                        offset: -5,
                         textAlign: 'center'
                     },
                     tooltip: {
                         enabled: true,
-                        yAlign: 'bottom', 
+                        yAlign: 'bottom', // Tooltip'i yukarı iter, böylece aşağıdaki etiketle çakışmaz
                     }
                 }
             },
