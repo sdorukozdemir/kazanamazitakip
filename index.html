@@ -92,7 +92,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Scroll'u app-section'a devrettik */
+            overflow: hidden; 
         }
 
         body { 
@@ -103,6 +103,22 @@
             -webkit-tap-highlight-color: transparent;
         }
         
+        /* PULL TO REFRESH INDIKATORU */
+        #ptr-spinner {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(96, 153, 121, 0.3);
+            border-top-color: #609979;
+            border-radius: 50%;
+            display: none;
+            animation: spin 1s linear infinite;
+        }
+
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -146,30 +162,29 @@
         .user-info-female { background: var(--user-box-bg-female); }
         
         #content { 
-            /* padding: 20px; Kaldırıldı, içerik section içinde */
             height: 100%; 
             width: 100%; 
             max-width: 900px; 
             margin: 0 auto; 
             position: relative; 
-            overflow: hidden; /* Dış scroll yok */
+            overflow: hidden; 
             box-sizing: border-box; 
             touch-action: pan-y; 
         }
 
-        /* --- SLIDER STRUCTURE (Fixed Height & Scroll) --- */
+        /* --- SLIDER STRUCTURE --- */
         .app-section {
             display: none;
             width: 100%;
-            height: 100%; /* Tam yükseklik */
+            height: 100%; 
             position: absolute; 
             top: 0; 
             left: 0; 
             will-change: transform;
             backface-visibility: hidden;
-            overflow-y: auto; /* İç scroll */
+            overflow-y: auto; 
             overflow-x: hidden;
-            padding: 20px 20px 90px 20px; /* Padding buraya taşındı */
+            padding: 20px 20px 90px 20px; 
         }
 
         .app-section.active { 
@@ -610,24 +625,24 @@
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
-        /* --- YENİ CHART BUTON STİLİ (GRID) --- */
+        /* --- YENİ CHART BUTON STİLİ (GRID - DAHA GENİŞ) --- */
         .chart-period-selector {
-            display: grid; /* Grid kullanarak eşit böldük */
+            display: grid; 
             grid-template-columns: 1fr 1fr 1fr;
             background: var(--input-bg);
-            border-radius: 12px;
-            padding: 4px;
-            gap: 5px;
+            border-radius: 15px; /* Radius arttırıldı */
+            padding: 6px; /* Boşluk arttırıldı */
+            gap: 8px; /* Aralık arttırıldı */
             border: 1px solid var(--border-color);
             margin-bottom: 10px;
         }
         .chart-period-btn {
             text-align: center;
-            padding: 8px 4px; /* Padding ayarlandı */
-            font-size: 0.8rem; /* Font hafif büyüdü */
-            font-weight: 600;
+            padding: 12px 2px; /* Dikey padding arttırılarak daha tombul yapıldı */
+            font-size: 0.85rem; 
+            font-weight: 700; /* Daha kalın yazı */
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 12px;
             transition: all 0.3s ease;
             color: var(--text-color);
             background: transparent;
@@ -647,6 +662,9 @@
     </style>
 </head>
 <body>
+
+<!-- Pull to Refresh İkonu -->
+<div id="ptr-spinner"></div>
 
 <div id="loading-overlay">
     <div class="spinner"></div>
@@ -1231,7 +1249,7 @@
     function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
-    /* --- REAL-TIME TOUCH SWIPE LOGIC (TWITTER STYLE) --- */
+    /* --- REAL-TIME TOUCH SWIPE & PULL TO REFRESH LOGIC --- */
     
     // Bölüm ID'leri sıralı
     const SECTION_IDS = ['dashboard', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
@@ -1258,17 +1276,16 @@
         // 3. Logic Trigger
         triggerLogic(targetId);
 
-        // 4. Görünüm Değiştirme (Animasyonsuz direkt geçiş - menüden tıklandığı için)
+        // 4. Görünüm Değiştirme
         document.querySelectorAll('.app-section').forEach(sec => {
             sec.classList.remove('active');
-            sec.style.transform = ''; // Varsa inline style temizle
-            sec.classList.remove('sliding', 'animate-transition'); // Temizlik
+            sec.style.transform = ''; 
+            sec.classList.remove('sliding', 'animate-transition'); 
         });
         
         const targetSection = document.getElementById('section-' + targetId);
         if(targetSection) targetSection.classList.add('active');
 
-        // Sidebar mobilde kapansın
         if(window.innerWidth < 768) { 
             document.getElementById('sidebar').classList.remove('active'); 
             document.getElementById('overlay').classList.remove('active'); 
@@ -1285,7 +1302,7 @@
         } catch(e) { console.log("Render error:", e); }
     }
 
-    // --- SWIPE VARIABLES ---
+    // --- SWIPE & PTR VARIABLES ---
     let startX = 0;
     let startY = 0;
     let currentTranslate = 0;
@@ -1295,34 +1312,35 @@
     let nextSection = null;
     let touchStartTime = 0;
     
-    // YENİ DEĞİŞKENLER: Kaydırmayı kontrol etmek için flag'ler
     let isHorizontalMove = false;
     let isVerticalMove = false;
-    let isSwipeInitialized = false; // DOM'un hazır olup olmadığını tutar
+    let isSwipeInitialized = false;
+    
+    // Pull to Refresh Specifics
+    let isPulling = false;
+    const ptrThreshold = 70; // px
+    const ptrSpinner = document.getElementById('ptr-spinner');
 
     const contentArea = document.getElementById('content');
 
     // --- TOUCH START ---
     contentArea.addEventListener('touchstart', e => {
-        // Yatay kaydırma içerebilecek elemanlarda VE İSTATİSTİK BUTONLARINDA swipe'ı engelle
         if (shouldIgnoreSwipe(e.target)) return;
 
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         touchStartTime = Date.now();
         
-        // Flag'leri sıfırla
         isHorizontalMove = false;
         isVerticalMove = false;
         isSwipeInitialized = false;
+        isPulling = false;
         
         isDragging = true;
 
-        // Aktif bölümü bul
         activeSection = document.querySelector('.app-section.active');
         if(!activeSection) return;
 
-        // Hazırlık: Animasyon classlarını temizle
         activeSection.classList.remove('animate-transition');
 
     }, {passive: true});
@@ -1336,16 +1354,39 @@
         const diffX = currentX - startX;
         const diffY = currentY - startY;
 
-        // 1. Eğer zaten dikey kaydırma olarak işaretlendiyse, swipe yapma (return)
+        // --- PULL TO REFRESH LOGIC (ONLY FOR DASHBOARD AT TOP) ---
+        if (activeSection.id === 'section-dashboard' && activeSection.scrollTop === 0 && diffY > 0 && !isHorizontalMove) {
+            // Aşağı çekiyor
+            if(diffY > 10) { // Biraz tolerans
+                isPulling = true;
+                // Spinner'ı göster ve döndür
+                ptrSpinner.style.display = 'block';
+                ptrSpinner.style.transform = `translateX(-50%) rotate(${diffY * 3}deg)`;
+                
+                // Opaklık artır
+                let opacity = Math.min(1, diffY / ptrThreshold);
+                ptrSpinner.style.opacity = opacity;
+                
+                if (diffY > ptrThreshold) {
+                    ptrSpinner.style.borderTopColor = "#20c997"; // Yeterince çekildi rengi
+                } else {
+                    ptrSpinner.style.borderTopColor = "#609979";
+                }
+            }
+            return; // Yatay swipe'ı engelle
+        }
+
+        // --- SWIPE NAVIGATION LOGIC ---
+        
+        // 1. Zaten dikey kaydırma ise (ve PTR değilse)
         if (isVerticalMove) {
             isDragging = false;
             resetStyles();
             return;
         }
 
-        // 2. Eğer henüz yatay kaydırma kararı verilmediyse kontrol et
+        // 2. Henüz karar verilmediyse
         if (!isHorizontalMove) {
-            // Dikey hareket yataydan çok daha fazlaysa -> Bu bir SCROLL işlemidir
             if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 5) {
                 isVerticalMove = true;
                 isDragging = false;
@@ -1353,7 +1394,6 @@
                 return;
             }
 
-            // Yatay hareket dikeyden fazlaysa VE belirli bir eşiği (15px) geçtiyse -> Bu bir SWIPE işlemidir
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 15) {
                 isHorizontalMove = true;
                 if(e.cancelable) e.preventDefault();
@@ -1362,11 +1402,10 @@
             }
         }
 
-        // 3. Eğer buraya geldiysek ve isHorizontalMove true ise
+        // 3. Yatay Hareket
         if (isHorizontalMove) {
             if(e.cancelable) e.preventDefault(); 
 
-            // Eğer DOM henüz hazırlanmadıysa (Lazy Initialization) şimdi hazırla
             if (!isSwipeInitialized) {
                 const currentIndex = getSectionIndex(activeSection.id);
                 prevSection = currentIndex > 0 ? document.getElementById('section-' + SECTION_IDS[currentIndex - 1]) : null;
@@ -1388,16 +1427,10 @@
             }
 
             currentTranslate = diffX;
-
-            // 1:1 Hareket
             activeSection.style.transform = `translateX(${diffX}px)`;
             
-            if (prevSection) {
-                prevSection.style.transform = `translateX(${diffX - contentArea.offsetWidth}px)`;
-            }
-            if (nextSection) {
-                nextSection.style.transform = `translateX(${diffX + contentArea.offsetWidth}px)`;
-            }
+            if (prevSection) prevSection.style.transform = `translateX(${diffX - contentArea.offsetWidth}px)`;
+            if (nextSection) nextSection.style.transform = `translateX(${diffX + contentArea.offsetWidth}px)`;
         }
 
     }, {passive: false});
@@ -1407,7 +1440,22 @@
         if (!isDragging || !activeSection) return;
         isDragging = false;
 
-        // Eğer yatay hareket hiç başlamadıysa reset at
+        // PTR Check
+        if (isPulling) {
+            const currentY = e.changedTouches[0].clientY;
+            const diffY = currentY - startY;
+            
+            if (diffY > ptrThreshold) {
+                // Trigger Refresh
+                performRefresh();
+            } else {
+                // Cancel
+                resetPtr();
+            }
+            isPulling = false;
+            return;
+        }
+
         if (!isHorizontalMove) {
             resetStyles();
             return;
@@ -1433,6 +1481,25 @@
         }
     });
 
+    function performRefresh() {
+        ptrSpinner.style.borderTopColor = "#20c997";
+        ptrSpinner.style.animation = "spin 0.5s linear infinite"; // Hızlı dön
+        triggerHaptic();
+        
+        // Simüle edilmiş yenileme (Firebase zaten canlı ama UI'ı resetleyelim)
+        setTimeout(() => {
+            renderApp();
+            showToast("Veriler güncellendi", "success");
+            resetPtr();
+        }, 800);
+    }
+
+    function resetPtr() {
+        ptrSpinner.style.display = 'none';
+        ptrSpinner.style.transform = 'translateX(-50%)';
+        ptrSpinner.style.opacity = 0;
+    }
+
     // Swipe'ı engellemesi gereken elemanları kontrol eden fonksiyon
     function shouldIgnoreSwipe(target) {
         if (!target) return false;
@@ -1450,7 +1517,6 @@
         if(prevSection) finishTransition(prevSection, -contentArea.offsetWidth);
         if(nextSection) finishTransition(nextSection, contentArea.offsetWidth);
         
-        // Animasyon bitince temizlik
         setTimeout(resetStyles, 300);
     }
 
@@ -2440,14 +2506,14 @@
         const ctx1 = document.getElementById('completionChart').getContext('2d');
         if (chartCompletion) chartCompletion.destroy();
         
-        // Gradient Renkler (Daha Parlak ve Uyumlu)
+        // YENİ GRADIENT RENKLER
         const gradDone = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradDone.addColorStop(0, '#609979'); // Tema Yeşili (Koyu)
-        gradDone.addColorStop(1, '#a8e6cf'); // Mint Yeşili (Açık)
+        gradDone.addColorStop(0, '#42e695'); 
+        gradDone.addColorStop(1, '#3bb2b8'); 
 
         const gradRem = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradRem.addColorStop(0, '#ff9966'); // Somon
-        gradRem.addColorStop(1, '#ff5e62'); // Gül Rengi
+        gradRem.addColorStop(0, '#ff9a9e'); 
+        gradRem.addColorStop(1, '#fecfef'); 
 
         const isDark = document.body.classList.contains('dark-mode'); 
         const lc = isDark ? '#fff' : '#666'; 
@@ -2467,6 +2533,9 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '60%', 
+                layout: {
+                    padding: { top: 20, bottom: 20 }
+                },
                 plugins: {
                     legend: {
                         position: 'bottom',
@@ -2477,21 +2546,26 @@
                         }
                     },
                     datalabels: {
-                        color: '#fff', // Beyaz Yazı
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Yarı saydam siyah arka plan
+                        color: '#fff', 
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)', 
                         borderRadius: 6,
-                        font: { weight: 'bold', family: 'Poppins', size: 11 },
+                        font: { weight: 'bold', family: 'Poppins', size: 12 },
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 5,
                         formatter: (val, ctx) => {
                             let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
                             let percentage = (val * 100 / sum).toFixed(1) + "%";
+                            let label = ctx.chart.data.labels[ctx.dataIndex];
                             if(percentage === "0.0%") return "";
-                            return percentage;
+                            return label + "\n" + percentage;
                         },
-                        padding: 6
+                        padding: 6,
+                        textAlign: 'center'
                     },
                     tooltip: {
                         enabled: true,
-                        yAlign: 'bottom', // Tooltip'i yukarı iter, böylece aşağıdaki etiketle çakışmaz
+                        yAlign: 'bottom', 
                     }
                 }
             },
