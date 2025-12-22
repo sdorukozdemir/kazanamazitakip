@@ -371,7 +371,6 @@
         body.dark-mode .capsule-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; }
         .capsule-reset { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #dc3545; cursor: pointer; font-size: 1rem; display: none; }
 
-        /* --- DÜZELTİLEN İŞLEM GEÇMİŞİ BUTONLARI (Flex-Wrap Eklendi) --- */
         .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
         .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; flex-wrap: wrap; }
         .h-sub-tabs { display: none; gap: 8px; justify-content: center; width: 100%; animation: fadeIn 0.3s ease; flex-wrap: wrap; }
@@ -391,17 +390,12 @@
         .flip-card-front { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         .flip-card-front.locked-front { background: var(--input-bg); opacity: 0.8; filter: grayscale(100%); }
         
-        /* --- GÜNCELLENMİŞ ROZET TASARIMI (4px Kalınlık) --- */
         .flip-card-front.unlocked-front {
-            /* İç Zemin: Beyaz -> Nane Yeşili */
             background-image: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%), 
-                              /* Çerçeve: Yeşil -> Mavi */
                               linear-gradient(135deg, #609979 0%, #20c997 100%);
             background-origin: border-box;
             background-clip: padding-box, border-box;
-            /* Kenarlık Kalınlığı: 4px */
             border: 4px solid transparent; 
-            /* Hafif Parlama */
             box-shadow: 0 4px 15px rgba(96, 153, 121, 0.2);
         }
         
@@ -764,7 +758,11 @@
                             <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
                         </div>
                         <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
-                        <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap"><button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button><button class="btn btn-sm btn-outline-secondary" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button></div>
+                        <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="resetCalculatorInputs()"><i class="fas fa-trash-alt me-1"></i> Temizle</button>
+                        </div>
                         <div id="calcRowsContainer"></div>
                         <hr class="my-4">
                         <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar</button>
@@ -1527,7 +1525,7 @@
         }, 100);
     }
     
-    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
+    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date')" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date')" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
     window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
     
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
@@ -2096,6 +2094,23 @@
         input.type = "text"; 
         document.getElementById('resetHistoryDateBtn').style.display = 'none';
         renderHistory();
+    }
+
+    window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
+    window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
+    
+    // --- YENİ EKLENEN TEMİZLEME FONKSİYONU ---
+    window.resetCalculatorInputs = function() {
+        showModal("Sıfırla", "Hesaplama sihirbazındaki tüm tarihleri temizlemek istiyor musunuz?", () => {
+            for(let i=0; i<5; i++) {
+                const row = document.getElementById(`row-${i}`);
+                const inputs = row.querySelectorAll('input');
+                inputs[0].value = ""; 
+                inputs[1].value = ""; 
+                document.getElementById(`res-${i}`).value = 0; 
+            }
+            showToast("Tarihler temizlendi.", "success");
+        });
     }
 
     function calculateEstFinish(totalDoneInput, elapsedDaysInput) { const dailyTarget = localData.daily.target || 10; let totalDebt = 0; localData.counts.forEach(c => totalDebt += (c.target - c.done)); const elContainer = document.getElementById('prediction-container'); const elSuccess = document.getElementById('prediction-success'); if (totalDebt <= 0) { elContainer.style.display = 'none'; elSuccess.style.display = 'block'; return; } elContainer.style.display = 'block'; elSuccess.style.display = 'none'; if (dailyTarget > 0) { const daysLeft = Math.ceil(totalDebt / dailyTarget); const today = new Date(); const finishDate = new Date(); finishDate.setDate(today.getDate() + daysLeft); const options = { year: 'numeric', month: 'long', day: 'numeric' }; document.getElementById('estFinishDate').innerText = finishDate.toLocaleDateString('tr-TR', options); document.getElementById('estDaysLeft').innerText = `${daysLeft} Gün Kaldı`; } else { document.getElementById('estFinishDate').innerText = "Belirlenmedi"; document.getElementById('estDaysLeft').innerText = "-"; } const avgDaily = totalDoneInput > 0 ? (totalDoneInput / elapsedDaysInput) : 0; const elDateAvg = document.getElementById('estFinishDateAvg'); const elDaysAvg = document.getElementById('estDaysLeftAvg'); if(avgDaily > 0) { const daysLeftAvg = Math.ceil(totalDebt / avgDaily); const todayAvg = new Date(); const finishDateAvg = new Date(); finishDateAvg.setDate(todayAvg.getDate() + daysLeftAvg); elDateAvg.innerText = finishDateAvg.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }); elDaysAvg.innerText = `(${daysLeftAvg} Gün)`; } else { elDateAvg.innerText = "Veri Yok"; elDaysAvg.innerText = "Henüz kazaya başlanmadı"; } }
