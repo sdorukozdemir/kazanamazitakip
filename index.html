@@ -2105,27 +2105,19 @@
 
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     
-    // --- GÜNCELLENMİŞ VE GENİŞLETİLMİŞ ROZET LİSTESİ ---
+    // YENİ: GELİŞMİŞ ROZET SİSTEMİ VERİLERİ
     const BADGES = [
-        // --- NAMAZ ROZETLERİ (Kategori: namaz) ---
+        // NAMAZ ROZETLERİ (Kategori: namaz)
         {id: 100, title: "Bismillah", icon: "🌱", desc: "100 Namaz Kılındı", category: "namaz", threshold: 100},
         {id: 500, title: "Gayret", icon: "🔥", desc: "500 Namaz Kılındı", category: "namaz", threshold: 500},
         {id: 1000, title: "Sebat", icon: "🏔️", desc: "1.000 Namaz Kılındı", category: "namaz", threshold: 1000},
         {id: 2500, title: "İstikrar", icon: "💎", desc: "2.500 Namaz Kılındı", category: "namaz", threshold: 2500},
         {id: 5000, title: "Sadakat", icon: "🌹", desc: "5.000 Namaz Kılındı", category: "namaz", threshold: 5000},
-        {id: 10000, title: "Hidayet", icon: "🌠", desc: "10.000 Namaz Kılındı", category: "namaz", threshold: 10000},
-        {id: 15000, title: "Nur", icon: "✨", desc: "15.000 Namaz Kılındı", category: "namaz", threshold: 15000},
-        {id: 20000, title: "Vuslat", icon: "🕋", desc: "20.000 Namaz Kılındı", category: "namaz", threshold: 20000},
-        {id: 25000, title: "Zirve", icon: "👑", desc: "25.000 Namaz Kılındı", category: "namaz", threshold: 25000},
         
-        // --- ZİNCİR ROZETLERİ (Kategori: streak) ---
-        {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün Peş Peşe", category: "streak", threshold: 7},
-        {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün Peş Peşe", category: "streak", threshold: 30},
-        {id: 's100', title: "Efsane", icon: "🏆", desc: "100 Gün Peş Peşe", category: "streak", threshold: 100},
-        {id: 's180', title: "Yarım Yıl", icon: "⏳", desc: "6 Ay Peş Peşe", category: "streak", threshold: 180},
-        {id: 's365', title: "Tam Yıl", icon: "🌍", desc: "1 Yıl Peş Peşe", category: "streak", threshold: 365},
-        {id: 's500', title: "Çınar", icon: "🌳", desc: "500 Gün Peş Peşe", category: "streak", threshold: 500},
-        {id: 's1000', title: "Asırlık", icon: "⚓", desc: "1000 Gün Peş Peşe", category: "streak", threshold: 1000}
+        // ZİNCİR ROZETLERİ (Kategori: streak)
+        {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün Aralıksız", category: "streak", threshold: 7},
+        {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün Aralıksız", category: "streak", threshold: 30},
+        {id: 's100', title: "Efsane", icon: "👑", desc: "100 Gün Aralıksız", category: "streak", threshold: 100}
     ];
 
     function calculateMaxStreak() {
@@ -2168,98 +2160,80 @@
         let maxStreak = calculateMaxStreak(); 
         if(maxStreak < localData.streak.current) maxStreak = localData.streak.current;
         
+        // Kapsayıcıları temizle
+        document.getElementById('badgeListNamaz').innerHTML = "";
+        document.getElementById('badgeListStreak').innerHTML = "";
+
         // Seviye Hesaplama
         const score = (totalPrayers * 10) + (maxStreak * 50);
         document.getElementById('totalScoreDisplay').innerText = score.toLocaleString();
         
         let levelTitle = "Başlangıç";
-        if(score > 500) levelTitle = "Gayretli";
-        if(score > 2500) levelTitle = "İstikrarlı";
+        if(score > 1000) levelTitle = "Gayretli";
+        if(score > 5000) levelTitle = "İstikrarlı";
         if(score > 10000) levelTitle = "Adanmış";
         if(score > 50000) levelTitle = "Üstad";
         document.getElementById('userLevelDisplay').innerText = levelTitle;
 
-        // --- NAMAZ ROZETLERİNİ FİLTRELE VE GÖSTER ---
-        const namazContainer = document.getElementById('badgeListNamaz');
-        let namazBadges = BADGES.filter(b => b.category === 'namaz').sort((a,b) => a.threshold - b.threshold);
-        let namazHTML = "";
+        BADGES.forEach(badge => {
+            let currentValue = 0;
+            let isUnlocked = false;
 
-        for (const badge of namazBadges) {
-            let isUnlocked = totalPrayers >= badge.threshold;
+            // Kategoriye göre hangi veriyi kontrol edeceğiz?
+            if (badge.category === 'namaz') currentValue = totalPrayers;
+            else if (badge.category === 'streak') currentValue = maxStreak;
 
-            if (isUnlocked) {
-                 if (!localData.earnedBadges.includes(badge.id)) {
+            // Rozet kazanıldı mı?
+            if (currentValue >= badge.threshold) {
+                isUnlocked = true;
+                if (!localData.earnedBadges.includes(badge.id)) {
+                    // Yeni kazanıldıysa veritabanına ekle
                     localData.earnedBadges.push(badge.id);
                     saveToCloud();
                     jsConfetti.addConfetti();
                     showToast(`Yeni Rozet: ${badge.title}`, "success");
                 }
-                namazHTML += getBadgeCardHTML(badge, totalPrayers, true);
-            } else {
-                // Bu rozet kilitli, bunu "Sıradaki Hedef" olarak göster ve döngüyü KIR
-                namazHTML += getBadgeCardHTML(badge, totalPrayers, false);
-                break; 
             }
-        }
-        namazContainer.innerHTML = namazHTML;
 
-        // --- ZİNCİR ROZETLERİNİ FİLTRELE VE GÖSTER ---
-        const streakContainer = document.getElementById('badgeListStreak');
-        let streakBadges = BADGES.filter(b => b.category === 'streak').sort((a,b) => a.threshold - b.threshold);
-        let streakHTML = "";
-
-        for (const badge of streakBadges) {
-             let isUnlocked = maxStreak >= badge.threshold;
-
-             if (isUnlocked) {
-                 if (!localData.earnedBadges.includes(badge.id)) {
-                    localData.earnedBadges.push(badge.id);
-                    saveToCloud();
-                    jsConfetti.addConfetti();
-                    showToast(`Yeni Rozet: ${badge.title}`, "success");
-                }
-                streakHTML += getBadgeCardHTML(badge, maxStreak, true);
-             } else {
-                streakHTML += getBadgeCardHTML(badge, maxStreak, false);
-                break;
-             }
-        }
-        streakContainer.innerHTML = streakHTML;
-    }
-
-    function getBadgeCardHTML(badge, currentValue, isUnlocked) {
-        let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
-        
-        const frontClass = isUnlocked ? 'unlocked-front' : 'locked-front';
-        const backClass = isUnlocked ? '' : 'locked-back';
-        const iconDisplay = isUnlocked ? badge.icon : '<i class="fas fa-lock" style="font-size:1.5rem; opacity:0.4;"></i>';
-        const finalTitle = badge.title; 
-        const statusText = isUnlocked ? 'Kazanıldı' : `Hedef: ${badge.threshold}`;
-        
-        return `
-            <div class="flip-card" ontouchstart="this.classList.toggle('hover');">
-                <div class="flip-card-inner">
-                    <!-- ÖN YÜZ -->
-                    <div class="flip-card-front ${frontClass}">
-                        <div class="badge-icon-large">${iconDisplay}</div>
-                        <div class="badge-title-clean" style="${!isUnlocked ? 'opacity:0.6;' : ''}">${finalTitle}</div>
-                    </div>
-                    
-                    <!-- ARKA YÜZ -->
-                    <div class="flip-card-back ${backClass}">
-                        <div class="badge-desc-back">${statusText}</div>
-                        
-                        <div class="progress w-100 mb-2" style="height: 6px; background: rgba(0,0,0,0.2); border-radius:10px;">
-                            <div class="progress-bar ${isUnlocked ? 'bg-white' : 'bg-warning'}" style="width: ${progressPct}%"></div>
+            // Progress Bar Yüzdesi
+            let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
+            
+            // Kilitli / Açık Durumu Stilleri
+            const frontClass = isUnlocked ? 'unlocked-front' : 'locked-front';
+            const backClass = isUnlocked ? '' : 'locked-back';
+            const iconDisplay = isUnlocked ? badge.icon : '<i class="fas fa-lock" style="font-size:1.5rem; opacity:0.5;"></i>';
+            const statusText = isUnlocked ? 'Tamamlandı' : 'Kilitli';
+            
+            // FLIP CARD HTML YAPISI
+            let badgeHTML = `
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <!-- ÖN YÜZ -->
+                        <div class="flip-card-front ${frontClass}">
+                            <div class="badge-icon-large">${iconDisplay}</div>
+                            <div class="badge-title-clean">${badge.title}</div>
                         </div>
                         
-                        <div class="badge-progress-text">
-                            ${currentValue} / ${badge.threshold}
+                        <!-- ARKA YÜZ -->
+                        <div class="flip-card-back ${backClass}">
+                            <div class="badge-desc-back">${statusText}</div>
+                            
+                            <div class="progress w-100 mb-2" style="height: 6px; background: rgba(0,0,0,0.2); border-radius:10px;">
+                                <div class="progress-bar ${isUnlocked ? 'bg-white' : 'bg-secondary'}" style="width: ${progressPct}%"></div>
+                            </div>
+                            
+                            <div class="badge-progress-text">
+                                ${currentValue} / ${badge.threshold}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
+
+            // İlgili container'a ekle
+            if (badge.category === 'namaz') document.getElementById('badgeListNamaz').innerHTML += badgeHTML;
+            else if (badge.category === 'streak') document.getElementById('badgeListStreak').innerHTML += badgeHTML;
+        });
     }
     
     // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
