@@ -587,58 +587,114 @@
         .h-sub-btn.active { background: #fd7e14; color: white; border-color: #fd7e14; opacity: 1; box-shadow: 0 3px 8px rgba(253, 126, 20, 0.3); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        .badge-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; margin: 20px auto 40px auto; }
-        
-        /* ROZET STİLLERİ (GÜNCELLENMİŞ: KALIN & GRADIENT ÇERÇEVE) */
-        .badge-item { 
-            width: 110px; 
-            padding: 10px; 
-            border-radius: 18px; 
-            text-align: center; 
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            position: relative; 
-            background: var(--card-bg); 
-            border: 1px solid var(--border-color); 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-            font-family: 'Arial', sans-serif;
+        /* --- YENİLENEN ROZET SİSTEMİ (KARE & FLIP KART) --- */
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+            gap: 15px;
+            padding: 10px;
         }
 
-        /* Kilidi Açılmış Rozet (Kalın Gradient Çerçeve) */
-        .badge-item.unlocked { 
-            border: 4px solid transparent; /* Çerçeve alanı şeffaf, yer tutucu */
-            
-            /* Katman 1: İçerik Arka Planı, Katman 2: Çerçeve Gradienti */
-            background-image: linear-gradient(135deg, #e0f2f1 0%, #4db6ac 100%), 
-                              linear-gradient(135deg, #0f5132, #20c997, #a2f1c8); 
-            
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            
-            box-shadow: 0 8px 20px rgba(32, 201, 151, 0.25); 
-            transform: scale(1.05); 
-            color: #004d40; 
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            aspect-ratio: 1/1; /* Tam kare olması için */
+            perspective: 1000px;
+            cursor: pointer;
         }
 
-        /* Kilidi Açılmış Rozet (Koyu Mod) */
-        body.dark-mode .badge-item.unlocked { 
-            background-image: linear-gradient(135deg, #004d40 0%, #00695c 100%), 
-                              linear-gradient(135deg, #4db6ac, #004d40); 
-            
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            
-            color: #e0f2f1; 
-            box-shadow: 0 8px 20px rgba(77, 182, 172, 0.2); 
-            border-color: transparent;
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        /* ÖN YÜZ */
+        .flip-card-front {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .flip-card-front.locked-front {
+            background: var(--input-bg);
+            opacity: 0.8;
+            filter: grayscale(100%);
+        }
+
+        .flip-card-front.unlocked-front {
+            background: linear-gradient(145deg, var(--card-bg), #e8f5e9);
+            border: 2px solid #609979;
         }
         
-        .badge-item.locked { filter: grayscale(100%); opacity: 0.6; background: var(--input-bg); }
-        .badge-icon { font-size: 2.2rem; display: block; margin-bottom: 6px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
-        .badge-title { font-family: 'Arial', sans-serif; font-weight: 900; font-size: 0.85rem; color: #00695c; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .badge-item.unlocked .badge-title { color: #004d40; text-shadow: 0 1px 1px rgba(255,255,255,0.4); }
-        body.dark-mode .badge-item.unlocked .badge-title { color: #b2dfdb; text-shadow: none; }
-        .badge-desc { font-size: 0.6rem; color: var(--text-color); opacity: 0.8; font-family: 'Arial', sans-serif; font-weight: 600; }
-        body.dark-mode .badge-item.unlocked .badge-desc { color: #80cbc4; opacity: 0.9; }
+        body.dark-mode .flip-card-front.unlocked-front {
+            background: linear-gradient(145deg, var(--card-bg), #0f2e1c);
+            border: 2px solid #4db6ac;
+        }
+
+        /* ARKA YÜZ */
+        .flip-card-back {
+            background: linear-gradient(135deg, #609979, #3e6b53);
+            color: white;
+            transform: rotateY(180deg);
+            border: 1px solid #3e6b53;
+        }
+
+        .flip-card-back.locked-back {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            border-color: #6c757d;
+        }
+
+        /* İÇERİK STİLLERİ */
+        .badge-icon-large {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+        }
+
+        .badge-title-clean {
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .badge-desc-back {
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .badge-progress-text {
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
 
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
@@ -894,10 +950,10 @@
         
             <!-- Kategoriler -->
             <h5 class="fw-bold text-secondary mb-3 mt-4 text-center"><i class="fas fa-mosque me-2"></i>Namaz Rozetleri</h5>
-            <div id="badgeListNamaz" class="badge-container justify-content-center"></div>
+            <div id="badgeListNamaz" class="badge-grid"></div>
         
             <h5 class="fw-bold text-secondary mb-3 mt-4 text-center"><i class="fas fa-fire me-2"></i>Zincir ve Devamlılık</h5>
-            <div id="badgeListStreak" class="badge-container justify-content-center"></div>
+            <div id="badgeListStreak" class="badge-grid"></div>
             
             <!-- Özel Görevler Kaldırıldı -->
              <div id="badgeListSpecial" style="display:none;"></div>
@@ -2183,7 +2239,7 @@
         return maxStreak;
     }
 
-    // YENİ: Başarılar Sayfası Render Fonksiyonu
+    // YENİ: Başarılar Sayfası Render Fonksiyonu (FLIP CARD YAPISI)
     function renderAchievements() {
         // Toplam kılınan namaz sayısı
         let totalPrayers = 0;
@@ -2197,7 +2253,7 @@
         document.getElementById('badgeListNamaz').innerHTML = "";
         document.getElementById('badgeListStreak').innerHTML = "";
 
-        // Seviye Hesaplama (Basit Örnek) - Zikir puanı çıkarıldı
+        // Seviye Hesaplama
         const score = (totalPrayers * 10) + (maxStreak * 50);
         document.getElementById('totalScoreDisplay').innerText = score.toLocaleString();
         
@@ -2220,7 +2276,7 @@
             if (currentValue >= badge.threshold) {
                 isUnlocked = true;
                 if (!localData.earnedBadges.includes(badge.id)) {
-                    // Yeni kazanıldıysa veritabanına ekle ve konfeti patlat
+                    // Yeni kazanıldıysa veritabanına ekle
                     localData.earnedBadges.push(badge.id);
                     saveToCloud();
                     jsConfetti.addConfetti();
@@ -2231,19 +2287,34 @@
             // Progress Bar Yüzdesi
             let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
             
-            // HTML Oluşturma
+            // Kilitli / Açık Durumu Stilleri
+            const frontClass = isUnlocked ? 'unlocked-front' : 'locked-front';
+            const backClass = isUnlocked ? '' : 'locked-back';
+            const iconDisplay = isUnlocked ? badge.icon : '<i class="fas fa-lock" style="font-size:1.5rem; opacity:0.5;"></i>';
+            const statusText = isUnlocked ? 'Tamamlandı' : 'Kilitli';
+            
+            // FLIP CARD HTML YAPISI
             let badgeHTML = `
-                <div class="badge-item ${isUnlocked ? 'unlocked' : 'locked'}" style="margin-bottom:10px;">
-                    <span class="badge-icon">${badge.icon}</span>
-                    <div class="badge-title">${badge.title}</div>
-                    <div class="badge-desc">${badge.desc}</div>
-                    
-                    <!-- İlerleme Çubuğu -->
-                    <div class="progress mt-2" style="height: 6px; background: rgba(0,0,0,0.1);">
-                        <div class="progress-bar ${isUnlocked ? 'bg-success' : 'bg-warning'}" style="width: ${progressPct}%"></div>
-                    </div>
-                    <div class="text-center mt-1" style="font-size: 0.6rem; opacity: 0.7;">
-                        ${currentValue} / ${badge.threshold}
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <!-- ÖN YÜZ -->
+                        <div class="flip-card-front ${frontClass}">
+                            <div class="badge-icon-large">${iconDisplay}</div>
+                            <div class="badge-title-clean">${badge.title}</div>
+                        </div>
+                        
+                        <!-- ARKA YÜZ -->
+                        <div class="flip-card-back ${backClass}">
+                            <div class="badge-desc-back">${statusText}</div>
+                            
+                            <div class="progress w-100 mb-2" style="height: 6px; background: rgba(0,0,0,0.2); border-radius:10px;">
+                                <div class="progress-bar ${isUnlocked ? 'bg-white' : 'bg-secondary'}" style="width: ${progressPct}%"></div>
+                            </div>
+                            
+                            <div class="badge-progress-text">
+                                ${currentValue} / ${badge.threshold}
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
