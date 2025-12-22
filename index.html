@@ -695,101 +695,6 @@
             font-weight: bold;
             margin-top: 5px;
         }
-
-        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
-        .custom-modal { background: var(--modal-bg); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s ease; }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-btn { padding: 10px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
-        .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
-        .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
-        
-        /* --- DÜZELTİLEN ALT MENÜ --- */
-        .bottom-nav { 
-            display: none; 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 70px; 
-            background: var(--card-bg); 
-            /* KENARLIK KALDIRILDI */
-            border-top: none !important; 
-            /* GÖLGE KALDIRILDI (TEMİZ GÖRÜNÜM İÇİN) */
-            box-shadow: none;
-            z-index: 1060; 
-            justify-content: space-around; 
-            align-items: center; 
-            padding-bottom: 10px; 
-        }
-        
-        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        #gender-selection-modal { display: none; z-index: 2005; }
-        .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
-        .gender-option:hover { border-color: #609979; }
-        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
-        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
-        .menstrual-toggle-container { margin-bottom: 15px; padding: 15px 20px; background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); border-radius: 50px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15); }
-        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
-        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
-        .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
-        .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
-        .fade-box { background: var(--fade-box-bg); border: 1px solid var(--fade-box-border); border-radius: 12px; padding: 8px 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); box-shadow: var(--fade-box-shadow); height: 100%; min-height: 70px; }
-        .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; }
-        .fade-box label { margin-bottom: 2px; opacity: 0.7; }
-        .custom-alert-box { background: var(--card-bg); border-left: 5px solid #17a2b8; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 20px; font-size: 0.9rem; }
-        .custom-alert-box strong { color: #17a2b8; }
-        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; }
-        .custom-alert-tip strong { color: #856404; }
-        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
-        body.dark-mode .custom-alert-tip strong { color: #ffc107; }
-        .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
-        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
-        .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
-        .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
-        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
-        @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
-        .toast-success { border-color: #609979; } .toast-success i { color: #609979; font-size: 1.2rem; }
-        .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
-        .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
-        
-        /* --- YENİ CHART BUTON STİLİ (GRID - DAHA GENİŞ) --- */
-        .chart-period-selector {
-            display: grid; 
-            grid-template-columns: 1fr 1fr 1fr;
-            background: var(--input-bg);
-            border-radius: 15px; /* Radius arttırıldı */
-            padding: 6px; /* Boşluk arttırıldı */
-            gap: 8px; /* Aralık arttırıldı */
-            border: 1px solid var(--border-color);
-            margin-bottom: 10px;
-        }
-        .chart-period-btn {
-            text-align: center;
-            padding: 12px 2px; /* Dikey padding arttırılarak daha tombul yapıldı */
-            font-size: 0.85rem; 
-            font-weight: 700; /* Daha kalın yazı */
-            cursor: pointer;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            color: var(--text-color);
-            background: transparent;
-            border: 1px solid transparent;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .chart-period-btn.active {
-            background: linear-gradient(135deg, #609979, #3e6b53);
-            color: white;
-            box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3);
-        }
-
-        @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
-        @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
     </style>
 </head>
 <body>
@@ -2194,19 +2099,27 @@
 
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     
-    // YENİ: GELİŞMİŞ ROZET SİSTEMİ VERİLERİ
+    // --- GÜNCELLENMİŞ VE GENİŞLETİLMİŞ ROZET LİSTESİ ---
     const BADGES = [
-        // NAMAZ ROZETLERİ (Kategori: namaz)
+        // --- NAMAZ ROZETLERİ (Kategori: namaz) ---
         {id: 100, title: "Bismillah", icon: "🌱", desc: "100 Namaz Kılındı", category: "namaz", threshold: 100},
         {id: 500, title: "Gayret", icon: "🔥", desc: "500 Namaz Kılındı", category: "namaz", threshold: 500},
         {id: 1000, title: "Sebat", icon: "🏔️", desc: "1.000 Namaz Kılındı", category: "namaz", threshold: 1000},
         {id: 2500, title: "İstikrar", icon: "💎", desc: "2.500 Namaz Kılındı", category: "namaz", threshold: 2500},
         {id: 5000, title: "Sadakat", icon: "🌹", desc: "5.000 Namaz Kılındı", category: "namaz", threshold: 5000},
+        {id: 10000, title: "Hidayet", icon: "🌠", desc: "10.000 Namaz Kılındı", category: "namaz", threshold: 10000},
+        {id: 15000, title: "Nur", icon: "✨", desc: "15.000 Namaz Kılındı", category: "namaz", threshold: 15000},
+        {id: 20000, title: "Vuslat", icon: "🕋", desc: "20.000 Namaz Kılındı", category: "namaz", threshold: 20000},
+        {id: 25000, title: "Zirve", icon: "👑", desc: "25.000 Namaz Kılındı", category: "namaz", threshold: 25000},
         
-        // ZİNCİR ROZETLERİ (Kategori: streak)
-        {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün Aralıksız", category: "streak", threshold: 7},
-        {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün Aralıksız", category: "streak", threshold: 30},
-        {id: 's100', title: "Efsane", icon: "👑", desc: "100 Gün Aralıksız", category: "streak", threshold: 100}
+        // --- ZİNCİR ROZETLERİ (Kategori: streak) ---
+        {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün Peş Peşe", category: "streak", threshold: 7},
+        {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün Peş Peşe", category: "streak", threshold: 30},
+        {id: 's100', title: "Efsane", icon: "🏆", desc: "100 Gün Peş Peşe", category: "streak", threshold: 100},
+        {id: 's180', title: "Yarım Yıl", icon: "⏳", desc: "6 Ay Peş Peşe", category: "streak", threshold: 180},
+        {id: 's365', title: "Tam Yıl", icon: "🌍", desc: "1 Yıl Peş Peşe", category: "streak", threshold: 365},
+        {id: 's500', title: "Çınar", icon: "🌳", desc: "500 Gün Peş Peşe", category: "streak", threshold: 500},
+        {id: 's1000', title: "Asırlık", icon: "⚓", desc: "1000 Gün Peş Peşe", category: "streak", threshold: 1000}
     ];
 
     function calculateMaxStreak() {
@@ -2258,71 +2171,94 @@
         document.getElementById('totalScoreDisplay').innerText = score.toLocaleString();
         
         let levelTitle = "Başlangıç";
-        if(score > 1000) levelTitle = "Gayretli";
-        if(score > 5000) levelTitle = "İstikrarlı";
+        if(score > 500) levelTitle = "Gayretli";
+        if(score > 2500) levelTitle = "İstikrarlı";
         if(score > 10000) levelTitle = "Adanmış";
         if(score > 50000) levelTitle = "Üstad";
         document.getElementById('userLevelDisplay').innerText = levelTitle;
 
-        BADGES.forEach(badge => {
-            let currentValue = 0;
-            let isUnlocked = false;
+        // --- NAMAZ ROZETLERİNİ FİLTRELE VE GÖSTER ---
+        let namazBadges = BADGES.filter(b => b.category === 'namaz').sort((a,b) => a.threshold - b.threshold);
+        let stopNamazRender = false;
 
-            // Kategoriye göre hangi veriyi kontrol edeceğiz?
-            if (badge.category === 'namaz') currentValue = totalPrayers;
-            else if (badge.category === 'streak') currentValue = maxStreak;
+        namazBadges.forEach(badge => {
+            if (stopNamazRender) return; // Daha fazla gösterme
 
-            // Rozet kazanıldı mı?
-            if (currentValue >= badge.threshold) {
-                isUnlocked = true;
-                if (!localData.earnedBadges.includes(badge.id)) {
-                    // Yeni kazanıldıysa veritabanına ekle
+            let isUnlocked = totalPrayers >= badge.threshold;
+
+            if (isUnlocked) {
+                 if (!localData.earnedBadges.includes(badge.id)) {
                     localData.earnedBadges.push(badge.id);
                     saveToCloud();
                     jsConfetti.addConfetti();
                     showToast(`Yeni Rozet: ${badge.title}`, "success");
                 }
+                renderBadgeCard(badge, totalPrayers, true, 'badgeListNamaz');
+            } else {
+                // Bu rozet kilitli, bunu "Sıradaki Hedef" olarak göster ve döngüyü durdur
+                renderBadgeCard(badge, totalPrayers, false, 'badgeListNamaz');
+                stopNamazRender = true;
             }
+        });
 
-            // Progress Bar Yüzdesi
-            let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
-            
-            // Kilitli / Açık Durumu Stilleri
-            const frontClass = isUnlocked ? 'unlocked-front' : 'locked-front';
-            const backClass = isUnlocked ? '' : 'locked-back';
-            const iconDisplay = isUnlocked ? badge.icon : '<i class="fas fa-lock" style="font-size:1.5rem; opacity:0.5;"></i>';
-            const statusText = isUnlocked ? 'Tamamlandı' : 'Kilitli';
-            
-            // FLIP CARD HTML YAPISI
-            let badgeHTML = `
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                        <!-- ÖN YÜZ -->
-                        <div class="flip-card-front ${frontClass}">
-                            <div class="badge-icon-large">${iconDisplay}</div>
-                            <div class="badge-title-clean">${badge.title}</div>
+        // --- ZİNCİR ROZETLERİNİ FİLTRELE VE GÖSTER ---
+        let streakBadges = BADGES.filter(b => b.category === 'streak').sort((a,b) => a.threshold - b.threshold);
+        let stopStreakRender = false;
+
+        streakBadges.forEach(badge => {
+             if (stopStreakRender) return;
+
+             let isUnlocked = maxStreak >= badge.threshold;
+
+             if (isUnlocked) {
+                 if (!localData.earnedBadges.includes(badge.id)) {
+                    localData.earnedBadges.push(badge.id);
+                    saveToCloud();
+                    jsConfetti.addConfetti();
+                    showToast(`Yeni Rozet: ${badge.title}`, "success");
+                }
+                renderBadgeCard(badge, maxStreak, true, 'badgeListStreak');
+             } else {
+                renderBadgeCard(badge, maxStreak, false, 'badgeListStreak');
+                stopStreakRender = true;
+             }
+        });
+    }
+
+    function renderBadgeCard(badge, currentValue, isUnlocked, containerId) {
+        let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
+        
+        const frontClass = isUnlocked ? 'unlocked-front' : 'locked-front';
+        const backClass = isUnlocked ? '' : 'locked-back';
+        const iconDisplay = isUnlocked ? badge.icon : '<i class="fas fa-lock" style="font-size:1.5rem; opacity:0.4;"></i>';
+        const finalTitle = badge.title; 
+        const statusText = isUnlocked ? 'Kazanıldı' : `Hedef: ${badge.threshold}`;
+        
+        let badgeHTML = `
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <!-- ÖN YÜZ -->
+                    <div class="flip-card-front ${frontClass}">
+                        <div class="badge-icon-large">${iconDisplay}</div>
+                        <div class="badge-title-clean" style="${!isUnlocked ? 'opacity:0.6;' : ''}">${finalTitle}</div>
+                    </div>
+                    
+                    <!-- ARKA YÜZ -->
+                    <div class="flip-card-back ${backClass}">
+                        <div class="badge-desc-back">${statusText}</div>
+                        
+                        <div class="progress w-100 mb-2" style="height: 6px; background: rgba(0,0,0,0.2); border-radius:10px;">
+                            <div class="progress-bar ${isUnlocked ? 'bg-white' : 'bg-warning'}" style="width: ${progressPct}%"></div>
                         </div>
                         
-                        <!-- ARKA YÜZ -->
-                        <div class="flip-card-back ${backClass}">
-                            <div class="badge-desc-back">${statusText}</div>
-                            
-                            <div class="progress w-100 mb-2" style="height: 6px; background: rgba(0,0,0,0.2); border-radius:10px;">
-                                <div class="progress-bar ${isUnlocked ? 'bg-white' : 'bg-secondary'}" style="width: ${progressPct}%"></div>
-                            </div>
-                            
-                            <div class="badge-progress-text">
-                                ${currentValue} / ${badge.threshold}
-                            </div>
+                        <div class="badge-progress-text">
+                            ${currentValue} / ${badge.threshold}
                         </div>
                     </div>
                 </div>
-            `;
-
-            // İlgili container'a ekle
-            if (badge.category === 'namaz') document.getElementById('badgeListNamaz').innerHTML += badgeHTML;
-            else if (badge.category === 'streak') document.getElementById('badgeListStreak').innerHTML += badgeHTML;
-        });
+            </div>
+        `;
+        document.getElementById(containerId).innerHTML += badgeHTML;
     }
     
     // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
