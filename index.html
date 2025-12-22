@@ -614,7 +614,13 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
 
+        /* Desktop Hover */
         .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        /* Mobile Touch Class */
+        .flip-card.hover .flip-card-inner {
             transform: rotateY(180deg);
         }
 
@@ -2162,10 +2168,6 @@
         let maxStreak = calculateMaxStreak(); 
         if(maxStreak < localData.streak.current) maxStreak = localData.streak.current;
         
-        // Kapsayıcıları temizle
-        document.getElementById('badgeListNamaz').innerHTML = "";
-        document.getElementById('badgeListStreak').innerHTML = "";
-
         // Seviye Hesaplama
         const score = (totalPrayers * 10) + (maxStreak * 50);
         document.getElementById('totalScoreDisplay').innerText = score.toLocaleString();
@@ -2178,12 +2180,11 @@
         document.getElementById('userLevelDisplay').innerText = levelTitle;
 
         // --- NAMAZ ROZETLERİNİ FİLTRELE VE GÖSTER ---
+        const namazContainer = document.getElementById('badgeListNamaz');
         let namazBadges = BADGES.filter(b => b.category === 'namaz').sort((a,b) => a.threshold - b.threshold);
-        let stopNamazRender = false;
+        let namazHTML = "";
 
-        namazBadges.forEach(badge => {
-            if (stopNamazRender) return; // Daha fazla gösterme
-
+        for (const badge of namazBadges) {
             let isUnlocked = totalPrayers >= badge.threshold;
 
             if (isUnlocked) {
@@ -2193,21 +2194,21 @@
                     jsConfetti.addConfetti();
                     showToast(`Yeni Rozet: ${badge.title}`, "success");
                 }
-                renderBadgeCard(badge, totalPrayers, true, 'badgeListNamaz');
+                namazHTML += getBadgeCardHTML(badge, totalPrayers, true);
             } else {
-                // Bu rozet kilitli, bunu "Sıradaki Hedef" olarak göster ve döngüyü durdur
-                renderBadgeCard(badge, totalPrayers, false, 'badgeListNamaz');
-                stopNamazRender = true;
+                // Bu rozet kilitli, bunu "Sıradaki Hedef" olarak göster ve döngüyü KIR
+                namazHTML += getBadgeCardHTML(badge, totalPrayers, false);
+                break; 
             }
-        });
+        }
+        namazContainer.innerHTML = namazHTML;
 
         // --- ZİNCİR ROZETLERİNİ FİLTRELE VE GÖSTER ---
+        const streakContainer = document.getElementById('badgeListStreak');
         let streakBadges = BADGES.filter(b => b.category === 'streak').sort((a,b) => a.threshold - b.threshold);
-        let stopStreakRender = false;
+        let streakHTML = "";
 
-        streakBadges.forEach(badge => {
-             if (stopStreakRender) return;
-
+        for (const badge of streakBadges) {
              let isUnlocked = maxStreak >= badge.threshold;
 
              if (isUnlocked) {
@@ -2217,15 +2218,16 @@
                     jsConfetti.addConfetti();
                     showToast(`Yeni Rozet: ${badge.title}`, "success");
                 }
-                renderBadgeCard(badge, maxStreak, true, 'badgeListStreak');
+                streakHTML += getBadgeCardHTML(badge, maxStreak, true);
              } else {
-                renderBadgeCard(badge, maxStreak, false, 'badgeListStreak');
-                stopStreakRender = true;
+                streakHTML += getBadgeCardHTML(badge, maxStreak, false);
+                break;
              }
-        });
+        }
+        streakContainer.innerHTML = streakHTML;
     }
 
-    function renderBadgeCard(badge, currentValue, isUnlocked, containerId) {
+    function getBadgeCardHTML(badge, currentValue, isUnlocked) {
         let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
         
         const frontClass = isUnlocked ? 'unlocked-front' : 'locked-front';
@@ -2234,8 +2236,8 @@
         const finalTitle = badge.title; 
         const statusText = isUnlocked ? 'Kazanıldı' : `Hedef: ${badge.threshold}`;
         
-        let badgeHTML = `
-            <div class="flip-card">
+        return `
+            <div class="flip-card" ontouchstart="this.classList.toggle('hover');">
                 <div class="flip-card-inner">
                     <!-- ÖN YÜZ -->
                     <div class="flip-card-front ${frontClass}">
@@ -2258,7 +2260,6 @@
                 </div>
             </div>
         `;
-        document.getElementById(containerId).innerHTML += badgeHTML;
     }
     
     // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
