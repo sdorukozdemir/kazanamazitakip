@@ -390,26 +390,29 @@
         .flip-card-front { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         .flip-card-front.locked-front { background: var(--input-bg); opacity: 0.8; filter: grayscale(100%); }
         
-        /* --- YENİLENEN ROZET SİSTEMİ (Gradient Border) --- */
+        /* --- YENİ ZARİF ROZET TASARIMI --- */
         .flip-card-front.unlocked-front {
-            background: var(--card-bg); /* Zemin rengi */
-            border: 5px solid transparent; /* Kalınlık artırıldı */
-            /* Gradient Border Hilesi */
+            /* Arka plan: Beyaz, üzerine yumuşak bir parlama */
+            background: var(--card-bg);
+            /* Kenarlık: İnce ve zarif */
+            border: 2px solid transparent; 
+            /* Gradient Kenarlık: Yeşil (#609979) -> Altın (#f3ce5e) Geçişi */
             background-image: linear-gradient(var(--card-bg), var(--card-bg)), 
-                              linear-gradient(135deg, #609979 0%, #ffd700 50%, #3e6b53 100%);
+                              linear-gradient(135deg, #609979 0%, #f3ce5e 100%);
             background-origin: border-box;
             background-clip: content-box, border-box;
-            /* İçeriye doğru derinlik hissi */
-            box-shadow: inset 0 0 15px rgba(96, 153, 121, 0.15); 
+            /* Gölge: Kartın arkasında yumuşak bir parlama (Glow) */
+            box-shadow: 0 4px 20px rgba(96, 153, 121, 0.25);
         }
         
         body.dark-mode .flip-card-front.unlocked-front {
+            /* Gece modu için daha koyu zemin ve parlak kenarlık */
             background-image: linear-gradient(var(--card-bg), var(--card-bg)), 
-                              linear-gradient(135deg, #4db6ac 0%, #ffeb3b 50%, #004d40 100%);
-            box-shadow: inset 0 0 15px rgba(77, 182, 172, 0.2);
+                              linear-gradient(135deg, #4db6ac 0%, #fbc02d 100%);
+            box-shadow: 0 4px 20px rgba(77, 182, 172, 0.15);
         }
 
-        .flip-card-back { background: linear-gradient(135deg, #609979, #3e6b53); color: white; transform: rotateY(180deg); border: 5px solid rgba(255,255,255,0.15); background-clip: padding-box; }
+        .flip-card-back { background: linear-gradient(135deg, #609979, #3e6b53); color: white; transform: rotateY(180deg); border: 3px solid rgba(255,255,255,0.15); }
         .flip-card-back.locked-back { background: linear-gradient(135deg, #6c757d, #495057); border-color: #6c757d; }
 
         .badge-icon-large { font-size: 2.5rem; margin-bottom: 8px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
