@@ -27,7 +27,6 @@
             box-sizing: border-box;
         }
         
-        /* Webkit tarayıcılar (Chrome, Safari) için scrollbar gizleme */
         ::-webkit-scrollbar {
             width: 0px;
             height: 0px;
@@ -115,14 +114,13 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* --- KARE PULL TO REFRESH INDIKATORU --- */
         #ptr-spinner {
             position: fixed;
             top: 25px;
             left: 50%;
             width: 36px;
             height: 36px;
-            margin-left: -18px; /* Tam ortalamak için genişliğin yarısı kadar sola çek */
+            margin-left: -18px; 
             z-index: 1000;
             border: 4px solid rgba(96, 153, 121, 0.3);
             border-top-color: #609979;
@@ -139,10 +137,8 @@
         .loading-text { margin-top: 15px; font-weight: 600; color: #609979; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
-        /* Layout Wrapper */
         .wrapper { display: flex; width: 100%; height: 100%; }
         
-        /* --- SIDEBAR --- */
         #sidebar { 
             min-width: 280px; max-width: 280px; 
             background: var(--sidebar-bg); color: #fff; 
@@ -186,7 +182,6 @@
             touch-action: pan-y; 
         }
 
-        /* --- SLIDER STRUCTURE --- */
         .app-section {
             display: none;
             width: 100%;
@@ -198,32 +193,16 @@
             backface-visibility: hidden;
             overflow-y: auto; 
             overflow-x: hidden;
-            /* Alt menüye takılmaması için padding arttırıldı */
             padding: 20px 20px 130px 20px; 
         }
 
-        .app-section.active { 
-            display: block; 
-            position: relative; 
-            z-index: 5;
-        }
-
-        .app-section.sliding {
-            display: block !important;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 10;
-        }
-
-        .animate-transition {
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+        .app-section.active { display: block; position: relative; z-index: 5; }
+        .app-section.sliding { display: block !important; position: absolute; top: 0; left: 0; z-index: 10; }
+        .animate-transition { transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
 
         .app-header { text-align: center; color: var(--sidebar-bg); font-weight: 600; margin-bottom: 25px; font-size: 1.5rem; background: -webkit-linear-gradient(45deg, #609979, #3e6b53); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         body.dark-mode .app-header { background: -webkit-linear-gradient(45deg, #20c997, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* --- DASHBOARD --- */
         .prayer-split-layout { display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch; height: 420px; }
         .prayer-side-menu { width: 85px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; overflow-y: auto; }
         @media (max-width: 768px) {
@@ -256,7 +235,6 @@
 
         .theme-oruc-kaza { background: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%); color: #212529; border: 1px solid #ced4da; }
         .theme-oruc-kaza.active { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; border: none; }
-        
         .theme-oruc-nafile { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); color: #1b5e20; }
         .theme-oruc-nafile.active { background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%); color: white; }
 
@@ -266,7 +244,6 @@
         body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); color: #fbe9e7; }
         body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); color: #e8eaf6; }
         body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); color: #eceff1; }
-        
         body.dark-mode .theme-oruc-kaza { background: #2c3035; color: #ced4da; border-color: #444; }
         body.dark-mode .theme-oruc-kaza.active { background: linear-gradient(135deg, #000000 0%, #434343 100%); color: white; }
         body.dark-mode .theme-oruc-nafile.active { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); }
@@ -318,7 +295,6 @@
         .pd-btn-plus { background: #609979; box-shadow: 0 10px 20px rgba(96, 153, 121, 0.3); }
         .pd-btn-minus { background: #6c757d; box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3); }
 
-        /* ACCORDION STATS */
         .stat-accordion-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 12px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
         .stat-accordion-header { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; background: var(--card-bg); user-select: none; }
         .stat-accordion-header:hover { background: rgba(0,0,0,0.02); }
@@ -349,7 +325,6 @@
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
         
-        /* --- YENİLENEN TESBİHAT CSS --- */
         .tesbihat-list-container { display: flex; flex-direction: column; gap: 12px; }
         .t-list-card {
             background: var(--card-bg);
@@ -384,7 +359,6 @@
         }
         .t-add-card:hover { border-color: #609979; color: #609979; background: var(--input-bg); }
         
-        /* TESBİHAT DETAY GÖRÜNÜMÜ */
         .tesbihat-detail-wrapper { animation: fadeIn 0.3s ease; }
         .tesbihat-header-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .control-btn {
@@ -401,7 +375,6 @@
         .cp-swatch { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.2s; }
         .cp-swatch:active { transform: scale(1.1); }
 
-        /* --- TEMA RENKLERİ --- */
         .theme-blue { background: linear-gradient(135deg, #0d47a1 0%, #42a5f5 100%); }
         .theme-green { background: linear-gradient(135deg, #1b5e20 0%, #66bb6a 100%); }
         .theme-red { background: linear-gradient(135deg, #b71c1c 0%, #ef5350 100%); }
@@ -539,7 +512,6 @@
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
         
-        /* Metallic Cards */
         .metallic-card { border: none; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); background: linear-gradient(145deg, #dce1e6 0%, #ffffff 50%, #dce1e6 100%); padding: 0; overflow: hidden; color: #333; transition: all 0.2s ease; position: relative; }
         .metallic-card.up { border-left: 5px solid #609979; }
         .metallic-card.down { border-left: 5px solid #dc3545; }
@@ -587,7 +559,6 @@
         .h-sub-btn.active { background: #fd7e14; color: white; border-color: #fd7e14; opacity: 1; box-shadow: 0 3px 8px rgba(253, 126, 20, 0.3); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- YENİLENEN ROZET SİSTEMİ (KARE & FLIP KART) --- */
         .badge-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
@@ -598,7 +569,7 @@
         .flip-card {
             background-color: transparent;
             width: 100%;
-            aspect-ratio: 1/1; /* Tam kare olması için */
+            aspect-ratio: 1/1; 
             perspective: 1000px;
             cursor: pointer;
         }
@@ -632,7 +603,6 @@
             padding: 10px;
         }
 
-        /* ÖN YÜZ */
         .flip-card-front {
             background-color: var(--card-bg);
             color: var(--text-color);
@@ -655,7 +625,6 @@
             border: 2px solid #4db6ac;
         }
 
-        /* ARKA YÜZ */
         .flip-card-back {
             background: linear-gradient(135deg, #609979, #3e6b53);
             color: white;
@@ -668,7 +637,6 @@
             border-color: #6c757d;
         }
 
-        /* İÇERİK STİLLERİ */
         .badge-icon-large {
             font-size: 2.5rem;
             margin-bottom: 8px;
@@ -703,7 +671,6 @@
         .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
         
-        /* --- DÜZELTİLEN ALT MENÜ --- */
         .bottom-nav { 
             display: none; 
             position: fixed; 
@@ -712,9 +679,7 @@
             width: 100%; 
             height: 70px; 
             background: var(--card-bg); 
-            /* KENARLIK KALDIRILDI */
             border-top: none !important; 
-            /* GÖLGE KALDIRILDI (TEMİZ GÖRÜNÜM İÇİN) */
             box-shadow: none;
             z-index: 1060; 
             justify-content: space-around; 
@@ -756,22 +721,21 @@
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
-        /* --- YENİ CHART BUTON STİLİ (GRID - DAHA GENİŞ) --- */
         .chart-period-selector {
             display: grid; 
             grid-template-columns: 1fr 1fr 1fr;
             background: var(--input-bg);
-            border-radius: 15px; /* Radius arttırıldı */
-            padding: 6px; /* Boşluk arttırıldı */
-            gap: 8px; /* Aralık arttırıldı */
+            border-radius: 15px;
+            padding: 6px;
+            gap: 8px;
             border: 1px solid var(--border-color);
             margin-bottom: 10px;
         }
         .chart-period-btn {
             text-align: center;
-            padding: 12px 2px; /* Dikey padding arttırılarak daha tombul yapıldı */
+            padding: 12px 2px;
             font-size: 0.85rem; 
-            font-weight: 700; /* Daha kalın yazı */
+            font-weight: 700;
             cursor: pointer;
             border-radius: 12px;
             transition: all 0.3s ease;
@@ -794,7 +758,6 @@
 </head>
 <body>
 
-<!-- Pull to Refresh İkonu (KARE TASARIM) -->
 <div id="ptr-spinner"></div>
 
 <div id="loading-overlay">
@@ -804,7 +767,6 @@
 
 <div id="toast-container"></div>
 
-<!-- Zikir Ekleme Modalı -->
 <div id="addZikrModal" class="custom-modal-overlay">
     <div class="custom-modal">
         <h4 class="mb-3 fw-bold">Yeni Zikir Ekle</h4>
@@ -878,7 +840,6 @@
     </nav>
 
     <div id="content">
-        <!-- BÖLÜMLER ARTIK "app-section" SINIFINA SAHİP -->
         <div id="section-dashboard" class="app-section active">
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                 <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
@@ -913,7 +874,6 @@
             </div>
             
             <div id="prayerSplitContainer" class="prayer-split-layout">
-                <!-- Javascript ile doldurulacak -->
             </div>
             
             <div id="summaryBar" class="summary-bar">
@@ -939,7 +899,6 @@
         <div id="section-achievements" class="app-section">
             <h3 class="app-header">Başarılarım & Rozetler</h3>
             
-            <!-- Üst Bilgi Kartı: Toplam Seviye -->
             <div class="card mb-4 shadow-lg border-0" style="border-radius: 20px; background: linear-gradient(135deg, #2c3e50, #4ca1af); color: white;">
                 <div class="card-body p-4 text-center">
                     <h5 class="text-white-50 text-uppercase small fw-bold">Toplam Skor</h5>
@@ -948,15 +907,11 @@
                 </div>
             </div>
         
-            <!-- Kategoriler -->
             <h5 class="fw-bold text-secondary mb-3 mt-4 text-center"><i class="fas fa-mosque me-2"></i>Namaz Rozetleri</h5>
             <div id="badgeListNamaz" class="badge-grid"></div>
         
             <h5 class="fw-bold text-secondary mb-3 mt-4 text-center"><i class="fas fa-fire me-2"></i>Zincir ve Devamlılık</h5>
             <div id="badgeListStreak" class="badge-grid"></div>
-            
-            <!-- Özel Görevler Kaldırıldı -->
-             <div id="badgeListSpecial" style="display:none;"></div>
         </div>
 
         <div id="section-stats" class="app-section">
@@ -1015,7 +970,6 @@
 
                 <h5 class="text-secondary fw-bold ms-1 mb-3">Detaylı Namaz Analizi</h5>
                 <div id="prayer-analysis-grid" class="mb-4">
-                    <!-- Javascript ile doldurulacak -->
                 </div>
 
                 <div class="row g-4">
@@ -1402,34 +1356,25 @@
     function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
-    /* --- REAL-TIME TOUCH SWIPE & PULL TO REFRESH LOGIC --- */
-    
-    // Bölüm ID'leri sıralı
     const SECTION_IDS = ['dashboard', 'achievements', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
     
-    // DOM Elementlerini ve indexleri bulmak için yardımcı
     function getSectionIndex(id) {
         return SECTION_IDS.indexOf(id.replace('section-', ''));
     }
 
-    // Normal geçiş fonksiyonu (Menüden tıklandığında)
     window.showSection = function(targetId) {
         if(!targetId) targetId = 'dashboard';
         
-        // 1. Menü Aktifliği
         document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
         const menuItem = document.getElementById('menu-' + targetId);
         if(menuItem) menuItem.classList.add('active');
 
-        // 2. Alt Nav Aktifliği
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
         if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
-        // 3. Logic Trigger
         triggerLogic(targetId);
 
-        // 4. Görünüm Değiştirme
         document.querySelectorAll('.app-section').forEach(sec => {
             sec.classList.remove('active');
             sec.style.transform = ''; 
@@ -1456,7 +1401,6 @@
         } catch(e) { console.log("Render error:", e); }
     }
 
-    // --- SWIPE & PTR VARIABLES ---
     let startX = 0;
     let startY = 0;
     let currentTranslate = 0;
@@ -1470,14 +1414,12 @@
     let isVerticalMove = false;
     let isSwipeInitialized = false;
     
-    // Pull to Refresh Specifics
     let isPulling = false;
-    const ptrThreshold = 70; // px
+    const ptrThreshold = 70; 
     const ptrSpinner = document.getElementById('ptr-spinner');
 
     const contentArea = document.getElementById('content');
 
-    // --- TOUCH START ---
     contentArea.addEventListener('touchstart', e => {
         if (shouldIgnoreSwipe(e.target)) return;
 
@@ -1499,7 +1441,6 @@
 
     }, {passive: true});
 
-    // --- TOUCH MOVE ---
     contentArea.addEventListener('touchmove', e => {
         if (!isDragging || !activeSection) return;
 
@@ -1508,39 +1449,30 @@
         const diffX = currentX - startX;
         const diffY = currentY - startY;
 
-        // --- PULL TO REFRESH LOGIC (ONLY FOR DASHBOARD AT TOP) ---
         if (activeSection.id === 'section-dashboard' && activeSection.scrollTop === 0 && diffY > 0 && !isHorizontalMove) {
-            // Aşağı çekiyor
-            if(diffY > 10) { // Biraz tolerans
+            if(diffY > 10) { 
                 isPulling = true;
-                // Spinner'ı göster ve döndür
                 ptrSpinner.style.display = 'block';
-                // translateX(-50%) yerine margin-left ile ortaladığımız için, transform sadece rotate için
                 ptrSpinner.style.transform = `rotate(${diffY * 3}deg)`;
                 
-                // Opaklık artır
                 let opacity = Math.min(1, diffY / ptrThreshold);
                 ptrSpinner.style.opacity = opacity;
                 
                 if (diffY > ptrThreshold) {
-                    ptrSpinner.style.borderTopColor = "#20c997"; // Yeterince çekildi rengi
+                    ptrSpinner.style.borderTopColor = "#20c997"; 
                 } else {
                     ptrSpinner.style.borderTopColor = "#609979";
                 }
             }
-            return; // Yatay swipe'ı engelle
+            return; 
         }
 
-        // --- SWIPE NAVIGATION LOGIC ---
-        
-        // 1. Zaten dikey kaydırma ise (ve PTR değilse)
         if (isVerticalMove) {
             isDragging = false;
             resetStyles();
             return;
         }
 
-        // 2. Henüz karar verilmediyse
         if (!isHorizontalMove) {
             if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 5) {
                 isVerticalMove = true;
@@ -1557,7 +1489,6 @@
             }
         }
 
-        // 3. Yatay Hareket
         if (isHorizontalMove) {
             if(e.cancelable) e.preventDefault(); 
 
@@ -1590,21 +1521,17 @@
 
     }, {passive: false});
 
-    // --- TOUCH END ---
     contentArea.addEventListener('touchend', e => {
         if (!isDragging || !activeSection) return;
         isDragging = false;
 
-        // PTR Check
         if (isPulling) {
             const currentY = e.changedTouches[0].clientY;
             const diffY = currentY - startY;
             
             if (diffY > ptrThreshold) {
-                // Trigger Refresh
                 performRefresh();
             } else {
-                // Cancel
                 resetPtr();
             }
             isPulling = false;
@@ -1638,10 +1565,8 @@
 
     function performRefresh() {
         ptrSpinner.style.borderTopColor = "#20c997";
-        ptrSpinner.style.animation = "spin 0.5s linear infinite"; // Hızlı dön
+        ptrSpinner.style.animation = "spin 0.5s linear infinite"; 
         triggerHaptic();
-        
-        // Simüle edilmiş yenileme (Firebase zaten canlı ama UI'ı resetleyelim)
         setTimeout(() => {
             renderApp();
             showToast("Veriler güncellendi", "success");
@@ -1654,7 +1579,6 @@
         ptrSpinner.style.opacity = 0;
     }
 
-    // Swipe'ı engellemesi gereken elemanları kontrol eden fonksiyon
     function shouldIgnoreSwipe(target) {
         if (!target) return false;
         return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas, .stats-tab-container, .history-filter-tabs, .date-filter-capsule');
@@ -1715,8 +1639,6 @@
         prevSection = null;
         nextSection = null;
     }
-
-    // --- ESKİ MANTIK VE DİĞER FONKSİYONLAR AYNI KALDI ---
 
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
@@ -2004,7 +1926,6 @@
 
     function getWeeklyProgress() { if (!localData.logs) return 0; const today = new Date(); const day = today.getDay(); const diff = today.getDate() - day + (day == 0 ? -6 : 1); const monday = new Date(today.setDate(diff)); monday.setHours(0,0,0,0); let weeklyTotal = 0; Object.keys(localData.logs).forEach(dateKey => { const logDate = new Date(dateKey); if (logDate >= monday) { weeklyTotal += localData.logs[dateKey]; } }); return weeklyTotal; }
 
-    /* --- YENİLENMİŞ TESBİHAT RENDER FONKSİYONU --- */
     function renderTesbihat() {
         const c = document.getElementById('tesbihatContainer');
         
@@ -2013,7 +1934,6 @@
         }
 
         if(!isTesbihatDetailView) {
-            // --- LİSTE GÖRÜNÜMÜ ---
             c.innerHTML = ""; 
             
             let listHTML = '<div class="tesbihat-list-container">';
@@ -2034,7 +1954,6 @@
                 `;
             });
 
-            // Yeni Ekle Butonu
             listHTML += `
                 <div class="t-add-card" onclick="openAddZikrModal()">
                     <i class="fas fa-plus me-2"></i> YENİ ZİKİR EKLE
@@ -2043,7 +1962,6 @@
             
             c.innerHTML = listHTML;
         } else {
-            // --- DETAY GÖRÜNÜMÜ ---
             if(activeTesbihatIndex >= localData.tesbihat.length) activeTesbihatIndex = 0;
             const currentZikr = localData.tesbihat[activeTesbihatIndex];
             const p = currentZikr.target > 0 ? (currentZikr.current / currentZikr.target) * 100 : 0;
@@ -2086,13 +2004,11 @@
             let detailHTML = `
                 <div class="tesbihat-detail-wrapper">
                     <div class="tesbihat-header-controls" style="position:relative;">
-                        <!-- Palet Butonu ve Açılır Menü -->
                         <div class="control-btn" onclick="togglePalette()"><i class="fas fa-palette"></i></div>
                         <div id="paletteMenu" class="color-palette-container">
                             ${paletteItems}
                         </div>
 
-                        <!-- Geri Butonu -->
                         <div class="control-btn" onclick="closeTesbihatDetail()"><i class="fas fa-arrow-left"></i></div>
                     </div>
 
@@ -2129,7 +2045,6 @@
         }
     }
 
-    /* --- TESBİHAT YARDIMCI FONKSİYONLAR --- */
     window.openTesbihatDetail = function(index) {
         activeTesbihatIndex = index;
         isTesbihatDetailView = true;
@@ -2194,19 +2109,28 @@
 
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     
-    // YENİ: GELİŞMİŞ ROZET SİSTEMİ VERİLERİ
+    // --- GÜNCELLENMİŞ ROZET VERİLERİ ---
     const BADGES = [
         // NAMAZ ROZETLERİ (Kategori: namaz)
-        {id: 100, title: "Bismillah", icon: "🌱", desc: "100 Namaz Kılındı", category: "namaz", threshold: 100},
-        {id: 500, title: "Gayret", icon: "🔥", desc: "500 Namaz Kılındı", category: "namaz", threshold: 500},
-        {id: 1000, title: "Sebat", icon: "🏔️", desc: "1.000 Namaz Kılındı", category: "namaz", threshold: 1000},
-        {id: 2500, title: "İstikrar", icon: "💎", desc: "2.500 Namaz Kılındı", category: "namaz", threshold: 2500},
-        {id: 5000, title: "Sadakat", icon: "🌹", desc: "5.000 Namaz Kılındı", category: "namaz", threshold: 5000},
-        
+        {id: 100, title: "Bismillah", icon: "🌱", desc: "100 Namaz", category: "namaz", threshold: 100},
+        {id: 500, title: "Gayret", icon: "🔥", desc: "500 Namaz", category: "namaz", threshold: 500},
+        {id: 1000, title: "Sebat", icon: "🏔️", desc: "1.000 Namaz", category: "namaz", threshold: 1000},
+        {id: 2500, title: "İstikrar", icon: "💎", desc: "2.500 Namaz", category: "namaz", threshold: 2500},
+        {id: 5000, title: "Sadakat", icon: "🌹", desc: "5.000 Namaz", category: "namaz", threshold: 5000},
+        // YENİ EKLENEN NAMAZ ROZETLERİ
+        {id: 10000, title: "Vuslat", icon: "🌟", desc: "10.000 Namaz", category: "namaz", threshold: 10000},
+        {id: 15000, title: "Huzur", icon: "🌌", desc: "15.000 Namaz", category: "namaz", threshold: 15000},
+        {id: 20000, title: "Nur", icon: "✨", desc: "20.000 Namaz", category: "namaz", threshold: 20000},
+        {id: 25000, title: "Cennet Muştusu", icon: "🕌", desc: "25.000 Namaz", category: "namaz", threshold: 25000},
+
         // ZİNCİR ROZETLERİ (Kategori: streak)
-        {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün Aralıksız", category: "streak", threshold: 7},
-        {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün Aralıksız", category: "streak", threshold: 30},
-        {id: 's100', title: "Efsane", icon: "👑", desc: "100 Gün Aralıksız", category: "streak", threshold: 100}
+        {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün", category: "streak", threshold: 7},
+        {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün", category: "streak", threshold: 30},
+        {id: 's100', title: "Efsane", icon: "👑", desc: "100 Gün", category: "streak", threshold: 100},
+        // YENİ EKLENEN ZİNCİR ROZETLERİ
+        {id: 's180', title: "Yarım Yıl", icon: "⏳", desc: "6 Ay", category: "streak", threshold: 180},
+        {id: 's365', title: "Tam Yıl", icon: "🏆", desc: "365 Gün", category: "streak", threshold: 365},
+        {id: 's1000', title: "Ömürlük", icon: "♾️", desc: "1000 Gün", category: "streak", threshold: 1000}
     ];
 
     function calculateMaxStreak() {
@@ -2239,21 +2163,15 @@
         return maxStreak;
     }
 
-    // YENİ: Başarılar Sayfası Render Fonksiyonu (FLIP CARD YAPISI)
+    // --- GÜNCELLENMİŞ BAŞARIM GÖSTERİM MANTIĞI ---
     function renderAchievements() {
-        // Toplam kılınan namaz sayısı
         let totalPrayers = 0;
         if(localData.counts) localData.counts.forEach(c => totalPrayers += c.done);
 
-        // En yüksek zincir
         let maxStreak = calculateMaxStreak(); 
         if(maxStreak < localData.streak.current) maxStreak = localData.streak.current;
         
-        // Kapsayıcıları temizle
-        document.getElementById('badgeListNamaz').innerHTML = "";
-        document.getElementById('badgeListStreak').innerHTML = "";
-
-        // Seviye Hesaplama
+        // Skor ve Seviye Hesaplama
         const score = (totalPrayers * 10) + (maxStreak * 50);
         document.getElementById('totalScoreDisplay').innerText = score.toLocaleString();
         
@@ -2264,68 +2182,67 @@
         if(score > 50000) levelTitle = "Üstad";
         document.getElementById('userLevelDisplay').innerText = levelTitle;
 
-        BADGES.forEach(badge => {
-            let currentValue = 0;
-            let isUnlocked = false;
+        // Rozetleri Filtreleme ve Sıralama
+        const namazBadges = BADGES.filter(b => b.category === 'namaz').sort((a,b) => a.threshold - b.threshold);
+        const streakBadges = BADGES.filter(b => b.category === 'streak').sort((a,b) => a.threshold - b.threshold);
 
-            // Kategoriye göre hangi veriyi kontrol edeceğiz?
-            if (badge.category === 'namaz') currentValue = totalPrayers;
-            else if (badge.category === 'streak') currentValue = maxStreak;
+        // Yardımcı Fonksiyon: Sadece açılanları ve sıradaki ilk kilitliyi göster
+        const renderBadgeGroup = (badges, containerId, currentValue) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            let nextLockedShown = false; 
 
-            // Rozet kazanıldı mı?
-            if (currentValue >= badge.threshold) {
-                isUnlocked = true;
-                if (!localData.earnedBadges.includes(badge.id)) {
-                    // Yeni kazanıldıysa veritabanına ekle
-                    localData.earnedBadges.push(badge.id);
-                    saveToCloud();
-                    jsConfetti.addConfetti();
-                    showToast(`Yeni Rozet: ${badge.title}`, "success");
+            badges.forEach(badge => {
+                const isUnlocked = currentValue >= badge.threshold;
+
+                // Mantık: Kazanılmışsa GÖSTER veya Henüz hiç kilitli gösterilmediyse (sıradaki hedef) GÖSTER
+                if (isUnlocked || !nextLockedShown) {
+                    
+                    if(isUnlocked && !localData.earnedBadges.includes(badge.id)) {
+                        localData.earnedBadges.push(badge.id);
+                        saveToCloud();
+                        jsConfetti.addConfetti();
+                        showToast(`Yeni Rozet: ${badge.title}`, "success");
+                    }
+
+                    let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
+                    const frontClass = isUnlocked ? 'unlocked-front' : 'locked-front';
+                    const backClass = isUnlocked ? '' : 'locked-back';
+                    const iconDisplay = isUnlocked ? badge.icon : '<i class="fas fa-lock" style="font-size:1.5rem; opacity:0.5;"></i>';
+                    const statusText = isUnlocked ? 'Tamamlandı' : 'Kilitli';
+                    
+                    let badgeHTML = `
+                        <div class="flip-card">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front ${frontClass}">
+                                    <div class="badge-icon-large">${iconDisplay}</div>
+                                    <div class="badge-title-clean">${badge.title}</div>
+                                </div>
+                                <div class="flip-card-back ${backClass}">
+                                    <div class="badge-desc-back">${statusText}</div>
+                                    <div class="progress w-100 mb-2" style="height: 6px; background: rgba(0,0,0,0.2); border-radius:10px;">
+                                        <div class="progress-bar ${isUnlocked ? 'bg-white' : 'bg-secondary'}" style="width: ${progressPct}%"></div>
+                                    </div>
+                                    <div class="badge-progress-text">
+                                        ${currentValue} / ${badge.threshold}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.innerHTML += badgeHTML;
+
+                    // Eğer bu kilitliyse, "sıradaki hedefi gösterdim" diye işaretle, döngü sonrakileri göstermeyecek
+                    if (!isUnlocked) nextLockedShown = true; 
                 }
-            }
+            });
+        };
 
-            // Progress Bar Yüzdesi
-            let progressPct = Math.min(100, (currentValue / badge.threshold) * 100);
-            
-            // Kilitli / Açık Durumu Stilleri
-            const frontClass = isUnlocked ? 'unlocked-front' : 'locked-front';
-            const backClass = isUnlocked ? '' : 'locked-back';
-            const iconDisplay = isUnlocked ? badge.icon : '<i class="fas fa-lock" style="font-size:1.5rem; opacity:0.5;"></i>';
-            const statusText = isUnlocked ? 'Tamamlandı' : 'Kilitli';
-            
-            // FLIP CARD HTML YAPISI
-            let badgeHTML = `
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                        <!-- ÖN YÜZ -->
-                        <div class="flip-card-front ${frontClass}">
-                            <div class="badge-icon-large">${iconDisplay}</div>
-                            <div class="badge-title-clean">${badge.title}</div>
-                        </div>
-                        
-                        <!-- ARKA YÜZ -->
-                        <div class="flip-card-back ${backClass}">
-                            <div class="badge-desc-back">${statusText}</div>
-                            
-                            <div class="progress w-100 mb-2" style="height: 6px; background: rgba(0,0,0,0.2); border-radius:10px;">
-                                <div class="progress-bar ${isUnlocked ? 'bg-white' : 'bg-secondary'}" style="width: ${progressPct}%"></div>
-                            </div>
-                            
-                            <div class="badge-progress-text">
-                                ${currentValue} / ${badge.threshold}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            // İlgili container'a ekle
-            if (badge.category === 'namaz') document.getElementById('badgeListNamaz').innerHTML += badgeHTML;
-            else if (badge.category === 'streak') document.getElementById('badgeListStreak').innerHTML += badgeHTML;
-        });
+        renderBadgeGroup(namazBadges, 'badgeListNamaz', totalPrayers);
+        renderBadgeGroup(streakBadges, 'badgeListStreak', maxStreak);
     }
     
-    // --- KOMPAKT METALİK TARİHÇE KARTLARI (ACCORDION) ---
     function renderHistory(filterDate = null) { 
         const container = document.getElementById('historyListContainer'); 
         container.innerHTML = ""; 
@@ -2337,33 +2254,25 @@
 
         let displayData = [];
         
-        // 1. Önce tarihe göre filtrele (varsa)
         if (filterDate) {
             const parts = filterDate.split('-'); 
             if(parts.length === 3) {
-                // Input date formatı YYYY-MM-DD olarak gelir
                 const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
             } else if(filterDate.includes('.')) {
-                // Eğer formatlı gelirse (gg.aa.yyyy)
                  displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
             }
         } else {
-            // Tarih filtresi yoksa ilk 50 kaydı al
             displayData = localData.history.slice(0, 50);
         }
 
-        // 2. Ana Kategori Filtreleme
         if (currentHistoryCategory === 'namaz') {
             displayData = displayData.filter(r => !r.namaz.includes('Oruç') && !r.namaz.includes('Orucu'));
-            
             if (currentNamazSubCat !== 'all') {
                 displayData = displayData.filter(r => r.namaz === currentNamazSubCat);
             }
-
         } else if (currentHistoryCategory === 'oruc') {
             displayData = displayData.filter(r => r.namaz.includes('Oruç') || r.namaz.includes('Orucu'));
-            
             if (currentFastingSubCat === 'kaza') {
                 displayData = displayData.filter(r => r.namaz.includes('Kaza'));
             } else if (currentFastingSubCat === 'nafile') {
@@ -2408,7 +2317,6 @@
         }
     }
 
-    // YENİ: Kategori değiştirme fonksiyonu
     window.setHistoryCategory = function(cat, btn) {
         currentHistoryCategory = cat;
         document.querySelectorAll('.h-main-tabs .h-tab-btn').forEach(b => b.classList.remove('active'));
@@ -2490,7 +2398,6 @@
     function showModal(title, message, onConfirm) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalMessage').innerText = message; const btnGroup = document.getElementById('modalButtons'); btnGroup.innerHTML = ''; if (onConfirm) { btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`; document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); }; } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; } document.getElementById('customModal').style.display = 'flex'; }
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
     
-    // Zikir Sayac Fonksiyonları (Artık activeTesbihatIndex'i kullanacak şekilde güncellendi)
     window.upTes = function(i, d) { 
         triggerHaptic(); 
         const item = localData.tesbihat[i]; 
@@ -2532,7 +2439,6 @@
     window.switchChartPeriod = function(period, btn) { 
         currentChartPeriod = period; 
         
-        // Buton stillerini güncelle
         const buttons = document.querySelectorAll('.chart-period-btn');
         buttons.forEach(b => b.classList.remove('active'));
         if(btn) btn.classList.add('active');
@@ -2568,10 +2474,10 @@
             chartData = periodStats.last30Data; 
             pointRadiusVal = 2; 
             labelText = 'Günlük Kılınan (Son 30 Gün)';
-        } else { // 3months
+        } else { 
             chartLabels = periodStats.last90Labels;
             chartData = periodStats.last90Data;
-            pointRadiusVal = 1; // 3 Ay için nokta boyutu küçük
+            pointRadiusVal = 1; 
             labelText = 'Günlük Kılınan (Son 90 Gün)';
         } 
         
@@ -2596,7 +2502,6 @@
             const val = localData.logs[date];
             if(val === 0) return;
             
-            // En verimli gün hesaplama
             if(val > maxDayVal) {
                 maxDayVal = val;
                 maxDayDate = date;
@@ -2720,7 +2625,6 @@
         const bestPeriods = calculateBestPeriods();
         const maxStreakVal = calculateMaxStreak();
         
-        // EKLENDİ: En verimli gün
         document.getElementById('bestDayVal').innerText = bestPeriods.day;
         
         document.getElementById('bestWeekVal').innerText = bestPeriods.week;
@@ -2730,14 +2634,13 @@
         const ctx1 = document.getElementById('completionChart').getContext('2d');
         if (chartCompletion) chartCompletion.destroy();
         
-        // Gradient Renkler (Pastel)
         const gradDone = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradDone.addColorStop(0, '#88cbb9'); // Pastel Mint
-        gradDone.addColorStop(1, '#609979'); // Tema Rengi
+        gradDone.addColorStop(0, '#88cbb9'); 
+        gradDone.addColorStop(1, '#609979'); 
 
         const gradRem = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradRem.addColorStop(0, '#ffb74d'); // Pastel Turuncu
-        gradRem.addColorStop(1, '#fb8c00'); // Koyu Pastel Turuncu
+        gradRem.addColorStop(0, '#ffb74d'); 
+        gradRem.addColorStop(1, '#fb8c00'); 
 
         const isDark = document.body.classList.contains('dark-mode'); 
         const lc = isDark ? '#fff' : '#666'; 
@@ -2767,15 +2670,14 @@
                         }
                     },
                     datalabels: {
-                        color: '#fff', // Beyaz Yazı
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Yarı saydam siyah arka plan
+                        color: '#fff', 
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
                         borderRadius: 6,
                         font: { weight: 'bold', family: 'Poppins', size: 11 },
                         formatter: (val, ctx) => {
                             let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
                             let percentage = (val * 100 / sum).toFixed(1) + "%";
                             if(percentage === "0.0%") return "";
-                            // ETIKETLERI YÜZDENİN ÜZERİNE YAZDIR
                             let label = ctx.chart.data.labels[ctx.dataIndex];
                             return label + "\n" + percentage;
                         },
@@ -2787,7 +2689,7 @@
                     },
                     tooltip: {
                         enabled: true,
-                        yAlign: 'bottom', // Tooltip'i yukarı iter, böylece aşağıdaki etiketle çakışmaz
+                        yAlign: 'bottom', 
                     }
                 }
             },
@@ -2809,7 +2711,7 @@
         let weeklyTotal = 0, m3 = 0, m6 = 0, y1 = 0; 
         let last7Data = [], last7Labels = []; 
         let last30Data = [], last30Labels = []; 
-        let last90Data = [], last90Labels = []; // 3 AYLIK VERİ
+        let last90Data = [], last90Labels = []; 
 
         for(let i=6; i>=0; i--) { 
             const d = new Date(); 
@@ -2827,7 +2729,6 @@
             last30Data.push(val); 
             last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
         } 
-        // 3 AYLIK GRAFİK HESAPLAMASI
         for(let i=89; i>=0; i--) { 
             const d = new Date(); 
             d.setDate(today.getDate() - i); 
@@ -2895,7 +2796,6 @@
         renderStats(); 
     };
     
-    // EKLENEN FONKSİYON: Detaylı Analiz Accordion Toggle
     window.toggleStatDetails = function(index) {
         const item = document.getElementById(`stat-acc-item-${index}`);
         if(item) {
@@ -2932,8 +2832,6 @@
     
     function confirmResetData() { showModal("Dikkat!", "Tüm veriler silinecek. Emin misiniz?", forceResetData); }
 
-    /* --- YENİLENMİŞ ORUÇ TAKİP (SPLIT LAYOUT) --- */
-    
     function renderFasting() {
         const container = document.getElementById('fastingContainer');
         if(!container || !localData.fasting) return;
@@ -2942,7 +2840,6 @@
         const typeKey = fastingTypes[activeFastingIndex];
         const data = localData.fasting[typeKey];
         
-        // UI Ayarları
         const uiProps = [
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
@@ -2960,7 +2857,6 @@
         
         const currentUI = uiProps[activeFastingIndex];
         
-        // 1. Yan Menü Oluştur
         let menuHTML = `<div class="prayer-side-menu">`;
         uiProps.forEach((props, i) => {
             const activeClass = i === activeFastingIndex ? 'active' : '';
@@ -2972,12 +2868,10 @@
         });
         menuHTML += `</div>`;
 
-        // 2. Kart İçeriği (Simple Mode vs Target Mode)
         let cardContentHTML = '';
         const hasTarget = data.hasTarget === true;
 
         if(!hasTarget) {
-            // Basit Mod
             cardContentHTML = `
                 <div class="text-center py-3">
                     <div class="fs-1 fw-bold text-white mb-2">${data.done}</div>
@@ -2996,7 +2890,6 @@
                 </div>
             `;
         } else {
-            // Hedef Modu
             const remaining = Math.max(0, data.target - data.done);
             const pct = data.target > 0 ? (data.done / data.target) * 100 : 0;
             
@@ -3032,7 +2925,6 @@
             `;
         }
 
-        // 3. Kart HTML Birleştirme
         let badgeHTML = hasTarget ? `<div class="pd-remaining-badge" style="background:#ffc107; color:#333;">${hasTarget && currentUI.key === 'kaza' ? 'Kalan: ' + Math.max(0, data.target - data.done) : 'Hedef Aktif'}</div>` : '';
         
         let cardHTML = `
@@ -3049,7 +2941,6 @@
             </div>
         `;
 
-        // 4. Kapsayıcıya Yaz
         container.innerHTML = `<div class="prayer-split-layout">${menuHTML} ${cardHTML}</div>`;
     }
 
