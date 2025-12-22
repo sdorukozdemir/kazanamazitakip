@@ -322,7 +322,7 @@
         .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
         .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #609979; background: white; }
-        .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 10px; }
+        .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
         
         .tesbihat-list-container { display: flex; flex-direction: column; gap: 12px; }
@@ -585,7 +585,8 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
 
-        .flip-card:hover .flip-card-inner {
+        /* --- BURADA DEĞİŞİKLİK YAPILDI: HOVER YERİNE CLICK --- */
+        .flip-card.active-flip .flip-card-inner {
             transform: rotateY(180deg);
         }
 
@@ -2109,7 +2110,6 @@
 
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     
-    // --- GÜNCELLENMİŞ ROZET VERİLERİ ---
     const BADGES = [
         // NAMAZ ROZETLERİ (Kategori: namaz)
         {id: 100, title: "Bismillah", icon: "🌱", desc: "100 Namaz", category: "namaz", threshold: 100},
@@ -2117,7 +2117,6 @@
         {id: 1000, title: "Sebat", icon: "🏔️", desc: "1.000 Namaz", category: "namaz", threshold: 1000},
         {id: 2500, title: "İstikrar", icon: "💎", desc: "2.500 Namaz", category: "namaz", threshold: 2500},
         {id: 5000, title: "Sadakat", icon: "🌹", desc: "5.000 Namaz", category: "namaz", threshold: 5000},
-        // YENİ EKLENEN NAMAZ ROZETLERİ
         {id: 10000, title: "Vuslat", icon: "🌟", desc: "10.000 Namaz", category: "namaz", threshold: 10000},
         {id: 15000, title: "Huzur", icon: "🌌", desc: "15.000 Namaz", category: "namaz", threshold: 15000},
         {id: 20000, title: "Nur", icon: "✨", desc: "20.000 Namaz", category: "namaz", threshold: 20000},
@@ -2127,7 +2126,6 @@
         {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün", category: "streak", threshold: 7},
         {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün", category: "streak", threshold: 30},
         {id: 's100', title: "Efsane", icon: "👑", desc: "100 Gün", category: "streak", threshold: 100},
-        // YENİ EKLENEN ZİNCİR ROZETLERİ
         {id: 's180', title: "Yarım Yıl", icon: "⏳", desc: "6 Ay", category: "streak", threshold: 180},
         {id: 's365', title: "Tam Yıl", icon: "🏆", desc: "365 Gün", category: "streak", threshold: 365},
         {id: 's1000', title: "Ömürlük", icon: "♾️", desc: "1000 Gün", category: "streak", threshold: 1000}
@@ -2163,7 +2161,6 @@
         return maxStreak;
     }
 
-    // --- GÜNCELLENMİŞ BAŞARIM GÖSTERİM MANTIĞI ---
     function renderAchievements() {
         let totalPrayers = 0;
         if(localData.counts) localData.counts.forEach(c => totalPrayers += c.done);
@@ -2171,7 +2168,6 @@
         let maxStreak = calculateMaxStreak(); 
         if(maxStreak < localData.streak.current) maxStreak = localData.streak.current;
         
-        // Skor ve Seviye Hesaplama
         const score = (totalPrayers * 10) + (maxStreak * 50);
         document.getElementById('totalScoreDisplay').innerText = score.toLocaleString();
         
@@ -2182,11 +2178,9 @@
         if(score > 50000) levelTitle = "Üstad";
         document.getElementById('userLevelDisplay').innerText = levelTitle;
 
-        // Rozetleri Filtreleme ve Sıralama
         const namazBadges = BADGES.filter(b => b.category === 'namaz').sort((a,b) => a.threshold - b.threshold);
         const streakBadges = BADGES.filter(b => b.category === 'streak').sort((a,b) => a.threshold - b.threshold);
 
-        // Yardımcı Fonksiyon: Sadece açılanları ve sıradaki ilk kilitliyi göster
         const renderBadgeGroup = (badges, containerId, currentValue) => {
             const container = document.getElementById(containerId);
             container.innerHTML = "";
@@ -2195,7 +2189,6 @@
             badges.forEach(badge => {
                 const isUnlocked = currentValue >= badge.threshold;
 
-                // Mantık: Kazanılmışsa GÖSTER veya Henüz hiç kilitli gösterilmediyse (sıradaki hedef) GÖSTER
                 if (isUnlocked || !nextLockedShown) {
                     
                     if(isUnlocked && !localData.earnedBadges.includes(badge.id)) {
@@ -2211,8 +2204,9 @@
                     const iconDisplay = isUnlocked ? badge.icon : '<i class="fas fa-lock" style="font-size:1.5rem; opacity:0.5;"></i>';
                     const statusText = isUnlocked ? 'Tamamlandı' : 'Kilitli';
                     
+                    /* BURADA CLICK EVENT EKLENDİ */
                     let badgeHTML = `
-                        <div class="flip-card">
+                        <div class="flip-card" onclick="this.classList.toggle('active-flip')">
                             <div class="flip-card-inner">
                                 <div class="flip-card-front ${frontClass}">
                                     <div class="badge-icon-large">${iconDisplay}</div>
@@ -2233,7 +2227,6 @@
                     
                     container.innerHTML += badgeHTML;
 
-                    // Eğer bu kilitliyse, "sıradaki hedefi gösterdim" diye işaretle, döngü sonrakileri göstermeyecek
                     if (!isUnlocked) nextLockedShown = true; 
                 }
             });
