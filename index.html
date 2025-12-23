@@ -455,9 +455,66 @@
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
-        .chart-period-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--input-bg); border-radius: 15px; padding: 6px; gap: 8px; border: 1px solid var(--border-color); margin-bottom: 10px; }
-        .chart-period-btn { text-align: center; padding: 12px 2px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border-radius: 12px; transition: all 0.3s ease; color: var(--text-color); background: transparent; border: 1px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .chart-period-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
+        /* --- PERFORMANS SEKMELERİ (YENİLENMİŞ) --- */
+        .chart-period-selector {
+            display: flex; /* Flexbox ile genişletme */
+            justify-content: space-between;
+            background: rgba(233, 236, 239, 0.7); /* Hafif transparan */
+            backdrop-filter: blur(10px); /* Buzlu cam efekti */
+            border-radius: 50px; /* Tam yuvarlak kenarlar */
+            padding: 6px;
+            gap: 5px; /* Butonlar arası boşluk */
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .chart-period-btn {
+            flex: 1; /* Butonların hepsi eşit genişlikte ve alanı doldurur */
+            text-align: center;
+            padding: 12px 0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 40px; /* Butonlar da yuvarlak */
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text-color);
+            background: transparent;
+            border: none;
+            opacity: 0.6;
+            white-space: nowrap;
+        }
+
+        /* Aktif Buton Stili */
+        .chart-period-btn.active {
+            background: linear-gradient(135deg, #609979 0%, #3e6b53 100%);
+            color: white;
+            opacity: 1;
+            box-shadow: 0 4px 15px rgba(96, 153, 121, 0.4); /* Parlama efekti */
+            transform: scale(1.05); /* Hafif büyüme */
+        }
+
+        /* --- ALT KUTU (GRADIENT ARKA PLAN) --- */
+        .gradient-chart-box {
+            /* Yukarıdan aşağı hafif yeşilden beyaza/koyuya geçiş */
+            background: linear-gradient(180deg, rgba(96, 153, 121, 0.12) 0%, rgba(255, 255, 255, 0) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 20px 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Gece Modu Ayarları */
+        body.dark-mode .chart-period-selector {
+            background: rgba(40, 40, 40, 0.6);
+        }
+        body.dark-mode .gradient-chart-box {
+            /* Gece modunda koyu yeşilden siyaha geçiş */
+            background: linear-gradient(180deg, rgba(96, 153, 121, 0.15) 0%, rgba(30, 30, 30, 0) 100%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
 
         /* Yeni Eklenen Buton Stilleri */
         .btn-tool-gradient { border: none; color: white !important; border-radius: 12px; padding: 8px 15px; font-weight: 600; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; }
@@ -688,19 +745,29 @@
 
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
+                    
+                    <!-- YENİLENEN GRAFİK ALANI -->
                     <div class="col-md-6">
-                        <div class="chart-container">
-                            <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
-                            <div class="d-flex justify-content-center mb-2">
-                                <div class="chart-period-selector">
-                                    <div class="chart-period-btn active" id="btn-period-weekly" onclick="switchChartPeriod('weekly', this)">Haftalık</div>
-                                    <div class="chart-period-btn" id="btn-period-monthly" onclick="switchChartPeriod('monthly', this)">Aylık</div>
-                                    <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
-                                </div>
+                        <div class="gradient-chart-box h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-3 px-2">
+                                <h5 class="fw-bold m-0"><i class="fas fa-chart-line me-2 text-success"></i>Performans</h5>
                             </div>
-                            <canvas id="lineChart" style="max-height: 250px;"></canvas>
+                            
+                            <!-- Genişletilmiş Seçici Butonlar -->
+                            <div class="chart-period-selector">
+                                <div class="chart-period-btn active" id="btn-period-weekly" onclick="switchChartPeriod('weekly', this)">Haftalık</div>
+                                <div class="chart-period-btn" id="btn-period-monthly" onclick="switchChartPeriod('monthly', this)">Aylık</div>
+                                <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
+                            </div>
+                            
+                            <!-- Grafik Alanı -->
+                            <div style="position: relative; height: 250px; width: 100%;">
+                                <canvas id="lineChart"></canvas>
+                            </div>
                         </div>
                     </div>
+                    <!-- YENİLENEN GRAFİK ALANI SONU -->
+
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
             </div>
@@ -2800,4 +2867,3 @@
 </script>
 </body>
 </html>
-
