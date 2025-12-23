@@ -42,9 +42,8 @@
             --calc-header-text: #ffffff; --calc-header-shadow: rgba(96, 153, 121, 0.3); 
             --placeholder-color: #6c757d; --pink-accent: #d63384; --pink-bg-light: #fce4ec; 
             --blue-accent: #0d6efd; --blue-bg-light: #e7f1ff; 
-            /* Onarılan Fade Box Renkleri */
-            --fade-box-bg: #ffffff; --fade-box-border: #dee2e6; 
-            --fade-box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+            --fade-box-bg: rgba(255, 255, 255, 0.6); --fade-box-border: rgba(0,0,0,0.05); 
+            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
             --calc-item-bg: #ffffff; --calc-item-border: #e9ecef; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
@@ -68,9 +67,8 @@
             --calc-box-bg: #2d2d2d; --calc-header-bg: linear-gradient(135deg, #0f5132, #146c43); 
             --calc-header-text: #e0e0e0; --calc-header-shadow: rgba(0, 0, 0, 0.5); 
             --placeholder-color: #bbbbbb; --pink-bg-light: #4a1b2d; --blue-bg-light: #0d2b4a; 
-            /* Onarılan Fade Box Dark */
-            --fade-box-bg: #2d2d2d; --fade-box-border: #444; 
-            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+            --fade-box-bg: rgba(255, 255, 255, 0.05); --fade-box-border: rgba(255,255,255,0.05); 
+            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
             --calc-item-bg: #262626; --calc-item-border: #333; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
@@ -308,7 +306,7 @@
             backdrop-filter: blur(5px); 
             box-shadow: var(--fade-box-shadow); 
             height: 100%; 
-            min-height: 75px; /* Yükseklik garantisi */
+            min-height: 75px; 
         }
         .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; font-size: 1.1rem; }
         .fade-box label { margin-bottom: 4px; opacity: 0.7; font-size: 0.7rem; letter-spacing: 0.5px; font-weight: 700; text-transform: uppercase; }
@@ -441,6 +439,40 @@
         .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
         
+        /* --- İSTATİSTİK SEKMELERİ (YENİLENMİŞ) --- */
+        .stats-tab-container {
+            display: flex;
+            background: rgba(233, 236, 239, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 6px;
+            gap: 5px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .stats-tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 0;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0.6;
+        }
+
+        .stats-tab-btn.active {
+            background: linear-gradient(135deg, #609979 0%, #3e6b53 100%);
+            color: white;
+            opacity: 1;
+            box-shadow: 0 4px 15px rgba(96, 153, 121, 0.4);
+            transform: scale(1.02);
+        }
+
         /* --- PERFORMANS SEKMELERİ (YENİLENMİŞ) --- */
         .chart-period-selector {
             display: flex;
@@ -490,6 +522,8 @@
         }
 
         body.dark-mode .chart-period-selector { background: rgba(40, 40, 40, 0.6); }
+        body.dark-mode .stats-tab-container { background: rgba(40, 40, 40, 0.6); }
+        
         body.dark-mode .gradient-chart-box {
             background: linear-gradient(180deg, rgba(96, 153, 121, 0.15) 0%, rgba(30, 30, 30, 0) 100%);
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -677,8 +711,8 @@
                 </div>
             </div>
             <div class="row g-3 mb-4 justify-content-center">
-                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
-                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
+                <div class="col-6 col-md-4"><div class="fade-box"><label>BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
+                <div class="col-6 col-md-4"><div class="fade-box"><label>GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
             
             <div id="prayerSplitContainer" class="prayer-split-layout">
@@ -1189,7 +1223,7 @@
         if(menuItem) menuItem.classList.add('active');
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        // NAVMAP (DÜZELTİLDİ: Sırada Ödül en sonda)
+        
         const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
         if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
@@ -1429,7 +1463,7 @@
             const newId = newActiveSection.id.replace('section-', '');
             
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            // NAVMAP (DÜZELTİLDİ: Sırada Ödül en sonda)
+            
             const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
             if (navMap[newId] !== undefined) document.querySelectorAll('.nav-item')[navMap[newId]].classList.add('active');
             
@@ -2672,14 +2706,14 @@
         const uiProps = [
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
-                boxClass: "kaza", 
-                progressColor: "bg-dark", btnClass: "pd-btn-minus", 
+                theme: "theme-oruc-kaza", bg: "bg-oruc-kaza", 
+                colorClass: "bg-dark", btnClass: "pd-btn-minus", 
                 countLabel: "Toplam Tutulan Kaza"
             },
             { 
                 key: 'nafile', name: "Nafile Oruç", icon: "fa-hands-holding-circle", 
-                boxClass: "nafile", 
-                progressColor: "bg-success", btnClass: "bg-success",
+                theme: "theme-oruc-nafile", bg: "bg-oruc-nafile", 
+                colorClass: "bg-success", btnClass: "bg-success",
                 countLabel: "Toplam Tutulan Nafile"
             }
         ];
