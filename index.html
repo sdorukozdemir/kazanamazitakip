@@ -496,7 +496,6 @@
 
         /* --- ALT KUTU (GRADIENT ARKA PLAN) --- */
         .gradient-chart-box {
-            /* Yukarıdan aşağı hafif yeşilden beyaza/koyuya geçiş */
             background: linear-gradient(180deg, rgba(96, 153, 121, 0.12) 0%, rgba(255, 255, 255, 0) 100%);
             border: 1px solid var(--border-color);
             border-radius: 24px;
@@ -511,9 +510,60 @@
             background: rgba(40, 40, 40, 0.6);
         }
         body.dark-mode .gradient-chart-box {
-            /* Gece modunda koyu yeşilden siyaha geçiş */
             background: linear-gradient(180deg, rgba(96, 153, 121, 0.15) 0%, rgba(30, 30, 30, 0) 100%);
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* --- ORUÇ İÇİN YENİ GRADIENT KUTULAR --- */
+        .fasting-box {
+            border-radius: 24px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Kaza (Gri/Koyu Ton) */
+        .fasting-box.kaza {
+            background: linear-gradient(180deg, rgba(73, 80, 87, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        .fasting-box.kaza .fasting-icon { color: #495057; }
+        .fasting-box.kaza .fasting-title { color: #212529; }
+
+        /* Nafile (Yeşil Ton) */
+        .fasting-box.nafile {
+            background: linear-gradient(180deg, rgba(25, 135, 84, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        .fasting-box.nafile .fasting-icon { color: #198754; }
+        .fasting-box.nafile .fasting-title { color: #0f5132; }
+
+        /* Gece Modu Uyumu */
+        body.dark-mode .fasting-box.kaza {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+        body.dark-mode .fasting-box.kaza .fasting-icon { color: #adb5bd; }
+        body.dark-mode .fasting-box.kaza .fasting-title { color: #e9ecef; }
+
+        body.dark-mode .fasting-box.nafile {
+            background: linear-gradient(180deg, rgba(25, 135, 84, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+        body.dark-mode .fasting-box.nafile .fasting-title { color: #75b798; }
+        body.dark-mode .fasting-box.nafile .fasting-icon { color: #20c997; }
+
+        /* Oruç Header Düzeni */
+        .fasting-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
         }
 
         /* Yeni Eklenen Buton Stilleri */
@@ -2284,217 +2334,6 @@
     }
     
     function calculateBestPeriods() {
-        if (!localData.logs) return { week: "-", month: "-", day: "-" };
-        
-        const weeklySums = {};
-        const monthlySums = {};
-        let maxDayVal = 0;
-        let maxDayDate = "";
-
-        Object.keys(localData.logs).forEach(date => {
-            const val = localData.logs[date];
-            if(val === 0) return;
-            
-            if(val > maxDayVal) {
-                maxDayVal = val;
-                maxDayDate = date;
-            }
-            
-            const d = new Date(date);
-            const mKey = d.toLocaleString('tr-TR', { month: 'long', year: 'numeric' });
-            monthlySums[mKey] = (monthlySums[mKey] || 0) + val;
-
-            const day = d.getDay();
-            const diff = d.getDate() - day + (day == 0 ? -6 : 1);
-            const monday = new Date(d); 
-            monday.setDate(diff);
-            const wKey = monday.toISOString().split('T')[0]; 
-            weeklySums[wKey] = (weeklySums[wKey] || 0) + val;
-        });
-
-        let maxW = 0, bestWDate = "";
-        for(let k in weeklySums) { 
-            if(weeklySums[k] > maxW) { maxW = weeklySums[k]; bestWDate = k; } 
-        }
-
-        let maxM = 0, bestMName = "";
-        for(let k in monthlySums) { 
-            if(monthlySums[k] > maxM) { maxM = monthlySums[k]; bestMName = k; } 
-        }
-
-        let weekStr = "-";
-        if(bestWDate) {
-            const m = new Date(bestWDate);
-            const s = new Date(m); 
-            s.setDate(m.getDate() + 6);
-            weekStr = `${m.getDate()} ${m.toLocaleString('tr-TR',{month:'short'})} - ${s.getDate()} ${s.toLocaleString('tr-TR',{month:'short'})} (${maxW})`;
-        }
-
-        let dayStr = "-";
-        if(maxDayDate) {
-             const d = new Date(maxDayDate);
-             dayStr = `${d.getDate()} ${d.toLocaleString('tr-TR', {month:'long'})} (${maxDayVal})`;
-        }
-
-        return {
-            week: weekStr,
-            month: maxM > 0 ? `${bestMName} (${maxM})` : "-",
-            day: dayStr
-        };
-    }
-
-    function renderStats() { 
-        let totalTarget = 0, totalDone = 0; 
-        let labels = [], remainingData = [], doneData = []; 
-        let maxRemaining = -1, maxName = "", maxDone = -1, bestName = ""; 
-        const days = getElapsedDays();
-
-        const gridContainer = document.getElementById('prayer-analysis-grid');
-        gridContainer.innerHTML = "";
-
-        localData.counts.forEach((c, index) => { 
-            totalTarget += c.target; 
-            totalDone += c.done; 
-            const remaining = Math.max(0, c.target - c.done); 
-            labels.push(c.name); 
-            remainingData.push(remaining); 
-            doneData.push(c.done); 
-            
-            if (remaining > maxRemaining) { maxRemaining = remaining; maxName = c.name; } 
-            if (c.done > maxDone) { maxDone = c.done; bestName = c.name; }
-
-            const avg = (c.done / days).toFixed(2);
-            const estText = formatTime(avg > 0 ? Math.ceil(remaining/avg) : 0);
-            
-            gridContainer.innerHTML += `
-            <div class="stat-accordion-item" id="stat-acc-item-${index}">
-                <div class="stat-accordion-header" onclick="toggleStatDetails(${index})">
-                    <div class="stat-header-content">
-                        <div class="stat-icon-wrapper"><i class="fas fa-mosque"></i></div>
-                        <div class="stat-title">${c.name}</div>
-                    </div>
-                    <i class="fas fa-chevron-down stat-arrow" id="icon-stat-${index}"></i>
-                </div>
-                <div class="stat-accordion-body" id="detail-stat-${index}">
-                    <div class="stat-detail-grid">
-                        <div class="stat-detail-item">
-                            <span class="stat-detail-label">KILINAN</span>
-                            <div class="stat-detail-value text-done">${c.done}</div>
-                        </div>
-                        <div class="stat-detail-item">
-                            <span class="stat-detail-label">KALAN</span>
-                            <div class="stat-detail-value text-rem">${remaining}</div>
-                        </div>
-                        <div class="stat-detail-item">
-                            <span class="stat-detail-label">GÜNLÜK ORT.</span>
-                            <div class="stat-detail-value text-primary">${avg}</div>
-                        </div>
-                        <div class="stat-detail-item">
-                            <span class="stat-detail-label">TAHMİNİ BİTİŞ</span>
-                            <div class="stat-detail-value text-warning" style="font-size:0.9rem;">${estText}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        }); 
-        
-        const periodStats = calculatePeriodStats(); 
-        const avg = (totalDone / days).toFixed(2); 
-    
-        const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
-        const weeklyDone = getWeeklyProgress(); 
-    
-        document.getElementById('statToday').innerText = dailyDone; 
-        document.getElementById('statWeekly').innerText = weeklyDone; 
-        document.getElementById('statMonthly').innerText = periodStats.monthly; 
-        document.getElementById('stat3Months').innerText = periodStats.months3;
-        document.getElementById('stat6Months').innerText = periodStats.months6;
-        document.getElementById('statYearly').innerText = periodStats.yearly;
-        document.getElementById('statAverage').innerText = avg;
-        
-        document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
-        document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
-        
-        const bestPeriods = calculateBestPeriods();
-        const maxStreakVal = calculateMaxStreak();
-        
-        document.getElementById('bestDayVal').innerText = bestPeriods.day;
-        
-        document.getElementById('bestWeekVal').innerText = bestPeriods.week;
-        document.getElementById('bestMonthVal').innerText = bestPeriods.month;
-        document.getElementById('longestStreakVal').innerText = maxStreakVal + " Gün";
-
-        const ctx1 = document.getElementById('completionChart').getContext('2d');
-        if (chartCompletion) chartCompletion.destroy();
-        
-        const gradDone = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradDone.addColorStop(0, '#88cbb9'); 
-        gradDone.addColorStop(1, '#609979'); 
-
-        const gradRem = ctx1.createLinearGradient(0, 0, 0, 200);
-        gradRem.addColorStop(0, '#ffb74d'); 
-        gradRem.addColorStop(1, '#fb8c00'); 
-
-        const isDark = document.body.classList.contains('dark-mode'); 
-        const lc = isDark ? '#fff' : '#666'; 
-        
-        chartCompletion = new Chart(ctx1, {
-            type: 'doughnut',
-            data: {
-                labels: ['Kılınan', 'Kalan'],
-                datasets: [{
-                    data: [totalDone, totalTarget - totalDone],
-                    backgroundColor: [gradDone, gradRem],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '60%', 
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: lc,
-                            usePointStyle: true,
-                            font: { family: 'Poppins' }
-                        }
-                    },
-                    datalabels: {
-                        color: '#fff', 
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
-                        borderRadius: 6,
-                        font: { weight: 'bold', family: 'Poppins', size: 11 },
-                        formatter: (val, ctx) => {
-                            let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                            let percentage = (val * 100 / sum).toFixed(1) + "%";
-                            if(percentage === "0.0%") return "";
-                            let label = ctx.chart.data.labels[ctx.dataIndex];
-                            return label + "\n" + percentage;
-                        },
-                        padding: 6,
-                        anchor: 'end',
-                        align: 'end',
-                        offset: -5,
-                        textAlign: 'center'
-                    },
-                    tooltip: {
-                        enabled: true,
-                        yAlign: 'bottom', 
-                    }
-                }
-            },
-            plugins: [ChartDataLabels]
-        }); 
-
-        const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
-        
-        renderHistory();
-    }
-    
-    function calculatePeriodStats() { 
         if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [], last90Data: [], last90Labels: [] }; 
         const today = new Date(); 
         
@@ -2636,15 +2475,15 @@
         const uiProps = [
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
-                theme: "theme-oruc-kaza", bg: "bg-oruc-kaza", 
-                colorClass: "bg-dark", btnClass: "btn-dark", 
-                countLabel: "Toplam Tutulan Kaza"
+                boxClass: "kaza", 
+                progressColor: "bg-dark", btnClass: "pd-btn-minus", 
+                countLabel: "Toplam Tutulan"
             },
             { 
                 key: 'nafile', name: "Nafile Oruç", icon: "fa-hands-holding-circle", 
-                theme: "theme-oruc-nafile", bg: "bg-oruc-nafile", 
-                colorClass: "bg-success", btnClass: "bg-success",
-                countLabel: "Toplam Tutulan Nafile"
+                boxClass: "nafile", 
+                progressColor: "bg-success", btnClass: "bg-success border-0", 
+                countLabel: "Toplam Nafile"
             }
         ];
         
@@ -2653,8 +2492,10 @@
         let menuHTML = `<div class="prayer-side-menu">`;
         uiProps.forEach((props, i) => {
             const activeClass = i === activeFastingIndex ? 'active' : '';
+            const themeClass = props.key === 'kaza' ? 'theme-oruc-kaza' : 'theme-oruc-nafile';
+            
             menuHTML += `
-            <div class="side-menu-item ${props.theme} ${activeClass}" onclick="setActiveFasting(${i})">
+            <div class="side-menu-item ${themeClass} ${activeClass}" onclick="setActiveFasting(${i})">
                 <i class="fas ${props.icon} side-menu-icon"></i>
                 <div class="side-menu-label">${props.name}</div>
             </div>`;
@@ -2666,18 +2507,18 @@
 
         if(!hasTarget) {
             cardContentHTML = `
-                <div class="text-center py-3">
-                    <div class="fs-1 fw-bold text-white mb-2">${data.done}</div>
-                    <div class="text-white-50 small text-uppercase fw-bold">${currentUI.countLabel}</div>
+                <div class="text-center py-4">
+                    <div class="display-1 fw-bold mb-2" style="color: var(--text-color);">${data.done}</div>
+                    <div class="text-muted small text-uppercase fw-bold ls-1">${currentUI.countLabel}</div>
                 </div>
                 
                 <div class="pd-actions mt-3">
                     <button class="pd-btn pd-btn-minus" onclick="changeFasting('${currentUI.key}', -1)"><i class="fas fa-minus"></i></button>
-                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass} border-0" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
+                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass}" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
                 </div>
 
-                <div class="text-center mt-3 pt-3 border-top border-white-10">
-                    <button class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleFastingTarget('${currentUI.key}')">
+                <div class="text-center mt-4">
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-4" onclick="toggleFastingTarget('${currentUI.key}')">
                         <i class="fas fa-bullseye me-2"></i> Hedef Belirle
                     </button>
                 </div>
@@ -2687,48 +2528,58 @@
             const pct = data.target > 0 ? (data.done / data.target) * 100 : 0;
             
             cardContentHTML = `
-                <div class="pd-stats-row">
-                    <div class="pd-input-group bg-white-10">
-                        <span class="pd-label text-white-50">${currentUI.key === 'kaza' ? 'BORÇ' : 'HEDEF'}</span>
-                        <input type="number" class="pd-input text-white" value="${data.target}" onchange="updateFastingTarget('${currentUI.key}', this.value)">
+                <div class="pd-stats-row mt-2">
+                    <div class="pd-input-group">
+                        <span class="pd-label">${currentUI.key === 'kaza' ? 'BORÇ' : 'HEDEF'}</span>
+                        <input type="number" class="pd-input" value="${data.target}" onchange="updateFastingTarget('${currentUI.key}', this.value)">
                     </div>
-                    <div class="pd-input-group bg-white-10">
-                        <span class="pd-label text-white">TUTULAN</span>
-                        <input type="number" class="pd-input text-white" value="${data.done}" onchange="updateFastingDone('${currentUI.key}', this.value)">
+                    <div class="pd-input-group">
+                        <span class="pd-label text-success">TUTULAN</span>
+                        <input type="number" class="pd-input text-success" value="${data.done}" onchange="updateFastingDone('${currentUI.key}', this.value)">
                     </div>
                 </div>
                 
                 <div class="pd-progress-container">
                     <div class="pd-progress-track">
-                        <div class="pd-progress-fill ${currentUI.colorClass}" style="width: ${pct}%"></div>
+                        <div class="pd-progress-fill ${currentUI.progressColor}" style="width: ${pct}%"></div>
                     </div>
-                    <div class="pd-progress-text text-white">%${pct.toFixed(1)} Tamamlandı</div>
+                    <div class="pd-progress-text">%${pct.toFixed(1)} Tamamlandı</div>
                 </div>
 
-                <div class="pd-actions mt-3">
+                <div class="pd-actions mt-4">
                     <button class="pd-btn pd-btn-minus" onclick="changeFasting('${currentUI.key}', -1)"><i class="fas fa-minus"></i></button>
-                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass} border-0" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
+                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass}" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
                 </div>
 
-                <div class="text-center mt-3 pt-3 border-top border-white-10">
-                    <button class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="toggleFastingTarget('${currentUI.key}')">
+                <div class="text-center mt-4">
+                    <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="toggleFastingTarget('${currentUI.key}')">
                         <i class="fas fa-times me-2"></i> Hedefi Kaldır
                     </button>
                 </div>
             `;
         }
 
-        let badgeHTML = hasTarget ? `<div class="pd-remaining-badge" style="background:#ffc107; color:#333;">${hasTarget && currentUI.key === 'kaza' ? 'Kalan: ' + Math.max(0, data.target - data.done) : 'Hedef Aktif'}</div>` : '';
-        
+        let badgeHTML = '';
+        if(hasTarget) {
+            if(currentUI.key === 'kaza') {
+                badgeHTML = `<span class="badge bg-danger rounded-pill shadow-sm">Kalan: ${Math.max(0, data.target - data.done)}</span>`;
+            } else {
+                badgeHTML = `<span class="badge bg-success rounded-pill shadow-sm">Hedef Aktif</span>`;
+            }
+        }
+
         let cardHTML = `
-            <div class="prayer-detail-card ${currentUI.bg}">
-                <div class="pd-content">
-                    <div class="pd-header">
-                        <div class="pd-title">
-                            <i class="fas ${currentUI.icon} me-2"></i> ${currentUI.name}
-                        </div>
+            <div style="flex:1;">
+                <div class="fasting-box ${currentUI.boxClass}">
+                    
+                    <div class="fasting-header">
+                        <h4 class="fw-bold m-0 fasting-title d-flex align-items-center">
+                            <i class="fas ${currentUI.icon} me-3 fasting-icon fs-3"></i>
+                            ${currentUI.name}
+                        </h4>
                         ${badgeHTML}
                     </div>
+
                     ${cardContentHTML}
                 </div>
             </div>
