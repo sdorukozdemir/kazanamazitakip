@@ -225,12 +225,36 @@
 
         .login-card, .goal-card, .zikr-card, .calculator-card, .settings-card, .prediction-card, .stat-card { border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         #login-screen { height: 100vh; display: flex; justify-content: center; align-items: center; background-color: var(--bg-color); }
-        .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; }
+        .goal-card { background: linear-gradient(135deg, #609979, #3e6b53); color: white; padding: 20px; margin-bottom: 20px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
         .goal-card.success-mode { border: 3px solid #ffc107; }
         .goal-input { width: 70px; text-align: center; font-weight: bold; border: none; border-radius: 5px; color: #609979; background: white; }
         .goal-content { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: margin-top: 15px; margin-bottom: 10px; }
         .streak-box { background: rgba(255, 255, 255, 0.2); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; }
         
+        /* Pasif Mod Stilleri (Muayyen Gün) */
+        .paused-card {
+            filter: grayscale(100%);
+            opacity: 0.6;
+            pointer-events: none;
+            position: relative;
+        }
+        .paused-card::after {
+            content: "DURAKLATILDI";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #333;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 10;
+            border: 2px solid #555;
+            letter-spacing: 2px;
+        }
+
         .tesbihat-list-container { display: flex; flex-direction: column; gap: 12px; }
         .t-list-card { background: var(--card-bg); border-radius: 16px; padding: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; border: 1px solid var(--border-color); }
         .t-list-card:active { transform: scale(0.98); }
@@ -466,94 +490,6 @@
         .btn-tool-clear { background: linear-gradient(135deg, #E74C3C, #C0392B); }
         .btn-tool-clear:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(192, 57, 43, 0.3); background: linear-gradient(135deg, #ec7063, #d35400); }
 
-        /* Tarih Kapsülü Stili */
-        .date-capsule {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            padding: 8px 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-            background-image: linear-gradient(135deg, rgba(96, 153, 121, 0.05) 0%, rgba(62, 107, 83, 0.05) 100%);
-        }
-        .date-row { display: flex; align-items: center; gap: 8px; justify-content: center; }
-        .date-divider-hor { display: none; }
-        .date-divider-ver { height: 15px; width: 1px; background: var(--border-color); margin: 0 5px; display: block; }
-        .date-capsule i { color: #609979; }
-
-        @media (max-width: 576px) {
-            .date-capsule {
-                flex-direction: column;
-                gap: 8px;
-                padding: 10px;
-                border-radius: 15px;
-                width: 100%;
-                align-items: center;
-            }
-            .date-divider-ver { display: none; }
-            .date-divider-hor { display: block; width: 100%; height: 1px; background: var(--border-color); opacity: 0.5; }
-        }
-
-        /* Hesaplama Sihirbazı Sekmeleri */
-        .calc-tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
-        .calc-tab-btn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-weight: 700; font-size: 0.9rem; transition: all 0.3s; }
-        .calc-tab-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); }
-
-        /* Radyo Kart Stili (Oruç Seçimi) */
-        .radio-card-group { display: flex; gap: 10px; width: 100%; margin-bottom: 15px; }
-        .radio-card-label {
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            flex: 1;
-            transition: all 0.2s;
-            background: var(--card-bg);
-            font-weight: 600;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .form-check-input { display: none; } /* Varsayılan radio butonunu gizle */
-        .form-check-input:checked + .radio-card-label {
-            background: linear-gradient(135deg, #609979, #3e6b53);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3);
-        }
-        .radio-card-icon { font-size: 1.1rem; opacity: 0.8; }
-
-        /* Fasting Input Updates */
-        .fasting-input-wrapper { display: flex; flex-direction: column; gap: 10px; }
-        .fasting-label-box { 
-            background: rgba(0,0,0,0.03); 
-            padding: 8px; 
-            border-radius: 8px; 
-            border: 1px solid var(--border-color); 
-            font-size: 0.75rem; 
-            font-weight: 700; 
-            color: var(--text-color); 
-            width: 100%; 
-            text-transform: uppercase; 
-            text-align: center;
-            white-space: normal; 
-        }
-
-        @media (max-width: 576px) {
-            .radio-card-group { flex-direction: column; }
-        }
-
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
     </style>
@@ -654,36 +590,40 @@
                 <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
                 <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
             </div>
-            <div class="row justify-content-center mb-4">
-                <div class="col-md-8 col-lg-6">
-                    <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
-                    <div id="goalCard" class="goal-card">
-                        <h4>🎯 Günlük Hedef</h4>
-                        <div class="goal-content">
-                            <span class="fs-5">Bugün</span><strong class="fs-1" id="dailyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)"><span class="fs-5">Kaza</span>
+            
+            <div id="dashboard-content-wrapper">
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-8 col-lg-6">
+                        <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
+                        <div id="goalCard" class="goal-card">
+                            <h4>🎯 Günlük Hedef</h4>
+                            <div class="goal-content">
+                                <span class="fs-5">Bugün</span><strong class="fs-1" id="dailyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="dailyGoalInput" class="goal-input" value="10" onchange="updateDailyGoal(this.value)"><span class="fs-5">Kaza</span>
+                            </div>
+                            <div class="progress mt-2" style="height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
+                            <div id="goalSuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🎉 Harika! Hedefe Ulaşıldı!</div>
+                            <div class="mt-2 streak-box"><i class="fas fa-fire text-warning"></i> <span>Zincir:</span><span id="streakValue" class="fw-bold text-warning">0</span> <span>Gün</span></div>
                         </div>
-                        <div class="progress mt-2" style="height: 8px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="dailyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
-                        <div id="goalSuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🎉 Harika! Hedefe Ulaşıldı!</div>
-                        <div class="mt-2 streak-box"><i class="fas fa-fire text-warning"></i> <span>Zincir:</span><span id="streakValue" class="fw-bold text-warning">0</span> <span>Gün</span></div>
-                    </div>
-                    <div id="weeklyCard" class="goal-card" style="background: linear-gradient(135deg, #0d6efd, #0dcaf0); margin-top: 20px;">
-                        <h4>🏆 Haftalık Meydan Okuma</h4>
-                        <div class="goal-content">
-                            <span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)">
+                        <div id="weeklyCard" class="goal-card" style="background: linear-gradient(135deg, #0d6efd, #0dcaf0); margin-top: 20px;">
+                            <h4>🏆 Haftalık Meydan Okuma</h4>
+                            <div class="goal-content">
+                                <span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)">
+                            </div>
+                            <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="weeklyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
+                            <div id="weeklySuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
+                            <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
                         </div>
-                        <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="weeklyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
-                        <div id="weeklySuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
-                        <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
                     </div>
                 </div>
-            </div>
-            <div class="row g-3 mb-4 justify-content-center">
-                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
-                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
-            </div>
-            
-            <div id="prayerSplitContainer" class="prayer-split-layout">
-            </div>
+                
+                <div class="row g-3 mb-4 justify-content-center">
+                    <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
+                    <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
+                </div>
+                
+                <div id="prayerSplitContainer" class="prayer-split-layout">
+                </div>
+            </div> <!-- Wrapper End -->
             
             <div id="summaryBar" class="summary-bar">
                 <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
@@ -1661,11 +1601,17 @@
         
         const isPaused = localData.gender === 'female' && localData.isMenstrualState;
         const pausedBadge = document.getElementById('pausedBadge');
-        const goalCard = document.getElementById('goalCard');
-        const weeklyCard = document.getElementById('weeklyCard');
-        const splitContainer = document.getElementById('prayerSplitContainer');
+        
+        // --- PAUSED MOD EFEKTİ ---
+        const contentWrapper = document.getElementById('dashboard-content-wrapper');
 
-        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); splitContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); splitContainer.classList.remove('paused-mode-overlay'); }
+        if (isPaused) { 
+            pausedBadge.style.display = 'block'; 
+            if(contentWrapper) contentWrapper.classList.add('paused-card');
+        } else { 
+            pausedBadge.style.display = 'none'; 
+            if(contentWrapper) contentWrapper.classList.remove('paused-card');
+        }
 
         document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
