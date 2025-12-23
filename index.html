@@ -420,41 +420,6 @@
         .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
         
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: none !important; box-shadow: none; z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
-        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        #gender-selection-modal { display: none; z-index: 2005; }
-        .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
-        .gender-option:hover { border-color: #609979; }
-        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
-        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
-        .menstrual-toggle-container { margin-bottom: 15px; padding: 15px 20px; background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); border-radius: 50px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15); }
-        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
-        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
-        .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
-        .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
-        .fade-box { background: var(--fade-box-bg); border: 1px solid var(--fade-box-border); border-radius: 12px; padding: 8px 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); box-shadow: var(--fade-box-shadow); height: 100%; min-height: 70px; }
-        .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; }
-        .fade-box label { margin-bottom: 2px; opacity: 0.7; }
-        .custom-alert-box { background: var(--card-bg); border-left: 5px solid #17a2b8; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 20px; font-size: 0.9rem; }
-        .custom-alert-box strong { color: #17a2b8; }
-        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; }
-        .custom-alert-tip strong { color: #856404; }
-        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
-        body.dark-mode .custom-alert-tip strong { color: #ffc107; }
-        .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
-        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
-        .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
-        .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
-        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
-        @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
-        .toast-success { border-color: #609979; } .toast-success i { color: #609979; font-size: 1.2rem; }
-        .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
-        .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
-        
         /* --- PERFORMANS SEKMELERİ (YENİLENMİŞ) --- */
         .chart-period-selector {
             display: flex;
@@ -568,6 +533,12 @@
         .btn-tool-clear { background: linear-gradient(135deg, #E74C3C, #C0392B); }
         .btn-tool-clear:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(192, 57, 43, 0.3); background: linear-gradient(135deg, #ec7063, #d35400); }
 
+        /* BOTTOM NAV DÜZENLEMESİ (Sıralama değişimini buradan yönetiyoruz) */
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: none !important; box-shadow: none; z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
+        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
     </style>
@@ -645,9 +616,9 @@
         <ul class="list-unstyled components">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
-            <li id="menu-achievements" onclick="showSection('achievements')"><i class="fas fa-medal me-3"></i> Başarılar & Ödül</li>
-            <li id="menu-fasting" onclick="showSection('fasting')"><i class="fas fa-utensils me-3"></i> Oruç Takip</li>
+            <li id="menu-fasting" onclick="showSection('fasting')"><i class="fas fa-star-and-crescent me-3"></i> Oruç Takip</li>
             <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
+            <li id="menu-achievements" onclick="showSection('achievements')"><i class="fas fa-medal me-3"></i> Başarılar & Ödül</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
             <li id="menu-settings" onclick="showSection('settings')"><i class="fas fa-cog me-3"></i> Yedekleme & Ayarlar</li>
             <li onclick="toggleDarkMode()"><i class="fas fa-moon me-3"></i> <span id="darkModeText">Gece Modu</span></li>
@@ -1183,7 +1154,8 @@
     function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
-    const SECTION_IDS = ['dashboard', 'achievements', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
+    // SECTION IDS GÜNCELLENDİ (Kaydırma sırası için)
+    const SECTION_IDS = ['dashboard', 'stats', 'fasting', 'tesbihat', 'achievements', 'calculator', 'settings'];
     
     function getSectionIndex(id) {
         return SECTION_IDS.indexOf(id.replace('section-', ''));
@@ -1197,7 +1169,8 @@
         if(menuItem) menuItem.classList.add('active');
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        // GÜNCELLENMİŞ HARİTA (Alt menüdeki yeni sıraya göre)
+        
+        // NAV MAP GÜNCELLENDİ (Alt menü aktifliği için)
         const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
         if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
@@ -1437,7 +1410,8 @@
             const newId = newActiveSection.id.replace('section-', '');
             
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            // GÜNCELLENMİŞ HARİTA (Alt menüdeki yeni sıraya göre)
+            
+            // NAV MAP GÜNCELLENDİ (Swipe sonrası aktiflik için)
             const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
             if (navMap[newId] !== undefined) document.querySelectorAll('.nav-item')[navMap[newId]].classList.add('active');
             
@@ -2681,7 +2655,7 @@
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
                 theme: "theme-oruc-kaza", bg: "bg-oruc-kaza", 
-                colorClass: "bg-dark", btnClass: "btn-dark", 
+                colorClass: "bg-dark", btnClass: "pd-btn-minus", 
                 countLabel: "Toplam Tutulan Kaza"
             },
             { 
