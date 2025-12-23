@@ -509,6 +509,58 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
+        /* --- ORUÇ İÇİN YENİ GRADIENT KUTULAR --- */
+        .fasting-box {
+            border-radius: 24px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Kaza (Gri/Koyu Ton) */
+        .fasting-box.kaza {
+            background: linear-gradient(180deg, rgba(73, 80, 87, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        .fasting-box.kaza .fasting-icon { color: #495057; }
+        .fasting-box.kaza .fasting-title { color: #212529; }
+
+        /* Nafile (Yeşil Ton) */
+        .fasting-box.nafile {
+            background: linear-gradient(180deg, rgba(25, 135, 84, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        .fasting-box.nafile .fasting-icon { color: #198754; }
+        .fasting-box.nafile .fasting-title { color: #0f5132; }
+
+        /* Gece Modu Uyumu */
+        body.dark-mode .fasting-box.kaza {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+        body.dark-mode .fasting-box.kaza .fasting-icon { color: #adb5bd; }
+        body.dark-mode .fasting-box.kaza .fasting-title { color: #e9ecef; }
+
+        body.dark-mode .fasting-box.nafile {
+            background: linear-gradient(180deg, rgba(25, 135, 84, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+        body.dark-mode .fasting-box.nafile .fasting-title { color: #75b798; }
+        body.dark-mode .fasting-box.nafile .fasting-icon { color: #20c997; }
+
+        /* Oruç Header Düzeni */
+        .fasting-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
         /* Yeni Eklenen Buton Stilleri */
         .btn-tool-gradient { border: none; color: white !important; border-radius: 12px; padding: 8px 15px; font-weight: 600; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; }
         .btn-tool-copy { background: linear-gradient(135deg, #5D6D7E, #34495E); }
@@ -867,10 +919,10 @@
 
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
-    <div class="nav-item" onclick="showSection('achievements'); activateNav(this)"><i class="fas fa-medal"></i><span style="font-size: 0.65rem;">Ödül</span></div>
     <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>Analiz</span></div>
-    <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-utensils"></i><span>Oruç</span></div>
+    <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-star-and-crescent"></i><span>Oruç</span></div>
     <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Zikir</span></div>
+    <div class="nav-item" onclick="showSection('achievements'); activateNav(this)"><i class="fas fa-medal"></i><span style="font-size: 0.65rem;">Ödül</span></div>
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
 </div>
 
@@ -1145,7 +1197,8 @@
         if(menuItem) menuItem.classList.add('active');
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
+        // GÜNCELLENMİŞ HARİTA (Alt menüdeki yeni sıraya göre)
+        const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
         if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
         triggerLogic(targetId);
@@ -1384,7 +1437,8 @@
             const newId = newActiveSection.id.replace('section-', '');
             
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
+            // GÜNCELLENMİŞ HARİTA (Alt menüdeki yeni sıraya göre)
+            const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
             if (navMap[newId] !== undefined) document.querySelectorAll('.nav-item')[navMap[newId]].classList.add('active');
             
             document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
@@ -2640,6 +2694,19 @@
         
         const currentUI = uiProps[activeFastingIndex];
         
+        let menuHTML = `<div class="prayer-side-menu">`;
+        uiProps.forEach((props, i) => {
+            const activeClass = i === activeFastingIndex ? 'active' : '';
+            const themeClass = props.key === 'kaza' ? 'theme-oruc-kaza' : 'theme-oruc-nafile';
+            
+            menuHTML += `
+            <div class="side-menu-item ${themeClass} ${activeClass}" onclick="setActiveFasting(${i})">
+                <i class="fas ${props.icon} side-menu-icon"></i>
+                <div class="side-menu-label">${props.name}</div>
+            </div>`;
+        });
+        menuHTML += `</div>`;
+
         let cardContentHTML = '';
         const hasTarget = data.hasTarget === true;
 
