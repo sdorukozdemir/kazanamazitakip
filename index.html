@@ -466,6 +466,31 @@
         .btn-tool-clear { background: linear-gradient(135deg, #E74C3C, #C0392B); }
         .btn-tool-clear:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(192, 57, 43, 0.3); background: linear-gradient(135deg, #ec7063, #d35400); }
 
+        /* Tarih Kapsülü Stili */
+        .date-capsule {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            background-image: linear-gradient(135deg, rgba(96, 153, 121, 0.05) 0%, rgba(62, 107, 83, 0.05) 100%);
+        }
+        .date-capsule i { color: #609979; }
+        .date-capsule .divider { height: 15px; width: 1px; background: var(--border-color); margin: 0 5px; }
+
+        /* Hesaplama Sihirbazı Sekmeleri */
+        .calc-tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+        .calc-tab-btn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-weight: 700; font-size: 0.9rem; transition: all 0.3s; }
+        .calc-tab-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); }
+
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
     </style>
@@ -555,6 +580,13 @@
 
     <div id="content">
         <div id="section-dashboard" class="app-section active">
+            <!-- TARIH KAPSÜLÜ -->
+            <div class="d-flex justify-content-center">
+                <div id="dateDisplayCapsule" class="date-capsule" style="display:none;">
+                    <!-- JS ile doldurulacak -->
+                </div>
+            </div>
+
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
                 <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
                 <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
@@ -756,23 +788,89 @@
         </div>
 
         <div id="section-calculator" class="app-section">
-            <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
+            <h3 class="app-header">Hesaplama Sihirbazı</h3>
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="calculator-card">
-                        <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
-                            <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
-                            <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
+                        <!-- Sekmeler -->
+                        <div class="calc-tabs">
+                            <button class="calc-tab-btn active" id="btn-tab-namaz" onclick="switchCalcTab('namaz')"><i class="fas fa-mosque me-2"></i>Namaz</button>
+                            <button class="calc-tab-btn" id="btn-tab-oruc" onclick="switchCalcTab('oruc')"><i class="fas fa-utensils me-2"></i>Oruç</button>
                         </div>
-                        <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
-                        <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
-                            <button class="btn-tool-gradient btn-tool-copy" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button>
-                            <button class="btn-tool-gradient btn-tool-copy" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button>
-                            <button class="btn-tool-gradient btn-tool-clear" onclick="resetCalculatorInputs()"><i class="fas fa-trash-alt me-1"></i> Temizle</button>
+
+                        <!-- NAMAZ HESAPLAMA -->
+                        <div id="calc-tab-namaz">
+                            <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
+                                <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
+                                <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
+                            </div>
+                            <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
+                            <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
+                                <button class="btn-tool-gradient btn-tool-copy" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button>
+                                <button class="btn-tool-gradient btn-tool-copy" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button>
+                                <button class="btn-tool-gradient btn-tool-clear" onclick="resetCalculatorInputs()"><i class="fas fa-trash-alt me-1"></i> Temizle</button>
+                            </div>
+                            <div id="calcRowsContainer"></div>
+                            <hr class="my-4">
+                            <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Namaz Hesabını Onayla ve Aktar</button>
                         </div>
-                        <div id="calcRowsContainer"></div>
-                        <hr class="my-4">
-                        <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar</button>
+
+                        <!-- ORUÇ HESAPLAMA -->
+                        <div id="calc-tab-oruc" style="display: none;">
+                            <div class="custom-alert-box custom-alert-tip">
+                                <i class="fas fa-info-circle me-2"></i> Oruç kazası için hesaplama yapılırken, ihtiyatlı olması açısından her Ramazan ayı <strong>30 gün</strong> olarak kabul edilmiştir.
+                            </div>
+                            
+                            <div class="calc-row mt-4">
+                                <div class="calc-header">Oruç Kaza Hesabı</div>
+                                <div class="calc-body">
+                                    <div class="calc-item">
+                                        <div class="calc-group-box">
+                                            <span class="calc-label-small">Başlangıç Yılı</span>
+                                            <input type="number" id="fastingStartYear" class="form-control date-input" placeholder="YYYY (Örn: 2015)">
+                                        </div>
+                                    </div>
+                                    <div class="calc-item">
+                                        <div class="calc-group-box">
+                                            <span class="calc-label-small">Bitiş Yılı</span>
+                                            <input type="number" id="fastingEndYear" class="form-control date-input" placeholder="YYYY (Örn: 2020)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-3">
+                                    <div class="d-flex justify-content-center gap-3 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="fastingType" id="fastingTypeFull" value="full" checked onchange="toggleFastingPartialInput(false)">
+                                            <label class="form-check-label" for="fastingTypeFull">Hiç Tutmadım (Yıl x 30)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="fastingType" id="fastingTypePartial" value="partial" onchange="toggleFastingPartialInput(true)">
+                                            <label class="form-check-label" for="fastingTypePartial">Kısmi/Mazeret</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="fastingPartialContainer" class="fade-box mb-3" style="display: none; background: var(--input-bg);">
+                                        <label class="small fw-bold text-muted mb-1">YILDA ORTALAMA TUTULMAYAN GÜN</label>
+                                        <input type="number" id="fastingDaysPerYear" class="form-control text-center fw-bold" style="width: 100px; margin: 0 auto;" value="6">
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button class="btn btn-dark w-100 rounded-pill fw-bold" onclick="calculateFastingDebt()">
+                                            <i class="fas fa-calculator me-2"></i> Hesapla
+                                        </button>
+                                    </div>
+                                    
+                                    <div id="fastingResultBox" class="mt-4 text-center" style="display: none;">
+                                        <h5 class="text-secondary fw-bold">Hesaplanan Oruç Borcu</h5>
+                                        <div class="display-4 fw-bold text-danger mb-3" id="fastingCalcResult">0</div>
+                                        <button class="btn btn-danger w-100 py-2 rounded-pill fw-bold" onclick="applyFastingDebt()">
+                                            <i class="fas fa-plus-circle me-2"></i> Borca Ekle ve Kaydet
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -884,7 +982,8 @@
         startDate: new Date().toISOString().split('T')[0],
         gender: null, 
         menstrualDaysPerMonth: 6,
-        isMenstrualState: false, 
+        isMenstrualState: false,
+        lastAppOpenDate: getIsoDate(new Date()), 
         daily: { date: getCurrentDateSimple(), counts: [0,0,0,0,0], target: 10 },
         weeklyTarget: 50,
         streak: { current: 0, lastAchievedDate: "" },
@@ -1018,6 +1117,8 @@
         if (!localData.history) localData.history = [];
         if (!localData.earnedBadges) localData.earnedBadges = [];
         if (!localData.startDate) localData.startDate = new Date().toISOString().split('T')[0];
+        
+        if (!localData.lastAppOpenDate) localData.lastAppOpenDate = getIsoDate(new Date());
     }
 
     function showToast(message, type = 'success') {
@@ -1071,7 +1172,17 @@
         }
     }
 
-    function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
+    function toggleMenstrualState(isChecked) { 
+        localData.isMenstrualState = isChecked; 
+        
+        // Ramazan kontrolü ve gün ekleme mantığı
+        if (isChecked) {
+            checkRamadanMissedDays(); // Manuel açıldığında o gün için kontrol et
+        }
+        
+        saveToCloud(); 
+        renderApp(); 
+    }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
     const SECTION_IDS = ['dashboard', 'achievements', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
@@ -1361,6 +1472,64 @@
     function toggleSidebar() { triggerHaptic(); document.getElementById('sidebar').classList.toggle('active'); document.getElementById('overlay').classList.toggle('active'); }
     function activateNav(element) { triggerHaptic(); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); }
 
+    function updateDateDisplay() {
+        try {
+            const today = new Date();
+            const optionsMiladi = { day: 'numeric', month: 'long', year: 'numeric' };
+            const miladiStr = today.toLocaleDateString('tr-TR', optionsMiladi);
+
+            const hicriStr = new Intl.DateTimeFormat('tr-TR-u-ca-islamic-umalqura', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).format(today);
+
+            const capsule = document.getElementById('dateDisplayCapsule');
+            capsule.innerHTML = `<i class="fas fa-calendar-day"></i> ${miladiStr} <div class="divider"></div> <i class="fas fa-moon"></i> ${hicriStr}`;
+            capsule.style.display = 'inline-flex';
+            
+            return hicriStr; // Ramazan kontrolü için döndür
+        } catch (e) {
+            console.error("Date format error", e);
+            return "";
+        }
+    }
+
+    function checkRamadanMissedDays(currentHijriStr) {
+        // Eğer Hicri tarih string'i verilmediyse tekrar hesapla
+        if (!currentHijriStr) currentHijriStr = updateDateDisplay();
+
+        const isRamadan = currentHijriStr.includes("Ramazan");
+        const todayIso = getIsoDate(new Date());
+
+        // 1. Durum: Kadın kullanıcı, Muayyen Modu Açık ve Ramazan ayı
+        if (localData.gender === 'female' && localData.isMenstrualState && isRamadan) {
+            const lastOpen = localData.lastAppOpenDate;
+            
+            // Eğer bugün ile son açılış arasında fark varsa
+            if (lastOpen !== todayIso) {
+                const d1 = new Date(lastOpen);
+                const d2 = new Date(todayIso);
+                const diffTime = Math.abs(d2 - d1);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                
+                if (diffDays > 0) {
+                    // Borca ekle
+                    localData.fasting.kaza.target = (localData.fasting.kaza.target || 0) + diffDays;
+                    localData.fasting.kaza.hasTarget = true;
+                    
+                    addHistory("Ramazan Orucu (Muayyen)", localData.fasting.kaza.target - diffDays, localData.fasting.kaza.target);
+                    
+                    showModal("Ramazan Tespit Edildi", `Muayyen gün modunuz açık olduğu için, uygulamayı açmadığınız son ${diffDays} gün kaza orucu borcunuza eklendi.`);
+                }
+            }
+        }
+        
+        // Son açılış tarihini güncelle
+        localData.lastAppOpenDate = todayIso;
+        saveToCloud();
+    }
+
     function renderApp() {
         if(!localData.counts) return;
         const todayISO = getIsoDate(new Date());
@@ -1371,6 +1540,9 @@
         }
         recalculateStreak();
         
+        const hijriStr = updateDateDisplay();
+        checkRamadanMissedDays(hijriStr);
+
         const dateInput = document.getElementById('startDate');
         if(dateInput.type !== 'date') { dateInput.value = formatDateTR(localData.startDate); } else { dateInput.value = localData.startDate; }
         
@@ -1532,9 +1704,76 @@
         }, 100);
     }
     
-    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date')" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date')" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
+    // --- HESAPLAMA SİHİRBAZI MANTIĞI ---
+    
+    // Sekme Değiştirme
+    window.switchCalcTab = function(tabName) {
+        // Buton stilleri
+        document.querySelectorAll('.calc-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('btn-tab-' + tabName).classList.add('active');
+        
+        // İçerik göster/gizle
+        document.getElementById('calc-tab-namaz').style.display = (tabName === 'namaz') ? 'block' : 'none';
+        document.getElementById('calc-tab-oruc').style.display = (tabName === 'oruc') ? 'block' : 'none';
+    }
+
+    // Namaz Hesaplama (Eski Kod)
+    window.renderCalculatorRows = function() { 
+        const c = document.getElementById('calcRowsContainer'); 
+        if(!c || c.innerHTML.trim()) return; 
+        const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; 
+        prayerTypes.forEach((p, i) => { 
+            c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date')" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date')" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; 
+        }); 
+    };
+    
     window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
     
+    // Oruç Hesaplama (YENİ)
+    window.toggleFastingPartialInput = function(isPartial) {
+        document.getElementById('fastingPartialContainer').style.display = isPartial ? 'block' : 'none';
+        document.getElementById('fastingResultBox').style.display = 'none'; // Sonucu gizle
+    }
+
+    window.calculateFastingDebt = function() {
+        const startY = parseInt(document.getElementById('fastingStartYear').value);
+        const endY = parseInt(document.getElementById('fastingEndYear').value);
+        
+        if (!startY || !endY || startY > endY) {
+            showToast("Lütfen geçerli bir yıl aralığı giriniz.", "warning");
+            return;
+        }
+
+        const years = endY - startY + 1; // Başlangıç ve bitiş dahil
+        let debt = 0;
+
+        const isPartial = document.getElementById('fastingTypePartial').checked;
+        
+        if (isPartial) {
+            const daysPerYear = parseInt(document.getElementById('fastingDaysPerYear').value) || 0;
+            debt = years * daysPerYear;
+        } else {
+            // Tam kaza (Her yılı 30 gün say)
+            debt = years * 30;
+        }
+
+        document.getElementById('fastingCalcResult').innerText = debt;
+        document.getElementById('fastingResultBox').style.display = 'block';
+    }
+
+    window.applyFastingDebt = function() {
+        const debt = parseInt(document.getElementById('fastingCalcResult').innerText) || 0;
+        if(debt > 0) {
+            showModal("Onay", `${debt} gün Kaza Orucu borcu eklensin mi? (Mevcut borcun üzerine eklenir)`, () => {
+                localData.fasting.kaza.target = (localData.fasting.kaza.target || 0) + debt;
+                localData.fasting.kaza.hasTarget = true;
+                saveToCloud();
+                showSection('fasting');
+                showToast("Oruç borcu eklendi.", "success");
+            });
+        }
+    }
+
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
     window.upD = function(i, v) { 
         const val = parseInt(v) || 0;
@@ -2106,7 +2345,6 @@
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
     
-    // --- YENİ EKLENEN TEMİZLEME FONKSİYONU ---
     window.resetCalculatorInputs = function() {
         showModal("Sıfırla", "Hesaplama sihirbazındaki tüm tarihleri temizlemek istiyor musunuz?", () => {
             for(let i=0; i<5; i++) {
@@ -2116,6 +2354,9 @@
                 inputs[1].value = ""; 
                 document.getElementById(`res-${i}`).value = 0; 
             }
+            document.getElementById('fastingStartYear').value = "";
+            document.getElementById('fastingEndYear').value = "";
+            document.getElementById('fastingResultBox').style.display = 'none';
             showToast("Tarihler temizlendi.", "success");
         });
     }
