@@ -490,6 +490,94 @@
         .btn-tool-clear { background: linear-gradient(135deg, #E74C3C, #C0392B); }
         .btn-tool-clear:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(192, 57, 43, 0.3); background: linear-gradient(135deg, #ec7063, #d35400); }
 
+        /* Tarih Kapsülü Stili */
+        .date-capsule {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            background-image: linear-gradient(135deg, rgba(96, 153, 121, 0.05) 0%, rgba(62, 107, 83, 0.05) 100%);
+        }
+        .date-row { display: flex; align-items: center; gap: 8px; justify-content: center; }
+        .date-divider-hor { display: none; }
+        .date-divider-ver { height: 15px; width: 1px; background: var(--border-color); margin: 0 5px; display: block; }
+        .date-capsule i { color: #609979; }
+
+        @media (max-width: 576px) {
+            .date-capsule {
+                flex-direction: column;
+                gap: 8px;
+                padding: 10px;
+                border-radius: 15px;
+                width: 100%;
+                align-items: center;
+            }
+            .date-divider-ver { display: none; }
+            .date-divider-hor { display: block; width: 100%; height: 1px; background: var(--border-color); opacity: 0.5; }
+        }
+
+        /* Hesaplama Sihirbazı Sekmeleri */
+        .calc-tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+        .calc-tab-btn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-weight: 700; font-size: 0.9rem; transition: all 0.3s; }
+        .calc-tab-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); }
+
+        /* Radyo Kart Stili (Oruç Seçimi) */
+        .radio-card-group { display: flex; gap: 10px; width: 100%; margin-bottom: 15px; }
+        .radio-card-label {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            flex: 1;
+            transition: all 0.2s;
+            background: var(--card-bg);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .form-check-input { display: none; } /* Varsayılan radio butonunu gizle */
+        .form-check-input:checked + .radio-card-label {
+            background: linear-gradient(135deg, #609979, #3e6b53);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3);
+        }
+        .radio-card-icon { font-size: 1.1rem; opacity: 0.8; }
+
+        /* Fasting Input Updates */
+        .fasting-input-wrapper { display: flex; flex-direction: column; gap: 10px; }
+        .fasting-label-box { 
+            background: rgba(0,0,0,0.03); 
+            padding: 8px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            color: var(--text-color); 
+            width: 100%; 
+            text-transform: uppercase; 
+            text-align: center;
+            white-space: normal; 
+        }
+
+        @media (max-width: 576px) {
+            .radio-card-group { flex-direction: column; }
+        }
+
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
     </style>
@@ -1633,6 +1721,7 @@
         if(document.getElementById('prayerDetailCard')) {
             updateCardUI(activeRowIndex);
         } else {
+            const splitContainer = document.getElementById('prayerSplitContainer');
             splitContainer.innerHTML = ""; 
             let menuHTML = `<div class="prayer-side-menu">`;
             const iconList = ["fa-cloud-sun", "fa-sun", "fa-cloud-sun", "fa-moon", "fa-star"]; 
@@ -2744,58 +2833,6 @@
         renderHistory();
     }
     
-    function calculatePeriodStats() { 
-        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [], last90Data: [], last90Labels: [] }; 
-        const today = new Date(); 
-        
-        const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-        let monthlyTotal = 0;
-
-        let weeklyTotal = 0, m3 = 0, m6 = 0, y1 = 0; 
-        let last7Data = [], last7Labels = []; 
-        let last30Data = [], last30Labels = []; 
-        let last90Data = [], last90Labels = []; 
-
-        for(let i=6; i>=0; i--) { 
-            const d = new Date(); 
-            d.setDate(today.getDate() - i); 
-            const iso = getIsoDate(d); 
-            const val = localData.logs[iso] || 0; 
-            last7Data.push(val); 
-            last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'})); 
-        } 
-        for(let i=29; i>=0; i--) { 
-            const d = new Date(); 
-            d.setDate(today.getDate() - i); 
-            const iso = getIsoDate(d); 
-            const val = localData.logs[iso] || 0; 
-            last30Data.push(val); 
-            last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
-        } 
-        for(let i=89; i>=0; i--) { 
-            const d = new Date(); 
-            d.setDate(today.getDate() - i); 
-            const iso = getIsoDate(d); 
-            const val = localData.logs[iso] || 0; 
-            last90Data.push(val); 
-            last90Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
-        }
-
-        const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3); 
-        const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6); 
-        const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1); 
-        
-        Object.keys(localData.logs).forEach(dateKey => { 
-            const d = new Date(dateKey); 
-            const val = localData.logs[dateKey]; 
-            if(d >= currentMonthStart) monthlyTotal += val;
-            if(d >= threeMonthsAgo) m3 += val; 
-            if(d >= sixMonthsAgo) m6 += val; 
-            if(d >= oneYearAgo) y1 += val; 
-        }); 
-        
-        return { monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels, last90Data, last90Labels }; 
-    }
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
     window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
