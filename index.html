@@ -457,26 +457,26 @@
         
         /* --- PERFORMANS SEKMELERİ (YENİLENMİŞ) --- */
         .chart-period-selector {
-            display: flex; /* Flexbox ile genişletme */
+            display: flex;
             justify-content: space-between;
-            background: rgba(233, 236, 239, 0.7); /* Hafif transparan */
-            backdrop-filter: blur(10px); /* Buzlu cam efekti */
-            border-radius: 50px; /* Tam yuvarlak kenarlar */
+            background: rgba(233, 236, 239, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
             padding: 6px;
-            gap: 5px; /* Butonlar arası boşluk */
+            gap: 5px;
             border: 1px solid var(--border-color);
             margin-bottom: 20px;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
         }
 
         .chart-period-btn {
-            flex: 1; /* Butonların hepsi eşit genişlikte ve alanı doldurur */
+            flex: 1;
             text-align: center;
             padding: 12px 0;
             font-size: 0.85rem;
             font-weight: 700;
             cursor: pointer;
-            border-radius: 40px; /* Butonlar da yuvarlak */
+            border-radius: 40px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: var(--text-color);
             background: transparent;
@@ -485,18 +485,15 @@
             white-space: nowrap;
         }
 
-        /* Aktif Buton Stili */
         .chart-period-btn.active {
             background: linear-gradient(135deg, #609979 0%, #3e6b53 100%);
             color: white;
             opacity: 1;
-            box-shadow: 0 4px 15px rgba(96, 153, 121, 0.4); /* Parlama efekti */
-            transform: scale(1.05); /* Hafif büyüme */
+            box-shadow: 0 4px 15px rgba(96, 153, 121, 0.4);
+            transform: scale(1.05);
         }
 
-        /* --- ALT KUTU (GRADIENT ARKA PLAN) --- */
         .gradient-chart-box {
-            /* Yukarıdan aşağı hafif yeşilden beyaza/koyuya geçiş */
             background: linear-gradient(180deg, rgba(96, 153, 121, 0.12) 0%, rgba(255, 255, 255, 0) 100%);
             border: 1px solid var(--border-color);
             border-radius: 24px;
@@ -506,66 +503,10 @@
             overflow: hidden;
         }
 
-        /* Gece Modu Ayarları */
-        body.dark-mode .chart-period-selector {
-            background: rgba(40, 40, 40, 0.6);
-        }
+        body.dark-mode .chart-period-selector { background: rgba(40, 40, 40, 0.6); }
         body.dark-mode .gradient-chart-box {
-            /* Gece modunda koyu yeşilden siyaha geçiş */
             background: linear-gradient(180deg, rgba(96, 153, 121, 0.15) 0%, rgba(30, 30, 30, 0) 100%);
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        /* --- ORUÇ İÇİN YENİ GRADIENT KUTULAR --- */
-        .fasting-box {
-            border-radius: 24px;
-            padding: 25px 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        /* Kaza (Gri/Koyu Ton) */
-        .fasting-box.kaza {
-            background: linear-gradient(180deg, rgba(73, 80, 87, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-        }
-        .fasting-box.kaza .fasting-icon { color: #495057; }
-        .fasting-box.kaza .fasting-title { color: #212529; }
-
-        /* Nafile (Yeşil Ton) */
-        .fasting-box.nafile {
-            background: linear-gradient(180deg, rgba(25, 135, 84, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-        }
-        .fasting-box.nafile .fasting-icon { color: #198754; }
-        .fasting-box.nafile .fasting-title { color: #0f5132; }
-
-        /* Gece Modu Uyumu */
-        body.dark-mode .fasting-box.kaza {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
-        }
-        body.dark-mode .fasting-box.kaza .fasting-icon { color: #adb5bd; }
-        body.dark-mode .fasting-box.kaza .fasting-title { color: #e9ecef; }
-
-        body.dark-mode .fasting-box.nafile {
-            background: linear-gradient(180deg, rgba(25, 135, 84, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
-        }
-        body.dark-mode .fasting-box.nafile .fasting-title { color: #75b798; }
-        body.dark-mode .fasting-box.nafile .fasting-icon { color: #20c997; }
-
-        /* Oruç Header Düzeni */
-        .fasting-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--border-color);
         }
 
         /* Yeni Eklenen Buton Stilleri */
@@ -798,27 +739,24 @@
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
                     
-                    <!-- YENİLENEN GRAFİK ALANI -->
+                    <!-- Performans Alanı -->
                     <div class="col-md-6">
                         <div class="gradient-chart-box h-100">
                             <div class="d-flex align-items-center justify-content-between mb-3 px-2">
                                 <h5 class="fw-bold m-0"><i class="fas fa-chart-line me-2 text-success"></i>Performans</h5>
                             </div>
                             
-                            <!-- Genişletilmiş Seçici Butonlar -->
                             <div class="chart-period-selector">
                                 <div class="chart-period-btn active" id="btn-period-weekly" onclick="switchChartPeriod('weekly', this)">Haftalık</div>
                                 <div class="chart-period-btn" id="btn-period-monthly" onclick="switchChartPeriod('monthly', this)">Aylık</div>
                                 <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
                             </div>
                             
-                            <!-- Grafik Alanı -->
                             <div style="position: relative; height: 250px; width: 100%;">
                                 <canvas id="lineChart"></canvas>
                             </div>
                         </div>
                     </div>
-                    <!-- YENİLENEN GRAFİK ALANI SONU -->
 
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
@@ -2688,50 +2626,37 @@
         const uiProps = [
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
-                boxClass: "kaza", 
-                progressColor: "bg-dark", btnClass: "pd-btn-minus", 
-                countLabel: "Toplam Tutulan"
+                theme: "theme-oruc-kaza", bg: "bg-oruc-kaza", 
+                colorClass: "bg-dark", btnClass: "btn-dark", 
+                countLabel: "Toplam Tutulan Kaza"
             },
             { 
                 key: 'nafile', name: "Nafile Oruç", icon: "fa-hands-holding-circle", 
-                boxClass: "nafile", 
-                progressColor: "bg-success", btnClass: "bg-success border-0", 
-                countLabel: "Toplam Nafile"
+                theme: "theme-oruc-nafile", bg: "bg-oruc-nafile", 
+                colorClass: "bg-success", btnClass: "bg-success",
+                countLabel: "Toplam Tutulan Nafile"
             }
         ];
         
         const currentUI = uiProps[activeFastingIndex];
         
-        let menuHTML = `<div class="prayer-side-menu">`;
-        uiProps.forEach((props, i) => {
-            const activeClass = i === activeFastingIndex ? 'active' : '';
-            const themeClass = props.key === 'kaza' ? 'theme-oruc-kaza' : 'theme-oruc-nafile';
-            
-            menuHTML += `
-            <div class="side-menu-item ${themeClass} ${activeClass}" onclick="setActiveFasting(${i})">
-                <i class="fas ${props.icon} side-menu-icon"></i>
-                <div class="side-menu-label">${props.name}</div>
-            </div>`;
-        });
-        menuHTML += `</div>`;
-
         let cardContentHTML = '';
         const hasTarget = data.hasTarget === true;
 
         if(!hasTarget) {
             cardContentHTML = `
-                <div class="text-center py-4">
-                    <div class="display-1 fw-bold mb-2" style="color: var(--text-color);">${data.done}</div>
-                    <div class="text-muted small text-uppercase fw-bold ls-1">${currentUI.countLabel}</div>
+                <div class="text-center py-3">
+                    <div class="fs-1 fw-bold text-white mb-2">${data.done}</div>
+                    <div class="text-white-50 small text-uppercase fw-bold">${currentUI.countLabel}</div>
                 </div>
                 
                 <div class="pd-actions mt-3">
                     <button class="pd-btn pd-btn-minus" onclick="changeFasting('${currentUI.key}', -1)"><i class="fas fa-minus"></i></button>
-                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass}" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
+                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass} border-0" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
                 </div>
 
-                <div class="text-center mt-4">
-                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-4" onclick="toggleFastingTarget('${currentUI.key}')">
+                <div class="text-center mt-3 pt-3 border-top border-white-10">
+                    <button class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="toggleFastingTarget('${currentUI.key}')">
                         <i class="fas fa-bullseye me-2"></i> Hedef Belirle
                     </button>
                 </div>
@@ -2741,64 +2666,62 @@
             const pct = data.target > 0 ? (data.done / data.target) * 100 : 0;
             
             cardContentHTML = `
-                <div class="pd-stats-row mt-2">
-                    <div class="pd-input-group">
-                        <span class="pd-label">${currentUI.key === 'kaza' ? 'BORÇ' : 'HEDEF'}</span>
-                        <input type="number" class="pd-input" value="${data.target}" onchange="updateFastingTarget('${currentUI.key}', this.value)">
+                <div class="pd-stats-row">
+                    <div class="pd-input-group bg-white-10">
+                        <span class="pd-label text-white-50">${currentUI.key === 'kaza' ? 'BORÇ' : 'HEDEF'}</span>
+                        <input type="number" class="pd-input text-white" value="${data.target}" onchange="updateFastingTarget('${currentUI.key}', this.value)">
                     </div>
-                    <div class="pd-input-group">
-                        <span class="pd-label text-success">TUTULAN</span>
-                        <input type="number" class="pd-input text-success" value="${data.done}" onchange="updateFastingDone('${currentUI.key}', this.value)">
+                    <div class="pd-input-group bg-white-10">
+                        <span class="pd-label text-white">TUTULAN</span>
+                        <input type="number" class="pd-input text-white" value="${data.done}" onchange="updateFastingDone('${currentUI.key}', this.value)">
                     </div>
                 </div>
                 
                 <div class="pd-progress-container">
                     <div class="pd-progress-track">
-                        <div class="pd-progress-fill ${currentUI.progressColor}" style="width: ${pct}%"></div>
+                        <div class="pd-progress-fill ${currentUI.colorClass}" style="width: ${pct}%"></div>
                     </div>
-                    <div class="pd-progress-text">%${pct.toFixed(1)} Tamamlandı</div>
+                    <div class="pd-progress-text text-white">%${pct.toFixed(1)} Tamamlandı</div>
                 </div>
 
-                <div class="pd-actions mt-4">
+                <div class="pd-actions mt-3">
                     <button class="pd-btn pd-btn-minus" onclick="changeFasting('${currentUI.key}', -1)"><i class="fas fa-minus"></i></button>
-                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass}" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
+                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass} border-0" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
                 </div>
 
-                <div class="text-center mt-4">
-                    <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="toggleFastingTarget('${currentUI.key}')">
+                <div class="text-center mt-3 pt-3 border-top border-white-10">
+                    <button class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="toggleFastingTarget('${currentUI.key}')">
                         <i class="fas fa-times me-2"></i> Hedefi Kaldır
                     </button>
                 </div>
             `;
         }
 
-        let badgeHTML = '';
-        if(hasTarget) {
-            if(currentUI.key === 'kaza') {
-                badgeHTML = `<span class="badge bg-danger rounded-pill shadow-sm">Kalan: ${Math.max(0, data.target - data.done)}</span>`;
-            } else {
-                badgeHTML = `<span class="badge bg-success rounded-pill shadow-sm">Hedef Aktif</span>`;
-            }
-        }
-
+        let badgeHTML = hasTarget ? `<div class="pd-remaining-badge" style="background:#ffc107; color:#333;">${hasTarget && currentUI.key === 'kaza' ? 'Kalan: ' + Math.max(0, data.target - data.done) : 'Hedef Aktif'}</div>` : '';
+        
         let cardHTML = `
-            <div style="flex:1;">
-                <div class="fasting-box ${currentUI.boxClass}">
-                    
-                    <div class="fasting-header">
-                        <h4 class="fw-bold m-0 fasting-title d-flex align-items-center">
-                            <i class="fas ${currentUI.icon} me-3 fasting-icon fs-3"></i>
-                            ${currentUI.name}
-                        </h4>
+            <div class="prayer-detail-card ${currentUI.bg}">
+                <div class="pd-content">
+                    <div class="pd-header">
+                        <div class="pd-title">
+                            <i class="fas ${currentUI.icon} me-2"></i> ${currentUI.name}
+                        </div>
                         ${badgeHTML}
                     </div>
-
                     ${cardContentHTML}
                 </div>
             </div>
         `;
 
-        container.innerHTML = `<div class="prayer-split-layout">${menuHTML} ${cardHTML}</div>`;
+        // Menü Butonları (Hap Şeklinde)
+        let selectorHTML = `
+            <div class="chart-period-selector mb-4">
+                <div class="chart-period-btn ${activeFastingIndex === 0 ? 'active' : ''}" onclick="setActiveFasting(0)">Kaza Orucu</div>
+                <div class="chart-period-btn ${activeFastingIndex === 1 ? 'active' : ''}" onclick="setActiveFasting(1)">Nafile Oruç</div>
+            </div>
+        `;
+
+        container.innerHTML = selectorHTML + cardHTML;
     }
 
     window.setActiveFasting = function(i) {
