@@ -455,7 +455,7 @@
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
-        .chart-period-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; border-radius: 15px; padding: 6px; gap: 8px; border: 1px solid var(--border-color); margin-bottom: 10px; }
+        .chart-period-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--input-bg); border-radius: 15px; padding: 6px; gap: 8px; border: 1px solid var(--border-color); margin-bottom: 10px; }
         .chart-period-btn { text-align: center; padding: 12px 2px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border-radius: 12px; transition: all 0.3s ease; color: var(--text-color); background: transparent; border: 1px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .chart-period-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
 
@@ -1250,14 +1250,21 @@
 
     function toggleMenstrualState(isChecked) { 
         localData.isMenstrualState = isChecked; 
-        
-        // Ramazan kontrolü ve gün ekleme mantığı
-        if (isChecked) {
-            checkRamadanMissedDays(); // Manuel açıldığında o gün için kontrol et
-        }
-        
-        saveToCloud(); 
+        saveToCloud();
         renderApp(); 
+
+        if (isChecked) {
+            const hijriStr = updateDateDisplay(); 
+            const isRamadan = hijriStr.includes("Ramazan");
+
+            if (isRamadan) {
+                checkRamadanMissedDays(hijriStr);
+            } else {
+                showToast("Muayyen modu açıldı. (Ramazan ayı dışında olduğumuz için otomatik kaza eklenmedi)", "warning");
+            }
+        } else {
+            showToast("Muayyen modu kapatıldı. İbadet takibine devam edebilirsiniz.", "success");
+        }
     }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
@@ -1599,17 +1606,16 @@
     }
 
     function checkRamadanMissedDays(currentHijriStr) {
-        // Eğer Hicri tarih string'i verilmediyse tekrar hesapla
         if (!currentHijriStr) currentHijriStr = updateDateDisplay();
 
         const isRamadan = currentHijriStr.includes("Ramazan");
         const todayIso = getIsoDate(new Date());
 
-        // 1. Durum: Kadın kullanıcı, Muayyen Modu Açık ve Ramazan ayı
+        // Sadece Kadın, Mod Açık ve Ramazan ise
         if (localData.gender === 'female' && localData.isMenstrualState && isRamadan) {
+            
             const lastOpen = localData.lastAppOpenDate;
             
-            // Eğer bugün ile son açılış arasında fark varsa
             if (lastOpen !== todayIso) {
                 const d1 = new Date(lastOpen);
                 const d2 = new Date(todayIso);
@@ -1617,18 +1623,22 @@
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
                 
                 if (diffDays > 0) {
-                    // Borca ekle
-                    localData.fasting.kaza.target = (localData.fasting.kaza.target || 0) + diffDays;
-                    localData.fasting.kaza.hasTarget = true;
-                    
-                    addHistory("Ramazan Orucu (Muayyen)", localData.fasting.kaza.target - diffDays, localData.fasting.kaza.target);
-                    
-                    showModal("Ramazan Tespit Edildi", `Muayyen gün modunuz açık olduğu için, uygulamayı açmadığınız son ${diffDays} gün kaza orucu borcunuza eklendi.`);
+                    showModal("Ramazan Ayı Tespit Edildi 🌙", 
+                        `Muayyen gün modunuz açık. Geçen ${diffDays} gün için Kaza Orucu borcu eklemek ister misiniz?`, 
+                        () => {
+                            localData.fasting.kaza.target = (localData.fasting.kaza.target || 0) + diffDays;
+                            localData.fasting.kaza.hasTarget = true;
+                            
+                            addHistory("Ramazan Orucu (Muayyen)", localData.fasting.kaza.target - diffDays, localData.fasting.kaza.target);
+                            saveToCloud();
+                            renderFasting(); 
+                            showToast(`${diffDays} gün kaza borcuna eklendi.`, "success");
+                        }
+                    );
                 }
             }
         }
         
-        // Son açılış tarihini güncelle
         localData.lastAppOpenDate = todayIso;
         saveToCloud();
     }
@@ -1834,7 +1844,7 @@
     
     // Oruç Hesaplama (YENİ)
     window.toggleFastingPartialInput = function(isPartial) {
-        document.getElementById('fastingPartialContainer').style.display = isPartial ? 'block' : 'none';
+        document.getElementById('fastingPartialContainer').style.display = isPartial ? 'flex' : 'none';
         document.getElementById('fastingResultBox').style.display = 'none'; // Sonucu gizle
     }
 
@@ -1967,7 +1977,11 @@
         } 
     };
     
-    function recalculateStreak() { let currentStreak = 0; const today = new Date(); const isoToday = getIsoDate(today); if (localData.calendar && localData.calendar[isoToday]) { currentStreak++; } for (let i = 1; i < 1000; i++) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); if (localData.calendar && localData.calendar[iso]) { currentStreak++; } else { if (i === 1 && currentStreak === 0) {} else { break; } } } localData.streak.current = currentStreak; }
+    function recalculateStreak() { 
+        if(localData.isMenstrualState) return; // Zinciri dondur
+
+        let currentStreak = 0; const today = new Date(); const isoToday = getIsoDate(today); if (localData.calendar && localData.calendar[isoToday]) { currentStreak++; } for (let i = 1; i < 1000; i++) { const d = new Date(); d.setDate(today.getDate() - i); const iso = getIsoDate(d); if (localData.calendar && localData.calendar[iso]) { currentStreak++; } else { if (i === 1 && currentStreak === 0) {} else { break; } } } localData.streak.current = currentStreak; 
+    }
     
     window.updateDailyGoal = function(v) { 
         let totalDebt = 0;
