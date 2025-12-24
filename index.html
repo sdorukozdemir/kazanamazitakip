@@ -1,3 +1,14 @@
+
+Model
+ThinkingThoughts
+Expand to view model thoughts
+
+chevron_right
+Harika, Oruç kartlarını daha canlı gradient (renk geçişli) hale getirdim ve Kaza Hesaplama Sihirbazındaki butonları standart butonlardan çıkarıp, modern, ikonlu ve şık "kontrol paneli" kutucuklarına dönüştürdüm.
+
+İşte güncellenmiş kodun tamamı:
+
+```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -174,7 +185,7 @@
             width: 6px;
         }
         
-        /* GÜNCELLENEN KAZA RENKLERİ (Mor yerine Koyu Slate/Mavi-Gri Gradient) */
+        /* GÜNCELLENEN KAZA RENKLERİ (Koyu Slate/Mavi-Gri Gradient) */
         .fasting-select-card[data-type="kaza"].active::before { background: linear-gradient(180deg, #546e7a, #37474f); }
         .fasting-select-card[data-type="nafile"].active::before { background: linear-gradient(180deg, #11998e, #38ef7d); }
 
@@ -197,21 +208,61 @@
 
         body.dark-mode .fasting-select-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); border-color: #444; color: #e0e0e0; }
 
-        /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ */
+        /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ - Zengin Gradient */
         .bg-oruc-kaza-gradient { 
-            /* Yeni Koyu Slate Gradient - Yeşil tema ile uyumlu, ciddi ve şık */
-            background: linear-gradient(135deg, #607d8b 0%, #37474f 100%); 
+            /* Rich Indigo/Slate Gradient */
+            background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);
             color: white; 
             border: none;
         }
         .bg-oruc-nafile-gradient { 
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
+            /* Lush Green/Teal Gradient */
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white; 
             border: none;
         }
         
-        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #37474f 0%, #102027 100%); }
-        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #0e4d46 0%, #08382d 100%); }
+        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #16222a 0%, #3a6073 100%); }
+        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
+
+        /* CALCULATOR ACTION BUTTON STYLES (NEW) */
+        .calc-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .calc-action-btn {
+            border: none;
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .calc-action-btn:active { transform: scale(0.96); }
+        .calc-action-btn i { font-size: 1.3rem; margin-bottom: 2px; }
+        
+        .btn-calc-copy-start { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .btn-calc-copy-end { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .btn-calc-reset { 
+            grid-column: span 2; 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); 
+            color: #b71c1c;
+        }
+        /* More vibrant reset */
+        .btn-calc-reset { background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%); color: white; }
 
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
         .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } 
@@ -808,12 +859,20 @@
                             <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
                             <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
                         </div>
-                        <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
-                        <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button>
-                            <button class="btn btn-sm btn-outline-secondary" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="resetCalculatorInputs()"><i class="fas fa-trash-alt me-1"></i> Temizle</button>
+                        <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini diğer namazlara uygulayabilirsiniz.</div>
+                        
+                        <div class="calc-actions-grid">
+                            <button class="calc-action-btn btn-calc-copy-start" onclick="copyStartDate()">
+                                <i class="fas fa-calendar-plus"></i> Başlangıcı Kopyala
+                            </button>
+                            <button class="calc-action-btn btn-calc-copy-end" onclick="copyEndDate()">
+                                <i class="fas fa-calendar-check"></i> Bitişi Kopyala
+                            </button>
+                            <button class="calc-action-btn btn-calc-reset" onclick="resetCalculatorInputs()">
+                                <i class="fas fa-trash-alt"></i> Tarihleri Temizle
+                            </button>
                         </div>
+
                         <div id="calcRowsContainer"></div>
                         <hr class="my-4">
                         <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold" onclick="applyAdvancedCalculation()"><i class="fas fa-check-circle me-2"></i> Hesaplananları Onayla ve Aktar</button>
