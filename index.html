@@ -187,8 +187,6 @@
         .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
         .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
         
-        .bg-oruc-kaza { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; }
-        .bg-oruc-nafile { background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); color: white; }
         .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; }
         .border-white-10 { border-color: rgba(255,255,255,0.2) !important; }
 
@@ -197,8 +195,6 @@
         body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
         body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); }
         body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
-        body.dark-mode .bg-oruc-kaza { background: linear-gradient(135deg, #000000 0%, #434343 100%); }
-        body.dark-mode .bg-oruc-nafile { background: linear-gradient(135deg, #0e6655 0%, #117864 100%); }
 
         .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
         body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); }
@@ -358,6 +354,37 @@
         
         @keyframes pulse-red { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
         .pulse-icon { animation: pulse-red 2s infinite; }
+
+        /* --- KAZA HESAPLAMA SİHİRBAZI STİLLERİ --- */
+        .calc-alert-box {
+            background: #fff;
+            border-left: 5px solid;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+        }
+        body.dark-mode .calc-alert-box { background: #2d2d2d; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        /* Kadın Kullanıcı Uyarısı (Pembe) */
+        .calc-alert-female {
+            border-color: #d63384;
+            background: linear-gradient(to right, #fff0f6, #fff);
+        }
+        body.dark-mode .calc-alert-female { background: linear-gradient(to right, #4a1b2d, #2d2d2d); }
+        .calc-alert-female i { color: #d63384; font-size: 1.4rem; }
+        .calc-alert-female strong { color: #d63384; }
+
+        /* İpucu Kutusu (Sarı) */
+        .calc-alert-tip {
+            border-color: #ffc107;
+            background: linear-gradient(to right, #fff9db, #fff);
+        }
+        body.dark-mode .calc-alert-tip { background: linear-gradient(to right, #3e2c00, #2d2d2d); }
+        .calc-alert-tip i { color: #ffc107; font-size: 1.4rem; }
+        .calc-alert-tip strong { color: #d68e00; }
+        body.dark-mode .calc-alert-tip strong { color: #ffc107; }
 
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
@@ -626,32 +653,21 @@
             transition: all 0.3s ease;
         }
 
-        /* Kaza (Gri/Koyu Ton) */
+        /* Kaza (Koyu Gri/Siyah Premium Gradient) */
         .fasting-box.kaza {
-            background: linear-gradient(180deg, rgba(73, 80, 87, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);
+            color: white;
         }
-        .fasting-box.kaza .fasting-icon { color: #495057; }
-        .fasting-box.kaza .fasting-title { color: #212529; }
+        .fasting-box.kaza .fasting-icon,
+        .fasting-box.kaza .fasting-title { color: white !important; }
 
-        /* Nafile (Yeşil Ton) */
+        /* Nafile (Canlı Yeşil/Doğa Gradient) */
         .fasting-box.nafile {
-            background: linear-gradient(180deg, rgba(25, 135, 84, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
         }
-        .fasting-box.nafile .fasting-icon { color: #198754; }
-        .fasting-box.nafile .fasting-title { color: #0f5132; }
-
-        /* Gece Modu Uyumu */
-        body.dark-mode .fasting-box.kaza {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
-        }
-        body.dark-mode .fasting-box.kaza .fasting-icon { color: #adb5bd; }
-        body.dark-mode .fasting-box.kaza .fasting-title { color: #e9ecef; }
-
-        body.dark-mode .fasting-box.nafile {
-            background: linear-gradient(180deg, rgba(25, 135, 84, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
-        }
-        body.dark-mode .fasting-box.nafile .fasting-title { color: #75b798; }
-        body.dark-mode .fasting-box.nafile .fasting-icon { color: #20c997; }
+        .fasting-box.nafile .fasting-icon,
+        .fasting-box.nafile .fasting-title { color: white !important; }
 
         /* Oruç Header Düzeni */
         .fasting-header {
@@ -660,8 +676,22 @@
             justify-content: space-between;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 1px dashed var(--border-color);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
+        
+        /* Oruç Input Grupları için özel stil (Koyu zemin üstünde şeffaf beyaz) */
+        .fasting-input-group {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .fasting-input-group .pd-label { color: rgba(255,255,255,0.8); }
+        .fasting-input-group .pd-input { color: white; }
 
         /* Yeni Eklenen Buton Stilleri */
         .btn-tool-gradient { border: none; color: white !important; border-radius: 12px; padding: 8px 15px; font-weight: 600; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; }
@@ -669,12 +699,21 @@
         .btn-tool-copy:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(52, 73, 94, 0.3); background: linear-gradient(135deg, #65788a, #3e566e); }
         .btn-tool-clear { background: linear-gradient(135deg, #E74C3C, #C0392B); }
         .btn-tool-clear:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(192, 57, 43, 0.3); background: linear-gradient(135deg, #ec7063, #d35400); }
-
-        /* BOTTOM NAV DÜZENLEMESİ (Sıralama değişimini buradan yönetiyoruz) */
-        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: none !important; box-shadow: none; z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
-        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        
+        /* HAFTALIK HEDEF BAŞARI ROZETİ */
+        .goal-success-badge {
+            display: none; /* JS ile açılır */
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+            text-align: center;
+            animation: popIn 0.5s ease;
+        }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
@@ -806,7 +845,8 @@
                             <span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)">
                         </div>
                         <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="weeklyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
-                        <div id="weeklySuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
+                        <!-- Haftalık Hedef Başarı Kutusu -->
+                        <div id="weeklySuccessMessage" class="goal-success-badge">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
                         <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
                     </div>
                 </div>
@@ -997,14 +1037,34 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="calculator-card">
-                        <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female female-alert-box" style="display:none;">
-                            <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
-                            <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
+                        
+                        <!-- KADIN KULLANICI UYARISI (ŞIK KUTU) -->
+                        <div id="femaleCalcInfo" class="calc-alert-box calc-alert-female" style="display:none;">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-female me-3"></i>
+                                <span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-3 bg-white bg-opacity-50 p-2 rounded-3 border">
+                                <span class="fw-bold text-muted small text-uppercase">Aylık Ortalama:</span>
+                                <input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger border-0 bg-transparent" style="width: 60px; font-size:1.2rem;" value="6" onchange="updateMenstrualDays(this.value)">
+                                <span class="fw-bold text-danger">Gün</span>
+                            </div>
                         </div>
-                        <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
+
+                        <!-- KOPYALAMA İPUCU (ŞIK KUTU) -->
+                        <div class="calc-alert-box calc-alert-tip">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-lightbulb me-3 mt-1"></i>
+                                <div>
+                                    <span class="d-block fw-bold mb-1">İpucu</span>
+                                    <span class="opacity-75">Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama</strong> ve <strong>Düzenli Başlama</strong> tarihlerini <strong>"Kopyala"</strong> butonları ile diğer tüm vakitlere hızlıca aktarabilirsiniz.</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
-                            <button class="btn-tool-gradient btn-tool-copy" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button>
-                            <button class="btn-tool-gradient btn-tool-copy" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button>
+                            <button class="btn-tool-gradient btn-tool-copy" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıcı Kopyala</button>
+                            <button class="btn-tool-gradient btn-tool-copy" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Kopyala</button>
                             <button class="btn-tool-gradient btn-tool-clear" onclick="resetCalculatorInputs()"><i class="fas fa-trash-alt me-1"></i> Temizle</button>
                         </div>
                         <div id="calcRowsContainer"></div>
@@ -2903,13 +2963,13 @@
             
             cardContentHTML = `
                 <div class="pd-stats-row">
-                    <div class="pd-input-group bg-white-10">
+                    <div class="fasting-input-group">
                         <span class="pd-label text-white-50">${currentUI.key === 'kaza' ? 'BORÇ' : 'HEDEF'}</span>
-                        <input type="number" class="pd-input text-white" value="${data.target}" onchange="updateFastingTarget('${currentUI.key}', this.value)">
+                        <input type="number" class="pd-input" value="${data.target}" onchange="updateFastingTarget('${currentUI.key}', this.value)">
                     </div>
-                    <div class="pd-input-group bg-white-10">
+                    <div class="fasting-input-group">
                         <span class="pd-label text-white">TUTULAN</span>
-                        <input type="number" class="pd-input text-white" value="${data.done}" onchange="updateFastingDone('${currentUI.key}', this.value)">
+                        <input type="number" class="pd-input" value="${data.done}" onchange="updateFastingDone('${currentUI.key}', this.value)">
                     </div>
                 </div>
                 
