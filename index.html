@@ -355,34 +355,37 @@
         @keyframes pulse-red { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
         .pulse-icon { animation: pulse-red 2s infinite; }
 
-        /* --- KAZA HESAPLAMA SİHİRBAZI STİLLERİ --- */
+        /* --- KAZA HESAPLAMA SİHİRBAZI STİLLERİ (YENİLENMİŞ) --- */
         .calc-alert-box {
             background: #fff;
-            border-left: 5px solid;
-            border-radius: 12px;
+            border-left: 6px solid;
+            border-radius: 16px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
             font-size: 0.9rem;
+            transition: transform 0.2s;
         }
-        body.dark-mode .calc-alert-box { background: #2d2d2d; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .calc-alert-box:hover { transform: translateY(-2px); }
+        body.dark-mode .calc-alert-box { background: #2d2d2d; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
         
         /* Kadın Kullanıcı Uyarısı (Pembe) */
         .calc-alert-female {
             border-color: #d63384;
-            background: linear-gradient(to right, #fff0f6, #fff);
+            background: linear-gradient(135deg, #fff0f6 0%, #ffffff 100%);
         }
-        body.dark-mode .calc-alert-female { background: linear-gradient(to right, #4a1b2d, #2d2d2d); }
-        .calc-alert-female i { color: #d63384; font-size: 1.4rem; }
-        .calc-alert-female strong { color: #d63384; }
+        body.dark-mode .calc-alert-female { background: linear-gradient(135deg, #4a1b2d 0%, #2d2d2d 100%); }
+        .calc-alert-female i { color: #d63384; font-size: 1.5rem; }
+        .calc-alert-female .fw-bold { color: #a51d5f; }
+        body.dark-mode .calc-alert-female .fw-bold { color: #f8bbd0; }
 
         /* İpucu Kutusu (Sarı) */
         .calc-alert-tip {
             border-color: #ffc107;
-            background: linear-gradient(to right, #fff9db, #fff);
+            background: linear-gradient(135deg, #fff9db 0%, #ffffff 100%);
         }
-        body.dark-mode .calc-alert-tip { background: linear-gradient(to right, #3e2c00, #2d2d2d); }
-        .calc-alert-tip i { color: #ffc107; font-size: 1.4rem; }
+        body.dark-mode .calc-alert-tip { background: linear-gradient(135deg, #3e2c00 0%, #2d2d2d 100%); }
+        .calc-alert-tip i { color: #ffc107; font-size: 1.5rem; }
         .calc-alert-tip strong { color: #d68e00; }
         body.dark-mode .calc-alert-tip strong { color: #ffc107; }
 
@@ -655,16 +658,16 @@
 
         /* Kaza (Koyu Gri/Siyah Premium Gradient) */
         .fasting-box.kaza {
-            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);
-            color: white;
+            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%) !important;
+            color: white !important;
         }
         .fasting-box.kaza .fasting-icon,
         .fasting-box.kaza .fasting-title { color: white !important; }
 
         /* Nafile (Canlı Yeşil/Doğa Gradient) */
         .fasting-box.nafile {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+            color: white !important;
         }
         .fasting-box.nafile .fasting-icon,
         .fasting-box.nafile .fasting-title { color: white !important; }
@@ -1735,8 +1738,17 @@
         document.getElementById('weeklyGoalInput').value = weeklyTarget;
         let wp = (weeklyTotal / weeklyTarget) * 100; if (wp > 100) wp = 100;
         document.getElementById('weeklyProgressBar').style.width = wp + "%";
-        const wCard = document.getElementById('weeklyCard'); const wMsg = document.getElementById('weeklySuccessMessage');
-        if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
+        
+        // HAFTALIK HEDEF KUTUSU DÜZELTME
+        const wCard = document.getElementById('weeklyCard'); 
+        const wMsg = document.getElementById('weeklySuccessMessage');
+        if (weeklyTotal >= weeklyTarget) { 
+            wCard.classList.add('success-mode'); 
+            wMsg.style.display = 'block'; 
+        } else { 
+            wCard.classList.remove('success-mode'); 
+            wMsg.style.display = 'none'; 
+        }
 
         
         if(document.getElementById('prayerDetailCard')) {
