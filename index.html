@@ -42,8 +42,8 @@
             --calc-header-text: #ffffff; --calc-header-shadow: rgba(96, 153, 121, 0.3); 
             --placeholder-color: #6c757d; --pink-accent: #d63384; --pink-bg-light: #fce4ec; 
             --blue-accent: #0d6efd; --blue-bg-light: #e7f1ff; 
-            --fade-box-bg: #ffffff; --fade-box-border: #dee2e6; 
-            --fade-box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+            --fade-box-bg: rgba(255, 255, 255, 0.6); --fade-box-border: rgba(0,0,0,0.05); 
+            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
             --calc-item-bg: #ffffff; --calc-item-border: #e9ecef; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
@@ -67,8 +67,8 @@
             --calc-box-bg: #2d2d2d; --calc-header-bg: linear-gradient(135deg, #0f5132, #146c43); 
             --calc-header-text: #e0e0e0; --calc-header-shadow: rgba(0, 0, 0, 0.5); 
             --placeholder-color: #bbbbbb; --pink-bg-light: #4a1b2d; --blue-bg-light: #0d2b4a; 
-            --fade-box-bg: #2d2d2d; --fade-box-border: #444; 
-            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+            --fade-box-bg: rgba(255, 255, 255, 0.05); --fade-box-border: rgba(255,255,255,0.05); 
+            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
             --calc-item-bg: #262626; --calc-item-border: #333; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
@@ -81,29 +81,7 @@
         html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: background-color 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
         
-        /* PULL TO REFRESH BOX */
-        #ptr-box {
-            position: fixed;
-            top: -70px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2000;
-            background-color: var(--card-bg);
-            border-radius: 50px;
-            padding: 8px 25px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            color: #609979;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: top 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
-            border: 1px solid var(--border-color);
-        }
-        #ptr-icon { font-size: 1.1rem; transition: transform 0.3s; }
-
+        #ptr-spinner { position: fixed; top: 25px; left: 50%; width: 36px; height: 36px; margin-left: -18px; z-index: 1000; border: 4px solid rgba(96, 153, 121, 0.3); border-top-color: #609979; border-radius: 12px; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); background-color: var(--card-bg); transition: opacity 0.2s; }
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(96, 153, 121, 0.2); border-top-color: #609979; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -187,6 +165,8 @@
         .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
         .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
         
+        .bg-oruc-kaza { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; }
+        .bg-oruc-nafile { background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); color: white; }
         .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; }
         .border-white-10 { border-color: rgba(255,255,255,0.2) !important; }
 
@@ -195,6 +175,8 @@
         body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
         body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); }
         body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
+        body.dark-mode .bg-oruc-kaza { background: linear-gradient(135deg, #000000 0%, #434343 100%); }
+        body.dark-mode .bg-oruc-nafile { background: linear-gradient(135deg, #0e6655 0%, #117864 100%); }
 
         .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
         body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); }
@@ -311,84 +293,6 @@
         .btn-add-large { padding: 8px 15px; font-size: 0.85rem; border-radius: 15px; font-weight: 700; cursor: pointer; background: rgba(255,255,255,0.9); color: #333; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.1s; white-space: nowrap; }
         .btn-add-large:active { transform: scale(0.95); }
         
-        /* DÜZELTİLEN FADE BOX (Başlama Tarihi Kutuları) */
-        .fade-box { 
-            background: linear-gradient(145deg, #ffffff, #f8f9fa); 
-            border: 1px solid rgba(0,0,0,0.08); 
-            border-radius: 20px; 
-            padding: 15px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.04); 
-            height: 100%; 
-            min-height: 85px; 
-            transition: all 0.3s ease;
-        }
-        .fade-box:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.07); }
-        .fade-box input { background: transparent; border: none; text-align: center; font-weight: 800; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; font-size: 1.15rem; }
-        .fade-box label { margin-bottom: 5px; opacity: 0.6; font-size: 0.75rem; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; color: var(--text-color); }
-        
-        body.dark-mode .fade-box { background: linear-gradient(145deg, #2d2d2d, #252525); border-color: #383838; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-
-        /* YENİLENEN İLERLEME DURAKLATILDI KUTUSU */
-        .paused-badge-styled {
-            background: rgba(255, 236, 236, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(220, 53, 69, 0.2);
-            color: #d63384;
-            border-radius: 50px;
-            padding: 12px 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.15);
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            flex-direction: column; /* Mobilde iki satır olması için eklendi */
-        }
-        body.dark-mode .paused-badge-styled { background: rgba(74, 27, 45, 0.8); border-color: #661a36; color: #f8bbd0; }
-        
-        @keyframes pulse-red { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
-        .pulse-icon { animation: pulse-red 2s infinite; }
-
-        /* --- KAZA HESAPLAMA SİHİRBAZI STİLLERİ (YENİLENMİŞ) --- */
-        .calc-alert-box {
-            background: #fff;
-            border-left: 6px solid;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            font-size: 0.9rem;
-            transition: transform 0.2s;
-        }
-        .calc-alert-box:hover { transform: translateY(-2px); }
-        body.dark-mode .calc-alert-box { background: #2d2d2d; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-        
-        /* Kadın Kullanıcı Uyarısı (Pembe) */
-        .calc-alert-female {
-            border-color: #d63384;
-            background: linear-gradient(135deg, #fff0f6 0%, #ffffff 100%);
-        }
-        body.dark-mode .calc-alert-female { background: linear-gradient(135deg, #4a1b2d 0%, #2d2d2d 100%); }
-        .calc-alert-female i { color: #d63384; font-size: 1.5rem; }
-        .calc-alert-female .fw-bold { color: #a51d5f; }
-        body.dark-mode .calc-alert-female .fw-bold { color: #f8bbd0; }
-
-        /* İpucu Kutusu (Sarı) */
-        .calc-alert-tip {
-            border-color: #ffc107;
-            background: linear-gradient(135deg, #fff9db 0%, #ffffff 100%);
-        }
-        body.dark-mode .calc-alert-tip { background: linear-gradient(135deg, #3e2c00 0%, #2d2d2d 100%); }
-        .calc-alert-tip i { color: #ffc107; font-size: 1.5rem; }
-        .calc-alert-tip strong { color: #d68e00; }
-        body.dark-mode .calc-alert-tip strong { color: #ffc107; }
-
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
@@ -436,7 +340,6 @@
         .prediction-secondary { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .prediction-secondary .date-small { font-size: 1.1rem; font-weight: bold; color: #fd7e14; }
         
-        /* ONARILAN METALİK KART (GEÇMİŞ) */
         .metallic-card { border: none; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); background: linear-gradient(145deg, #dce1e6 0%, #ffffff 50%, #dce1e6 100%); padding: 0; overflow: hidden; color: #333; transition: all 0.2s ease; position: relative; }
         .metallic-card.up { border-left: 5px solid #609979; }
         .metallic-card.down { border-left: 5px solid #dc3545; }
@@ -467,40 +370,6 @@
         .capsule-input::-webkit-calendar-picker-indicator { opacity: 0.3; }
         body.dark-mode .capsule-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; }
         .capsule-reset { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #dc3545; cursor: pointer; font-size: 1rem; display: none; }
-
-        /* ONARILAN MENSTRUAL TOGGLE (Switch) */
-        .menstrual-toggle-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding: 15px 20px;
-            background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6);
-            border-radius: 50px;
-            border: 1px solid var(--pink-accent);
-            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15);
-        }
-        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
-        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
-        /* Switch boyutlandırma */
-        .form-check-input { width: 3em !important; height: 1.5em !important; cursor: pointer; }
-
-        /* PAUSED MODU İÇİN (Gri Ekran) */
-        .paused-mode-overlay {
-            pointer-events: none !important;
-            opacity: 0.5 !important;
-            filter: grayscale(100%) !important;
-            transition: all 0.3s ease;
-        }
-
-        /* GÜÇLENDİRİLMİŞ CİNSİYET SEÇİMİ */
-        .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); background: var(--card-bg); position: relative; overflow: hidden; }
-        .gender-option:hover { transform: translateY(-3px); }
-        .gender-option.selected { transform: scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-width: 3px; }
-        /* Kadın Seçili */
-        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: linear-gradient(145deg, #fce4ec, #ffffff); color: var(--pink-accent); }
-        /* Erkek Seçili */
-        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: linear-gradient(145deg, #e3f2fd, #ffffff); color: var(--blue-accent); }
 
         .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
         .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; flex-wrap: wrap; }
@@ -551,172 +420,44 @@
         .modal-btn-group { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
         .btn-confirm { background: #dc3545; color: white; } .btn-cancel { background: #6c757d; color: white; } .btn-ok { background: #609979; color: white; width: 100%; }
         
-        /* --- İSTATİSTİK SEKMELERİ (YENİLENMİŞ) --- */
-        .stats-tab-container {
-            display: flex;
-            background: rgba(233, 236, 239, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 6px;
-            gap: 5px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 25px;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
-        }
-
-        .stats-tab-btn {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 12px 0;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--text-color);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            opacity: 0.6;
-        }
-
-        .stats-tab-btn.active {
-            background: linear-gradient(135deg, #609979 0%, #3e6b53 100%);
-            color: white;
-            opacity: 1;
-            box-shadow: 0 4px 15px rgba(96, 153, 121, 0.4);
-            transform: scale(1.02);
-        }
-
-        /* --- PERFORMANS SEKMELERİ (YENİLENMİŞ) --- */
-        .chart-period-selector {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(233, 236, 239, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 6px;
-            gap: 5px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);
-        }
-
-        .chart-period-btn {
-            flex: 1;
-            text-align: center;
-            padding: 12px 0;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            border-radius: 40px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            color: var(--text-color);
-            background: transparent;
-            border: none;
-            opacity: 0.6;
-            white-space: nowrap;
-        }
-
-        .chart-period-btn.active {
-            background: linear-gradient(135deg, #609979 0%, #3e6b53 100%);
-            color: white;
-            opacity: 1;
-            box-shadow: 0 4px 15px rgba(96, 153, 121, 0.4);
-            transform: scale(1.05);
-        }
-
-        .gradient-chart-box {
-            background: linear-gradient(180deg, rgba(96, 153, 121, 0.12) 0%, rgba(255, 255, 255, 0) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 20px 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        body.dark-mode .chart-period-selector { background: rgba(40, 40, 40, 0.6); }
-        body.dark-mode .stats-tab-container { background: rgba(40, 40, 40, 0.6); }
+        .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: var(--card-bg); border-top: none !important; box-shadow: none; z-index: 1060; justify-content: space-around; align-items: center; padding-bottom: 10px; }
+        .nav-item { text-align: center; color: var(--text-color); opacity: 0.6; font-size: 0.75rem; flex: 1; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .nav-item.active { color: #609979; opacity: 1; font-weight: 600; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        #gender-selection-modal { display: none; z-index: 2005; }
+        .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: 0.2s; background: var(--card-bg); }
+        .gender-option:hover { border-color: #609979; }
+        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: var(--pink-bg-light); color: var(--pink-accent); }
+        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: var(--blue-bg-light); color: var(--blue-accent); }
+        .menstrual-toggle-container { margin-bottom: 15px; padding: 15px 20px; background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6); border-radius: 50px; border: 1px solid var(--pink-accent); display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15); }
+        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
+        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
+        .paused-mode-overlay { pointer-events: none; opacity: 0.5; filter: grayscale(1); transition: 0.3s; }
+        .paused-badge { display: none; background: var(--pink-accent); color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(214, 51, 132, 0.4); }
+        .fade-box { background: var(--fade-box-bg); border: 1px solid var(--fade-box-border); border-radius: 12px; padding: 8px 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(5px); box-shadow: var(--fade-box-shadow); height: 100%; min-height: 70px; }
+        .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; }
+        .fade-box label { margin-bottom: 2px; opacity: 0.7; }
+        .custom-alert-box { background: var(--card-bg); border-left: 5px solid #17a2b8; padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 20px; font-size: 0.9rem; }
+        .custom-alert-box strong { color: #17a2b8; }
+        .custom-alert-tip { border-left-color: #ffc107; background: #fff9db; color: #856404; }
+        .custom-alert-tip strong { color: #856404; }
+        body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
+        body.dark-mode .custom-alert-tip strong { color: #ffc107; }
+        .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
+        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
+        .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
+        .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
+        #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
+        @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes toastFadeOut { to { opacity: 0; transform: translateY(-20px); } }
+        .toast-success { border-color: #609979; } .toast-success i { color: #609979; font-size: 1.2rem; }
+        .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
+        .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
-        body.dark-mode .gradient-chart-box {
-            background: linear-gradient(180deg, rgba(96, 153, 121, 0.15) 0%, rgba(30, 30, 30, 0) 100%);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        /* --- ORUÇ İÇİN YENİ GRADIENT KUTULAR --- */
-        .fasting-box {
-            border-radius: 24px;
-            padding: 25px 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        /* Kaza (Koyu Gri/Siyah Premium Gradient) */
-        .fasting-box.kaza {
-            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%) !important;
-            color: white !important;
-        }
-        .fasting-box.kaza .fasting-icon,
-        .fasting-box.kaza .fasting-title { color: white !important; }
-
-        /* Nafile (Canlı Yeşil/Doğa Gradient) */
-        .fasting-box.nafile {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
-            color: white !important;
-        }
-        .fasting-box.nafile .fasting-icon,
-        .fasting-box.nafile .fasting-title { color: white !important; }
-
-        /* Oruç Header Düzeni */
-        .fasting-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        /* Oruç Input Grupları için özel stil (Koyu zemin üstünde şeffaf beyaz) */
-        .fasting-input-group {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .fasting-input-group .pd-label { color: rgba(255,255,255,0.8); }
-        .fasting-input-group .pd-input { color: white; }
-
-        /* Yeni Eklenen Buton Stilleri */
-        .btn-tool-gradient { border: none; color: white !important; border-radius: 12px; padding: 8px 15px; font-weight: 600; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; }
-        .btn-tool-copy { background: linear-gradient(135deg, #5D6D7E, #34495E); }
-        .btn-tool-copy:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(52, 73, 94, 0.3); background: linear-gradient(135deg, #65788a, #3e566e); }
-        .btn-tool-clear { background: linear-gradient(135deg, #E74C3C, #C0392B); }
-        .btn-tool-clear:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(192, 57, 43, 0.3); background: linear-gradient(135deg, #ec7063, #d35400); }
-        
-        /* HAFTALIK HEDEF BAŞARI ROZETİ */
-        .goal-success-badge {
-            display: none; /* JS ile açılır */
-            background: linear-gradient(135deg, #ffc107, #ff9800);
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
-            text-align: center;
-            animation: popIn 0.5s ease;
-        }
+        .chart-period-selector { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--input-bg); border-radius: 15px; padding: 6px; gap: 8px; border: 1px solid var(--border-color); margin-bottom: 10px; }
+        .chart-period-btn { text-align: center; padding: 12px 2px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border-radius: 12px; transition: all 0.3s ease; color: var(--text-color); background: transparent; border: 1px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chart-period-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
@@ -724,12 +465,7 @@
 </head>
 <body>
 
-<!-- PULL TO REFRESH BOX -->
-<div id="ptr-box">
-    <i id="ptr-icon" class="fas fa-sync-alt"></i>
-    <div class="spinner-border text-success spinner-border-sm" id="ptr-loading-spinner" role="status" style="display:none;"></div>
-    <span id="ptr-text">Aşağı Çek</span>
-</div>
+<div id="ptr-spinner"></div>
 
 <div id="loading-overlay">
     <div class="spinner"></div>
@@ -800,9 +536,9 @@
         <ul class="list-unstyled components">
             <li id="menu-dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-mosque me-3"></i> Kaza Namazı</li>
             <li id="menu-stats" onclick="showSection('stats')"><i class="fas fa-chart-pie me-3"></i> İstatistikler</li>
-            <li id="menu-fasting" onclick="showSection('fasting')"><i class="fas fa-star-and-crescent me-3"></i> Oruç Takip</li>
-            <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
             <li id="menu-achievements" onclick="showSection('achievements')"><i class="fas fa-medal me-3"></i> Başarılar & Ödül</li>
+            <li id="menu-fasting" onclick="showSection('fasting')"><i class="fas fa-utensils me-3"></i> Oruç Takip</li>
+            <li id="menu-tesbihat" onclick="showSection('tesbihat')"><i class="fas fa-fingerprint me-3"></i> Tesbihat</li>
             <li id="menu-calculator" onclick="showSection('calculator')"><i class="fas fa-calculator me-3"></i> Hesap Sihirbazı</li>
             <li id="menu-settings" onclick="showSection('settings')"><i class="fas fa-cog me-3"></i> Yedekleme & Ayarlar</li>
             <li onclick="toggleDarkMode()"><i class="fas fa-moon me-3"></i> <span id="darkModeText">Gece Modu</span></li>
@@ -812,27 +548,13 @@
 
     <div id="content">
         <div id="section-dashboard" class="app-section active">
-            <!-- MENSTRUAL TOGGLE AREA -->
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
-                <div class="menstrual-label">
-                    <i class="fas fa-flower me-2"></i> Muayyen Günümdeyim
-                </div>
-                <div class="form-check form-switch m-0">
-                    <input class="form-check-input" type="checkbox" id="menstrualSwitch" onchange="toggleMenstrualState(this.checked)">
-                </div>
+                <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
+                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
             </div>
-            
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
-                    <!-- PAUSED BADGE (YENİ TASARIM) -->
-                    <div id="pausedBadge" class="paused-badge-styled" style="display:none;">
-                        <i class="fas fa-pause-circle pulse-icon fs-5"></i>
-                        <div class="d-flex flex-column text-center">
-                            <span>İlerleme Duraklatıldı</span>
-                            <span class="small opacity-75">(Muayyen Gün)</span>
-                        </div>
-                    </div>
-                    
+                    <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
                     <div id="goalCard" class="goal-card">
                         <h4>🎯 Günlük Hedef</h4>
                         <div class="goal-content">
@@ -848,16 +570,14 @@
                             <span class="fs-5">Bu Hafta</span><strong class="fs-1" id="weeklyCountDisplay">0</strong><span class="fs-5">/</span><input type="number" id="weeklyGoalInput" class="goal-input" style="color:#0d6efd;" value="50" onchange="updateWeeklyGoal(this.value)">
                         </div>
                         <div class="progress mt-2" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 10px;"><div id="weeklyProgressBar" class="progress-bar bg-warning" style="width: 0%"></div></div>
-                        <!-- Haftalık Hedef Başarı Kutusu -->
-                        <div id="weeklySuccessMessage" class="goal-success-badge">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
+                        <div id="weeklySuccessMessage" class="mt-2 fw-bold text-white" style="display: none;">🔥 Bu Hafta Tamamlandı! Harikasın!</div>
                         <div class="small text-white-50 mt-2">Pazartesi'den bu yana ilerleme</div>
                     </div>
                 </div>
             </div>
-            
-            <div class="row g-3 mb-4 justify-content-center" id="dateInputsArea">
-                <div class="col-6 col-md-4"><div class="fade-box"><label>BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
-                <div class="col-6 col-md-4"><div class="fade-box"><label>GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
+            <div class="row g-3 mb-4 justify-content-center">
+                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
+                <div class="col-6 col-md-4"><div class="fade-box"><label class="fw-bold text-secondary small">GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
             
             <div id="prayerSplitContainer" class="prayer-split-layout">
@@ -961,26 +681,19 @@
 
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
-                    
-                    <!-- Performans Alanı -->
                     <div class="col-md-6">
-                        <div class="gradient-chart-box h-100">
-                            <div class="d-flex align-items-center justify-content-between mb-3 px-2">
-                                <h5 class="fw-bold m-0"><i class="fas fa-chart-line me-2 text-success"></i>Performans</h5>
+                        <div class="chart-container">
+                            <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
+                            <div class="d-flex justify-content-center mb-2">
+                                <div class="chart-period-selector">
+                                    <div class="chart-period-btn active" id="btn-period-weekly" onclick="switchChartPeriod('weekly', this)">Haftalık</div>
+                                    <div class="chart-period-btn" id="btn-period-monthly" onclick="switchChartPeriod('monthly', this)">Aylık</div>
+                                    <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
+                                </div>
                             </div>
-                            
-                            <div class="chart-period-selector">
-                                <div class="chart-period-btn active" id="btn-period-weekly" onclick="switchChartPeriod('weekly', this)">Haftalık</div>
-                                <div class="chart-period-btn" id="btn-period-monthly" onclick="switchChartPeriod('monthly', this)">Aylık</div>
-                                <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
-                            </div>
-                            
-                            <div style="position: relative; height: 250px; width: 100%;">
-                                <canvas id="lineChart"></canvas>
-                            </div>
+                            <canvas id="lineChart" style="max-height: 250px;"></canvas>
                         </div>
                     </div>
-
                     <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
             </div>
@@ -1040,35 +753,15 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="calculator-card">
-                        
-                        <!-- KADIN KULLANICI UYARISI (ŞIK KUTU) -->
-                        <div id="femaleCalcInfo" class="calc-alert-box calc-alert-female" style="display:none;">
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="fas fa-female me-3"></i>
-                                <span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3 bg-white bg-opacity-50 p-2 rounded-3 border">
-                                <span class="fw-bold text-muted small text-uppercase">Aylık Ortalama:</span>
-                                <input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger border-0 bg-transparent" style="width: 60px; font-size:1.2rem;" value="6" onchange="updateMenstrualDays(this.value)">
-                                <span class="fw-bold text-danger">Gün</span>
-                            </div>
+                        <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
+                            <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
+                            <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
                         </div>
-
-                        <!-- KOPYALAMA İPUCU (ŞIK KUTU) -->
-                        <div class="calc-alert-box calc-alert-tip">
-                            <div class="d-flex align-items-start">
-                                <i class="fas fa-lightbulb me-3 mt-1"></i>
-                                <div>
-                                    <span class="d-block fw-bold mb-1">İpucu</span>
-                                    <span class="opacity-75">Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama</strong> ve <strong>Düzenli Başlama</strong> tarihlerini <strong>"Kopyala"</strong> butonları ile diğer tüm vakitlere hızlıca aktarabilirsiniz.</span>
-                                </div>
-                            </div>
-                        </div>
-
+                        <div class="custom-alert-box custom-alert-tip"><i class="fas fa-lightbulb me-2"></i>Sabah Namazına girdiğiniz <strong>Sorumluluk Başlama (Buluğ Çağı)</strong> ve <strong>Namaza Düzenli Başlama Tarihi</strong> değerlerini <strong>Kopyala</strong> ile diğer namazlara uygulayabilirsiniz.</div>
                         <div class="d-flex justify-content-end gap-2 mb-3 flex-wrap">
-                            <button class="btn-tool-gradient btn-tool-copy" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıcı Kopyala</button>
-                            <button class="btn-tool-gradient btn-tool-copy" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Kopyala</button>
-                            <button class="btn-tool-gradient btn-tool-clear" onclick="resetCalculatorInputs()"><i class="fas fa-trash-alt me-1"></i> Temizle</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="copyStartDate()"><i class="fas fa-copy me-1"></i> Sorumluluk Başlangıç Tarihini Kopyala</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="copyEndDate()"><i class="fas fa-copy me-1"></i> Düzenli Başlama Tarihini Kopyala</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="resetCalculatorInputs()"><i class="fas fa-trash-alt me-1"></i> Temizle</button>
                         </div>
                         <div id="calcRowsContainer"></div>
                         <hr class="my-4">
@@ -1110,10 +803,10 @@
 
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
-    <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>Analiz</span></div>
-    <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-star-and-crescent"></i><span>Oruç</span></div>
-    <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Zikir</span></div>
     <div class="nav-item" onclick="showSection('achievements'); activateNav(this)"><i class="fas fa-medal"></i><span style="font-size: 0.65rem;">Ödül</span></div>
+    <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>Analiz</span></div>
+    <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-utensils"></i><span>Oruç</span></div>
+    <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Zikir</span></div>
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
 </div>
 
@@ -1374,7 +1067,7 @@
     function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
-    const SECTION_IDS = ['dashboard', 'stats', 'fasting', 'tesbihat', 'achievements', 'calculator', 'settings'];
+    const SECTION_IDS = ['dashboard', 'achievements', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
     
     function getSectionIndex(id) {
         return SECTION_IDS.indexOf(id.replace('section-', ''));
@@ -1388,8 +1081,7 @@
         if(menuItem) menuItem.classList.add('active');
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        
-        const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
+        const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
         if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
         triggerLogic(targetId);
@@ -1435,12 +1127,7 @@
     
     let isPulling = false;
     const ptrThreshold = 70; 
-    
-    // YENİ PTR DEĞİŞKENLERİ
-    const ptrBox = document.getElementById('ptr-box');
-    const ptrText = document.getElementById('ptr-text');
-    const ptrIcon = document.getElementById('ptr-icon');
-    const ptrLoading = document.getElementById('ptr-loading-spinner');
+    const ptrSpinner = document.getElementById('ptr-spinner');
 
     const contentArea = document.getElementById('content');
 
@@ -1476,17 +1163,16 @@
         if (activeSection.id === 'section-dashboard' && activeSection.scrollTop === 0 && diffY > 0 && !isHorizontalMove) {
             if(diffY > 10) { 
                 isPulling = true;
+                ptrSpinner.style.display = 'block';
+                ptrSpinner.style.transform = `rotate(${diffY * 3}deg)`;
                 
-                // PULL TO REFRESH MANTIĞI
-                ptrBox.style.top = (20 + (diffY * 0.4)) + 'px'; 
-                ptrBox.style.opacity = 1;
+                let opacity = Math.min(1, diffY / ptrThreshold);
+                ptrSpinner.style.opacity = opacity;
                 
                 if (diffY > ptrThreshold) {
-                    ptrText.innerText = "Bırak";
-                    ptrIcon.style.transform = "rotate(180deg)";
+                    ptrSpinner.style.borderTopColor = "#20c997"; 
                 } else {
-                    ptrText.innerText = "Aşağı Çek";
-                    ptrIcon.style.transform = "rotate(0deg)";
+                    ptrSpinner.style.borderTopColor = "#609979";
                 }
             }
             return; 
@@ -1589,40 +1275,19 @@
     });
 
     function performRefresh() {
+        ptrSpinner.style.borderTopColor = "#20c997";
+        ptrSpinner.style.animation = "spin 0.5s linear infinite"; 
         triggerHaptic();
-        
-        // Yükleniyor Durumu
-        ptrText.innerText = "Güncelleniyor...";
-        ptrIcon.style.display = 'none';
-        ptrLoading.style.display = 'block';
-        ptrBox.style.top = '25px';
-        
         setTimeout(() => {
             renderApp();
-            
-            // BAŞARILI DURUMU (Kutu İçinde)
-            ptrLoading.style.display = 'none';
-            ptrIcon.className = "fas fa-check-circle text-success";
-            ptrIcon.style.display = 'block';
-            ptrIcon.style.transform = 'rotate(0deg)';
-            ptrText.innerText = "Veriler Güncellendi";
-            
-            // Biraz bekleyip kutuyu kapat
-            setTimeout(() => {
-                resetPtr();
-                // Eski haline getir (ikonu vs)
-                setTimeout(() => {
-                    ptrIcon.className = "fas fa-sync-alt";
-                    ptrIcon.style.color = ""; 
-                }, 300);
-            }, 1500);
-            
+            showToast("Veriler güncellendi", "success");
+            resetPtr();
         }, 800);
     }
 
     function resetPtr() {
-        ptrBox.style.top = '-70px';
-        ptrBox.style.opacity = 0;
+        ptrSpinner.style.display = 'none';
+        ptrSpinner.style.opacity = 0;
     }
 
     function shouldIgnoreSwipe(target) {
@@ -1655,8 +1320,7 @@
             const newId = newActiveSection.id.replace('section-', '');
             
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
-            const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
+            const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
             if (navMap[newId] !== undefined) document.querySelectorAll('.nav-item')[navMap[newId]].classList.add('active');
             
             document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
@@ -1709,21 +1373,7 @@
         const weeklyCard = document.getElementById('weeklyCard');
         const splitContainer = document.getElementById('prayerSplitContainer');
 
-        if (isPaused) { 
-            pausedBadge.style.display = 'flex'; 
-            goalCard.classList.add('paused-mode-overlay'); 
-            weeklyCard.classList.add('paused-mode-overlay'); 
-            if(splitContainer) splitContainer.classList.add('paused-mode-overlay');
-            const pdCard = document.getElementById('prayerDetailCard');
-            if(pdCard) pdCard.classList.add('paused-mode-overlay');
-        } else { 
-            pausedBadge.style.display = 'none'; 
-            goalCard.classList.remove('paused-mode-overlay'); 
-            weeklyCard.classList.remove('paused-mode-overlay'); 
-            if(splitContainer) splitContainer.classList.remove('paused-mode-overlay');
-            const pdCard = document.getElementById('prayerDetailCard');
-            if(pdCard) pdCard.classList.remove('paused-mode-overlay');
-        }
+        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); splitContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); splitContainer.classList.remove('paused-mode-overlay'); }
 
         document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
@@ -1738,17 +1388,8 @@
         document.getElementById('weeklyGoalInput').value = weeklyTarget;
         let wp = (weeklyTotal / weeklyTarget) * 100; if (wp > 100) wp = 100;
         document.getElementById('weeklyProgressBar').style.width = wp + "%";
-        
-        // HAFTALIK HEDEF KUTUSU DÜZELTME
-        const wCard = document.getElementById('weeklyCard'); 
-        const wMsg = document.getElementById('weeklySuccessMessage');
-        if (weeklyTotal >= weeklyTarget) { 
-            wCard.classList.add('success-mode'); 
-            wMsg.style.display = 'block'; 
-        } else { 
-            wCard.classList.remove('success-mode'); 
-            wMsg.style.display = 'none'; 
-        }
+        const wCard = document.getElementById('weeklyCard'); const wMsg = document.getElementById('weeklySuccessMessage');
+        if (weeklyTotal >= weeklyTarget) { wCard.classList.add('success-mode'); wMsg.style.display = 'block'; } else { wCard.classList.remove('success-mode'); wMsg.style.display = 'none'; }
 
         
         if(document.getElementById('prayerDetailCard')) {
@@ -2921,14 +2562,14 @@
         const uiProps = [
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
-                boxClass: "kaza", 
-                progressColor: "bg-dark", btnClass: "pd-btn-minus", 
+                theme: "theme-oruc-kaza", bg: "bg-oruc-kaza", 
+                colorClass: "bg-dark", btnClass: "btn-dark", 
                 countLabel: "Toplam Tutulan Kaza"
             },
             { 
                 key: 'nafile', name: "Nafile Oruç", icon: "fa-hands-holding-circle", 
-                boxClass: "nafile", 
-                progressColor: "bg-success", btnClass: "bg-success",
+                theme: "theme-oruc-nafile", bg: "bg-oruc-nafile", 
+                colorClass: "bg-success", btnClass: "bg-success",
                 countLabel: "Toplam Tutulan Nafile"
             }
         ];
@@ -2938,10 +2579,8 @@
         let menuHTML = `<div class="prayer-side-menu">`;
         uiProps.forEach((props, i) => {
             const activeClass = i === activeFastingIndex ? 'active' : '';
-            const themeClass = props.key === 'kaza' ? 'theme-oruc-kaza' : 'theme-oruc-nafile';
-            
             menuHTML += `
-            <div class="side-menu-item ${themeClass} ${activeClass}" onclick="setActiveFasting(${i})">
+            <div class="side-menu-item ${props.theme} ${activeClass}" onclick="setActiveFasting(${i})">
                 <i class="fas ${props.icon} side-menu-icon"></i>
                 <div class="side-menu-label">${props.name}</div>
             </div>`;
@@ -2975,13 +2614,13 @@
             
             cardContentHTML = `
                 <div class="pd-stats-row">
-                    <div class="fasting-input-group">
+                    <div class="pd-input-group bg-white-10">
                         <span class="pd-label text-white-50">${currentUI.key === 'kaza' ? 'BORÇ' : 'HEDEF'}</span>
-                        <input type="number" class="pd-input" value="${data.target}" onchange="updateFastingTarget('${currentUI.key}', this.value)">
+                        <input type="number" class="pd-input text-white" value="${data.target}" onchange="updateFastingTarget('${currentUI.key}', this.value)">
                     </div>
-                    <div class="fasting-input-group">
+                    <div class="pd-input-group bg-white-10">
                         <span class="pd-label text-white">TUTULAN</span>
-                        <input type="number" class="pd-input" value="${data.done}" onchange="updateFastingDone('${currentUI.key}', this.value)">
+                        <input type="number" class="pd-input text-white" value="${data.done}" onchange="updateFastingDone('${currentUI.key}', this.value)">
                     </div>
                 </div>
                 
@@ -3021,15 +2660,7 @@
             </div>
         `;
 
-        // Menü Butonları (Hap Şeklinde)
-        let selectorHTML = `
-            <div class="chart-period-selector mb-4">
-                <div class="chart-period-btn ${activeFastingIndex === 0 ? 'active' : ''}" onclick="setActiveFasting(0)">Kaza Orucu</div>
-                <div class="chart-period-btn ${activeFastingIndex === 1 ? 'active' : ''}" onclick="setActiveFasting(1)">Nafile Oruç</div>
-            </div>
-        `;
-
-        container.innerHTML = selectorHTML + cardHTML;
+        container.innerHTML = `<div class="prayer-split-layout">${menuHTML} ${cardHTML}</div>`;
     }
 
     window.setActiveFasting = function(i) {
@@ -3162,3 +2793,4 @@
 </script>
 </body>
 </html>
+
