@@ -42,6 +42,8 @@
             --calc-header-text: #ffffff; --calc-header-shadow: rgba(96, 153, 121, 0.3); 
             --placeholder-color: #6c757d; --pink-accent: #d63384; --pink-bg-light: #fce4ec; 
             --blue-accent: #0d6efd; --blue-bg-light: #e7f1ff; 
+            --fade-box-bg: #ffffff; --fade-box-border: #dee2e6; 
+            --fade-box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
             --calc-item-bg: #ffffff; --calc-item-border: #e9ecef; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
@@ -65,6 +67,8 @@
             --calc-box-bg: #2d2d2d; --calc-header-bg: linear-gradient(135deg, #0f5132, #146c43); 
             --calc-header-text: #e0e0e0; --calc-header-shadow: rgba(0, 0, 0, 0.5); 
             --placeholder-color: #bbbbbb; --pink-bg-light: #4a1b2d; --blue-bg-light: #0d2b4a; 
+            --fade-box-bg: #2d2d2d; --fade-box-border: #444; 
+            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
             --calc-item-bg: #262626; --calc-item-border: #333; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
@@ -80,7 +84,7 @@
         /* PULL TO REFRESH BOX */
         #ptr-box {
             position: fixed;
-            top: -70px; /* Başlangıçta gizli */
+            top: -70px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2000;
@@ -348,6 +352,7 @@
             box-shadow: 0 4px 15px rgba(214, 51, 132, 0.15);
             margin-bottom: 20px;
             font-size: 0.9rem;
+            flex-direction: column; /* Mobilde iki satır olması için eklendi */
         }
         body.dark-mode .paused-badge-styled { background: rgba(74, 27, 45, 0.8); border-color: #661a36; color: #f8bbd0; }
         
@@ -780,7 +785,10 @@
                     <!-- PAUSED BADGE (YENİ TASARIM) -->
                     <div id="pausedBadge" class="paused-badge-styled" style="display:none;">
                         <i class="fas fa-pause-circle pulse-icon fs-5"></i>
-                        <span>İlerleme Duraklatıldı (Muayyen Gün)</span>
+                        <div class="d-flex flex-column text-center">
+                            <span>İlerleme Duraklatıldı</span>
+                            <span class="small opacity-75">(Muayyen Gün)</span>
+                        </div>
                     </div>
                     
                     <div id="goalCard" class="goal-card">
@@ -989,7 +997,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="calculator-card">
-                        <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female" style="display:none;">
+                        <div id="femaleCalcInfo" class="custom-alert-box custom-alert-female female-alert-box" style="display:none;">
                             <div class="d-flex align-items-center mb-2"><i class="fas fa-female fa-lg me-2 text-danger"></i><span class="fw-bold">Kadın kullanıcı olarak işaretlendiğiniz için hesaplamalardan Muayyen Günler düşülecektir.</span></div>
                             <div class="d-flex align-items-center gap-2 mt-2"><span>Aylık Ortalama Muayyen Gün Sayısı:</span><input type="number" id="menstrualDaysInput" class="form-control text-center fw-bold text-danger" style="width: 70px; height: 35px;" value="6" onchange="updateMenstrualDays(this.value)"></div>
                         </div>
@@ -1638,7 +1646,6 @@
         const weeklyCard = document.getElementById('weeklyCard');
         const splitContainer = document.getElementById('prayerSplitContainer');
 
-        // PAUSED MODU MANTIĞI: Yeni CSS sınıfını doğru elementlere uygular
         if (isPaused) { 
             pausedBadge.style.display = 'flex'; 
             goalCard.classList.add('paused-mode-overlay'); 
@@ -2849,7 +2856,7 @@
             { 
                 key: 'nafile', name: "Nafile Oruç", icon: "fa-hands-holding-circle", 
                 boxClass: "nafile", 
-                progressColor: "bg-success", btnClass: "bg-success border-0", 
+                progressColor: "bg-success", btnClass: "bg-success",
                 countLabel: "Toplam Tutulan Nafile"
             }
         ];
