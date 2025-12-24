@@ -143,20 +143,71 @@
         .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
         .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        .theme-oruc-kaza { background: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%); color: #212529; border: 1px solid #ced4da; }
-        .theme-oruc-kaza.active { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; border: none; }
-        .theme-oruc-nafile { background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%); color: #1b5e20; }
-        .theme-oruc-nafile.active { background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%); color: white; }
+        /* YENI ORUC STILLERI VE SECIM KUTULARI ICIN */
+        .fasting-select-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .fasting-select-card:hover { transform: translateY(-3px); }
+        .fasting-select-card.active {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: var(--card-bg); /* Yada aktif için hafif renk */
+        }
+        /* Aktif oldugunda kenarlik veya belirteç */
+        .fasting-select-card.active::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 6px;
+        }
+        .fasting-select-card[data-type="kaza"].active::before { background: linear-gradient(180deg, #8E2DE2, #4A00E0); }
+        .fasting-select-card[data-type="nafile"].active::before { background: linear-gradient(180deg, #11998e, #38ef7d); }
 
-        body.dark-mode .side-menu-item { background: #2c3035; color: #90a4ae; border: 1px solid #444; }
-        body.dark-mode .theme-sabah.active { background: linear-gradient(135deg, #0277bd 0%, #01579b 100%); color: #e1f5fe; }
-        body.dark-mode .theme-ogle.active { background: linear-gradient(135deg, #ff8f00 0%, #e65100 100%); color: #fffde7; }
-        body.dark-mode .theme-ikindi.active { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); color: #fbe9e7; }
-        body.dark-mode .theme-aksam.active { background: linear-gradient(135deg, #283593 0%, #1a237e 100%); color: #e8eaf6; }
-        body.dark-mode .theme-yatsi.active { background: linear-gradient(135deg, #37474f 0%, #263238 100%); color: #eceff1; }
-        body.dark-mode .theme-oruc-kaza { background: #2c3035; color: #ced4da; border-color: #444; }
-        body.dark-mode .theme-oruc-kaza.active { background: linear-gradient(135deg, #000000 0%, #434343 100%); color: white; }
-        body.dark-mode .theme-oruc-nafile.active { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); }
+        .fasting-icon-box {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        .icon-box-kaza { background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%); box-shadow: 0 4px 10px rgba(74, 0, 224, 0.3); }
+        .icon-box-nafile { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); }
+        
+        .fasting-text-group { flex: 1; }
+        .fasting-title { font-weight: 700; font-size: 0.95rem; display: block; color: var(--text-color); }
+        .fasting-subtitle { font-size: 0.7rem; opacity: 0.7; font-weight: 600; text-transform: uppercase; }
+
+        body.dark-mode .fasting-select-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); border-color: #444; color: #e0e0e0; }
+
+        /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ */
+        /* Kaza Orucu: Çok daha belirgin, koyu mor/mavi/kırmızı geçişli güçlü bir renk */
+        .bg-oruc-kaza-gradient { 
+            background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%); 
+            color: white; 
+            border: none;
+        }
+        .bg-oruc-nafile-gradient { 
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
+            color: white; 
+            border: none;
+        }
+        
+        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #4e0f64 0%, #2a0845 100%); }
+        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #0e4d46 0%, #08382d 100%); }
 
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
         .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } 
@@ -165,8 +216,6 @@
         .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
         .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
         
-        .bg-oruc-kaza { background: linear-gradient(135deg, #232526 0%, #414345 100%); color: white; }
-        .bg-oruc-nafile { background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); color: white; }
         .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; }
         .border-white-10 { border-color: rgba(255,255,255,0.2) !important; }
 
@@ -175,8 +224,6 @@
         body.dark-mode .bg-ikindi { background: linear-gradient(120deg, #bf360c 0%, #d84315 40%, #ff7043 50%, #d84315 60%, #bf360c 100%); }
         body.dark-mode .bg-aksam { background: linear-gradient(120deg, #1a237e 0%, #303f9f 40%, #7986cb 50%, #303f9f 60%, #1a237e 100%); }
         body.dark-mode .bg-yatsi { background: linear-gradient(120deg, #102027 0%, #263238 40%, #546e7a 50%, #263238 60%, #102027 100%); }
-        body.dark-mode .bg-oruc-kaza { background: linear-gradient(135deg, #000000 0%, #434343 100%); }
-        body.dark-mode .bg-oruc-nafile { background: linear-gradient(135deg, #0e6655 0%, #117864 100%); }
 
         .pd-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; padding: 25px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border-radius: 24px; margin: 10px; }
         body.dark-mode .pd-content { background: rgba(20, 20, 20, 0.5); }
@@ -2562,27 +2609,33 @@
         const uiProps = [
             { 
                 key: 'kaza', name: "Kaza Orucu", icon: "fa-star-and-crescent", 
-                theme: "theme-oruc-kaza", bg: "bg-oruc-kaza", 
-                colorClass: "bg-dark", btnClass: "btn-dark", 
+                theme: "icon-box-kaza", bg: "bg-oruc-kaza-gradient", 
+                colorClass: "bg-white", btnClass: "btn-outline-light", 
                 countLabel: "Toplam Tutulan Kaza"
             },
             { 
                 key: 'nafile', name: "Nafile Oruç", icon: "fa-hands-holding-circle", 
-                theme: "theme-oruc-nafile", bg: "bg-oruc-nafile", 
-                colorClass: "bg-success", btnClass: "bg-success",
+                theme: "icon-box-nafile", bg: "bg-oruc-nafile-gradient", 
+                colorClass: "bg-white", btnClass: "btn-outline-light",
                 countLabel: "Toplam Tutulan Nafile"
             }
         ];
         
         const currentUI = uiProps[activeFastingIndex];
         
-        let menuHTML = `<div class="prayer-side-menu">`;
+        let menuHTML = `<div class="fasting-side-menu">`;
         uiProps.forEach((props, i) => {
             const activeClass = i === activeFastingIndex ? 'active' : '';
             menuHTML += `
-            <div class="side-menu-item ${props.theme} ${activeClass}" onclick="setActiveFasting(${i})">
-                <i class="fas ${props.icon} side-menu-icon"></i>
-                <div class="side-menu-label">${props.name}</div>
+            <div class="fasting-select-card ${activeClass}" data-type="${props.key}" onclick="setActiveFasting(${i})">
+                <div class="fasting-icon-box ${props.theme}">
+                    <i class="fas ${props.icon}"></i>
+                </div>
+                <div class="fasting-text-group">
+                    <span class="fasting-title">${props.name}</span>
+                    <span class="fasting-subtitle text-muted">Takip Et</span>
+                </div>
+                ${i === activeFastingIndex ? '<i class="fas fa-chevron-right text-success"></i>' : ''}
             </div>`;
         });
         menuHTML += `</div>`;
@@ -2599,7 +2652,7 @@
                 
                 <div class="pd-actions mt-3">
                     <button class="pd-btn pd-btn-minus" onclick="changeFasting('${currentUI.key}', -1)"><i class="fas fa-minus"></i></button>
-                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass} border-0" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
+                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass} border-0 bg-white text-dark" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
                 </div>
 
                 <div class="text-center mt-3 pt-3 border-top border-white-10">
@@ -2633,7 +2686,7 @@
 
                 <div class="pd-actions mt-3">
                     <button class="pd-btn pd-btn-minus" onclick="changeFasting('${currentUI.key}', -1)"><i class="fas fa-minus"></i></button>
-                    <button class="pd-btn pd-btn-plus ${currentUI.btnClass} border-0" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
+                    <button class="pd-btn pd-btn-plus border-0 bg-white text-dark" onclick="changeFasting('${currentUI.key}', 1)"><i class="fas fa-plus"></i></button>
                 </div>
 
                 <div class="text-center mt-3 pt-3 border-top border-white-10">
@@ -2793,4 +2846,3 @@
 </script>
 </body>
 </html>
-
