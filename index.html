@@ -143,13 +143,19 @@
         .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
         .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        /* YENI ORUC STILLERI VE SECIM KUTULARI ICIN */
+        /* YENI ORUC STILLERI */
+        .fasting-menu-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
         .fasting-select-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -158,7 +164,8 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             position: relative;
             overflow: hidden;
-            width: 100%;
+            flex: 1; /* Side by side equal width */
+            justify-content: flex-start;
         }
         .fasting-select-card:hover { transform: translateY(-3px); }
         .fasting-select-card.active {
@@ -179,10 +186,10 @@
         .fasting-select-card[data-type="nafile"].active::before { background: linear-gradient(180deg, #11998e, #38ef7d); }
 
         .fasting-icon-box {
-            width: 45px; height: 45px;
+            width: 40px; height: 40px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: white;
             flex-shrink: 0;
         }
@@ -191,21 +198,19 @@
         .icon-box-kaza { background: linear-gradient(135deg, #607d8b 0%, #37474f 100%); box-shadow: 0 4px 10px rgba(55, 71, 79, 0.3); }
         .icon-box-nafile { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); }
         
-        .fasting-text-group { flex: 1; }
-        .fasting-title { font-weight: 700; font-size: 0.95rem; display: block; color: var(--text-color); }
-        .fasting-subtitle { font-size: 0.7rem; opacity: 0.7; font-weight: 600; text-transform: uppercase; }
+        .fasting-text-group { flex: 1; overflow: hidden; }
+        .fasting-title { font-weight: 700; font-size: 0.85rem; display: block; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .fasting-subtitle { font-size: 0.65rem; opacity: 0.7; font-weight: 600; text-transform: uppercase; }
 
         body.dark-mode .fasting-select-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); border-color: #444; color: #e0e0e0; }
 
         /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ - Zengin Gradient */
         .bg-oruc-kaza-gradient { 
-            /* Rich Indigo/Slate Gradient */
             background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);
             color: white; 
             border: none;
         }
         .bg-oruc-nafile-gradient { 
-            /* Lush Green/Teal Gradient */
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white; 
             border: none;
@@ -247,11 +252,9 @@
         .btn-calc-copy-end { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .btn-calc-reset { 
             grid-column: span 2; 
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); 
-            color: #b71c1c;
+            background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%); 
+            color: white; 
         }
-        /* More vibrant reset */
-        .btn-calc-reset { background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%); color: white; }
 
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
         .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } 
@@ -2675,7 +2678,7 @@
         
         const currentUI = uiProps[activeFastingIndex];
         
-        let menuHTML = `<div class="fasting-side-menu">`;
+        let menuHTML = `<div class="fasting-menu-container">`;
         uiProps.forEach((props, i) => {
             const activeClass = i === activeFastingIndex ? 'active' : '';
             menuHTML += `
@@ -2765,7 +2768,7 @@
             </div>
         `;
 
-        container.innerHTML = `<div class="prayer-split-layout">${menuHTML} ${cardHTML}</div>`;
+        container.innerHTML = menuHTML + cardHTML;
     }
 
     window.setActiveFasting = function(i) {
@@ -2898,4 +2901,3 @@
 </script>
 </body>
 </html>
-
