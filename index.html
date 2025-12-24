@@ -164,16 +164,18 @@
         .fasting-select-card.active {
             border: none;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: var(--card-bg); /* Yada aktif için hafif renk */
+            background: var(--card-bg);
         }
-        /* Aktif oldugunda kenarlik veya belirteç */
+        
         .fasting-select-card.active::before {
             content: '';
             position: absolute;
             left: 0; top: 0; bottom: 0;
             width: 6px;
         }
-        .fasting-select-card[data-type="kaza"].active::before { background: linear-gradient(180deg, #8E2DE2, #4A00E0); }
+        
+        /* GÜNCELLENEN KAZA RENKLERİ (Mor yerine Koyu Slate/Mavi-Gri Gradient) */
+        .fasting-select-card[data-type="kaza"].active::before { background: linear-gradient(180deg, #546e7a, #37474f); }
         .fasting-select-card[data-type="nafile"].active::before { background: linear-gradient(180deg, #11998e, #38ef7d); }
 
         .fasting-icon-box {
@@ -184,7 +186,9 @@
             color: white;
             flex-shrink: 0;
         }
-        .icon-box-kaza { background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%); box-shadow: 0 4px 10px rgba(74, 0, 224, 0.3); }
+        
+        /* İKON KUTUSU VE ANA KART İÇİN YENİ PREMIUM KOYU GRADIENT */
+        .icon-box-kaza { background: linear-gradient(135deg, #607d8b 0%, #37474f 100%); box-shadow: 0 4px 10px rgba(55, 71, 79, 0.3); }
         .icon-box-nafile { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); }
         
         .fasting-text-group { flex: 1; }
@@ -194,9 +198,9 @@
         body.dark-mode .fasting-select-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); border-color: #444; color: #e0e0e0; }
 
         /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ */
-        /* Kaza Orucu: Çok daha belirgin, koyu mor/mavi/kırmızı geçişli güçlü bir renk */
         .bg-oruc-kaza-gradient { 
-            background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%); 
+            /* Yeni Koyu Slate Gradient - Yeşil tema ile uyumlu, ciddi ve şık */
+            background: linear-gradient(135deg, #607d8b 0%, #37474f 100%); 
             color: white; 
             border: none;
         }
@@ -206,7 +210,7 @@
             border: none;
         }
         
-        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #4e0f64 0%, #2a0845 100%); }
+        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #37474f 0%, #102027 100%); }
         body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #0e4d46 0%, #08382d 100%); }
 
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
