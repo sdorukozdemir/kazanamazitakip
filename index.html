@@ -42,8 +42,8 @@
             --calc-header-text: #ffffff; --calc-header-shadow: rgba(96, 153, 121, 0.3); 
             --placeholder-color: #6c757d; --pink-accent: #d63384; --pink-bg-light: #fce4ec; 
             --blue-accent: #0d6efd; --blue-bg-light: #e7f1ff; 
-            --fade-box-bg: rgba(255, 255, 255, 0.6); --fade-box-border: rgba(0,0,0,0.05); 
-            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
+            --fade-box-bg: #ffffff; --fade-box-border: #dee2e6; 
+            --fade-box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
             --calc-item-bg: #ffffff; --calc-item-border: #e9ecef; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
@@ -67,8 +67,8 @@
             --calc-box-bg: #2d2d2d; --calc-header-bg: linear-gradient(135deg, #0f5132, #146c43); 
             --calc-header-text: #e0e0e0; --calc-header-shadow: rgba(0, 0, 0, 0.5); 
             --placeholder-color: #bbbbbb; --pink-bg-light: #4a1b2d; --blue-bg-light: #0d2b4a; 
-            --fade-box-bg: rgba(255, 255, 255, 0.05); --fade-box-border: rgba(255,255,255,0.05); 
-            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+            --fade-box-bg: #2d2d2d; --fade-box-border: #444; 
+            --fade-box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
             --calc-item-bg: #262626; --calc-item-border: #333; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
@@ -81,10 +81,10 @@
         html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: background-color 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
         
-        /* PULL TO REFRESH BOX (YENİLENMİŞ) */
+        /* PULL TO REFRESH BOX */
         #ptr-box {
             position: fixed;
-            top: -70px; /* Başlangıçta gizli */
+            top: -70px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2000;
@@ -315,24 +315,6 @@
         .btn-add-large { padding: 8px 15px; font-size: 0.85rem; border-radius: 15px; font-weight: 700; cursor: pointer; background: rgba(255,255,255,0.9); color: #333; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.1s; white-space: nowrap; }
         .btn-add-large:active { transform: scale(0.95); }
         
-        /* DÜZELTİLEN KUTU STİLLERİ */
-        .fade-box { 
-            background: var(--fade-box-bg); 
-            border: 1px solid var(--fade-box-border); 
-            border-radius: 12px; 
-            padding: 10px 15px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            backdrop-filter: blur(5px); 
-            box-shadow: var(--fade-box-shadow); 
-            height: 100%; 
-            min-height: 75px; 
-        }
-        .fade-box input { background: transparent; border: none; text-align: center; font-weight: bold; color: var(--text-color); width: 100%; outline: none; padding: 0; margin: 0; font-size: 1.1rem; }
-        .fade-box label { margin-bottom: 4px; opacity: 0.7; font-size: 0.7rem; letter-spacing: 0.5px; font-weight: 700; text-transform: uppercase; }
-
         .calculator-card { padding: 20px; }
         .calc-row { background-color: var(--calc-box-bg); padding: 0; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
         .calc-header { background: var(--calc-header-bg); color: var(--calc-header-text); padding: 8px 20px; text-align: center; font-weight: bold; font-size: 1.1rem; margin: 12px auto 5px auto; width: fit-content; min-width: 120px; border-radius: 20px; box-shadow: 0 4px 10px var(--calc-header-shadow); letter-spacing: 0.5px; }
@@ -411,6 +393,40 @@
         .capsule-input::-webkit-calendar-picker-indicator { opacity: 0.3; }
         body.dark-mode .capsule-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; }
         .capsule-reset { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #dc3545; cursor: pointer; font-size: 1rem; display: none; }
+
+        /* ONARILAN MENSTRUAL TOGGLE (Switch) */
+        .menstrual-toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--pink-bg-light), #fff0f6);
+            border-radius: 50px;
+            border: 1px solid var(--pink-accent);
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.15);
+        }
+        body.dark-mode .menstrual-toggle-container { background: linear-gradient(135deg, #4a1b2d, #2d121b); }
+        .menstrual-label { font-weight: bold; color: var(--pink-accent); display: flex; align-items: center; gap: 10px; font-size: 1rem; }
+        /* Switch boyutlandırma */
+        .form-check-input { width: 3em !important; height: 1.5em !important; cursor: pointer; }
+
+        /* PAUSED MODU İÇİN (Gri Ekran) */
+        .paused-mode-overlay {
+            pointer-events: none !important;
+            opacity: 0.5 !important;
+            filter: grayscale(100%) !important;
+            transition: all 0.3s ease;
+        }
+
+        /* GÜÇLENDİRİLMİŞ CİNSİYET SEÇİMİ */
+        .gender-option { cursor: pointer; border: 2px solid var(--border-color); border-radius: 15px; padding: 20px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); background: var(--card-bg); position: relative; overflow: hidden; }
+        .gender-option:hover { transform: translateY(-3px); }
+        .gender-option.selected { transform: scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-width: 3px; }
+        /* Kadın Seçili */
+        .gender-option.selected[data-type="female"] { border-color: var(--pink-accent); background: linear-gradient(145deg, #fce4ec, #ffffff); color: var(--pink-accent); }
+        /* Erkek Seçili */
+        .gender-option.selected[data-type="male"] { border-color: var(--blue-accent); background: linear-gradient(145deg, #e3f2fd, #ffffff); color: var(--blue-accent); }
 
         .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
         .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; flex-wrap: wrap; }
@@ -710,13 +726,23 @@
 
     <div id="content">
         <div id="section-dashboard" class="app-section active">
+            <!-- MENSTRUAL TOGGLE AREA -->
             <div id="menstrualToggleArea" class="menstrual-toggle-container" style="display:none;">
-                <div class="menstrual-label"><i class="fas fa-flower"></i> Muayyen Günümdeyim</div>
-                <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="menstrualSwitch" style="width: 50px; height: 25px;" onchange="toggleMenstrualState(this.checked)"></div>
+                <div class="menstrual-label">
+                    <i class="fas fa-flower me-2"></i> Muayyen Günümdeyim
+                </div>
+                <div class="form-check form-switch m-0">
+                    <input class="form-check-input" type="checkbox" id="menstrualSwitch" onchange="toggleMenstrualState(this.checked)">
+                </div>
             </div>
+            
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8 col-lg-6">
-                    <div id="pausedBadge" class="paused-badge text-center w-100"><i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)</div>
+                    <!-- PAUSED BADGE -->
+                    <div id="pausedBadge" class="paused-badge text-center w-100 shadow-sm border border-danger mb-3" style="display:none; background:#ffecec; color:#d63384;">
+                        <i class="fas fa-pause-circle me-2"></i> İlerleme Duraklatıldı (Muayyen Gün)
+                    </div>
+                    
                     <div id="goalCard" class="goal-card">
                         <h4>🎯 Günlük Hedef</h4>
                         <div class="goal-content">
@@ -737,7 +763,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row g-3 mb-4 justify-content-center">
+            
+            <div class="row g-3 mb-4 justify-content-center" id="dateInputsArea">
                 <div class="col-6 col-md-4"><div class="fade-box"><label>BAŞLAMA TARİHİ</label> <input type="text" id="startDate" class="fs-6" placeholder="gg.aa.yyyy" onfocus="(this.type='date')" onblur="(this.type='text')"></div></div>
                 <div class="col-6 col-md-4"><div class="fade-box"><label>GEÇEN SÜRE (GÜN)</label> <input type="text" id="elapsedDays" class="fs-5" readonly></div></div>
             </div>
@@ -1571,7 +1598,25 @@
         const weeklyCard = document.getElementById('weeklyCard');
         const splitContainer = document.getElementById('prayerSplitContainer');
 
-        if (isPaused) { pausedBadge.style.display = 'block'; goalCard.classList.add('paused-mode-overlay'); weeklyCard.classList.add('paused-mode-overlay'); splitContainer.classList.add('paused-mode-overlay'); } else { pausedBadge.style.display = 'none'; goalCard.classList.remove('paused-mode-overlay'); weeklyCard.classList.remove('paused-mode-overlay'); splitContainer.classList.remove('paused-mode-overlay'); }
+        if (isPaused) { 
+            pausedBadge.style.display = 'block'; 
+            goalCard.classList.add('paused-mode-overlay'); 
+            weeklyCard.classList.add('paused-mode-overlay'); 
+            
+            // DÜZELTME: Doğrudan doğru elementi seçelim
+            if(splitContainer) splitContainer.classList.add('paused-mode-overlay');
+            // Eğer prayerDetailCard dışarıda ise (mobil)
+            const pdCard = document.getElementById('prayerDetailCard');
+            if(pdCard) pdCard.classList.add('paused-mode-overlay');
+
+        } else { 
+            pausedBadge.style.display = 'none'; 
+            goalCard.classList.remove('paused-mode-overlay'); 
+            weeklyCard.classList.remove('paused-mode-overlay'); 
+            if(splitContainer) splitContainer.classList.remove('paused-mode-overlay');
+            const pdCard = document.getElementById('prayerDetailCard');
+            if(pdCard) pdCard.classList.remove('paused-mode-overlay');
+        }
 
         document.getElementById('dailyCountDisplay').innerText = todayTotal;
         document.getElementById('dailyGoalInput').value = localData.daily.target;
