@@ -204,13 +204,31 @@
 
         body.dark-mode .fasting-select-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); border-color: #444; color: #e0e0e0; }
 
+        /* MOBIL UYUMLULUK AYARLARI (Yanyana tutmak için) */
+        @media (max-width: 576px) {
+           .fasting-menu-container {
+               gap: 8px; /* Reduce gap between the two cards */
+           }
+           .fasting-select-card {
+               padding: 10px; /* Reduce padding inside cards */
+               gap: 8px;
+           }
+           .fasting-icon-box {
+               width: 32px; height: 32px; font-size: 0.9rem; /* Smaller icons */
+           }
+           .fasting-title { font-size: 0.75rem; }
+           .fasting-subtitle { font-size: 0.6rem; }
+        }
+
         /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ - Zengin Gradient */
         .bg-oruc-kaza-gradient { 
+            /* Rich Indigo/Slate Gradient */
             background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);
             color: white; 
             border: none;
         }
         .bg-oruc-nafile-gradient { 
+            /* Lush Green/Teal Gradient */
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white; 
             border: none;
@@ -219,7 +237,7 @@
         body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #16222a 0%, #3a6073 100%); }
         body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
 
-        /* CALCULATOR ACTION BUTTON STYLES (NEW) */
+        /* CALCULATOR ACTION BUTTON STYLES */
         .calc-actions-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -2768,7 +2786,7 @@
             </div>
         `;
 
-        container.innerHTML = menuHTML + cardHTML;
+        container.innerHTML = `<div class="prayer-split-layout" style="flex-direction:column;">${menuHTML} ${cardHTML}</div>`;
     }
 
     window.setActiveFasting = function(i) {
