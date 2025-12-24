@@ -143,99 +143,21 @@
         .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
         .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        /* YENI ORUC STILLERI */
-        .fasting-menu-container {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-        .fasting-select-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-            flex: 1; /* Side by side equal width */
-            justify-content: flex-start;
-        }
-        .fasting-select-card:hover { transform: translateY(-3px); }
-        .fasting-select-card.active {
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: var(--card-bg);
-        }
-        
-        .fasting-select-card.active::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 6px;
-        }
-        
-        /* GÜNCELLENEN KAZA RENKLERİ (Koyu Slate/Mavi-Gri Gradient) */
-        .fasting-select-card[data-type="kaza"].active::before { background: linear-gradient(180deg, #546e7a, #37474f); }
-        .fasting-select-card[data-type="nafile"].active::before { background: linear-gradient(180deg, #11998e, #38ef7d); }
-
-        .fasting-icon-box {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
-            color: white;
-            flex-shrink: 0;
-        }
-        
-        /* İKON KUTUSU VE ANA KART İÇİN YENİ PREMIUM KOYU GRADIENT */
-        .icon-box-kaza { background: linear-gradient(135deg, #607d8b 0%, #37474f 100%); box-shadow: 0 4px 10px rgba(55, 71, 79, 0.3); }
-        .icon-box-nafile { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); }
-        
-        .fasting-text-group { flex: 1; overflow: hidden; }
-        .fasting-title { font-weight: 700; font-size: 0.85rem; display: block; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .fasting-subtitle { font-size: 0.65rem; opacity: 0.7; font-weight: 600; text-transform: uppercase; }
-
-        body.dark-mode .fasting-select-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); border-color: #444; color: #e0e0e0; }
-
-        /* MOBIL UYUMLULUK AYARLARI (Yanyana tutmak için) */
-        @media (max-width: 576px) {
-           .fasting-menu-container {
-               gap: 8px; /* Reduce gap between the two cards */
-           }
-           .fasting-select-card {
-               padding: 10px; /* Reduce padding inside cards */
-               gap: 8px;
-           }
-           .fasting-icon-box {
-               width: 32px; height: 32px; font-size: 0.9rem; /* Smaller icons */
-           }
-           .fasting-title { font-size: 0.75rem; }
-           .fasting-subtitle { font-size: 0.6rem; }
-        }
-
         /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ - Zengin Gradient */
         .bg-oruc-kaza-gradient { 
-            /* Rich Indigo/Slate Gradient */
             background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);
             color: white; 
             border: none;
         }
         .bg-oruc-nafile-gradient { 
-            /* Lush Green/Teal Gradient */
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white; 
             border: none;
         }
         
-        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #16222a 0%, #3a6073 100%); }
-        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
+        /* DARK MODE DÜZELTMESİ: Kaza ve Nafile için belirgin farklı renkler */
+        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #4527a0 0%, #283593 100%); } /* Belirgin Mor/Mavi */
+        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #00695c 0%, #004d40 100%); } /* Belirgin Koyu Teal/Yeşil */
 
         /* CALCULATOR ACTION BUTTON STYLES */
         .calc-actions-grid {
@@ -559,6 +481,11 @@
         .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
         .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
         .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
+        
+        /* FASTING TAB BUTTONS (Analysis style but specific colors) */
+        .fasting-tab-btn.active.active-kaza { background: linear-gradient(135deg, #546e7a, #37474f); box-shadow: 0 4px 10px rgba(55, 71, 79, 0.3); color:white; }
+        .fasting-tab-btn.active.active-nafile { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); color:white; }
+
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
         @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -2696,22 +2623,18 @@
         
         const currentUI = uiProps[activeFastingIndex];
         
-        let menuHTML = `<div class="fasting-menu-container">`;
+        // --- BU KISIM GÜNCELLENDİ: Analiz / Son Değişiklikler TARZI TAB MENU ---
+        let menuHTML = `<div class="stats-tab-container mb-3" style="width:100%;">`;
         uiProps.forEach((props, i) => {
-            const activeClass = i === activeFastingIndex ? 'active' : '';
-            menuHTML += `
-            <div class="fasting-select-card ${activeClass}" data-type="${props.key}" onclick="setActiveFasting(${i})">
-                <div class="fasting-icon-box ${props.theme}">
-                    <i class="fas ${props.icon}"></i>
-                </div>
-                <div class="fasting-text-group">
-                    <span class="fasting-title">${props.name}</span>
-                    <span class="fasting-subtitle text-muted">Takip Et</span>
-                </div>
-                ${i === activeFastingIndex ? '<i class="fas fa-chevron-right text-success"></i>' : ''}
-            </div>`;
+            const isActive = i === activeFastingIndex;
+            let activeColorClass = "";
+            if(isActive) {
+                activeColorClass = props.key === 'kaza' ? 'active-kaza' : 'active-nafile';
+            }
+            menuHTML += `<button class="stats-tab-btn fasting-tab-btn ${isActive ? 'active ' + activeColorClass : ''}" onclick="setActiveFasting(${i})">${props.name}</button>`;
         });
         menuHTML += `</div>`;
+        // ------------------------------------------------------------------------
 
         let cardContentHTML = '';
         const hasTarget = data.hasTarget === true;
