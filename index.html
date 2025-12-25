@@ -227,7 +227,7 @@
 
         /* --- CHART PERİOD SELECTOR (NEW) --- */
         .chart-period-selector { 
-            display: flex; /* Changed from grid to flex */
+            display: flex; /* Changed from grid to flex for wider look */
             width: 100%;
             background: var(--input-bg); 
             border-radius: 15px; 
@@ -237,7 +237,7 @@
             margin-bottom: 10px; 
         }
         .chart-period-btn { 
-            flex: 1; /* Equal width */
+            flex: 1; /* Make items grow to fill space */
             text-align: center; 
             padding: 12px 2px; 
             font-size: 0.85rem; 
@@ -877,26 +877,28 @@
                                     <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
                                 </div>
                             </div>
-                            <canvas id="lineChart" style="max-height: 250px;"></canvas>
+                            <div style="height: 250px; position: relative;">
+                                <canvas id="lineChart"></canvas>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="chart-container">
                             <h5 class="text-center mb-3 fw-bold">Genel Durum</h5>
-                            <div style="position: relative; height: 200px;">
+                            <div style="height: 220px; position: relative; margin-bottom:15px;">
                                 <canvas id="completionChart"></canvas>
                             </div>
                             <!-- CUSTOM LEGEND FOR COMPLETION CHART -->
                             <div class="custom-chart-legend">
                                 <div class="legend-box done">
-                                    <span class="legend-label">KILINAN</span>
-                                    <span class="legend-count" id="legendDoneCount">0</span>
-                                    <span class="legend-percent" id="legendDonePercent">%0</span>
+                                     <span class="legend-label">KILINAN</span>
+                                     <span class="legend-count" id="legendDoneCount">0</span>
+                                     <span class="legend-percent" id="legendDonePercent">%0</span>
                                 </div>
                                 <div class="legend-box remaining">
-                                    <span class="legend-label">KALAN</span>
-                                    <span class="legend-count" id="legendRemCount">0</span>
-                                    <span class="legend-percent" id="legendRemPercent">%0</span>
+                                     <span class="legend-label">KALAN</span>
+                                     <span class="legend-count" id="legendRemCount">0</span>
+                                     <span class="legend-percent" id="legendRemPercent">%0</span>
                                 </div>
                             </div>
                         </div>
@@ -2778,6 +2780,7 @@
         
         const currentUI = uiProps[activeFastingIndex];
         
+        // --- BU KISIM GÜNCELLENDİ: Analiz / Son Değişiklikler TARZI TAB MENU ---
         let menuHTML = `<div class="stats-tab-container mb-3" style="width:100%;">`;
         uiProps.forEach((props, i) => {
             const isActive = i === activeFastingIndex;
