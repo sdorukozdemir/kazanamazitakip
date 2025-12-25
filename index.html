@@ -505,7 +505,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 450px; /* Daha uzun kart */
+            min-height: 450px;
         }
 
         .chart-period-selector {
@@ -542,6 +542,57 @@
             color: white;
             box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3);
             font-weight: 700;
+        }
+
+        /* --- YENİ EKLENEN CUSTOM LEGEND STİLLERİ --- */
+        .custom-legend-box {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px;
+            background: var(--input-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-top: 15px;
+        }
+        .cl-item {
+            text-align: center;
+            flex: 1;
+        }
+        .cl-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 2px;
+        }
+        .cl-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .cl-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+        .cl-percent {
+            font-size: 1.6rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .cl-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+        .cl-divider {
+            width: 1px;
+            height: 50px;
+            background: var(--border-color);
+            margin: 0 10px;
         }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
@@ -766,7 +817,7 @@
 
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
-                    <!-- GÜNCELLENEN PERFORMANS KARTI -->
+                    <!-- PERFORMANS KARTI -->
                     <div class="col-md-6">
                         <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
                         <div class="perf-card">
@@ -781,7 +832,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
+                    <!-- GÜNCELLENEN GENEL DURUM KARTI -->
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h5 class="text-center mb-3 fw-bold">Genel Durum</h5>
+                            <!-- Saf Grafik Alanı -->
+                            <div style="position: relative; height: 220px; width:100%;">
+                                <canvas id="completionChart"></canvas>
+                            </div>
+                            <!-- Yeni Custom Legend -->
+                            <div id="generalStatusLegend" class="custom-legend-box"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -2473,42 +2535,47 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '60%', 
+                cutout: '70%', /* İç halkayı biraz daha incelttim */
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: lc,
-                            usePointStyle: true,
-                            font: { family: 'Poppins' }
-                        }
-                    },
-                    datalabels: {
-                        color: '#fff', 
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
-                        borderRadius: 6,
-                        font: { weight: 'bold', family: 'Poppins', size: 11 },
-                        formatter: (val, ctx) => {
-                            let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                            let percentage = (val * 100 / sum).toFixed(1) + "%";
-                            if(percentage === "0.0%") return "";
-                            let label = ctx.chart.data.labels[ctx.dataIndex];
-                            return label + "\n" + percentage;
-                        },
-                        padding: 6,
-                        anchor: 'end',
-                        align: 'end',
-                        offset: -5,
-                        textAlign: 'center'
-                    },
+                    legend: { display: false }, /* Varsayılan lejantı kapattım */
+                    datalabels: { display: false }, /* Grafik üzerindeki etiketleri kapattım */
                     tooltip: {
                         enabled: true,
                         yAlign: 'bottom', 
                     }
                 }
-            },
-            plugins: [ChartDataLabels]
+            }
         }); 
+
+        // --- YENİ EKLENEN CUSTOM LEGEND KODU ---
+        let pctDone = totalTarget > 0 ? (totalDone / totalTarget * 100).toFixed(1) : 0;
+        let pctRem = totalTarget > 0 ? ((totalTarget - totalDone) / totalTarget * 100).toFixed(1) : 0;
+        
+        const legendContainer = document.getElementById('generalStatusLegend');
+        if(legendContainer) {
+            legendContainer.innerHTML = `
+                <div class="cl-item">
+                    <div class="cl-title-row" style="color: #609979;">
+                        <span class="cl-dot" style="background-color: #609979;"></span>
+                        <span class="cl-label">Kılınan</span>
+                    </div>
+                    <span class="cl-percent text-success">%${pctDone}</span>
+                    <div class="cl-value">${totalDone} Vakit</div>
+                </div>
+                
+                <div class="cl-divider"></div>
+                
+                <div class="cl-item">
+                    <div class="cl-title-row" style="color: #fd7e14;">
+                        <span class="cl-dot" style="background-color: #fd7e14;"></span>
+                        <span class="cl-label">Kalan</span>
+                    </div>
+                    <span class="cl-percent text-warning">%${pctRem}</span>
+                    <div class="cl-value">${Math.max(0, totalTarget - totalDone)} Vakit</div>
+                </div>
+            `;
+        }
+        // ----------------------------------------
 
         const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } 
         
@@ -2524,14 +2591,12 @@
                     tension: 0.4, 
                     fill: true, 
                     pointRadius: pointRadiusVal,
-                    // DOKUNMA HASSASİYETİNİ ARTIRMAK İÇİN:
                     pointHitRadius: 20 
                 }] 
             }, 
             options: { 
                 responsive: true, 
                 maintainAspectRatio: false, 
-                // YAKIN ALAN ALGILAMA (INTERSECT: FALSE)
                 interaction: {
                     mode: 'index',
                     intersect: false,
