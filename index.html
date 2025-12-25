@@ -505,14 +505,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 100%;
-        }
-
-        .perf-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            /* height: 100%; */
         }
 
         .chart-period-selector {
@@ -775,19 +768,16 @@
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
                     <!-- GÜNCELLENEN PERFORMANS KARTI -->
                     <div class="col-md-6">
+                        <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
                         <div class="perf-card">
-                            <div class="perf-header">
-                                <h5 class="mb-0 fw-bold">Performans Analizi</h5>
-                            </div>
-                            
                             <div class="chart-period-selector">
                                 <div class="chart-period-btn active" id="btn-period-weekly" onclick="switchChartPeriod('weekly', this)">Haftalık</div>
                                 <div class="chart-period-btn" id="btn-period-monthly" onclick="switchChartPeriod('monthly', this)">Aylık</div>
                                 <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
                             </div>
                             
-                            <div style="flex:1; display:flex; align-items:flex-end;">
-                                <canvas id="lineChart" style="max-height: 250px; width: 100%;"></canvas>
+                            <div style="flex:1; display:flex; align-items:center;">
+                                <canvas id="lineChart" style="max-height: 320px; width: 100%;"></canvas>
                             </div>
                         </div>
                     </div>
