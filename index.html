@@ -143,74 +143,7 @@
         .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
         .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        /* YENI ORUC STILLERI */
-        .fasting-menu-container {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-        .fasting-select-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-            flex: 1;
-            justify-content: flex-start;
-        }
-        .fasting-select-card:hover { transform: translateY(-3px); }
-        .fasting-select-card.active {
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: var(--card-bg);
-        }
-        
-        .fasting-select-card.active::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 6px;
-        }
-        
-        /* GÜNCELLENEN KAZA RENKLERİ */
-        .fasting-select-card[data-type="kaza"].active::before { background: linear-gradient(180deg, #546e7a, #37474f); }
-        .fasting-select-card[data-type="nafile"].active::before { background: linear-gradient(180deg, #11998e, #38ef7d); }
-
-        .fasting-icon-box {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
-            color: white;
-            flex-shrink: 0;
-        }
-        
-        .icon-box-kaza { background: linear-gradient(135deg, #607d8b 0%, #37474f 100%); box-shadow: 0 4px 10px rgba(55, 71, 79, 0.3); }
-        .icon-box-nafile { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); }
-        
-        .fasting-text-group { flex: 1; overflow: hidden; }
-        .fasting-title { font-weight: 700; font-size: 0.85rem; display: block; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .fasting-subtitle { font-size: 0.65rem; opacity: 0.7; font-weight: 600; text-transform: uppercase; }
-
-        body.dark-mode .fasting-select-card { background: linear-gradient(145deg, #1f2226 0%, #3a3f45 50%, #1f2226 100%); border-color: #444; color: #e0e0e0; }
-
-        @media (max-width: 576px) {
-           .fasting-menu-container { gap: 8px; }
-           .fasting-select-card { padding: 10px; gap: 8px; }
-           .fasting-icon-box { width: 32px; height: 32px; font-size: 0.9rem; }
-           .fasting-title { font-size: 0.75rem; }
-           .fasting-subtitle { font-size: 0.6rem; }
-        }
-
+        /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ - Zengin Gradient */
         .bg-oruc-kaza-gradient { 
             background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);
             color: white; 
@@ -222,93 +155,11 @@
             border: none;
         }
         
-        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #4527a0 0%, #283593 100%); }
-        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #00695c 0%, #004d40 100%); }
+        /* DARK MODE DÜZELTMESİ: Kaza ve Nafile için belirgin farklı renkler */
+        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #4527a0 0%, #283593 100%); } /* Belirgin Mor/Mavi */
+        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #00695c 0%, #004d40 100%); } /* Belirgin Koyu Teal/Yeşil */
 
-        /* --- CHART PERİOD SELECTOR (NEW) --- */
-        .chart-period-selector { 
-            display: flex; /* Changed from grid to flex for wider look */
-            width: 100%;
-            background: var(--input-bg); 
-            border-radius: 15px; 
-            padding: 6px; 
-            gap: 8px; 
-            border: 1px solid var(--border-color); 
-            margin-bottom: 10px; 
-        }
-        .chart-period-btn { 
-            flex: 1; /* Make items grow to fill space */
-            text-align: center; 
-            padding: 12px 2px; 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            border-radius: 12px; 
-            transition: all 0.3s ease; 
-            color: var(--text-color); 
-            background: transparent; 
-            border: 1px solid transparent; 
-            white-space: nowrap; 
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-        }
-        .chart-period-btn.active { 
-            background: linear-gradient(135deg, #609979, #3e6b53); 
-            color: white; 
-            box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); 
-        }
-
-        /* --- CUSTOM LEGEND (NEW) --- */
-        .custom-chart-legend {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .legend-box {
-            border-radius: 16px;
-            padding: 15px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid transparent;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            position: relative;
-            overflow: hidden;
-        }
-        .legend-box.done { background: rgba(96, 153, 121, 0.08); border-color: rgba(96, 153, 121, 0.2); }
-        .legend-box.remaining { background: rgba(253, 126, 20, 0.08); border-color: rgba(253, 126, 20, 0.2); }
-        
-        .legend-label {
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-        .legend-box.done .legend-label { color: #609979; }
-        .legend-box.remaining .legend-label { color: #fd7e14; }
-
-        .legend-count {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 2px;
-        }
-        .legend-percent {
-            font-size: 1.6rem;
-            font-weight: 900;
-            line-height: 1;
-        }
-        .legend-box.done .legend-percent { color: #609979; }
-        .legend-box.remaining .legend-percent { color: #fd7e14; }
-
-        body.dark-mode .legend-box.done { background: rgba(96, 153, 121, 0.15); border-color: rgba(96, 153, 121, 0.3); }
-        body.dark-mode .legend-box.remaining { background: rgba(253, 126, 20, 0.15); border-color: rgba(253, 126, 20, 0.3); }
-
+        /* CALCULATOR ACTION BUTTON STYLES */
         .calc-actions-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -344,9 +195,6 @@
             background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%); 
             color: white; 
         }
-
-        .fasting-tab-btn.active.active-kaza { background: linear-gradient(135deg, #546e7a, #37474f); box-shadow: 0 4px 10px rgba(55, 71, 79, 0.3); color:white; }
-        .fasting-tab-btn.active.active-nafile { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); color:white; }
 
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
         .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } 
@@ -633,6 +481,11 @@
         .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
         .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
         .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
+        
+        /* FASTING TAB BUTTONS (Analysis style but specific colors) */
+        .fasting-tab-btn.active.active-kaza { background: linear-gradient(135deg, #546e7a, #37474f); box-shadow: 0 4px 10px rgba(55, 71, 79, 0.3); color:white; }
+        .fasting-tab-btn.active.active-nafile { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); color:white; }
+
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .custom-toast { pointer-events: auto; min-width: 300px; max-width: 90vw; background: var(--card-bg); color: var(--text-color); padding: 15px 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 5px solid; font-weight: 500; }
         @keyframes toastSlideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -877,32 +730,10 @@
                                     <div class="chart-period-btn" id="btn-period-3months" onclick="switchChartPeriod('3months', this)">3 Ay</div>
                                 </div>
                             </div>
-                            <div style="height: 250px; position: relative;">
-                                <canvas id="lineChart"></canvas>
-                            </div>
+                            <canvas id="lineChart" style="max-height: 250px;"></canvas>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="chart-container">
-                            <h5 class="text-center mb-3 fw-bold">Genel Durum</h5>
-                            <div style="height: 220px; position: relative; margin-bottom:15px;">
-                                <canvas id="completionChart"></canvas>
-                            </div>
-                            <!-- CUSTOM LEGEND FOR COMPLETION CHART -->
-                            <div class="custom-chart-legend">
-                                <div class="legend-box done">
-                                     <span class="legend-label">KILINAN</span>
-                                     <span class="legend-count" id="legendDoneCount">0</span>
-                                     <span class="legend-percent" id="legendDonePercent">%0</span>
-                                </div>
-                                <div class="legend-box remaining">
-                                     <span class="legend-label">KALAN</span>
-                                     <span class="legend-count" id="legendRemCount">0</span>
-                                     <span class="legend-percent" id="legendRemPercent">%0</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="col-md-6"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Genel Durum</h5><canvas id="completionChart" style="max-height: 250px;"></canvas></div></div>
                 </div>
             </div>
             
@@ -2416,58 +2247,13 @@
             labelText = 'Günlük Kılınan (Son 90 Gün)';
         } 
         
-        const ctx3 = document.getElementById('lineChart').getContext('2d');
-        
         if (lineChart) { 
             lineChart.data.labels = chartLabels; 
             lineChart.data.datasets[0].data = chartData; 
             lineChart.data.datasets[0].label = labelText; 
             lineChart.data.datasets[0].pointRadius = pointRadiusVal; 
             lineChart.update(); 
-        } else {
-            const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200);
-            gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); 
-            gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); 
-            
-            const isDark = document.body.classList.contains('dark-mode');
-            const lc = isDark ? '#fff' : '#666';
-
-            lineChart = new Chart(ctx3, { 
-                type: 'line', 
-                data: { 
-                    labels: chartLabels, 
-                    datasets: [{ 
-                        label: labelText, 
-                        data: chartData, 
-                        borderColor: '#609979', 
-                        backgroundColor: gradientLine, 
-                        tension: 0.4, 
-                        fill: true, 
-                        pointRadius: pointRadiusVal,
-                        pointBackgroundColor: '#609979'
-                    }] 
-                }, 
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { 
-                        legend: { display: false }, 
-                        datalabels: { display: false } 
-                    }, 
-                    scales: { 
-                        y: { 
-                            beginAtZero: true, 
-                            grid: { color: isDark ? '#333' : '#eee' }, 
-                            ticks:{ color: lc, stepSize: 1 } 
-                        }, 
-                        x: { 
-                            grid: { display: false }, 
-                            ticks: { color: lc, font: { size: 10 } } 
-                        } 
-                    } 
-                } 
-            }); 
-        }
+        } 
     }
     
     function calculateBestPeriods() {
@@ -2611,18 +2397,6 @@
         document.getElementById('bestMonthVal').innerText = bestPeriods.month;
         document.getElementById('longestStreakVal').innerText = maxStreakVal + " Gün";
 
-        // GUNCEL CUSTOM LEGEND HESAPLAMASI
-        document.getElementById('legendDoneCount').innerText = totalDone.toLocaleString();
-        document.getElementById('legendRemCount').innerText = Math.max(0, totalTarget - totalDone).toLocaleString();
-        
-        let donePct = 0, remPct = 0;
-        if(totalTarget > 0) {
-            donePct = (totalDone / totalTarget) * 100;
-            remPct = 100 - donePct;
-        }
-        document.getElementById('legendDonePercent').innerText = `%${donePct.toFixed(1)}`;
-        document.getElementById('legendRemPercent').innerText = `%${remPct.toFixed(1)}`;
-
         const ctx1 = document.getElementById('completionChart').getContext('2d');
         if (chartCompletion) chartCompletion.destroy();
         
@@ -2651,31 +2425,100 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '70%', 
+                cutout: '60%', 
                 plugins: {
                     legend: {
-                        display: false // LEGEND GIZLENDI, CUSTOM KULLANILIYOR
+                        position: 'bottom',
+                        labels: {
+                            color: lc,
+                            usePointStyle: true,
+                            font: { family: 'Poppins' }
+                        }
                     },
                     datalabels: {
-                       display: false // ETIKETLER GIZLENDI, CUSTOM KULLANILIYOR
+                        color: '#fff', 
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+                        borderRadius: 6,
+                        font: { weight: 'bold', family: 'Poppins', size: 11 },
+                        formatter: (val, ctx) => {
+                            let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                            let percentage = (val * 100 / sum).toFixed(1) + "%";
+                            if(percentage === "0.0%") return "";
+                            let label = ctx.chart.data.labels[ctx.dataIndex];
+                            return label + "\n" + percentage;
+                        },
+                        padding: 6,
+                        anchor: 'end',
+                        align: 'end',
+                        offset: -5,
+                        textAlign: 'center'
                     },
                     tooltip: {
-                        enabled: true
+                        enabled: true,
+                        yAlign: 'bottom', 
                     }
                 }
             },
             plugins: [ChartDataLabels]
         }); 
 
-        const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); 
+        const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } lineChart = new Chart(ctx3, { type: 'line', data: { labels: chartLabels, datasets: [{ label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', data: chartData, borderColor: '#609979', backgroundColor: gradientLine, tension: 0.4, fill: true, pointRadius: pointRadiusVal }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: isDark?'#333':'#eee' }, ticks:{ color: lc, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: lc, font: { size: 10 } } } } } }); 
         
-        // Line chart zaten updatePerformanceChart() ile yonetiliyor, burada ilk render cagirisi yapilabilir
-        updatePerformanceChart();
-
         renderHistory();
     }
     
-    // ... (rest of the functions remain the same)
+    function calculatePeriodStats() { 
+        if (!localData.logs) return { weekly: 0, monthly: 0, months3: 0, months6: 0, yearly: 0, last7Data: [], last7Labels: [], last30Data: [], last30Labels: [], last90Data: [], last90Labels: [] }; 
+        const today = new Date(); 
+        
+        const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        let monthlyTotal = 0;
+
+        let weeklyTotal = 0, m3 = 0, m6 = 0, y1 = 0; 
+        let last7Data = [], last7Labels = []; 
+        let last30Data = [], last30Labels = []; 
+        let last90Data = [], last90Labels = []; 
+
+        for(let i=6; i>=0; i--) { 
+            const d = new Date(); 
+            d.setDate(today.getDate() - i); 
+            const iso = getIsoDate(d); 
+            const val = localData.logs[iso] || 0; 
+            last7Data.push(val); 
+            last7Labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'})); 
+        } 
+        for(let i=29; i>=0; i--) { 
+            const d = new Date(); 
+            d.setDate(today.getDate() - i); 
+            const iso = getIsoDate(d); 
+            const val = localData.logs[iso] || 0; 
+            last30Data.push(val); 
+            last30Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
+        } 
+        for(let i=89; i>=0; i--) { 
+            const d = new Date(); 
+            d.setDate(today.getDate() - i); 
+            const iso = getIsoDate(d); 
+            const val = localData.logs[iso] || 0; 
+            last90Data.push(val); 
+            last90Labels.push(d.toLocaleDateString('tr-TR', {day: 'numeric', month: 'short'})); 
+        }
+
+        const threeMonthsAgo = new Date(); threeMonthsAgo.setMonth(today.getMonth() - 3); 
+        const sixMonthsAgo = new Date(); sixMonthsAgo.setMonth(today.getMonth() - 6); 
+        const oneYearAgo = new Date(); oneYearAgo.setFullYear(today.getFullYear() - 1); 
+        
+        Object.keys(localData.logs).forEach(dateKey => { 
+            const d = new Date(dateKey); 
+            const val = localData.logs[dateKey]; 
+            if(d >= currentMonthStart) monthlyTotal += val;
+            if(d >= threeMonthsAgo) m3 += val; 
+            if(d >= sixMonthsAgo) m6 += val; 
+            if(d >= oneYearAgo) y1 += val; 
+        }); 
+        
+        return { monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels, last90Data, last90Labels }; 
+    }
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
     window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
@@ -2791,6 +2634,7 @@
             menuHTML += `<button class="stats-tab-btn fasting-tab-btn ${isActive ? 'active ' + activeColorClass : ''}" onclick="setActiveFasting(${i})">${props.name}</button>`;
         });
         menuHTML += `</div>`;
+        // ------------------------------------------------------------------------
 
         let cardContentHTML = '';
         const hasTarget = data.hasTarget === true;
@@ -2998,3 +2842,4 @@
 </script>
 </body>
 </html>
+
