@@ -739,24 +739,6 @@
             </div>
         </div>
 
-        <div id="section-achievements" class="app-section">
-            <h3 class="app-header">Başarılarım & Rozetler</h3>
-            
-            <div class="card mb-4 shadow-lg border-0" style="border-radius: 20px; background: linear-gradient(135deg, #2c3e50, #4ca1af); color: white;">
-                <div class="card-body p-4 text-center">
-                    <h5 class="text-white-50 text-uppercase small fw-bold">Toplam Skor</h5>
-                    <h1 class="display-4 fw-bold mb-0" id="totalScoreDisplay">0</h1>
-                    <div class="badge bg-warning text-dark mt-2 fs-6">Seviye: <span id="userLevelDisplay">Başlangıç</span></div>
-                </div>
-            </div>
-        
-            <h5 class="fw-bold text-secondary mb-3 mt-4 text-center"><i class="fas fa-mosque me-2"></i>Namaz Rozetleri</h5>
-            <div id="badgeListNamaz" class="badge-grid"></div>
-        
-            <h5 class="fw-bold text-secondary mb-3 mt-4 text-center"><i class="fas fa-fire me-2"></i>Zincir ve Devamlılık</h5>
-            <div id="badgeListStreak" class="badge-grid"></div>
-        </div>
-
         <div id="section-stats" class="app-section">
             <h3 class="app-header">İstatistikler</h3>
             <div class="stats-tab-container">
@@ -897,6 +879,24 @@
             <div id="tesbihatContainer"></div>
         </div>
 
+        <div id="section-achievements" class="app-section">
+            <h3 class="app-header">Başarılarım & Rozetler</h3>
+            
+            <div class="card mb-4 shadow-lg border-0" style="border-radius: 20px; background: linear-gradient(135deg, #2c3e50, #4ca1af); color: white;">
+                <div class="card-body p-4 text-center">
+                    <h5 class="text-white-50 text-uppercase small fw-bold">Toplam Skor</h5>
+                    <h1 class="display-4 fw-bold mb-0" id="totalScoreDisplay">0</h1>
+                    <div class="badge bg-warning text-dark mt-2 fs-6">Seviye: <span id="userLevelDisplay">Başlangıç</span></div>
+                </div>
+            </div>
+        
+            <h5 class="fw-bold text-secondary mb-3 mt-4 text-center"><i class="fas fa-mosque me-2"></i>Namaz Rozetleri</h5>
+            <div id="badgeListNamaz" class="badge-grid"></div>
+        
+            <h5 class="fw-bold text-secondary mb-3 mt-4 text-center"><i class="fas fa-fire me-2"></i>Zincir ve Devamlılık</h5>
+            <div id="badgeListStreak" class="badge-grid"></div>
+        </div>
+
         <div id="section-calculator" class="app-section">
             <h3 class="app-header">Kaza Hesaplama Sihirbazı</h3>
             <div class="row justify-content-center">
@@ -960,10 +960,10 @@
 
 <div class="bottom-nav">
     <div class="nav-item active" onclick="showSection('dashboard'); activateNav(this)"><i class="fas fa-mosque"></i><span>Kaza</span></div>
-    <div class="nav-item" onclick="showSection('achievements'); activateNav(this)"><i class="fas fa-medal"></i><span style="font-size: 0.65rem;">Ödül</span></div>
     <div class="nav-item" onclick="showSection('stats'); activateNav(this)"><i class="fas fa-chart-pie"></i><span>Analiz</span></div>
     <div class="nav-item" onclick="showSection('fasting'); activateNav(this)"><i class="fas fa-utensils"></i><span>Oruç</span></div>
     <div class="nav-item" onclick="showSection('tesbihat'); activateNav(this)"><i class="fas fa-fingerprint"></i><span>Zikir</span></div>
+    <div class="nav-item" onclick="showSection('achievements'); activateNav(this)"><i class="fas fa-medal"></i><span>Ödül</span></div>
     <div class="nav-item" onclick="toggleSidebar()"><i class="fas fa-bars"></i><span>Menü</span></div>
 </div>
 
@@ -1224,7 +1224,7 @@
     function toggleMenstrualState(isChecked) { localData.isMenstrualState = isChecked; saveToCloud(); renderApp(); }
     window.updateMenstrualDays = function(val) { localData.menstrualDaysPerMonth = parseInt(val) || 0; saveToCloud(); for(let i=0; i<5; i++) { window.calcRow(i); } }
 
-    const SECTION_IDS = ['dashboard', 'achievements', 'stats', 'fasting', 'tesbihat', 'calculator', 'settings'];
+    const SECTION_IDS = ['dashboard', 'stats', 'fasting', 'tesbihat', 'achievements', 'calculator', 'settings'];
     
     function getSectionIndex(id) {
         return SECTION_IDS.indexOf(id.replace('section-', ''));
@@ -1238,7 +1238,7 @@
         if(menuItem) menuItem.classList.add('active');
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
+        const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
         if (navMap[targetId] !== undefined) document.querySelectorAll('.nav-item')[navMap[targetId]].classList.add('active');
 
         triggerLogic(targetId);
@@ -1477,7 +1477,7 @@
             const newId = newActiveSection.id.replace('section-', '');
             
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const navMap = { 'dashboard': 0, 'achievements': 1, 'stats': 2, 'fasting': 3, 'tesbihat': 4 };
+            const navMap = { 'dashboard': 0, 'stats': 1, 'fasting': 2, 'tesbihat': 3, 'achievements': 4 };
             if (navMap[newId] !== undefined) document.querySelectorAll('.nav-item')[navMap[newId]].classList.add('active');
             
             document.querySelectorAll('#sidebar ul li').forEach(li => li.classList.remove('active'));
