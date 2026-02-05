@@ -746,14 +746,23 @@
                 <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
             </div>
             <div id="stats-view-analysis">
-                <div class="scrolling-wrapper mb-4">
+                <div class="scrolling-wrapper mb-2">
                     <div class="stat-card-scroll"><div class="stat-number text-primary" id="statToday">0</div><div class="stat-label">Bugün</div></div>
                     <div class="stat-card-scroll"><div class="stat-number text-success" id="statWeekly">0</div><div class="stat-label">Bu Hafta</div></div>
                     <div class="stat-card-scroll"><div class="stat-number text-info" id="statMonthly">0</div><div class="stat-label">Bu Ay</div></div>
                     <div class="stat-card-scroll"><div class="stat-number text-warning" id="stat3Months">0</div><div class="stat-label">Son 3 Ay</div></div>
                     <div class="stat-card-scroll"><div class="stat-number text-danger" id="stat6Months">0</div><div class="stat-label">Son 6 Ay</div></div>
                     <div class="stat-card-scroll"><div class="stat-number text-secondary" id="statYearly">0</div><div class="stat-label">Son 1 Yıl</div></div>
-                     <div class="stat-card-scroll"><div class="stat-number" id="statAverage">0</div><div class="stat-label">Günlük Ort.</div></div>
+                </div>
+                
+                <h6 class="ms-1 mb-2 text-secondary fw-bold" style="font-size: 0.8rem;">DÖNEMSEL GÜNLÜK ORTALAMALAR</h6>
+                <div class="scrolling-wrapper mb-4">
+                    <div class="stat-card-scroll"><div class="stat-number text-primary" id="statAverage">0</div><div class="stat-label">Genel Ort.</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-success" id="avg7Days">0</div><div class="stat-label">Ort. (7 Gün)</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-info" id="avg30Days">0</div><div class="stat-label">Ort. (1 Ay)</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-warning" id="avg3Months">0</div><div class="stat-label">Ort. (3 Ay)</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-danger" id="avg6Months">0</div><div class="stat-label">Ort. (6 Ay)</div></div>
+                    <div class="stat-card-scroll"><div class="stat-number text-secondary" id="avgYearly">0</div><div class="stat-label">Ort. (1 Yıl)</div></div>
                 </div>
 
                 <div class="analysis-box mb-4">
@@ -2483,17 +2492,33 @@
         
         const periodStats = calculatePeriodStats(); 
         const avg = (totalDone / days).toFixed(2); 
+
+        // Ortalama Değerlerin Hesaplanması
+        const avg7 = (periodStats.last7Data.reduce((a,b)=>a+b,0) / 7).toFixed(1);
+        const avg30 = (periodStats.last30Data.reduce((a,b)=>a+b,0) / 30).toFixed(1);
+        const avg90 = (periodStats.months3 / 90).toFixed(1);
+        const avg180 = (periodStats.months6 / 180).toFixed(1);
+        const avg365 = (periodStats.yearly / 365).toFixed(1);
     
         const dailyDone = localData.daily.counts.reduce((a,b)=>a+b,0); 
         const weeklyDone = getWeeklyProgress(); 
     
+        // Mevcut Kartlar (Toplamlar)
         document.getElementById('statToday').innerText = dailyDone; 
         document.getElementById('statWeekly').innerText = weeklyDone; 
         document.getElementById('statMonthly').innerText = periodStats.monthly; 
         document.getElementById('stat3Months').innerText = periodStats.months3;
         document.getElementById('stat6Months').innerText = periodStats.months6;
         document.getElementById('statYearly').innerText = periodStats.yearly;
+        
+        // Yeni Eklenen Ortalama Kartlar
         document.getElementById('statAverage').innerText = avg;
+        document.getElementById('avg7Days').innerText = avg7;
+        document.getElementById('avg30Days').innerText = avg30;
+        document.getElementById('avg3Months').innerText = avg90;
+        document.getElementById('avg6Months').innerText = avg180;
+        document.getElementById('avgYearly').innerText = avg365;
+
         
         document.getElementById('bestPrayer').innerText = totalDone === 0 ? "-" : `${bestName} (${maxDone})`; 
         document.getElementById('worstPrayer').innerText = totalDone === 0 ? "-" : `${maxName} (${maxRemaining})`; 
