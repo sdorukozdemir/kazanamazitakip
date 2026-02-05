@@ -24,7 +24,8 @@
     <style>
         /* --- GENEL AYARLAR --- */
         *, *::before, *::after { box-sizing: border-box; }
-        ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; }
+        /* GLOBAL SCROLLBAR GİZLEME */
+        ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; display: none; }
         
         :root { 
             --bg-color: #e3e6ec; --text-color: #212529; --card-bg: #ffffff; 
@@ -346,10 +347,9 @@
         .settings-gender-female { background: linear-gradient(135deg, #fce4ec, #f8bbd0); border: 1px solid #f48fb1; color: #880e4f; }
         body.dark-mode .settings-gender-male { background: linear-gradient(135deg, #0d2b4a, #1a3e66); border-color: #1a3e66; color: #bbdefb; }
         body.dark-mode .settings-gender-female { background: linear-gradient(135deg, #4a1b2d, #661a36); border-color: #661a36; color: #f8bbd0; }
-        .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); }
-        .scrolling-wrapper::-webkit-scrollbar { height: 6px; }
-        .scrolling-wrapper::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
-        .scrolling-wrapper::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 10px; }
+        .scrolling-wrapper { overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) var(--scroll-track); scrollbar-width: none; }
+        .scrolling-wrapper::-webkit-scrollbar { display: none; }
+
         .stat-card-scroll { display: inline-block; width: 160px; margin-right: 15px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; text-align: center; white-space: normal; vertical-align: top; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .stat-number { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; color: #609979; }
         .stat-label { font-size: 0.75rem; color: var(--text-color); opacity: 0.7; font-weight: 600; text-transform: uppercase; }
@@ -2600,14 +2600,48 @@
         }
         // ----------------------------------------
 
-        const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); const ctx3 = document.getElementById('lineChart').getContext('2d'); if (lineChart) lineChart.destroy(); const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); let chartLabels = []; let chartData = []; let pointRadiusVal = 3; if(currentChartPeriod === 'weekly') { chartLabels = periodStats.last7Labels; chartData = periodStats.last7Data; pointRadiusVal = 3; } else { chartLabels = periodStats.last30Labels; chartData = periodStats.last30Data; pointRadiusVal = 2; } 
+        const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); 
+        
+        // --- GRAFİK DÜZELTMESİ BURADA YAPILDI ---
+        const ctx3 = document.getElementById('lineChart').getContext('2d'); 
+        if (lineChart) lineChart.destroy(); 
+        const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); 
+        gradientLine.addColorStop(0, 'rgba(96, 153, 121, 0.5)'); 
+        gradientLine.addColorStop(1, 'rgba(96, 153, 121, 0.0)'); 
+        
+        let chartLabels = []; 
+        let chartData = []; 
+        let pointRadiusVal = 3; 
+        let labelText = "";
+        
+        // --- Düğmeleri senkronize et ---
+        document.querySelectorAll('.chart-period-btn').forEach(btn => btn.classList.remove('active'));
+        if(currentChartPeriod === 'weekly') {
+            document.getElementById('btn-period-weekly')?.classList.add('active');
+            chartLabels = periodStats.last7Labels; 
+            chartData = periodStats.last7Data; 
+            pointRadiusVal = 3;
+            labelText = 'Günlük Kılınan (Son 7 Gün)';
+        } else if (currentChartPeriod === 'monthly') {
+            document.getElementById('btn-period-monthly')?.classList.add('active');
+            chartLabels = periodStats.last30Labels; 
+            chartData = periodStats.last30Data; 
+            pointRadiusVal = 2;
+            labelText = 'Günlük Kılınan (Son 30 Gün)';
+        } else if (currentChartPeriod === '3months') {
+             document.getElementById('btn-period-3months')?.classList.add('active');
+             chartLabels = periodStats.last90Labels;
+             chartData = periodStats.last90Data;
+             pointRadiusVal = 1;
+             labelText = 'Günlük Kılınan (Son 90 Gün)';
+        }
         
         lineChart = new Chart(ctx3, { 
             type: 'line', 
             data: { 
                 labels: chartLabels, 
                 datasets: [{ 
-                    label: currentChartPeriod === 'weekly' ? 'Günlük Kılınan (Son 7 Gün)' : 'Günlük Kılınan (Son 30 Gün)', 
+                    label: labelText, 
                     data: chartData, 
                     borderColor: '#609979', 
                     backgroundColor: gradientLine, 
@@ -3020,4 +3054,3 @@
 </script>
 </body>
 </html>
-
