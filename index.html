@@ -349,9 +349,6 @@
         body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; }
         body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
 
-        input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
-        body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
-
         .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
         .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; flex-wrap: wrap; }
         .h-sub-tabs { display: none; gap: 8px; justify-content: center; width: 100%; animation: fadeIn 0.3s ease; flex-wrap: wrap; }
@@ -438,10 +435,10 @@
         .cl-percent { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
         .cl-divider { width: 1px; height: 30px; background: var(--border-color); margin: 0 10px; }
 
-        /* --- BAVUL ŞİFRESİ (WHEEL PICKER) CSS --- */
-        .wheel-picker-wrap { position: relative; height: 160px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 10px; }
-        .wheel-highlight { position: absolute; top: 60px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
-        .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 60px 0; position: relative; z-index: 2; text-align: center; }
+        /* --- BAVUL ŞİFRESİ (WHEEL PICKER) CSS YENİDEN DÜZENLENDİ --- */
+        .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 10px; }
+        .wheel-highlight { position: absolute; top: 40px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
+        .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 40px 0; position: relative; z-index: 2; text-align: center; }
         .wheel-col::-webkit-scrollbar { display: none; }
         .wheel-item { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; color: var(--text-color); opacity: 0.3; scroll-snap-align: center; transition: all 0.2s; cursor: pointer; }
         .wheel-item.active { opacity: 1; font-size: 1.35rem; color: #609979; font-weight: 800; }
@@ -498,14 +495,16 @@
     <div class="custom-modal" style="padding: 25px 20px;">
         <h5 class="fw-bold mb-3"><i class="fas fa-calendar-alt me-2 text-success"></i>Dönem Seçimi</h5>
         
-        <div class="d-flex justify-content-center gap-2 mb-2">
-            <button class="btn btn-sm btn-outline-success rounded-pill px-4" id="btnFilterMode-month" onclick="setPickerMode('month')">Sadece Ay</button>
-            <button class="btn btn-sm btn-outline-success rounded-pill px-4 active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük Seçim</button>
+        <div class="d-flex justify-content-center gap-2 mb-2 flex-wrap">
+            <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="btnFilterMode-month" onclick="setPickerMode('month')">Aylık</button>
+            <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="btnFilterMode-week" onclick="setPickerMode('week')">Haftalık</button>
+            <button class="btn btn-sm btn-outline-success rounded-pill px-3 active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük</button>
         </div>
 
         <div class="wheel-picker-wrap">
             <div class="wheel-highlight"></div>
             <div class="wheel-col" id="wheelDay" onscroll="updateWheelActive(this)"></div>
+            <div class="wheel-col" id="wheelWeek" onscroll="updateWheelActive(this)" style="display:none;"></div>
             <div class="wheel-col" id="wheelMonth" onscroll="updateWheelActive(this)"></div>
             <div class="wheel-col" id="wheelYear" onscroll="updateWheelActive(this)"></div>
         </div>
@@ -617,28 +616,14 @@
         <div id="section-stats" class="app-section">
             <h3 class="app-header">İstatistikler</h3>
             
-            <!-- ORTAK ÜST KISIM (Global Filtreleme Alanı) -->
             <div class="stats-tab-container mb-2">
                 <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
                 <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-3 px-1">
-                <button class="btn btn-sm" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius:20px; font-weight: 600;" onclick="openCustomDatePicker()">
-                    <i class="fas fa-filter text-success me-1"></i> Tarih Filtresi Seç
-                </button>
-                <div class="d-flex align-items-center gap-2">
-                    <span id="activeFilterText" class="small fw-bold text-success" style="display:none;"></span>
-                    <i id="clearFilterIcon" class="fas fa-times-circle text-danger fs-5" style="display:none; cursor:pointer;" onclick="clearCustomFilter()"></i>
-                </div>
-            </div>
-
-            <!-- Filtre Özeti -->
-            <div id="globalFilterSummary" class="mb-3" style="display:none;"></div>
-
             <!-- ANALİZ GÖRÜNÜMÜ -->
             <div id="stats-view-analysis">
-                <div class="scrolling-wrapper mb-2">
+                <div class="scrolling-wrapper mb-2 mt-3">
                     <div class="stat-card-scroll"><div class="stat-number text-primary" id="statToday">0</div><div class="stat-label">Bugün</div></div>
                     <div class="stat-card-scroll"><div class="stat-number text-success" id="statWeekly">0</div><div class="stat-label">Bu Hafta</div></div>
                     <div class="stat-card-scroll"><div class="stat-number text-info" id="statMonthly">0</div><div class="stat-label">Bu Ay</div></div>
@@ -728,6 +713,18 @@
             
             <!-- SON DEĞİŞİKLİKLER (GEÇMİŞ) GÖRÜNÜMÜ -->
             <div id="stats-view-history" style="display: none;">
+                
+                <!-- BURAYA TAŞINDI: FİLTRELEME BUTONU -->
+                <div class="d-flex justify-content-between align-items-center mt-3 mb-3 px-1">
+                    <button class="btn btn-sm" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius:20px; font-weight: 600;" onclick="openCustomDatePicker()">
+                        <i class="fas fa-filter text-success me-1"></i> Tarih Filtresi Seç
+                    </button>
+                    <div class="d-flex align-items-center gap-2">
+                        <span id="activeFilterText" class="small fw-bold text-success" style="display:none;"></span>
+                        <i id="clearFilterIcon" class="fas fa-times-circle text-danger fs-5" style="display:none; cursor:pointer;" onclick="clearCustomFilter()"></i>
+                    </div>
+                </div>
+
                 <div class="history-filter-tabs mt-2">
                     <div class="h-main-tabs">
                         <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
@@ -751,7 +748,7 @@
                     </div>
                 </div>
 
-                <div id="historyListContainer" class="px-2"></div>
+                <div id="historyListContainer" class="px-2 pb-4"></div>
             </div>
         </div>
 
@@ -863,7 +860,7 @@
     
     // --- YENİ FİLTRE DEĞİŞKENLERİ ---
     let currentHistoryFilter = { type: 'none', dateStr: '' }; 
-    let pickerMode = 'date'; // 'date' veya 'month'
+    let pickerMode = 'date'; // 'date', 'week', veya 'month'
     const MONTH_NAMES = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
     
     let activeTesbihatIndex = 0; 
@@ -920,6 +917,18 @@
         if(parts.length !== 3) return isoDate;
         const [y, m, d] = parts;
         return `${d}.${m}.${y}`;
+    }
+    function getWeekNumber(d) {
+        let date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+        date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay()||7));
+        let yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+        let weekNo = Math.ceil(( ( (date - yearStart) / 86400000) + 1)/7);
+        return weekNo;
+    }
+    function parseHistoryDate(timeStr) {
+        const [datePart] = timeStr.split(' ');
+        const [d, m, y] = datePart.split('.');
+        return new Date(`${y}-${m}-${d}T12:00:00`);
     }
 
     const defaultData = {
@@ -1991,10 +2000,10 @@
         renderBadgeGroup(streakBadges, 'badgeListStreak', maxStreak);
     }
 
-    // --- WHEEL PICKER LOGIC ---
+    // --- BAVUL ŞİFRESİ (WHEEL PICKER) MANTIĞI ---
     function openCustomDatePicker() {
         document.getElementById('customDatePickerModal').style.display = 'flex';
-        setPickerMode(pickerMode); // Refresh layout
+        setPickerMode(pickerMode); 
     }
 
     function closeCustomDatePicker() {
@@ -2005,25 +2014,42 @@
         pickerMode = mode;
         const btnDate = document.getElementById('btnFilterMode-date');
         const btnMonth = document.getElementById('btnFilterMode-month');
-        const colDay = document.getElementById('wheelDay');
+        const btnWeek = document.getElementById('btnFilterMode-week');
         
+        const colDay = document.getElementById('wheelDay');
+        const colWeek = document.getElementById('wheelWeek');
+        const colMonth = document.getElementById('wheelMonth');
+        const colYear = document.getElementById('wheelYear');
+
+        btnDate.classList.remove('active');
+        btnMonth.classList.remove('active');
+        btnWeek.classList.remove('active');
+
         if (mode === 'date') {
             btnDate.classList.add('active');
-            btnMonth.classList.remove('active');
             colDay.style.display = 'block';
+            colWeek.style.display = 'none';
+            colMonth.style.display = 'block';
+        } else if (mode === 'week') {
+            btnWeek.classList.add('active');
+            colDay.style.display = 'none';
+            colWeek.style.display = 'block';
+            colMonth.style.display = 'none';
         } else {
             btnMonth.classList.add('active');
-            btnDate.classList.remove('active');
             colDay.style.display = 'none';
+            colWeek.style.display = 'none';
+            colMonth.style.display = 'block';
         }
 
         const today = new Date();
         const y = today.getFullYear();
-        const m = today.getMonth(); // 0-11
+        const m = today.getMonth(); 
         const d = today.getDate();
+        const w = getWeekNumber(today);
 
-        // Populate
         populateWheel('wheelDay', 1, 31, val => String(val).padStart(2, '0'), d);
+        populateWheel('wheelWeek', 1, 52, val => val + ". Hafta", w);
         populateWheel('wheelMonth', 0, 11, val => MONTH_NAMES[val], m);
         populateWheel('wheelYear', 2020, y + 1, val => val, y);
     }
@@ -2034,9 +2060,6 @@
         let targetIndex = 0;
         let index = 0;
         
-        // Blank space for snapping padding
-        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
-        
         for(let i=start; i<=end; i++) {
             const val = formatFunc ? formatFunc(i) : i;
             if(i === selectedValue) targetIndex = index;
@@ -2044,12 +2067,10 @@
             index++;
         }
         
-        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
-        
         setTimeout(() => {
             col.scrollTop = targetIndex * 40;
             updateWheelActive(col);
-        }, 50);
+        }, 10);
     }
 
     window.updateWheelActive = function(col) {
@@ -2070,17 +2091,23 @@
             return activeItem ? activeItem.getAttribute('data-val') : null;
         };
 
-        const mVal = parseInt(getActiveVal('wheelMonth'));
         const yVal = getActiveVal('wheelYear');
         let filterStr = '';
         let displayStr = '';
 
         if (pickerMode === 'month') {
+            const mVal = parseInt(getActiveVal('wheelMonth'));
             const mStr = String(mVal + 1).padStart(2, '0');
             filterStr = `${mStr}.${yVal}`;
-            displayStr = `${MONTH_NAMES[mVal]} ${yVal}`;
+            displayStr = `${MONTH_NAMES[mVal]} ${yVal} Özeti`;
             currentHistoryFilter = { type: 'month', dateStr: filterStr };
+        } else if (pickerMode === 'week') {
+            const wVal = getActiveVal('wheelWeek');
+            filterStr = `${wVal}.${yVal}`;
+            displayStr = `${wVal}. Hafta ${yVal} Özeti`;
+            currentHistoryFilter = { type: 'week', dateStr: filterStr };
         } else {
+            const mVal = parseInt(getActiveVal('wheelMonth'));
             const dVal = parseInt(getActiveVal('wheelDay'));
             const dStr = String(dVal).padStart(2, '0');
             const mStr = String(mVal + 1).padStart(2, '0');
@@ -2094,7 +2121,6 @@
         document.getElementById('clearFilterIcon').style.display = 'inline-block';
         
         closeCustomDatePicker();
-        updateFilterSummary();
         renderHistory();
     }
 
@@ -2103,55 +2129,7 @@
         currentHistoryFilter = { type: 'none', dateStr: '' };
         document.getElementById('activeFilterText').style.display = 'none';
         document.getElementById('clearFilterIcon').style.display = 'none';
-        document.getElementById('globalFilterSummary').style.display = 'none';
         renderHistory();
-    }
-
-    function updateFilterSummary() {
-        const summaryBox = document.getElementById('globalFilterSummary');
-        
-        if (currentHistoryFilter.type === 'none' || !localData.history || localData.history.length === 0) {
-            summaryBox.style.display = 'none';
-            return;
-        }
-
-        let displayData = localData.history;
-        if (currentHistoryFilter.type === 'date') {
-            displayData = displayData.filter(r => r.time.split(' ')[0] === currentHistoryFilter.dateStr);
-        } else if (currentHistoryFilter.type === 'month') {
-            const [m, y] = currentHistoryFilter.dateStr.split('.');
-            displayData = displayData.filter(r => {
-                const parts = r.time.split(' ')[0].split('.');
-                return parts[1] === m && parts[2] === y;
-            });
-        }
-
-        if (displayData.length === 0) {
-            summaryBox.innerHTML = `<div class="text-center fw-bold" style="opacity:0.8;">Seçili dönemde kayıt bulunamadı.</div>`;
-            summaryBox.style.display = 'block';
-            return;
-        }
-
-        const summary = {};
-        displayData.forEach(r => {
-            const diff = parseFloat(r.newVal) - parseFloat(r.oldVal);
-            if (!summary[r.namaz]) summary[r.namaz] = 0;
-            summary[r.namaz] += diff;
-        });
-
-        let sumHTML = `<strong class="d-block mb-2 border-bottom pb-1" style="color: inherit; opacity: 0.9;">${document.getElementById('activeFilterText').innerText} Özeti (Net Değişim)</strong><div class="d-flex flex-wrap gap-2">`;
-        for(let key in summary) {
-            if (summary[key] !== 0) {
-                const sign = summary[key] > 0 ? '+' : '';
-                const bgCol = summary[key] > 0 ? '#d1e7dd' : '#f8d7da';
-                const textCol = summary[key] > 0 ? '#0f5132' : '#842029';
-                sumHTML += `<span class="badge" style="background-color: ${bgCol}; color: ${textCol}; font-size: 0.85rem; padding: 6px 10px; border: 1px solid rgba(0,0,0,0.05);">${key}: ${sign}${summary[key]}</span>`;
-            }
-        }
-        sumHTML += '</div>';
-        
-        summaryBox.innerHTML = sumHTML;
-        summaryBox.style.display = 'block';
     }
 
     function renderHistory() { 
@@ -2165,6 +2143,7 @@
 
         let displayData = localData.history;
         let isFiltered = false;
+        let isSummaryMode = false;
         
         if (currentHistoryFilter.type === 'date') {
             displayData = displayData.filter(r => r.time.split(' ')[0] === currentHistoryFilter.dateStr);
@@ -2176,6 +2155,15 @@
                 return parts[1] === m && parts[2] === y;
             });
             isFiltered = true;
+            isSummaryMode = true;
+        } else if (currentHistoryFilter.type === 'week') {
+            const [w, y] = currentHistoryFilter.dateStr.split('.');
+            displayData = displayData.filter(r => {
+                const d = parseHistoryDate(r.time);
+                return getWeekNumber(d) == parseInt(w) && d.getFullYear() == parseInt(y);
+            });
+            isFiltered = true;
+            isSummaryMode = true;
         }
 
         if (currentHistoryCategory === 'namaz') {
@@ -2197,6 +2185,52 @@
              return;
         }
 
+        // ÖZET MODU (SADECE HAFTALIK VE AYLIK SEÇİMDE ÇALIŞIR)
+        if (isSummaryMode) {
+            const summary = {
+                "Sabah": 0, "Öğle": 0, "İkindi": 0, "Akşam": 0, "Yatsı": 0,
+                "Kaza Orucu": 0, "Nafile Oruç": 0
+            };
+
+            displayData.forEach(r => {
+                const diff = parseFloat(r.newVal) - parseFloat(r.oldVal);
+                let key = r.namaz;
+                if (key.includes("Nafile")) key = "Nafile Oruç"; 
+                if (key.includes("Kaza Orucu")) key = "Kaza Orucu";
+
+                if (summary[key] !== undefined) {
+                    summary[key] += diff;
+                }
+            });
+
+            let renderedAny = false;
+            for(let key in summary) {
+                if (summary[key] !== 0) {
+                    renderedAny = true;
+                    const diff = summary[key];
+                    const diffSign = diff > 0 ? '+' : '';
+                    const statusClass = diff > 0 ? 'up' : 'down'; 
+                    
+                    container.innerHTML += `
+                    <div class="metallic-card ${statusClass}">
+                        <div class="card-summary" style="cursor:default;">
+                            <span class="summary-prayer">${key}</span>
+                            <div class="summary-right-group">
+                                <span class="change-badge">${diffSign}${diff}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            }
+
+            if (!renderedAny) {
+                 container.innerHTML = '<div class="text-center text-muted small py-4">Bu kriterlerde net değişim yok.</div>';
+            }
+
+            return; // Özet modu çalıştıysa detaya inmeden çık
+        }
+
+        // DETAYLI LİSTE (TÜMÜ VEYA GÜNLÜK SEÇİM İÇİN)
         const renderLimit = isFiltered ? displayData.length : 50;
         const dataToRender = displayData.slice(0, renderLimit);
 
