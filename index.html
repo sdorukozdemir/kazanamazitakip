@@ -395,8 +395,8 @@
         body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; }
         body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
 
-        input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
-        body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
+        input[type="date"], input[type="month"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
+        body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator, body.dark-mode input[type="month"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
         
         .date-filter-capsule { background-color: var(--capsule-bg); border: 1px solid var(--capsule-border); border-radius: 12px; padding: 5px 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: fit-content; margin: 0 auto 15px auto; position: relative; min-width: 150px; box-shadow: var(--capsule-shadow); transition: all 0.3s ease; }
         .capsule-label { font-size: 0.65rem; font-weight: 800; color: var(--capsule-label); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
@@ -864,15 +864,46 @@
                     </div>
                 </div>
 
-                <div class="date-filter-capsule">
-                    <span class="capsule-label">İŞLEM TARİHİ</span>
-                    <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
-                           ontouchstart="(this.type='date');"
-                           onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
-                           onblur="if(!this.value) this.type='text'"
-                           onchange="filterHistoryByDate()">
-                    <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
+                <div class="history-filter-container d-flex flex-column align-items-center mb-3">
+                    <select id="historyFilterType" class="form-select form-select-sm mb-3 text-center fw-bold shadow-sm" style="width: auto; border-radius: 20px; border-color: var(--border-color); background-color: var(--card-bg); color: var(--text-color);" onchange="changeHistoryFilterType()">
+                        <option value="date">Tek Tarih Seçimi</option>
+                        <option value="month">Ay Seçimi</option>
+                        <option value="range">Tarih Aralığı Seçimi</option>
+                    </select>
+                    
+                    <!-- Single Date -->
+                    <div id="filterInputs-date" class="date-filter-capsule" style="margin-bottom:0;">
+                        <span class="capsule-label">İŞLEM TARİHİ</span>
+                        <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
+                               ontouchstart="(this.type='date');"
+                               onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
+                               onblur="if(!this.value) this.type='text'"
+                               onchange="applyHistoryFilter()">
+                        <i id="resetFilterBtn1" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
+                    </div>
+
+                    <!-- Month -->
+                    <div id="filterInputs-month" class="date-filter-capsule" style="display:none; margin-bottom:0;">
+                        <span class="capsule-label">AY SEÇİMİ</span>
+                        <input type="month" id="historyFilterMonth" class="capsule-input" onchange="applyHistoryFilter()">
+                        <i id="resetFilterBtn2" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div id="filterInputs-range" class="d-flex gap-2 align-items-center" style="display:none !important;">
+                        <div class="date-filter-capsule" style="margin-bottom:0; min-width: 130px;">
+                            <span class="capsule-label">BAŞLANGIÇ</span>
+                            <input type="date" id="historyFilterStart" class="capsule-input" onchange="applyHistoryFilter()">
+                        </div>
+                        <div class="date-filter-capsule" style="margin-bottom:0; min-width: 130px;">
+                            <span class="capsule-label">BİTİŞ</span>
+                            <input type="date" id="historyFilterEnd" class="capsule-input" onchange="applyHistoryFilter()">
+                        </div>
+                        <i id="resetFilterBtn3" class="fas fa-times text-danger ms-1 fs-5" style="cursor:pointer; display:none;" onclick="clearHistoryFilter()"></i>
+                    </div>
                 </div>
+                
+                <div id="historySummaryContainer" class="px-2 w-100"></div>
 
                 <div id="historyListContainer" class="px-2"></div>
             </div>
@@ -983,6 +1014,7 @@
     let currentHistoryCategory = 'all'; 
     let currentFastingSubCat = 'all'; 
     let currentNamazSubCat = 'all'; 
+    let currentHistoryFilter = { type: 'none', val1: '', val2: '' };
     let activeTesbihatIndex = 0; 
     let isTesbihatDetailView = false;
     let activeFastingIndex = 0; 
@@ -1458,7 +1490,7 @@
 
     function shouldIgnoreSwipe(target) {
         if (!target) return false;
-        return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas, .stats-tab-container, .history-filter-tabs, .date-filter-capsule');
+        return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas, .stats-tab-container, .history-filter-tabs, .date-filter-capsule, .history-filter-container');
     }
 
     function finishTransition(element, targetX) {
@@ -2111,27 +2143,99 @@
         renderBadgeGroup(streakBadges, 'badgeListStreak', maxStreak);
     }
     
-    function renderHistory(filterDate = null) { 
+    window.changeHistoryFilterType = function() {
+        const type = document.getElementById('historyFilterType').value;
+        document.getElementById('filterInputs-date').style.display = 'none';
+        document.getElementById('filterInputs-month').style.display = 'none';
+        document.getElementById('filterInputs-range').style.setProperty('display', 'none', 'important');
+        
+        if (type === 'date') document.getElementById('filterInputs-date').style.display = 'flex';
+        else if (type === 'month') document.getElementById('filterInputs-month').style.display = 'flex';
+        else if (type === 'range') document.getElementById('filterInputs-range').style.setProperty('display', 'flex', 'important');
+        
+        clearHistoryFilter();
+    }
+
+    window.applyHistoryFilter = function() {
+        const type = document.getElementById('historyFilterType').value;
+        currentHistoryFilter.type = type;
+        
+        if (type === 'date') {
+            const val = document.getElementById('historyFilterDate').value;
+            currentHistoryFilter.val1 = val;
+            document.getElementById('resetFilterBtn1').style.display = val ? 'block' : 'none';
+        } else if (type === 'month') {
+            const val = document.getElementById('historyFilterMonth').value;
+            currentHistoryFilter.val1 = val;
+            document.getElementById('resetFilterBtn2').style.display = val ? 'block' : 'none';
+        } else if (type === 'range') {
+            const v1 = document.getElementById('historyFilterStart').value;
+            const v2 = document.getElementById('historyFilterEnd').value;
+            currentHistoryFilter.val1 = v1;
+            currentHistoryFilter.val2 = v2;
+            document.getElementById('resetFilterBtn3').style.display = (v1 || v2) ? 'block' : 'none';
+        }
+        
+        if(!currentHistoryFilter.val1 && !currentHistoryFilter.val2) {
+            currentHistoryFilter.type = 'none';
+        }
+        
+        renderHistory();
+    }
+
+    window.clearHistoryFilter = function() {
+        document.getElementById('historyFilterDate').value = "";
+        document.getElementById('historyFilterDate').type = "text";
+        document.getElementById('historyFilterMonth').value = "";
+        document.getElementById('historyFilterStart').value = "";
+        document.getElementById('historyFilterEnd').value = "";
+        
+        document.getElementById('resetFilterBtn1').style.display = 'none';
+        document.getElementById('resetFilterBtn2').style.display = 'none';
+        document.getElementById('resetFilterBtn3').style.display = 'none';
+        
+        currentHistoryFilter = { type: 'none', val1: '', val2: '' };
+        renderHistory();
+    }
+
+    function renderHistory() { 
         const container = document.getElementById('historyListContainer'); 
+        const summaryContainer = document.getElementById('historySummaryContainer');
         container.innerHTML = ""; 
+        summaryContainer.innerHTML = "";
 
         if (!localData.history || localData.history.length === 0) {
             container.innerHTML = '<div class="text-center text-muted small py-4">Henüz işlem geçmişi yok.</div>';
             return;
         }
 
-        let displayData = [];
+        let displayData = localData.history;
+        let isFiltered = false;
         
-        if (filterDate) {
-            const parts = filterDate.split('-'); 
-            if(parts.length === 3) {
-                const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
-                displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
-            } else if(filterDate.includes('.')) {
-                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
+        if (currentHistoryFilter.type === 'date' && currentHistoryFilter.val1) {
+            let targetStr = currentHistoryFilter.val1;
+            if (targetStr.includes('-')) {
+                const parts = targetStr.split('-');
+                targetStr = `${parts[2]}.${parts[1]}.${parts[0]}`;
             }
-        } else {
-            displayData = localData.history.slice(0, 50);
+            displayData = displayData.filter(r => r.time.split(' ')[0] === targetStr);
+            isFiltered = true;
+        } else if (currentHistoryFilter.type === 'month' && currentHistoryFilter.val1) {
+            const [y, m] = currentHistoryFilter.val1.split('-');
+            displayData = displayData.filter(r => {
+                const parts = r.time.split(' ')[0].split('.');
+                return parts[1] === m && parts[2] === y;
+            });
+            isFiltered = true;
+        } else if (currentHistoryFilter.type === 'range' && currentHistoryFilter.val1 && currentHistoryFilter.val2) {
+            const sDate = new Date(currentHistoryFilter.val1 + "T00:00:00");
+            const eDate = new Date(currentHistoryFilter.val2 + "T23:59:59");
+            displayData = displayData.filter(r => {
+                const parts = r.time.split(' ')[0].split('.');
+                const rDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T12:00:00`);
+                return rDate >= sDate && rDate <= eDate;
+            });
+            isFiltered = true;
         }
 
         if (currentHistoryCategory === 'namaz') {
@@ -2153,7 +2257,33 @@
              return;
         }
 
-        displayData.forEach(r => { 
+        if (isFiltered) {
+            const summary = {};
+            displayData.forEach(r => {
+                const diff = parseFloat(r.newVal) - parseFloat(r.oldVal);
+                if (!summary[r.namaz]) summary[r.namaz] = 0;
+                summary[r.namaz] += diff;
+            });
+
+            if (Object.keys(summary).length > 0) {
+                let sumHTML = '<div class="custom-alert-box custom-alert-tip p-3 mb-3" style="border-radius: 15px;"><strong class="d-block mb-2 border-bottom pb-1" style="color: inherit; opacity: 0.9;">Filtrelenen Dönem Özeti (Net Değişim)</strong><div class="d-flex flex-wrap gap-2">';
+                for(let key in summary) {
+                    if (summary[key] !== 0) {
+                        const sign = summary[key] > 0 ? '+' : '';
+                        const bgCol = summary[key] > 0 ? '#d1e7dd' : '#f8d7da';
+                        const textCol = summary[key] > 0 ? '#0f5132' : '#842029';
+                        sumHTML += `<span class="badge" style="background-color: ${bgCol}; color: ${textCol}; font-size: 0.85rem; padding: 6px 10px; border: 1px solid rgba(0,0,0,0.05);">${key}: ${sign}${summary[key]}</span>`;
+                    }
+                }
+                sumHTML += '</div></div>';
+                summaryContainer.innerHTML = sumHTML;
+            }
+        }
+
+        const renderLimit = isFiltered ? displayData.length : 50;
+        const dataToRender = displayData.slice(0, renderLimit);
+
+        dataToRender.forEach(r => { 
             const o = parseFloat(r.oldVal); 
             const n = parseFloat(r.newVal); 
             const diff = n - o;
@@ -2180,7 +2310,7 @@
             </div>`; 
         }); 
 
-        if(!filterDate && localData.history.length > 50) {
+        if(!isFiltered && displayData.length > 50) {
              container.innerHTML += '<div class="text-center text-muted small py-2">Daha eski kayıtlar için tarih filtresini kullanınız...</div>';
         }
     }
@@ -2206,21 +2336,21 @@
             currentFastingSubCat = 'all';
             currentNamazSubCat = 'all';
         }
-        renderHistory(document.getElementById('historyFilterDate').value);
+        renderHistory();
     }
 
     window.setFastingSubCategory = function(subCat, btn) {
         currentFastingSubCat = subCat;
         document.querySelectorAll('#fastingSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        renderHistory(document.getElementById('historyFilterDate').value);
+        renderHistory();
     }
 
     window.setNamazSubCategory = function(subCat, btn) {
         currentNamazSubCat = subCat;
         document.querySelectorAll('#namazSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        renderHistory(document.getElementById('historyFilterDate').value);
+        renderHistory();
     }
 
     window.toggleHistoryCard = function(el) {
@@ -2240,26 +2370,6 @@
             el.classList.add('open');
             detail.style.display = 'block';
         }
-    }
-
-    window.filterHistoryByDate = function() {
-        const val = document.getElementById('historyFilterDate').value;
-        const resetBtn = document.getElementById('resetHistoryDateBtn');
-        if(val) {
-             resetBtn.style.display = 'block';
-             renderHistory(val);
-        } else {
-            resetBtn.style.display = 'none';
-            renderHistory();
-        }
-    }
-
-    window.clearHistoryFilter = function() {
-        const input = document.getElementById('historyFilterDate');
-        input.value = "";
-        input.type = "text"; 
-        document.getElementById('resetHistoryDateBtn').style.display = 'none';
-        renderHistory();
     }
 
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
@@ -2338,7 +2448,7 @@
         document.getElementById('stats-view-history').style.display = 'none';
         document.getElementById('stats-view-' + tab).style.display = 'block';
         if(tab === 'history') {
-            renderHistory(document.getElementById('historyFilterDate').value);
+            renderHistory();
         }
     }
 
@@ -2432,7 +2542,7 @@
             week: weekStr,
             month: maxM > 0 ? `${bestMName} (${maxM})` : "-",
             day: dayStr
-        };
+        }
     }
 
     function renderStats() { 
@@ -3054,5 +3164,3 @@
 </script>
 </body>
 </html>
-
-
