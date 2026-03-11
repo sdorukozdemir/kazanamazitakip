@@ -500,16 +500,26 @@
         
         <div class="d-flex justify-content-center gap-2 mb-2 flex-wrap">
             <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="btnFilterMode-month" onclick="setPickerMode('month')">Aylık</button>
-            <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="btnFilterMode-week" onclick="setPickerMode('week')">Haftalık</button>
+            <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="btnFilterMode-range" onclick="setPickerMode('range')">Tarih Aralığı</button>
             <button class="btn btn-sm btn-outline-success rounded-pill px-3 active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük</button>
         </div>
 
-        <div class="wheel-picker-wrap">
+        <div class="wheel-picker-wrap" id="wheelPickerWrap">
             <div class="wheel-highlight"></div>
             <div class="wheel-col" id="wheelDay" onscroll="updateWheelActive(this)"></div>
-            <div class="wheel-col" id="wheelWeek" onscroll="updateWheelActive(this)" style="display:none;"></div>
             <div class="wheel-col" id="wheelMonth" onscroll="updateWheelActive(this)"></div>
             <div class="wheel-col" id="wheelYear" onscroll="updateWheelActive(this)"></div>
+        </div>
+
+        <div id="rangePickerWrap" style="display:none; gap: 10px; margin-top: 15px;">
+            <div style="flex:1;">
+                <label class="small fw-bold text-muted mb-1 d-block text-center">Başlangıç</label>
+                <input type="date" id="filterRangeStart" class="form-control text-center rounded-3" style="background:var(--input-bg); color:var(--text-color); border:1px solid var(--border-color);">
+            </div>
+            <div style="flex:1;">
+                <label class="small fw-bold text-muted mb-1 d-block text-center">Bitiş</label>
+                <input type="date" id="filterRangeEnd" class="form-control text-center rounded-3" style="background:var(--input-bg); color:var(--text-color); border:1px solid var(--border-color);">
+            </div>
         </div>
 
         <div class="modal-btn-group mt-4">
@@ -861,8 +871,8 @@
     let currentNamazSubCat = 'all'; 
     
     // --- YENİ FİLTRE DEĞİŞKENLERİ ---
-    let currentHistoryFilter = { type: 'none', dateStr: '' }; 
-    let pickerMode = 'date'; // 'date', 'week', veya 'month'
+    let currentHistoryFilter = { type: 'none', dateStr: '', detailText: '' }; 
+    let pickerMode = 'date'; // 'date', 'range', veya 'month'
     const MONTH_NAMES = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
     
     let activeTesbihatIndex = 0; 
@@ -920,13 +930,7 @@
         const [y, m, d] = parts;
         return `${d}.${m}.${y}`;
     }
-    function getWeekNumber(d) {
-        let date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay()||7));
-        let yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
-        let weekNo = Math.ceil(( ( (date - yearStart) / 86400000) + 1)/7);
-        return weekNo;
-    }
+    
     function parseHistoryDate(timeStr) {
         const [datePart] = timeStr.split(' ');
         const [d, m, y] = datePart.split('.');
@@ -2016,31 +2020,34 @@
         pickerMode = mode;
         const btnDate = document.getElementById('btnFilterMode-date');
         const btnMonth = document.getElementById('btnFilterMode-month');
-        const btnWeek = document.getElementById('btnFilterMode-week');
+        const btnRange = document.getElementById('btnFilterMode-range');
+        
+        const wheelWrap = document.getElementById('wheelPickerWrap');
+        const rangeWrap = document.getElementById('rangePickerWrap');
         
         const colDay = document.getElementById('wheelDay');
-        const colWeek = document.getElementById('wheelWeek');
         const colMonth = document.getElementById('wheelMonth');
         const colYear = document.getElementById('wheelYear');
 
         btnDate.classList.remove('active');
         btnMonth.classList.remove('active');
-        btnWeek.classList.remove('active');
+        btnRange.classList.remove('active');
 
         if (mode === 'date') {
             btnDate.classList.add('active');
+            wheelWrap.style.display = 'flex';
+            rangeWrap.style.display = 'none';
             colDay.style.display = 'block';
-            colWeek.style.display = 'none';
             colMonth.style.display = 'block';
-        } else if (mode === 'week') {
-            btnWeek.classList.add('active');
-            colDay.style.display = 'none';
-            colWeek.style.display = 'block';
-            colMonth.style.display = 'none';
-        } else {
+        } else if (mode === 'range') {
+            btnRange.classList.add('active');
+            wheelWrap.style.display = 'none';
+            rangeWrap.style.display = 'flex';
+        } else { // month
             btnMonth.classList.add('active');
+            wheelWrap.style.display = 'flex';
+            rangeWrap.style.display = 'none';
             colDay.style.display = 'none';
-            colWeek.style.display = 'none';
             colMonth.style.display = 'block';
         }
 
@@ -2048,13 +2055,19 @@
         const y = today.getFullYear();
         const m = today.getMonth(); 
         const d = today.getDate();
-        const w = getWeekNumber(today);
 
-        // Populate the wheels
-        populateWheel('wheelDay', 1, 31, val => String(val).padStart(2, '0'), d);
-        populateWheel('wheelWeek', 1, 52, val => val + ". Hafta", w);
-        populateWheel('wheelMonth', 0, 11, val => MONTH_NAMES[val], m);
-        populateWheel('wheelYear', 2020, y + 1, val => val, y);
+        if(mode !== 'range') {
+            populateWheel('wheelDay', 1, 31, val => String(val).padStart(2, '0'), d);
+            populateWheel('wheelMonth', 0, 11, val => MONTH_NAMES[val], m);
+            populateWheel('wheelYear', 2020, y + 1, val => val, y);
+        } else {
+            if(!document.getElementById('filterRangeEnd').value) {
+                document.getElementById('filterRangeEnd').value = getIsoDate(today);
+                let lastWeek = new Date();
+                lastWeek.setDate(today.getDate() - 7);
+                document.getElementById('filterRangeStart').value = getIsoDate(lastWeek);
+            }
+        }
     }
 
     function populateWheel(colId, start, end, formatFunc, selectedValue) {
@@ -2063,7 +2076,7 @@
         let targetIndex = 0;
         let index = 0;
         
-        // Blank item for top padding inside scroll
+        // Üst boşluk için hayalet div
         col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
 
         for(let i=start; i<=end; i++) {
@@ -2073,7 +2086,7 @@
             index++;
         }
         
-        // Blank item for bottom padding inside scroll
+        // Alt boşluk için hayalet div
         col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
 
         setTimeout(() => {
@@ -2100,29 +2113,47 @@
             return activeItem ? activeItem.getAttribute('data-val') : null;
         };
 
-        const yVal = getActiveVal('wheelYear');
         let filterStr = '';
         let displayStr = '';
+        let secondaryStr = ''; 
 
         if (pickerMode === 'month') {
+            const yVal = getActiveVal('wheelYear');
             const mVal = parseInt(getActiveVal('wheelMonth'));
             const mStr = String(mVal + 1).padStart(2, '0');
             filterStr = `${mStr}.${yVal}`;
             displayStr = `${MONTH_NAMES[mVal]} ${yVal} Özeti`;
-            currentHistoryFilter = { type: 'month', dateStr: filterStr };
-        } else if (pickerMode === 'week') {
-            const wVal = getActiveVal('wheelWeek');
-            filterStr = `${wVal}.${yVal}`;
-            displayStr = `${wVal}. Hafta ${yVal} Özeti`;
-            currentHistoryFilter = { type: 'week', dateStr: filterStr };
+            
+            const lastDay = new Date(yVal, mVal + 1, 0).getDate();
+            secondaryStr = `1 ${MONTH_NAMES[mVal]} ${yVal} ➔ ${lastDay} ${MONTH_NAMES[mVal]} ${yVal}`;
+            
+            currentHistoryFilter = { type: 'month', dateStr: filterStr, detailText: secondaryStr };
+        } else if (pickerMode === 'range') {
+            const sDate = document.getElementById('filterRangeStart').value;
+            const eDate = document.getElementById('filterRangeEnd').value;
+            
+            if(!sDate || !eDate) { showToast("Lütfen tarih aralığı seçin", "warning"); return; }
+            if(sDate > eDate) { showToast("Başlangıç bitişten büyük olamaz", "warning"); return; }
+            
+            const d1 = new Date(sDate);
+            const d2 = new Date(eDate);
+            const f1 = `${d1.getDate()} ${MONTH_NAMES[d1.getMonth()]} ${d1.getFullYear()}`;
+            const f2 = `${d2.getDate()} ${MONTH_NAMES[d2.getMonth()]} ${d2.getFullYear()}`;
+            
+            filterStr = `${sDate}|${eDate}`;
+            displayStr = `${d1.getDate()} ${MONTH_NAMES[d1.getMonth()].substring(0,3)} - ${d2.getDate()} ${MONTH_NAMES[d2.getMonth()].substring(0,3)} Özeti`;
+            secondaryStr = `${f1} ➔ ${f2}`;
+            
+            currentHistoryFilter = { type: 'range', dateStr: filterStr, detailText: secondaryStr };
         } else {
+            const yVal = getActiveVal('wheelYear');
             const mVal = parseInt(getActiveVal('wheelMonth'));
             const dVal = parseInt(getActiveVal('wheelDay'));
             const dStr = String(dVal).padStart(2, '0');
             const mStr = String(mVal + 1).padStart(2, '0');
             filterStr = `${dStr}.${mStr}.${yVal}`;
             displayStr = `${dStr} ${MONTH_NAMES[mVal]} ${yVal}`;
-            currentHistoryFilter = { type: 'date', dateStr: filterStr };
+            currentHistoryFilter = { type: 'date', dateStr: filterStr, detailText: '' };
         }
 
         document.getElementById('activeFilterText').innerText = displayStr;
@@ -2135,7 +2166,7 @@
 
     function clearCustomFilter() {
         triggerHaptic();
-        currentHistoryFilter = { type: 'none', dateStr: '' };
+        currentHistoryFilter = { type: 'none', dateStr: '', detailText: '' };
         document.getElementById('activeFilterText').style.display = 'none';
         document.getElementById('clearFilterIcon').style.display = 'none';
         renderHistory();
@@ -2165,14 +2196,16 @@
             });
             isFiltered = true;
             isSummaryMode = true;
-        } else if (currentHistoryFilter.type === 'week') {
-            const [w, y] = currentHistoryFilter.dateStr.split('.');
+        } else if (currentHistoryFilter.type === 'range') {
+            const [startStr, endStr] = currentHistoryFilter.dateStr.split('|');
+            const sDate = new Date(startStr + "T00:00:00");
+            const eDate = new Date(endStr + "T23:59:59");
             displayData = displayData.filter(r => {
                 const d = parseHistoryDate(r.time);
-                return getWeekNumber(d) == parseInt(w) && d.getFullYear() == parseInt(y);
+                return d >= sDate && d <= eDate;
             });
             isFiltered = true;
-            isSummaryMode = true;
+            isSummaryMode = true; 
         }
 
         if (currentHistoryCategory === 'namaz') {
@@ -2194,7 +2227,7 @@
              return;
         }
 
-        // ÖZET MODU (SADECE HAFTALIK VE AYLIK SEÇİMDE ÇALIŞIR)
+        // ÖZET MODU (SADECE AYLIK VE TARİH ARALIĞI SEÇİMİNDE ÇALIŞIR)
         if (isSummaryMode) {
             const summaryStats = {};
 
@@ -2210,7 +2243,6 @@
                         diff: 0
                     };
                 }
-                // En eski değer olarak r.oldVal kaydedilir (Döngü en yeniden eskiye doğru gider, bu yüzden eskiye indikçe oldVal güncellenir)
                 summaryStats[key].oldVal = parseFloat(r.oldVal);
                 summaryStats[key].diff += (parseFloat(r.newVal) - parseFloat(r.oldVal));
             });
@@ -2254,7 +2286,7 @@
                                     <i class="fas fa-arrow-right mx-2" style="opacity:0.5;"></i>
                                     <span>${n}</span>
                                 </div>
-                                <div class="small fw-bold" style="opacity:0.6; color: var(--text-color); text-transform:uppercase;"><i class="far fa-calendar-alt me-1"></i> Dönem Başı ➔ Dönem Sonu</div>
+                                <div class="small fw-bold" style="opacity:0.6; color: var(--text-color); text-transform:uppercase;"><i class="far fa-calendar-alt me-1"></i> ${currentHistoryFilter.detailText}</div>
                             </div>
                         </div>
                     </div>`;
@@ -2371,7 +2403,6 @@
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
     
-    // --- YENİ EKLENEN TEMİZLEME FONKSİYONU ---
     window.resetCalculatorInputs = function() {
         showModal("Sıfırla", "Hesaplama sihirbazındaki tüm tarihleri temizlemek istiyor musunuz?", () => {
             for(let i=0; i<5; i++) {
