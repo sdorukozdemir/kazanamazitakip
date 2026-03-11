@@ -24,7 +24,6 @@
     <style>
         /* --- GENEL AYARLAR --- */
         *, *::before, *::after { box-sizing: border-box; }
-        /* GLOBAL SCROLLBAR GİZLEME */
         ::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; display: none; }
         
         :root { 
@@ -49,8 +48,6 @@
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #0a58ca); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #a52864); 
             --user-box-text: #ffffff; --user-box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
-            --capsule-bg: #e9ecef; --capsule-border: #ced4da; --capsule-label: #6c757d;
-            --capsule-text: #212529; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         body.dark-mode { 
@@ -73,8 +70,6 @@
             --calc-item-bg: #262626; --calc-item-border: #333; 
             --user-box-bg-male: linear-gradient(135deg, #0d6efd, #002a5c); 
             --user-box-bg-female: linear-gradient(135deg, #d63384, #4d0a2b); 
-            --capsule-bg: #2c3035; --capsule-border: #444444; --capsule-label: #aaaaaa;
-            --capsule-text: #ffffff; --capsule-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
@@ -144,58 +139,18 @@
         .theme-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); color: #263238; }
         .theme-yatsi.active { background: linear-gradient(135deg, #546e7a 0%, #455a64 100%); }
 
-        /* GÜNCELLENMİŞ ORUÇ KART RENKLERİ - Zengin Gradient */
-        .bg-oruc-kaza-gradient { 
-            background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);
-            color: white; 
-            border: none;
-        }
-        .bg-oruc-nafile-gradient { 
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white; 
-            border: none;
-        }
-        
-        /* DARK MODE DÜZELTMESİ: Kaza ve Nafile için belirgin farklı renkler */
-        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #4527a0 0%, #283593 100%); } /* Belirgin Mor/Mavi */
-        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #00695c 0%, #004d40 100%); } /* Belirgin Koyu Teal/Yeşil */
+        .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #373b44 0%, #4286f4 100%); color: white; border: none; }
+        .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; }
+        body.dark-mode .bg-oruc-kaza-gradient { background: linear-gradient(135deg, #4527a0 0%, #283593 100%); } 
+        body.dark-mode .bg-oruc-nafile-gradient { background: linear-gradient(135deg, #00695c 0%, #004d40 100%); } 
 
-        /* CALCULATOR ACTION BUTTON STYLES */
-        .calc-actions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .calc-action-btn {
-            border: none;
-            border-radius: 16px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+        .calc-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .calc-action-btn { border: none; border-radius: 16px; padding: 12px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; font-size: 0.75rem; font-weight: 700; color: white; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.15); text-align: center; position: relative; overflow: hidden; }
         .calc-action-btn:active { transform: scale(0.96); }
         .calc-action-btn i { font-size: 1.3rem; margin-bottom: 2px; }
-        
         .btn-calc-copy-start { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
         .btn-calc-copy-end { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .btn-calc-reset { 
-            grid-column: span 2; 
-            background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%); 
-            color: white; 
-        }
+        .btn-calc-reset { grid-column: span 2; background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%); color: white; }
 
         .prayer-detail-card { flex: 1; border-radius: 25px; position: relative; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: background 0.5s ease; border: 1px solid var(--border-color); }
         .bg-sabah { background: linear-gradient(135deg, #e1f5fe 0%, #81d4fa 100%); } 
@@ -203,7 +158,6 @@
         .bg-ikindi { background: linear-gradient(135deg, #ffccbc 0%, #ff8a65 100%); } 
         .bg-aksam { background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%); } 
         .bg-yatsi { background: linear-gradient(135deg, #cfd8dc 0%, #b0bec5 100%); } 
-        
         .bg-white-10 { background: rgba(255,255,255,0.15) !important; border: 1px solid rgba(255,255,255,0.2) !important; }
         .border-white-10 { border-color: rgba(255,255,255,0.2) !important; }
 
@@ -397,13 +351,6 @@
 
         input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
         body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
-        
-        .date-filter-capsule { background-color: var(--capsule-bg); border: 1px solid var(--capsule-border); border-radius: 12px; padding: 5px 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: fit-content; margin: 0 auto 15px auto; position: relative; min-width: 150px; box-shadow: var(--capsule-shadow); transition: all 0.3s ease; }
-        .capsule-label { font-size: 0.65rem; font-weight: 800; color: var(--capsule-label); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-        .capsule-input { background: transparent; border: none; color: var(--capsule-text); font-size: 1rem; height: 30px; font-weight: 600; text-align: center; width: 100%; outline: none; font-family: inherit; }
-        .capsule-input::-webkit-calendar-picker-indicator { opacity: 0.3; }
-        body.dark-mode .capsule-input::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; }
-        .capsule-reset { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #dc3545; cursor: pointer; font-size: 1rem; display: none; }
 
         .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
         .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; flex-wrap: wrap; }
@@ -423,25 +370,10 @@
         .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; }
         .flip-card-front { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); }
         .flip-card-front.locked-front { background: var(--input-bg); opacity: 0.8; filter: grayscale(100%); }
-        
-        .flip-card-front.unlocked-front {
-            background-image: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%), 
-                              linear-gradient(135deg, #609979 0%, #20c997 100%);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            border: 4px solid transparent; 
-            box-shadow: 0 4px 15px rgba(96, 153, 121, 0.2);
-        }
-        
-        body.dark-mode .flip-card-front.unlocked-front {
-            background-image: linear-gradient(135deg, #1e1e1e 0%, #112820 100%), 
-                              linear-gradient(135deg, #4db6ac 0%, #0288d1 100%);
-            box-shadow: 0 4px 15px rgba(32, 201, 151, 0.15);
-        }
-
+        .flip-card-front.unlocked-front { background-image: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%), linear-gradient(135deg, #609979 0%, #20c997 100%); background-origin: border-box; background-clip: padding-box, border-box; border: 4px solid transparent; box-shadow: 0 4px 15px rgba(96, 153, 121, 0.2); }
+        body.dark-mode .flip-card-front.unlocked-front { background-image: linear-gradient(135deg, #1e1e1e 0%, #112820 100%), linear-gradient(135deg, #4db6ac 0%, #0288d1 100%); box-shadow: 0 4px 15px rgba(32, 201, 151, 0.15); }
         .flip-card-back { background: linear-gradient(135deg, #609979, #2c3e50); color: white; transform: rotateY(180deg); border: 3px solid rgba(255,255,255,0.15); }
         .flip-card-back.locked-back { background: linear-gradient(135deg, #6c757d, #495057); border-color: #6c757d; }
-
         .badge-icon-large { font-size: 2.5rem; margin-bottom: 8px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
         .badge-title-clean { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
         .badge-desc-back { font-size: 0.7rem; font-weight: 600; margin-bottom: 8px; opacity: 0.9; }
@@ -478,11 +410,10 @@
         body.dark-mode .custom-alert-tip { background: #3e2c00; color: #ffc107; border-left-color: #ffc107; }
         body.dark-mode .custom-alert-tip strong { color: #ffc107; }
         .custom-alert-female { border-left-color: var(--pink-accent); background: var(--pink-bg-light); border: 1px solid var(--pink-accent); border-left-width: 5px; }
-        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 25px; border: 1px solid var(--border-color); }
+        .stats-tab-container { display: flex; background: var(--input-bg); padding: 5px; border-radius: 50px; margin-bottom: 15px; border: 1px solid var(--border-color); }
         .stats-tab-btn { flex: 1; border: none; background: transparent; padding: 10px; border-radius: 50px; font-weight: 600; color: var(--text-color); transition: all 0.3s ease; }
         .stats-tab-btn.active { background-color: #609979; color: white; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.3); }
         
-        /* FASTING TAB BUTTONS (Analysis style but specific colors) */
         .fasting-tab-btn.active.active-kaza { background: linear-gradient(135deg, #546e7a, #37474f); box-shadow: 0 4px 10px rgba(55, 71, 79, 0.3); color:white; }
         .fasting-tab-btn.active.active-nafile { background: linear-gradient(135deg, #11998e, #38ef7d); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.3); color:white; }
 
@@ -494,106 +425,26 @@
         .toast-error { border-color: #dc3545; } .toast-error i { color: #dc3545; font-size: 1.2rem; }
         .toast-warning { border-color: #ffc107; } .toast-warning i { color: #ffc107; font-size: 1.2rem; }
         
-        /* --- GÜNCELLENMİŞ PERFORMANS KART STİLİ (Chic Design) --- */
-        .perf-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 450px;
-        }
+        .perf-card { background: var(--card-bg); border-radius: 24px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid var(--border-color); position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 450px; }
+        .chart-period-selector { background: var(--input-bg); border-radius: 50px; padding: 5px; display: flex; width: 100%; border: 1px solid var(--border-color); position: relative; margin-bottom: 15px; }
+        .chart-period-btn { flex: 1; text-align: center; padding: 10px 0; border-radius: 40px; font-size: 0.85rem; color: var(--text-color); cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; z-index: 2; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border: 1px solid transparent; }
+        .chart-period-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); font-weight: 700; }
 
-        .chart-period-selector {
-            background: var(--input-bg);
-            border-radius: 50px;
-            padding: 5px;
-            display: flex;
-            width: 100%;
-            border: 1px solid var(--border-color);
-            position: relative;
-            margin-bottom: 15px;
-        }
+        .custom-legend-box { display: flex; justify-content: space-around; align-items: center; padding: 15px; background: var(--input-bg); border-radius: 16px; border: 1px solid var(--border-color); margin-top: 15px; }
+        .cl-item { text-align: center; flex: 1; }
+        .cl-title-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 2px; }
+        .cl-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .cl-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; opacity: 0.7; }
+        .cl-percent { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+        .cl-divider { width: 1px; height: 30px; background: var(--border-color); margin: 0 10px; }
 
-        .chart-period-btn {
-            flex: 1;
-            text-align: center;
-            padding: 10px 0;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            color: var(--text-color);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            z-index: 2;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            border: 1px solid transparent;
-        }
-
-        .chart-period-btn.active {
-            background: linear-gradient(135deg, #609979, #3e6b53);
-            color: white;
-            box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3);
-            font-weight: 700;
-        }
-
-        /* --- YENİ EKLENEN CUSTOM LEGEND STİLLERİ --- */
-        .custom-legend-box {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 15px;
-            background: var(--input-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            margin-top: 15px;
-        }
-        .cl-item {
-            text-align: center;
-            flex: 1;
-        }
-        .cl-title-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 2px;
-        }
-        .cl-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        .cl-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            opacity: 0.7;
-        }
-        .cl-percent {
-            font-size: 1.6rem;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        .cl-value {
-            font-size: 0.85rem;
-            font-weight: 600;
-            opacity: 0.8;
-        }
-        .cl-divider {
-            width: 1px;
-            height: 30px; /* Daha kısa divider */
-            background: var(--border-color);
-            margin: 0 10px;
-        }
+        /* --- BAVUL ŞİFRESİ (WHEEL PICKER) CSS --- */
+        .wheel-picker-wrap { position: relative; height: 160px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 10px; }
+        .wheel-highlight { position: absolute; top: 60px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
+        .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 60px 0; position: relative; z-index: 2; text-align: center; }
+        .wheel-col::-webkit-scrollbar { display: none; }
+        .wheel-item { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; color: var(--text-color); opacity: 0.3; scroll-snap-align: center; transition: all 0.2s; cursor: pointer; }
+        .wheel-item.active { opacity: 1; font-size: 1.35rem; color: #609979; font-weight: 800; }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
@@ -638,6 +489,30 @@
                     <div class="fw-bold">Erkek</div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- YENİ: Bavul Şifresi Tarzı Tarih Seçici Modal -->
+<div id="customDatePickerModal" class="custom-modal-overlay" style="z-index: 2010;">
+    <div class="custom-modal" style="padding: 25px 20px;">
+        <h5 class="fw-bold mb-3"><i class="fas fa-calendar-alt me-2 text-success"></i>Dönem Seçimi</h5>
+        
+        <div class="d-flex justify-content-center gap-2 mb-2">
+            <button class="btn btn-sm btn-outline-success rounded-pill px-4" id="btnFilterMode-month" onclick="setPickerMode('month')">Sadece Ay</button>
+            <button class="btn btn-sm btn-outline-success rounded-pill px-4 active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük Seçim</button>
+        </div>
+
+        <div class="wheel-picker-wrap">
+            <div class="wheel-highlight"></div>
+            <div class="wheel-col" id="wheelDay" onscroll="updateWheelActive(this)"></div>
+            <div class="wheel-col" id="wheelMonth" onscroll="updateWheelActive(this)"></div>
+            <div class="wheel-col" id="wheelYear" onscroll="updateWheelActive(this)"></div>
+        </div>
+
+        <div class="modal-btn-group mt-4">
+            <button class="modal-btn btn-cancel" onclick="closeCustomDatePicker()">İptal</button>
+            <button class="modal-btn btn-confirm bg-success border-0" onclick="applyCustomPicker()">Uygula</button>
         </div>
     </div>
 </div>
@@ -741,10 +616,27 @@
 
         <div id="section-stats" class="app-section">
             <h3 class="app-header">İstatistikler</h3>
-            <div class="stats-tab-container">
+            
+            <!-- ORTAK ÜST KISIM (Global Filtreleme Alanı) -->
+            <div class="stats-tab-container mb-2">
                 <button class="stats-tab-btn active" onclick="switchStatsTab('analysis')" id="tabBtn-analysis">Analiz</button>
                 <button class="stats-tab-btn" onclick="switchStatsTab('history')" id="tabBtn-history">Son Değişiklikler</button>
             </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3 px-1">
+                <button class="btn btn-sm" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius:20px; font-weight: 600;" onclick="openCustomDatePicker()">
+                    <i class="fas fa-filter text-success me-1"></i> Tarih Filtresi Seç
+                </button>
+                <div class="d-flex align-items-center gap-2">
+                    <span id="activeFilterText" class="small fw-bold text-success" style="display:none;"></span>
+                    <i id="clearFilterIcon" class="fas fa-times-circle text-danger fs-5" style="display:none; cursor:pointer;" onclick="clearCustomFilter()"></i>
+                </div>
+            </div>
+
+            <!-- Filtre Özeti -->
+            <div id="globalFilterSummary" class="mb-3" style="display:none;"></div>
+
+            <!-- ANALİZ GÖRÜNÜMÜ -->
             <div id="stats-view-analysis">
                 <div class="scrolling-wrapper mb-2">
                     <div class="stat-card-scroll"><div class="stat-number text-primary" id="statToday">0</div><div class="stat-label">Bugün</div></div>
@@ -808,7 +700,6 @@
 
                 <div class="row g-4">
                     <div class="col-md-12"><div class="chart-container"><h5 class="text-center mb-3 fw-bold">Namaz Bazlı Dağılım</h5><canvas id="barChart" style="max-height: 350px;"></canvas></div></div>
-                    <!-- PERFORMANS KARTI -->
                     <div class="col-md-6">
                         <h5 class="text-center mb-3 fw-bold">Performans Analizi</h5>
                         <div class="perf-card">
@@ -823,25 +714,21 @@
                             </div>
                         </div>
                     </div>
-                    <!-- GÜNCELLENEN GENEL DURUM KARTI -->
                     <div class="col-md-6">
                         <div class="chart-container">
                             <h5 class="text-center mb-3 fw-bold">Genel Durum</h5>
-                            <!-- Saf Grafik Alanı -->
                             <div style="position: relative; height: 220px; width:100%;">
                                 <canvas id="completionChart"></canvas>
                             </div>
-                            <!-- Yeni Custom Legend -->
                             <div id="generalStatusLegend" class="custom-legend-box"></div>
                         </div>
                     </div>
                 </div>
             </div>
             
+            <!-- SON DEĞİŞİKLİKLER (GEÇMİŞ) GÖRÜNÜMÜ -->
             <div id="stats-view-history" style="display: none;">
-                <h5 class="text-center fw-bold mt-4 text-secondary">İşlem Geçmişi</h5>
-                
-                <div class="history-filter-tabs">
+                <div class="history-filter-tabs mt-2">
                     <div class="h-main-tabs">
                         <button class="h-tab-btn active" onclick="setHistoryCategory('all', this)">Tümü</button>
                         <button class="h-tab-btn" onclick="setHistoryCategory('namaz', this)">Namaz</button>
@@ -862,16 +749,6 @@
                         <button class="h-sub-btn" onclick="setFastingSubCategory('kaza', this)">Kaza</button>
                         <button class="h-sub-btn" onclick="setFastingSubCategory('nafile', this)">Nafile</button>
                     </div>
-                </div>
-
-                <div class="date-filter-capsule">
-                    <span class="capsule-label">İŞLEM TARİHİ</span>
-                    <input type="text" id="historyFilterDate" class="capsule-input" placeholder="gg.aa.yyyy" 
-                           ontouchstart="(this.type='date');"
-                           onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" 
-                           onblur="if(!this.value) this.type='text'"
-                           onchange="filterHistoryByDate()">
-                    <i id="resetHistoryDateBtn" class="fas fa-times capsule-reset" onclick="clearHistoryFilter()"></i>
                 </div>
 
                 <div id="historyListContainer" class="px-2"></div>
@@ -983,6 +860,12 @@
     let currentHistoryCategory = 'all'; 
     let currentFastingSubCat = 'all'; 
     let currentNamazSubCat = 'all'; 
+    
+    // --- YENİ FİLTRE DEĞİŞKENLERİ ---
+    let currentHistoryFilter = { type: 'none', dateStr: '' }; 
+    let pickerMode = 'date'; // 'date' veya 'month'
+    const MONTH_NAMES = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+    
     let activeTesbihatIndex = 0; 
     let isTesbihatDetailView = false;
     let activeFastingIndex = 0; 
@@ -1001,7 +884,7 @@
 
     const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "Kaza İbadet Takip v1.01", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
+        "name": "Kaza İbadet Takip v1.0", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#609979", 
         "icons": [{ "src": pwaIcon, "sizes": "192x192", "type": "image/svg+xml" }] 
     })], {type: 'application/json'});
@@ -1458,7 +1341,7 @@
 
     function shouldIgnoreSwipe(target) {
         if (!target) return false;
-        return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas, .stats-tab-container, .history-filter-tabs, .date-filter-capsule');
+        return target.closest('.scrolling-wrapper, .prayer-side-menu, canvas, .stats-tab-container, .history-filter-tabs, .wheel-col');
     }
 
     function finishTransition(element, targetX) {
@@ -1987,7 +1870,6 @@
     function formatTime(d) { if (!isFinite(d) || d <= 0) return "Tamamlandı"; const y = Math.floor(d/365); const r = d % 365; const m = Math.floor(r/30); const fd = Math.floor(r%30); let res = ""; if (y > 0) res += `${y} Yıl `; if (m > 0) res += `${m} Ay `; if (y===0 && m===0) res += `${fd} Gün`; else if (fd > 0 && y < 10) res += `${fd} G.`; return res || "Bugün"; }
     
     const BADGES = [
-        // NAMAZ ROZETLERİ (Kategori: namaz)
         {id: 100, title: "Bismillah", icon: "🌱", desc: "100 Namaz", category: "namaz", threshold: 100},
         {id: 500, title: "Gayret", icon: "🔥", desc: "500 Namaz", category: "namaz", threshold: 500},
         {id: 1000, title: "Sebat", icon: "🏔️", desc: "1.000 Namaz", category: "namaz", threshold: 1000},
@@ -1997,8 +1879,6 @@
         {id: 15000, title: "Huzur", icon: "🌌", desc: "15.000 Namaz", category: "namaz", threshold: 15000},
         {id: 20000, title: "Nur", icon: "✨", desc: "20.000 Namaz", category: "namaz", threshold: 20000},
         {id: 25000, title: "Cennet Muştusu", icon: "🕌", desc: "25.000 Namaz", category: "namaz", threshold: 25000},
-
-        // ZİNCİR ROZETLERİ (Kategori: streak)
         {id: 's7', title: "İlk Hafta", icon: "🗓️", desc: "7 Gün", category: "streak", threshold: 7},
         {id: 's30', title: "Bir Ay", icon: "🌙", desc: "30 Gün", category: "streak", threshold: 30},
         {id: 's100', title: "Efsane", icon: "👑", desc: "100 Gün", category: "streak", threshold: 100},
@@ -2110,8 +1990,171 @@
         renderBadgeGroup(namazBadges, 'badgeListNamaz', totalPrayers);
         renderBadgeGroup(streakBadges, 'badgeListStreak', maxStreak);
     }
-    
-    function renderHistory(filterDate = null) { 
+
+    // --- WHEEL PICKER LOGIC ---
+    function openCustomDatePicker() {
+        document.getElementById('customDatePickerModal').style.display = 'flex';
+        setPickerMode(pickerMode); // Refresh layout
+    }
+
+    function closeCustomDatePicker() {
+        document.getElementById('customDatePickerModal').style.display = 'none';
+    }
+
+    function setPickerMode(mode) {
+        pickerMode = mode;
+        const btnDate = document.getElementById('btnFilterMode-date');
+        const btnMonth = document.getElementById('btnFilterMode-month');
+        const colDay = document.getElementById('wheelDay');
+        
+        if (mode === 'date') {
+            btnDate.classList.add('active');
+            btnMonth.classList.remove('active');
+            colDay.style.display = 'block';
+        } else {
+            btnMonth.classList.add('active');
+            btnDate.classList.remove('active');
+            colDay.style.display = 'none';
+        }
+
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = today.getMonth(); // 0-11
+        const d = today.getDate();
+
+        // Populate
+        populateWheel('wheelDay', 1, 31, val => String(val).padStart(2, '0'), d);
+        populateWheel('wheelMonth', 0, 11, val => MONTH_NAMES[val], m);
+        populateWheel('wheelYear', 2020, y + 1, val => val, y);
+    }
+
+    function populateWheel(colId, start, end, formatFunc, selectedValue) {
+        const col = document.getElementById(colId);
+        col.innerHTML = '';
+        let targetIndex = 0;
+        let index = 0;
+        
+        // Blank space for snapping padding
+        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
+        
+        for(let i=start; i<=end; i++) {
+            const val = formatFunc ? formatFunc(i) : i;
+            if(i === selectedValue) targetIndex = index;
+            col.innerHTML += `<div class="wheel-item" data-val="${i}">${val}</div>`;
+            index++;
+        }
+        
+        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
+        
+        setTimeout(() => {
+            col.scrollTop = targetIndex * 40;
+            updateWheelActive(col);
+        }, 50);
+    }
+
+    window.updateWheelActive = function(col) {
+        const index = Math.round(col.scrollTop / 40);
+        const items = col.querySelectorAll('.wheel-item[data-val]');
+        items.forEach((item, i) => {
+            if(i === index) item.classList.add('active');
+            else item.classList.remove('active');
+        });
+    }
+
+    function applyCustomPicker() {
+        triggerHaptic();
+        
+        const getActiveVal = (colId) => {
+            const col = document.getElementById(colId);
+            const activeItem = col.querySelector('.wheel-item.active');
+            return activeItem ? activeItem.getAttribute('data-val') : null;
+        };
+
+        const mVal = parseInt(getActiveVal('wheelMonth'));
+        const yVal = getActiveVal('wheelYear');
+        let filterStr = '';
+        let displayStr = '';
+
+        if (pickerMode === 'month') {
+            const mStr = String(mVal + 1).padStart(2, '0');
+            filterStr = `${mStr}.${yVal}`;
+            displayStr = `${MONTH_NAMES[mVal]} ${yVal}`;
+            currentHistoryFilter = { type: 'month', dateStr: filterStr };
+        } else {
+            const dVal = parseInt(getActiveVal('wheelDay'));
+            const dStr = String(dVal).padStart(2, '0');
+            const mStr = String(mVal + 1).padStart(2, '0');
+            filterStr = `${dStr}.${mStr}.${yVal}`;
+            displayStr = `${dStr} ${MONTH_NAMES[mVal]} ${yVal}`;
+            currentHistoryFilter = { type: 'date', dateStr: filterStr };
+        }
+
+        document.getElementById('activeFilterText').innerText = displayStr;
+        document.getElementById('activeFilterText').style.display = 'inline-block';
+        document.getElementById('clearFilterIcon').style.display = 'inline-block';
+        
+        closeCustomDatePicker();
+        updateFilterSummary();
+        renderHistory();
+    }
+
+    function clearCustomFilter() {
+        triggerHaptic();
+        currentHistoryFilter = { type: 'none', dateStr: '' };
+        document.getElementById('activeFilterText').style.display = 'none';
+        document.getElementById('clearFilterIcon').style.display = 'none';
+        document.getElementById('globalFilterSummary').style.display = 'none';
+        renderHistory();
+    }
+
+    function updateFilterSummary() {
+        const summaryBox = document.getElementById('globalFilterSummary');
+        
+        if (currentHistoryFilter.type === 'none' || !localData.history || localData.history.length === 0) {
+            summaryBox.style.display = 'none';
+            return;
+        }
+
+        let displayData = localData.history;
+        if (currentHistoryFilter.type === 'date') {
+            displayData = displayData.filter(r => r.time.split(' ')[0] === currentHistoryFilter.dateStr);
+        } else if (currentHistoryFilter.type === 'month') {
+            const [m, y] = currentHistoryFilter.dateStr.split('.');
+            displayData = displayData.filter(r => {
+                const parts = r.time.split(' ')[0].split('.');
+                return parts[1] === m && parts[2] === y;
+            });
+        }
+
+        if (displayData.length === 0) {
+            summaryBox.innerHTML = `<div class="text-center fw-bold" style="opacity:0.8;">Seçili dönemde kayıt bulunamadı.</div>`;
+            summaryBox.style.display = 'block';
+            return;
+        }
+
+        const summary = {};
+        displayData.forEach(r => {
+            const diff = parseFloat(r.newVal) - parseFloat(r.oldVal);
+            if (!summary[r.namaz]) summary[r.namaz] = 0;
+            summary[r.namaz] += diff;
+        });
+
+        let sumHTML = `<strong class="d-block mb-2 border-bottom pb-1" style="color: inherit; opacity: 0.9;">${document.getElementById('activeFilterText').innerText} Özeti (Net Değişim)</strong><div class="d-flex flex-wrap gap-2">`;
+        for(let key in summary) {
+            if (summary[key] !== 0) {
+                const sign = summary[key] > 0 ? '+' : '';
+                const bgCol = summary[key] > 0 ? '#d1e7dd' : '#f8d7da';
+                const textCol = summary[key] > 0 ? '#0f5132' : '#842029';
+                sumHTML += `<span class="badge" style="background-color: ${bgCol}; color: ${textCol}; font-size: 0.85rem; padding: 6px 10px; border: 1px solid rgba(0,0,0,0.05);">${key}: ${sign}${summary[key]}</span>`;
+            }
+        }
+        sumHTML += '</div>';
+        
+        summaryBox.innerHTML = sumHTML;
+        summaryBox.style.display = 'block';
+    }
+
+    function renderHistory() { 
         const container = document.getElementById('historyListContainer'); 
         container.innerHTML = ""; 
 
@@ -2120,18 +2163,19 @@
             return;
         }
 
-        let displayData = [];
+        let displayData = localData.history;
+        let isFiltered = false;
         
-        if (filterDate) {
-            const parts = filterDate.split('-'); 
-            if(parts.length === 3) {
-                const filterStr = `${parts[2]}.${parts[1]}.${parts[0]}`; 
-                displayData = localData.history.filter(r => r.time.split(' ')[0] === filterStr);
-            } else if(filterDate.includes('.')) {
-                 displayData = localData.history.filter(r => r.time.split(' ')[0] === filterDate);
-            }
-        } else {
-            displayData = localData.history.slice(0, 50);
+        if (currentHistoryFilter.type === 'date') {
+            displayData = displayData.filter(r => r.time.split(' ')[0] === currentHistoryFilter.dateStr);
+            isFiltered = true;
+        } else if (currentHistoryFilter.type === 'month') {
+            const [m, y] = currentHistoryFilter.dateStr.split('.');
+            displayData = displayData.filter(r => {
+                const parts = r.time.split(' ')[0].split('.');
+                return parts[1] === m && parts[2] === y;
+            });
+            isFiltered = true;
         }
 
         if (currentHistoryCategory === 'namaz') {
@@ -2153,7 +2197,10 @@
              return;
         }
 
-        displayData.forEach(r => { 
+        const renderLimit = isFiltered ? displayData.length : 50;
+        const dataToRender = displayData.slice(0, renderLimit);
+
+        dataToRender.forEach(r => { 
             const o = parseFloat(r.oldVal); 
             const n = parseFloat(r.newVal); 
             const diff = n - o;
@@ -2180,7 +2227,7 @@
             </div>`; 
         }); 
 
-        if(!filterDate && localData.history.length > 50) {
+        if(!isFiltered && displayData.length > 50) {
              container.innerHTML += '<div class="text-center text-muted small py-2">Daha eski kayıtlar için tarih filtresini kullanınız...</div>';
         }
     }
@@ -2206,21 +2253,21 @@
             currentFastingSubCat = 'all';
             currentNamazSubCat = 'all';
         }
-        renderHistory(document.getElementById('historyFilterDate').value);
+        renderHistory();
     }
 
     window.setFastingSubCategory = function(subCat, btn) {
         currentFastingSubCat = subCat;
         document.querySelectorAll('#fastingSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        renderHistory(document.getElementById('historyFilterDate').value);
+        renderHistory();
     }
 
     window.setNamazSubCategory = function(subCat, btn) {
         currentNamazSubCat = subCat;
         document.querySelectorAll('#namazSubTabs .h-sub-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        renderHistory(document.getElementById('historyFilterDate').value);
+        renderHistory();
     }
 
     window.toggleHistoryCard = function(el) {
@@ -2240,26 +2287,6 @@
             el.classList.add('open');
             detail.style.display = 'block';
         }
-    }
-
-    window.filterHistoryByDate = function() {
-        const val = document.getElementById('historyFilterDate').value;
-        const resetBtn = document.getElementById('resetHistoryDateBtn');
-        if(val) {
-             resetBtn.style.display = 'block';
-             renderHistory(val);
-        } else {
-            resetBtn.style.display = 'none';
-            renderHistory();
-        }
-    }
-
-    window.clearHistoryFilter = function() {
-        const input = document.getElementById('historyFilterDate');
-        input.value = "";
-        input.type = "text"; 
-        document.getElementById('resetHistoryDateBtn').style.display = 'none';
-        renderHistory();
     }
 
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
@@ -2338,7 +2365,7 @@
         document.getElementById('stats-view-history').style.display = 'none';
         document.getElementById('stats-view-' + tab).style.display = 'block';
         if(tab === 'history') {
-            renderHistory(document.getElementById('historyFilterDate').value);
+            renderHistory();
         }
     }
 
@@ -2432,7 +2459,7 @@
             week: weekStr,
             month: maxM > 0 ? `${bestMName} (${maxM})` : "-",
             day: dayStr
-        };
+        }
     }
 
     function renderStats() { 
@@ -2835,7 +2862,6 @@
         
         const currentUI = uiProps[activeFastingIndex];
         
-        // --- BU KISIM GÜNCELLENDİ: Analiz / Son Değişiklikler TARZI TAB MENU ---
         let menuHTML = `<div class="stats-tab-container mb-3" style="width:100%;">`;
         uiProps.forEach((props, i) => {
             const isActive = i === activeFastingIndex;
@@ -2846,7 +2872,6 @@
             menuHTML += `<button class="stats-tab-btn fasting-tab-btn ${isActive ? 'active ' + activeColorClass : ''}" onclick="setActiveFasting(${i})">${props.name}</button>`;
         });
         menuHTML += `</div>`;
-        // ------------------------------------------------------------------------
 
         let cardContentHTML = '';
         const hasTarget = data.hasTarget === true;
@@ -3054,5 +3079,3 @@
 </script>
 </body>
 </html>
-
-
