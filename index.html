@@ -438,8 +438,12 @@
         .cl-percent { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
         .cl-divider { width: 1px; height: 30px; background: var(--border-color); margin: 0 10px; }
 
-        /* BAVUL ŞİFRESİ (WHEEL PICKER) */
-        .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; }
+        /* YENİ TASARIM FİLTRE BUTONU VE ROZETİ */
+        .btn-custom-filter { background: var(--card-bg); border: 2px solid #609979; color: #609979; border-radius: 30px; font-weight: 700; font-size: 0.95rem; padding: 8px 24px; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.1); }
+        .btn-custom-filter:active { transform: scale(0.95); }
+        .active-filter-badge { background: linear-gradient(135deg, rgba(96, 153, 121, 0.15), rgba(32, 201, 151, 0.05)); border: 1px solid rgba(96, 153, 121, 0.3); border-radius: 50px; padding: 8px 20px; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 10px; }
         .wheel-highlight { position: absolute; top: 40px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
         .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 0; position: relative; z-index: 2; text-align: center; }
         .wheel-col::-webkit-scrollbar { display: none; }
@@ -736,13 +740,17 @@
             <!-- SON DEĞİŞİKLİKLER (GEÇMİŞ) GÖRÜNÜMÜ -->
             <div id="stats-view-history" style="display: none;">
                 
-                <div class="d-flex justify-content-between align-items-center mt-3 mb-3 px-1">
-                    <button class="btn btn-sm" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius:20px; font-weight: 600;" onclick="openCustomDatePicker()">
-                        <i class="fas fa-filter text-success me-1"></i> Tarih Filtresi Seç
+                <div class="d-flex flex-column align-items-center mt-4 mb-4">
+                    <button class="btn-custom-filter" onclick="openCustomDatePicker()">
+                        <i class="fas fa-calendar-alt me-2"></i> Tarih Filtresi Seç
                     </button>
-                    <div class="d-flex align-items-center gap-2">
-                        <span id="activeFilterText" class="small fw-bold text-success" style="display:none;"></span>
-                        <i id="clearFilterIcon" class="fas fa-times-circle text-danger fs-5" style="display:none; cursor:pointer;" onclick="clearCustomFilter()"></i>
+                    
+                    <div id="activeFilterContainer" style="display: none; margin-top: 15px;">
+                        <div class="active-filter-badge">
+                            <i class="fas fa-filter text-success"></i>
+                            <span id="activeFilterText" class="fw-bold" style="color: var(--text-color); font-size: 0.95rem;"></span>
+                            <i id="clearFilterIcon" class="fas fa-times-circle text-danger fs-5 ms-1" style="cursor:pointer; transition: 0.2s;" onclick="clearCustomFilter()"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -900,7 +908,7 @@
     
     setTimeout(() => { hideLoader(); }, 5000); 
 
-    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
+    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7-4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
         "name": "Kaza İbadet Takip v1.0", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#609979", 
@@ -2180,8 +2188,7 @@
         }
 
         document.getElementById('activeFilterText').innerText = displayStr;
-        document.getElementById('activeFilterText').style.display = 'inline-block';
-        document.getElementById('clearFilterIcon').style.display = 'inline-block';
+        document.getElementById('activeFilterContainer').style.display = 'block';
         
         closeCustomDatePicker();
         renderHistory();
@@ -2190,8 +2197,7 @@
     function clearCustomFilter() {
         triggerHaptic();
         currentHistoryFilter = { type: 'none', dateStr: '', startDate: null, endDate: null, summaryText: '' };
-        document.getElementById('activeFilterText').style.display = 'none';
-        document.getElementById('clearFilterIcon').style.display = 'none';
+        document.getElementById('activeFilterContainer').style.display = 'none';
         renderHistory();
     }
 
