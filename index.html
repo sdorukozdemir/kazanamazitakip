@@ -349,18 +349,6 @@
         body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; }
         body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
 
-        /* YENİ: Özel Özet Kartı Tasarımı (Indigo) */
-        .metallic-summary { background: linear-gradient(145deg, #e8eaf6 0%, #ffffff 50%, #e8eaf6 100%); border-left: 5px solid #5c6bc0; }
-        .metallic-summary.up { border-left-color: #5c6bc0; }
-        .metallic-summary.down { border-left-color: #d81b60; }
-        .metallic-summary .change-badge { background: rgba(92, 107, 192, 0.1); color: #5c6bc0; }
-        .metallic-summary.down .change-badge { background: rgba(216, 27, 96, 0.1); color: #d81b60; }
-        .metallic-summary .detail-values { color: #5c6bc0; }
-        .metallic-summary.down .detail-values { color: #d81b60; }
-        body.dark-mode .metallic-summary { background: linear-gradient(145deg, #1a237e 0%, #283593 50%, #1a237e 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.4); color: #e0e0e0; }
-        body.dark-mode .metallic-summary.up .detail-values, body.dark-mode .metallic-summary.up .change-badge { color: #8c9eff; }
-        body.dark-mode .metallic-summary.down .detail-values, body.dark-mode .metallic-summary.down .change-badge { color: #ff80ab; }
-
         input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
         body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
 
@@ -450,12 +438,12 @@
         .cl-percent { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
         .cl-divider { width: 1px; height: 30px; background: var(--border-color); margin: 0 10px; }
 
-        /* --- BAVUL ŞİFRESİ (WHEEL PICKER) CSS --- */
+        /* --- BAVUL ŞİFRESİ (WHEEL PICKER) PADDING HİZALAMASI DÜZELTİLDİ --- */
         .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 10px; }
         .wheel-highlight { position: absolute; top: 40px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
-        .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 40px 0; position: relative; z-index: 2; text-align: center; }
+        .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 0; position: relative; z-index: 2; text-align: center; }
         .wheel-col::-webkit-scrollbar { display: none; }
-        .wheel-item { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; color: var(--text-color); opacity: 0.3; scroll-snap-align: center; transition: all 0.2s; cursor: pointer; }
+        .wheel-item { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; color: var(--text-color); opacity: 0.3; scroll-snap-align: center; transition: all 0.2s; cursor: pointer; line-height: 40px; }
         .wheel-item.active { opacity: 1; font-size: 1.35rem; color: #609979; font-weight: 800; }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
@@ -2222,10 +2210,20 @@
                         diff: 0
                     };
                 }
-                // En eski değer olarak r.oldVal kaydedilir.
+                // En eski değer olarak r.oldVal kaydedilir (Döngü en yeniden eskiye doğru gider, bu yüzden eskiye indikçe oldVal güncellenir)
                 summaryStats[key].oldVal = parseFloat(r.oldVal);
                 summaryStats[key].diff += (parseFloat(r.newVal) - parseFloat(r.oldVal));
             });
+
+            const prayerMeta = {
+                "Sabah": { bg: "bg-sabah", icon: "fa-cloud-sun" },
+                "Öğle": { bg: "bg-ogle", icon: "fa-sun" },
+                "İkindi": { bg: "bg-ikindi", icon: "fa-cloud-sun flip-icon" },
+                "Akşam": { bg: "bg-aksam", icon: "fa-moon" },
+                "Yatsı": { bg: "bg-yatsi", icon: "fa-star" },
+                "Kaza Orucu": { bg: "bg-oruc-kaza-gradient", icon: "fa-star-and-crescent" },
+                "Nafile Oruç": { bg: "bg-oruc-nafile-gradient", icon: "fa-hands-holding-circle" }
+            };
 
             let renderedAny = false;
             for(let key in summaryStats) {
@@ -2233,26 +2231,31 @@
                     renderedAny = true;
                     const diff = summaryStats[key].diff;
                     const diffSign = diff > 0 ? '+' : '';
-                    const statusClass = diff >= 0 ? 'up' : 'down'; 
                     const o = summaryStats[key].oldVal;
                     const n = summaryStats[key].newVal;
                     
+                    const meta = prayerMeta[key] || { bg: "bg-secondary", icon: "fa-mosque" };
+                    
                     container.innerHTML += `
-                    <div class="metallic-card metallic-summary ${statusClass}" onclick="toggleHistoryCard(this)">
-                        <div class="card-summary">
-                            <span class="summary-prayer">${key}</span>
-                            <div class="summary-right-group">
-                                <span class="change-badge">${diffSign}${diff}</span>
-                                <i class="fas fa-chevron-down toggle-icon"></i>
+                    <div class="prayer-detail-card mb-3 ${meta.bg}" onclick="toggleHistoryCard(this)" style="min-height: auto; cursor: pointer; display: block; border-radius: 20px;">
+                        <div class="pd-content" style="padding: 15px 20px; border-radius: 20px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-bold fs-5 d-flex align-items-center gap-2" style="color: var(--text-color);">
+                                    <i class="fas ${meta.icon}"></i> ${key}
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge" style="background: rgba(0,0,0,0.1); color: var(--text-color); font-size: 1rem; padding: 6px 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1);">${diffSign}${diff}</span>
+                                    <i class="fas fa-chevron-down" style="color: var(--text-color); opacity: 0.5; transition: transform 0.3s;"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-detail">
-                            <div class="detail-values">
-                                <span>${o}</span>
-                                <i class="fas fa-arrow-right"></i>
-                                <span>${n}</span>
+                            <div class="card-detail mt-3 pt-3 border-top" style="display:none; text-align:center; border-color: rgba(0,0,0,0.1) !important;">
+                                <div class="detail-values fs-4 fw-bold mb-1" style="color: var(--text-color);">
+                                    <span>${o}</span>
+                                    <i class="fas fa-arrow-right mx-2" style="opacity:0.5;"></i>
+                                    <span>${n}</span>
+                                </div>
+                                <div class="small fw-bold" style="opacity:0.6; color: var(--text-color); text-transform:uppercase;"><i class="far fa-calendar-alt me-1"></i> Dönem Başı ➔ Dönem Sonu</div>
                             </div>
-                            <div class="detail-full-date"><i class="far fa-calendar-alt me-1"></i> Dönem İçi Değişim</div>
                         </div>
                     </div>`;
                 }
@@ -2340,21 +2343,28 @@
     }
 
     window.toggleHistoryCard = function(el) {
-        const allOpen = document.querySelectorAll('.metallic-card.open');
+        const allOpen = document.querySelectorAll('.metallic-card.open, .prayer-detail-card.open');
         allOpen.forEach(card => {
             if(card !== el) {
                 card.classList.remove('open');
-                card.querySelector('.card-detail').style.display = 'none';
+                const det = card.querySelector('.card-detail');
+                if(det) det.style.display = 'none';
+                const icon = card.querySelector('.fa-chevron-down');
+                if(icon) icon.style.transform = 'rotate(0deg)';
             }
         });
 
         const detail = el.querySelector('.card-detail');
+        const icon = el.querySelector('.fa-chevron-down');
+        
         if (el.classList.contains('open')) {
             el.classList.remove('open');
             detail.style.display = 'none';
+            if(icon) icon.style.transform = 'rotate(0deg)';
         } else {
             el.classList.add('open');
             detail.style.display = 'block';
+            if(icon) icon.style.transform = 'rotate(180deg)';
         }
     }
 
