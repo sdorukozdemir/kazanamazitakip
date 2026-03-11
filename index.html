@@ -349,6 +349,21 @@
         body.dark-mode .metallic-card.up .detail-values, body.dark-mode .metallic-card.up .change-badge { color: #2ecc71; }
         body.dark-mode .metallic-card.down .detail-values, body.dark-mode .metallic-card.down .change-badge { color: #e74c3c; }
 
+        /* YENİ: Özel Özet Kartı Tasarımı (Indigo) */
+        .metallic-summary { background: linear-gradient(145deg, #e8eaf6 0%, #ffffff 50%, #e8eaf6 100%); border-left: 5px solid #5c6bc0; }
+        .metallic-summary.up { border-left-color: #5c6bc0; }
+        .metallic-summary.down { border-left-color: #d81b60; }
+        .metallic-summary .change-badge { background: rgba(92, 107, 192, 0.1); color: #5c6bc0; }
+        .metallic-summary.down .change-badge { background: rgba(216, 27, 96, 0.1); color: #d81b60; }
+        .metallic-summary .detail-values { color: #5c6bc0; }
+        .metallic-summary.down .detail-values { color: #d81b60; }
+        body.dark-mode .metallic-summary { background: linear-gradient(145deg, #1a237e 0%, #283593 50%, #1a237e 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.4); color: #e0e0e0; }
+        body.dark-mode .metallic-summary.up .detail-values, body.dark-mode .metallic-summary.up .change-badge { color: #8c9eff; }
+        body.dark-mode .metallic-summary.down .detail-values, body.dark-mode .metallic-summary.down .change-badge { color: #ff80ab; }
+
+        input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--text-color); background: transparent; min-width: 130px; }
+        body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
+
         .history-filter-tabs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; align-items: center; }
         .h-main-tabs { display: flex; gap: 10px; justify-content: center; width: 100%; flex-wrap: wrap; }
         .h-sub-tabs { display: none; gap: 8px; justify-content: center; width: 100%; animation: fadeIn 0.3s ease; flex-wrap: wrap; }
@@ -435,7 +450,7 @@
         .cl-percent { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
         .cl-divider { width: 1px; height: 30px; background: var(--border-color); margin: 0 10px; }
 
-        /* --- BAVUL ŞİFRESİ (WHEEL PICKER) CSS YENİDEN DÜZENLENDİ --- */
+        /* --- BAVUL ŞİFRESİ (WHEEL PICKER) CSS --- */
         .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 10px; }
         .wheel-highlight { position: absolute; top: 40px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
         .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 40px 0; position: relative; z-index: 2; text-align: center; }
@@ -490,7 +505,7 @@
     </div>
 </div>
 
-<!-- YENİ: Bavul Şifresi Tarzı Tarih Seçici Modal -->
+<!-- Bavul Şifresi Tarzı Tarih Seçici Modal -->
 <div id="customDatePickerModal" class="custom-modal-overlay" style="z-index: 2010;">
     <div class="custom-modal" style="padding: 25px 20px;">
         <h5 class="fw-bold mb-3"><i class="fas fa-calendar-alt me-2 text-success"></i>Dönem Seçimi</h5>
@@ -714,7 +729,6 @@
             <!-- SON DEĞİŞİKLİKLER (GEÇMİŞ) GÖRÜNÜMÜ -->
             <div id="stats-view-history" style="display: none;">
                 
-                <!-- BURAYA TAŞINDI: FİLTRELEME BUTONU -->
                 <div class="d-flex justify-content-between align-items-center mt-3 mb-3 px-1">
                     <button class="btn btn-sm" style="background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius:20px; font-weight: 600;" onclick="openCustomDatePicker()">
                         <i class="fas fa-filter text-success me-1"></i> Tarih Filtresi Seç
@@ -2048,6 +2062,7 @@
         const d = today.getDate();
         const w = getWeekNumber(today);
 
+        // Populate the wheels
         populateWheel('wheelDay', 1, 31, val => String(val).padStart(2, '0'), d);
         populateWheel('wheelWeek', 1, 52, val => val + ". Hafta", w);
         populateWheel('wheelMonth', 0, 11, val => MONTH_NAMES[val], m);
@@ -2060,6 +2075,9 @@
         let targetIndex = 0;
         let index = 0;
         
+        // Blank item for top padding inside scroll
+        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
+
         for(let i=start; i<=end; i++) {
             const val = formatFunc ? formatFunc(i) : i;
             if(i === selectedValue) targetIndex = index;
@@ -2067,6 +2085,9 @@
             index++;
         }
         
+        // Blank item for bottom padding inside scroll
+        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
+
         setTimeout(() => {
             col.scrollTop = targetIndex * 40;
             updateWheelActive(col);
@@ -2187,37 +2208,51 @@
 
         // ÖZET MODU (SADECE HAFTALIK VE AYLIK SEÇİMDE ÇALIŞIR)
         if (isSummaryMode) {
-            const summary = {
-                "Sabah": 0, "Öğle": 0, "İkindi": 0, "Akşam": 0, "Yatsı": 0,
-                "Kaza Orucu": 0, "Nafile Oruç": 0
-            };
+            const summaryStats = {};
 
             displayData.forEach(r => {
-                const diff = parseFloat(r.newVal) - parseFloat(r.oldVal);
                 let key = r.namaz;
                 if (key.includes("Nafile")) key = "Nafile Oruç"; 
                 if (key.includes("Kaza Orucu")) key = "Kaza Orucu";
 
-                if (summary[key] !== undefined) {
-                    summary[key] += diff;
+                if (!summaryStats[key]) {
+                    summaryStats[key] = {
+                        newVal: parseFloat(r.newVal), 
+                        oldVal: parseFloat(r.oldVal), 
+                        diff: 0
+                    };
                 }
+                // En eski değer olarak r.oldVal kaydedilir.
+                summaryStats[key].oldVal = parseFloat(r.oldVal);
+                summaryStats[key].diff += (parseFloat(r.newVal) - parseFloat(r.oldVal));
             });
 
             let renderedAny = false;
-            for(let key in summary) {
-                if (summary[key] !== 0) {
+            for(let key in summaryStats) {
+                if (summaryStats[key].diff !== 0 || summaryStats[key].newVal !== summaryStats[key].oldVal) {
                     renderedAny = true;
-                    const diff = summary[key];
+                    const diff = summaryStats[key].diff;
                     const diffSign = diff > 0 ? '+' : '';
-                    const statusClass = diff > 0 ? 'up' : 'down'; 
+                    const statusClass = diff >= 0 ? 'up' : 'down'; 
+                    const o = summaryStats[key].oldVal;
+                    const n = summaryStats[key].newVal;
                     
                     container.innerHTML += `
-                    <div class="metallic-card ${statusClass}">
-                        <div class="card-summary" style="cursor:default;">
+                    <div class="metallic-card metallic-summary ${statusClass}" onclick="toggleHistoryCard(this)">
+                        <div class="card-summary">
                             <span class="summary-prayer">${key}</span>
                             <div class="summary-right-group">
                                 <span class="change-badge">${diffSign}${diff}</span>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
                             </div>
+                        </div>
+                        <div class="card-detail">
+                            <div class="detail-values">
+                                <span>${o}</span>
+                                <i class="fas fa-arrow-right"></i>
+                                <span>${n}</span>
+                            </div>
+                            <div class="detail-full-date"><i class="far fa-calendar-alt me-1"></i> Dönem İçi Değişim</div>
                         </div>
                     </div>`;
                 }
