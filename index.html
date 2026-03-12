@@ -442,6 +442,9 @@
         .btn-custom-filter { background: var(--card-bg); border: 2px solid #609979; color: #609979; border-radius: 30px; font-weight: 700; font-size: 0.95rem; padding: 8px 24px; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(96, 153, 121, 0.1); }
         .btn-custom-filter:active { transform: scale(0.95); }
         .active-filter-badge { background: linear-gradient(135deg, rgba(96, 153, 121, 0.15), rgba(32, 201, 151, 0.05)); border: 1px solid rgba(96, 153, 121, 0.3); border-radius: 50px; padding: 8px 20px; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        .filter-mode-btn { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-weight: 600; padding: 8px 20px; border-radius: 30px; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .filter-mode-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); }
 
         .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 10px; }
         .wheel-highlight { position: absolute; top: 40px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
@@ -503,9 +506,9 @@
         <h5 class="fw-bold mb-3"><i class="fas fa-calendar-alt me-2 text-success"></i>Dönem Seçimi</h5>
         
         <div class="d-flex justify-content-center gap-2 mb-3 flex-wrap">
-            <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="btnFilterMode-month" onclick="setPickerMode('month')">Aylık</button>
-            <button class="btn btn-sm btn-outline-success rounded-pill px-3" id="btnFilterMode-range" onclick="setPickerMode('range')">Tarih Aralığı</button>
-            <button class="btn btn-sm btn-outline-success rounded-pill px-3 active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük</button>
+            <button class="filter-mode-btn" id="btnFilterMode-month" onclick="setPickerMode('month')">Aylık</button>
+            <button class="filter-mode-btn" id="btnFilterMode-range" onclick="setPickerMode('range')">Tarih Aralığı</button>
+            <button class="filter-mode-btn active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük</button>
         </div>
 
         <div id="singleWheelContainer">
@@ -518,7 +521,7 @@
         </div>
 
         <div id="rangeWheelContainer" style="display:none;">
-            <div class="text-center fw-bold small text-success mb-1 mt-2">Başlangıç Tarihi</div>
+            <div class="text-center fw-bold small mb-1 mt-2" style="color: #609979;">Başlangıç Tarihi</div>
             <div class="wheel-picker-wrap">
                 <div class="wheel-highlight"></div>
                 <div class="wheel-col" id="startDay" onscroll="updateWheelActive(this)"></div>
@@ -526,7 +529,7 @@
                 <div class="wheel-col" id="startYear" onscroll="updateWheelActive(this)"></div>
             </div>
             
-            <div class="text-center fw-bold small text-danger mb-1 mt-3">Bitiş Tarihi</div>
+            <div class="text-center fw-bold small mb-1 mt-3" style="color: #3e6b53;">Bitiş Tarihi</div>
             <div class="wheel-picker-wrap">
                 <div class="wheel-highlight"></div>
                 <div class="wheel-col" id="endDay" onscroll="updateWheelActive(this)"></div>
@@ -621,7 +624,7 @@
             
             <div id="summaryBar" class="summary-bar">
                 <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
-                <div class="summary-item"><div class="summary-val text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
+                <div class="summary-item"><div class="summaryval text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
                 <div class="summary-item"><div class="summary-val" id="sumRemaining">0</div><div class="summary-lbl">Kalan</div></div>
             </div>
 
@@ -908,7 +911,7 @@
     
     setTimeout(() => { hideLoader(); }, 5000); 
 
-    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7-4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
+    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
         "name": "Kaza İbadet Takip v1.0", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#609979", 
@@ -2094,7 +2097,6 @@
         let targetIndex = 0;
         let index = 0;
         
-        // Blank item for top padding inside scroll
         col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
 
         for(let i=start; i<=end; i++) {
@@ -2104,7 +2106,6 @@
             index++;
         }
         
-        // Blank item for bottom padding inside scroll
         col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
 
         setTimeout(() => {
@@ -2284,14 +2285,16 @@
                 "Nafile Oruç": { bg: "bg-oruc-nafile-gradient", icon: "fa-hands-holding-circle" }
             };
 
+            const orderedKeys = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı", "Kaza Orucu", "Nafile Oruç"];
             let renderedAny = false;
-            for(let key in summaryStats) {
-                if (summaryStats[key].diff !== 0 || summaryStats[key].newVal !== summaryStats[key].oldVal) {
+
+            orderedKeys.forEach(key => {
+                if (summaryStats[key] && (summaryStats[key].diff !== 0 || summaryStats[key].newVal !== summaryStats[key].oldVal)) {
                     renderedAny = true;
                     const diff = summaryStats[key].diff;
                     const diffSign = diff > 0 ? '+' : '';
                     const o = summaryStats[key].oldVal;
-                    const n = summaryStats[key].newVal;
+                    const n = o + diff; 
                     
                     const meta = prayerMeta[key] || { bg: "bg-secondary", icon: "fa-mosque" };
                     
@@ -2299,32 +2302,32 @@
                     <div class="prayer-detail-card mb-3 ${meta.bg}" onclick="toggleHistoryCard(this)" style="min-height: auto; cursor: pointer; display: block; border-radius: 20px;">
                         <div class="pd-content" style="padding: 15px 20px; border-radius: 20px;">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="fw-bold fs-5 d-flex align-items-center gap-2" style="color: var(--text-color);">
+                                <div class="fw-bold fs-5 d-flex align-items-center gap-2" style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
                                     <i class="fas ${meta.icon}"></i> ${key}
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
-                                    <span class="badge" style="background: rgba(0,0,0,0.1); color: var(--text-color); font-size: 1rem; padding: 6px 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1);">${diffSign}${diff}</span>
-                                    <i class="fas fa-chevron-down" style="color: var(--text-color); opacity: 0.5; transition: transform 0.3s;"></i>
+                                    <span class="badge" style="background: rgba(255,255,255,0.2); color: white; font-size: 1rem; padding: 6px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); text-shadow: 0 1px 2px rgba(0,0,0,0.2);">${diffSign}${diff}</span>
+                                    <i class="fas fa-chevron-down" style="color: white; opacity: 0.8; transition: transform 0.3s; text-shadow: 0 1px 2px rgba(0,0,0,0.2);"></i>
                                 </div>
                             </div>
-                            <div class="card-detail mt-3 pt-3 border-top" style="display:none; text-align:center; border-color: rgba(0,0,0,0.1) !important;">
-                                <div class="detail-values fs-4 fw-bold mb-1" style="color: var(--text-color);">
+                            <div class="card-detail mt-3 pt-3 border-top" style="display:none; text-align:center; border-color: rgba(255,255,255,0.2) !important;">
+                                <div class="detail-values fs-4 fw-bold mb-1" style="color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
                                     <span>${o}</span>
-                                    <i class="fas fa-arrow-right mx-2" style="opacity:0.5;"></i>
+                                    <i class="fas fa-arrow-right mx-2" style="opacity:0.8;"></i>
                                     <span>${n}</span>
                                 </div>
-                                <div class="small fw-bold" style="opacity:0.6; color: var(--text-color); text-transform:uppercase;"><i class="far fa-calendar-alt me-1"></i> ${currentHistoryFilter.summaryText}</div>
+                                <div class="small fw-bold" style="opacity:0.9; color: white; text-transform:uppercase; text-shadow: 0 1px 2px rgba(0,0,0,0.2);"><i class="far fa-calendar-alt me-1"></i> ${currentHistoryFilter.summaryText}</div>
                             </div>
                         </div>
                     </div>`;
                 }
-            }
+            });
 
             if (!renderedAny) {
                  container.innerHTML = '<div class="text-center text-muted small py-4">Bu kriterlerde net değişim yok.</div>';
             }
 
-            return; // Özet modu çalıştıysa detaya inmeden çık
+            return; 
         }
 
         // DETAYLI LİSTE (TÜMÜ VEYA GÜNLÜK SEÇİM İÇİN)
