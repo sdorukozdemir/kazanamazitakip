@@ -443,15 +443,17 @@
         .btn-custom-filter:active { transform: scale(0.95); }
         .active-filter-badge { background: linear-gradient(135deg, rgba(96, 153, 121, 0.15), rgba(32, 201, 151, 0.05)); border: 1px solid rgba(96, 153, 121, 0.3); border-radius: 50px; padding: 8px 20px; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        .filter-mode-btn { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-weight: 600; padding: 8px 20px; border-radius: 30px; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .filter-mode-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); }
+        /* FİLTRE MODU BUTONLARI (KAPSÜL TASARIMI) */
+        .filter-mode-btn { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-weight: 600; padding: 10px 20px; border-radius: 30px; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.02); display: flex; justify-content: center; align-items: center; }
+        .filter-mode-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); transform: translateY(-1px); }
 
-        .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 10px; }
-        .wheel-highlight { position: absolute; top: 40px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
-        .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 0; position: relative; z-index: 2; text-align: center; }
+        /* BAVUL ŞİFRESİ (WHEEL PICKER) YENİ YÜKSEKLİK VE MATEMATİK */
+        .wheel-picker-wrap { position: relative; height: 105px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; }
+        .wheel-highlight { position: absolute; top: 35px; left: 0; width: 100%; height: 35px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; }
+        .wheel-col { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 35px 0; position: relative; z-index: 2; text-align: center; }
         .wheel-col::-webkit-scrollbar { display: none; }
-        .wheel-item { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; color: var(--text-color); opacity: 0.3; scroll-snap-align: center; transition: all 0.2s; cursor: pointer; line-height: 40px; }
-        .wheel-item.active { opacity: 1; font-size: 1.35rem; color: #609979; font-weight: 800; }
+        .wheel-item { height: 35px; display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 600; color: var(--text-color); opacity: 0.3; scroll-snap-align: center; transition: all 0.2s; cursor: pointer; line-height: 35px; }
+        .wheel-item.active { opacity: 1; font-size: 1.25rem; color: #609979; font-weight: 800; }
 
         @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
         @media (orientation: landscape) and (max-height: 600px) { .app-header { display: none; } .bottom-nav { height: 50px; padding-bottom: 0; } .nav-item i { font-size: 1.1rem; margin-bottom: 2px; } .nav-item span { font-size: 0.6rem; } #content { padding-top: 5px; padding-bottom: 55px; } .chart-container { display: block !important; padding: 10px; margin-bottom: 10px; } .chart-container h5 { font-size: 0.9rem; margin-bottom: 5px; } #barChart, #lineChart, #completionChart { max-height: 180px !important; } .scrolling-wrapper { margin-bottom: 10px !important; } .stat-card-scroll { padding: 8px; width: 130px; } .analysis-box { padding: 10px; margin-bottom: 10px; } }
@@ -505,10 +507,16 @@
     <div class="custom-modal" style="padding: 25px 20px;">
         <h5 class="fw-bold mb-3"><i class="fas fa-calendar-alt me-2 text-success"></i>Dönem Seçimi</h5>
         
-        <div class="d-flex justify-content-center gap-2 mb-3 flex-wrap">
-            <button class="filter-mode-btn" id="btnFilterMode-month" onclick="setPickerMode('month')">Aylık</button>
-            <button class="filter-mode-btn" id="btnFilterMode-range" onclick="setPickerMode('range')">Tarih Aralığı</button>
-            <button class="filter-mode-btn active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük</button>
+        <div class="row g-2 mb-3">
+            <div class="col-6">
+                <button class="w-100 filter-mode-btn" id="btnFilterMode-month" onclick="setPickerMode('month')">Aylık</button>
+            </div>
+            <div class="col-6">
+                <button class="w-100 filter-mode-btn active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük</button>
+            </div>
+            <div class="col-12">
+                <button class="w-100 filter-mode-btn" id="btnFilterMode-range" onclick="setPickerMode('range')"><i class="fas fa-arrows-alt-h me-2"></i>Özel Tarih Aralığı</button>
+            </div>
         </div>
 
         <div id="singleWheelContainer">
@@ -520,21 +528,29 @@
             </div>
         </div>
 
-        <div id="rangeWheelContainer" style="display:none;">
-            <div class="text-center fw-bold small mb-1 mt-2" style="color: #609979;">Başlangıç Tarihi</div>
-            <div class="wheel-picker-wrap">
-                <div class="wheel-highlight"></div>
-                <div class="wheel-col" id="startDay" onscroll="updateWheelActive(this)"></div>
-                <div class="wheel-col" id="startMonth" onscroll="updateWheelActive(this)"></div>
-                <div class="wheel-col" id="startYear" onscroll="updateWheelActive(this)"></div>
+        <div id="rangeWheelContainer" style="display:none; position: relative;">
+            <div style="position: absolute; left: 13px; top: 35px; bottom: 35px; width: 2px; background: rgba(96, 153, 121, 0.3); z-index: 0;"></div>
+
+            <div style="position: relative; z-index: 1; padding-left: 28px; margin-bottom: 15px;">
+                <div style="position: absolute; left: -11px; top: 2px; width: 20px; height: 20px; background: var(--card-bg); border: 4px solid #20c997; border-radius: 50%;"></div>
+                <div class="fs-6 fw-bold mb-1 text-start" style="color: #20c997;">Başlangıç Tarihi</div>
+                <div class="wheel-picker-wrap mt-0">
+                    <div class="wheel-highlight"></div>
+                    <div class="wheel-col" id="startDay" onscroll="updateWheelActive(this)"></div>
+                    <div class="wheel-col" id="startMonth" onscroll="updateWheelActive(this)"></div>
+                    <div class="wheel-col" id="startYear" onscroll="updateWheelActive(this)"></div>
+                </div>
             </div>
             
-            <div class="text-center fw-bold small mb-1 mt-3" style="color: #3e6b53;">Bitiş Tarihi</div>
-            <div class="wheel-picker-wrap">
-                <div class="wheel-highlight"></div>
-                <div class="wheel-col" id="endDay" onscroll="updateWheelActive(this)"></div>
-                <div class="wheel-col" id="endMonth" onscroll="updateWheelActive(this)"></div>
-                <div class="wheel-col" id="endYear" onscroll="updateWheelActive(this)"></div>
+            <div style="position: relative; z-index: 1; padding-left: 28px;">
+                <div style="position: absolute; left: -11px; top: 2px; width: 20px; height: 20px; background: var(--card-bg); border: 4px solid #146c43; border-radius: 50%;"></div>
+                <div class="fs-6 fw-bold mb-1 text-start" style="color: #146c43;">Bitiş Tarihi</div>
+                <div class="wheel-picker-wrap mt-0">
+                    <div class="wheel-highlight"></div>
+                    <div class="wheel-col" id="endDay" onscroll="updateWheelActive(this)"></div>
+                    <div class="wheel-col" id="endMonth" onscroll="updateWheelActive(this)"></div>
+                    <div class="wheel-col" id="endYear" onscroll="updateWheelActive(this)"></div>
+                </div>
             </div>
         </div>
 
@@ -624,7 +640,7 @@
             
             <div id="summaryBar" class="summary-bar">
                 <div class="summary-item"><div class="summary-val" id="sumTarget">0</div><div class="summary-lbl">Kılınacak</div></div>
-                <div class="summary-item"><div class="summaryval text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
+                <div class="summary-item"><div class="summary-val text-warning" id="sumDone">0</div><div class="summary-lbl">Kılınan</div></div>
                 <div class="summary-item"><div class="summary-val" id="sumRemaining">0</div><div class="summary-lbl">Kalan</div></div>
             </div>
 
@@ -2097,7 +2113,8 @@
         let targetIndex = 0;
         let index = 0;
         
-        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
+        // Blank item for top padding inside scroll (TAM HİZALAMA İÇİN 35px)
+        col.innerHTML += `<div class="wheel-item" style="height:35px;"></div>`;
 
         for(let i=start; i<=end; i++) {
             const val = formatFunc ? formatFunc(i) : i;
@@ -2106,16 +2123,17 @@
             index++;
         }
         
-        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
+        // Blank item for bottom padding inside scroll
+        col.innerHTML += `<div class="wheel-item" style="height:35px;"></div>`;
 
         setTimeout(() => {
-            col.scrollTop = targetIndex * 40;
+            col.scrollTop = targetIndex * 35;
             updateWheelActive(col);
         }, 10);
     }
 
     window.updateWheelActive = function(col) {
-        const index = Math.round(col.scrollTop / 40);
+        const index = Math.round(col.scrollTop / 35);
         const items = col.querySelectorAll('.wheel-item[data-val]');
         items.forEach((item, i) => {
             if(i === index) item.classList.add('active');
@@ -2271,7 +2289,7 @@
                         diff: 0
                     };
                 }
-                summaryStats[key].oldVal = parseFloat(r.oldVal);
+                // DÜZELTME: Sadece net değişimi toplayacağız. Eski formül karışıyordu.
                 summaryStats[key].diff += (parseFloat(r.newVal) - parseFloat(r.oldVal));
             });
 
@@ -2285,16 +2303,19 @@
                 "Nafile Oruç": { bg: "bg-oruc-nafile-gradient", icon: "fa-hands-holding-circle" }
             };
 
+            // DÜZELTME: Her zaman sabit bir sıra ile yazdır. (Sabah'tan başlayıp Nafile'de bitecek)
             const orderedKeys = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı", "Kaza Orucu", "Nafile Oruç"];
             let renderedAny = false;
 
             orderedKeys.forEach(key => {
-                if (summaryStats[key] && (summaryStats[key].diff !== 0 || summaryStats[key].newVal !== summaryStats[key].oldVal)) {
+                if (summaryStats[key] && summaryStats[key].diff !== 0) {
                     renderedAny = true;
                     const diff = summaryStats[key].diff;
                     const diffSign = diff > 0 ? '+' : '';
-                    const o = summaryStats[key].oldVal;
-                    const n = o + diff; 
+                    
+                    // DÜZELTME: Matematiksel Garanti. Bitiş değeri her zaman eski değer + farktır.
+                    const o = summaryStats[key].oldVal; // O an listedeki en son (kronolojik olarak ilk) değer
+                    const n = o + diff; // O + net fark = N
                     
                     const meta = prayerMeta[key] || { bg: "bg-secondary", icon: "fa-mosque" };
                     
