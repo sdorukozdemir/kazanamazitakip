@@ -73,6 +73,7 @@
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
+        
         html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: background-color 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
         
@@ -1073,10 +1074,9 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Bekleniyor...';
         
-        const freshProvider = new firebase.auth.GoogleAuthProvider();
-        freshProvider.setCustomParameters({ prompt: 'select_account' });
+        provider.setCustomParameters({ prompt: 'select_account' });
         
-        auth.signInWithPopup(freshProvider)
+        auth.signInWithPopup(provider)
         .then(() => {
             isLoginProcessing = false;
             btn.innerHTML = originalHtml;
@@ -1100,8 +1100,7 @@
     function logout() { 
         showModal("Çıkış Yap", "Hesabınızdan güvenli bir şekilde çıkış yapmak istiyor musunuz?", () => {
             auth.signOut().then(() => {
-                localStorage.clear();
-                sessionStorage.clear();
+                localStorage.removeItem('offlineBackup');
                 window.location.reload(); 
             }).catch(e => showToast("Çıkış yapılırken hata: " + e.message, "error")); 
         });
@@ -2150,7 +2149,8 @@
         let targetIndex = 0;
         let index = 0;
         
-        col.innerHTML += `<div class="wheel-item" style="height:35px;"></div>`;
+        // Blank item for top padding inside scroll (TAM HİZALAMA İÇİN 35px YERİNE 40px VE İLGİLİ CSS MATEMATİĞİ KULLANILDI)
+        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
 
         for(let i=start; i<=end; i++) {
             const val = formatFunc ? formatFunc(i) : i;
@@ -2159,16 +2159,17 @@
             index++;
         }
         
-        col.innerHTML += `<div class="wheel-item" style="height:35px;"></div>`;
+        // Blank item for bottom padding inside scroll
+        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
 
         setTimeout(() => {
-            col.scrollTop = targetIndex * 35;
+            col.scrollTop = targetIndex * 40;
             updateWheelActive(col);
         }, 10);
     }
 
     window.updateWheelActive = function(col) {
-        const index = Math.round(col.scrollTop / 35);
+        const index = Math.round(col.scrollTop / 40);
         const items = col.querySelectorAll('.wheel-item[data-val]');
         items.forEach((item, i) => {
             if(i === index) item.classList.add('active');
@@ -2311,6 +2312,7 @@
              return;
         }
 
+        // ÖZET MODU (SADECE AYLIK VE TARİH ARALIĞI SEÇİMİNDE ÇALIŞIR)
         if (isSummaryMode) {
             const summaryStats = {};
 
