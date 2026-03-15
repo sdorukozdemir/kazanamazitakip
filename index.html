@@ -1073,8 +1073,10 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Bekleniyor...';
         
-        provider.setCustomParameters({ prompt: 'select_account' });
-        auth.signInWithPopup(provider)
+        const freshProvider = new firebase.auth.GoogleAuthProvider();
+        freshProvider.setCustomParameters({ prompt: 'select_account' });
+        
+        auth.signInWithPopup(freshProvider)
         .then(() => {
             isLoginProcessing = false;
             btn.innerHTML = originalHtml;
@@ -1098,11 +1100,9 @@
     function logout() { 
         showModal("Çıkış Yap", "Hesabınızdan güvenli bir şekilde çıkış yapmak istiyor musunuz?", () => {
             auth.signOut().then(() => {
-                localStorage.removeItem('offlineBackup');
-                localData = JSON.parse(JSON.stringify(defaultData));
-                document.getElementById('app-wrapper').style.display = 'none';
-                document.getElementById('login-screen').style.display = 'flex';
-                showToast("Başarıyla çıkış yapıldı.", "success");
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.reload(); 
             }).catch(e => showToast("Çıkış yapılırken hata: " + e.message, "error")); 
         });
     }
@@ -2311,7 +2311,6 @@
              return;
         }
 
-        // ÖZET MODU (SADECE AYLIK VE TARİH ARALIĞI SEÇİMİNDE ÇALIŞIR)
         if (isSummaryMode) {
             const summaryStats = {};
 
