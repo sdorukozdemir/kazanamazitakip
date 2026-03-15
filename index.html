@@ -448,8 +448,8 @@
         .filter-mode-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); transform: translateY(-1px); }
 
         /* AYLIK DAĞILIM RAPORU KUTUCUKLARI (YENİ) */
-        .breakdown-box { background: rgba(255,255,255,0.4); border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; padding: 8px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; color: var(--text-color); font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        body.dark-mode .breakdown-box { background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.05); }
+        .breakdown-box { background: rgba(0,0,0,0.05); border-radius: 12px; padding: 8px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; color: var(--text-color); font-weight: 600; }
+        body.dark-mode .breakdown-box { background: rgba(0,0,0,0.2); }
 
         /* BAVUL ŞİFRESİ (WHEEL PICKER) YENİ YÜKSEKLİK VE MATEMATİK */
         .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 5px; }
@@ -910,7 +910,6 @@
     let currentFastingSubCat = 'all'; 
     let currentNamazSubCat = 'all'; 
     
-    // --- YENİ FİLTRE DEĞİŞKENLERİ ---
     let currentHistoryFilter = { type: 'none', startDate: null, endDate: null, summaryText: '', dateStr: '' }; 
     let pickerMode = 'date'; 
     const MONTH_NAMES = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
@@ -931,7 +930,7 @@
     
     setTimeout(() => { hideLoader(); }, 5000); 
 
-    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7-4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
+    const pwaIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23609979' d='M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S401.4 0 256 0zm-46.8 389L68.6 248.4c-4.7-4.7-4.7-12.3 0-17l28.3-28.3c4.7-4.7 12.3-4.7 17 0L209.2 298l188.8-188.8c4.7-4.7 12.3-4.7 17 0l28.3 28.3c4.7 4.7 4.7 12.3 0 17L226.2 389c-4.7 4.7-12.3 4.7-17 0z'/%3E%3C/svg%3E";
     const manifestBlob = new Blob([JSON.stringify({ 
         "name": "Kaza İbadet Takip v1.0", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
         "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#609979", 
@@ -969,11 +968,6 @@
         if(parts.length !== 3) return isoDate;
         const [y, m, d] = parts;
         return `${d}.${m}.${y}`;
-    }
-    function parseHistoryDate(timeStr) {
-        const [datePart] = timeStr.split(' ');
-        const [d, m, y] = datePart.split('.');
-        return new Date(`${y}-${m}-${d}T12:00:00`);
     }
 
     const defaultData = {
@@ -1068,14 +1062,21 @@
 
     function loginWithGoogle() { 
         provider.setCustomParameters({ prompt: 'select_account' });
-        auth.signInWithPopup(provider).catch(e => showModal("Hata", e.message)); 
+        auth.signInWithPopup(provider).catch(e => {
+            if(e.code !== 'auth/popup-closed-by-user') {
+                showModal("Hata", e.message);
+            }
+        }); 
     }
     
     function logout() { 
         auth.signOut().then(() => {
             localStorage.removeItem('offlineBackup');
-            window.location.reload(); 
-        });
+            localData = JSON.parse(JSON.stringify(defaultData));
+            document.getElementById('app-wrapper').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            showToast("Başarıyla çıkış yapıldı.", "success");
+        }).catch(e => showModal("Hata", e.message)); 
     }
     
     function saveToCloud() { 
@@ -2045,6 +2046,7 @@
         renderBadgeGroup(streakBadges, 'badgeListStreak', maxStreak);
     }
 
+    // --- BAVUL ŞİFRESİ (WHEEL PICKER) MANTIĞI YENİLENDİ ---
     function openCustomDatePicker() {
         document.getElementById('customDatePickerModal').style.display = 'flex';
         setPickerMode(pickerMode); 
@@ -2121,7 +2123,8 @@
         let targetIndex = 0;
         let index = 0;
         
-        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
+        // Blank item for top padding inside scroll (TAM HİZALAMA İÇİN 40px YERİNE 35px VE İLGİLİ CSS MATEMATİĞİ KULLANILDI)
+        col.innerHTML += `<div class="wheel-item" style="height:35px;"></div>`;
 
         for(let i=start; i<=end; i++) {
             const val = formatFunc ? formatFunc(i) : i;
@@ -2130,16 +2133,17 @@
             index++;
         }
         
-        col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
+        // Blank item for bottom padding inside scroll
+        col.innerHTML += `<div class="wheel-item" style="height:35px;"></div>`;
 
         setTimeout(() => {
-            col.scrollTop = targetIndex * 40;
+            col.scrollTop = targetIndex * 35;
             updateWheelActive(col);
         }, 10);
     }
 
     window.updateWheelActive = function(col) {
-        const index = Math.round(col.scrollTop / 40);
+        const index = Math.round(col.scrollTop / 35);
         const items = col.querySelectorAll('.wheel-item[data-val]');
         items.forEach((item, i) => {
             if(i === index) item.classList.add('active');
@@ -2300,8 +2304,11 @@
                     };
                 }
                 
+                // --- ARTIK NET DEĞİŞİME GÖRE ÇALIŞIR ---
                 let netDiff = parseFloat(r.newVal) - parseFloat(r.oldVal);
                 summaryStats[key].diff += netDiff;
+                
+                // Old val güncellemesi: En eski kayıt döngünün en sonunda gelir, o yüzden üstüne yazmak yeterlidir
                 summaryStats[key].oldVal = parseFloat(r.oldVal);
 
                 if (isMonthMode) {
