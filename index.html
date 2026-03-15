@@ -73,7 +73,6 @@
         }
         
         body.dark-mode .text-muted { color: #adb5bd !important; }
-        
         html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Poppins', sans-serif; transition: background-color 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
         
@@ -447,7 +446,7 @@
         .filter-mode-btn { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); font-weight: 600; padding: 10px 20px; border-radius: 30px; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.02); display: flex; justify-content: center; align-items: center; }
         .filter-mode-btn.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(96, 153, 121, 0.3); transform: translateY(-1px); }
 
-        /* AYLIK DAĞILIM RAPORU KUTUCUKLARI (YENİ) */
+        /* AYLIK DAĞILIM RAPORU KUTUCUKLARI */
         .breakdown-box { background: rgba(0,0,0,0.05); border-radius: 12px; padding: 8px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; color: var(--text-color); font-weight: 600; }
         body.dark-mode .breakdown-box { background: rgba(0,0,0,0.2); }
 
@@ -969,6 +968,11 @@
         const [y, m, d] = parts;
         return `${d}.${m}.${y}`;
     }
+    function parseHistoryDate(timeStr) {
+        const [datePart] = timeStr.split(' ');
+        const [d, m, y] = datePart.split('.');
+        return new Date(`${y}-${m}-${d}T12:00:00`);
+    }
 
     const defaultData = {
         startDate: new Date().toISOString().split('T')[0],
@@ -1060,23 +1064,47 @@
         }
     });
 
+    let isLoginProcessing = false;
     function loginWithGoogle() { 
+        if(isLoginProcessing) return;
+        isLoginProcessing = true;
+        
+        const btn = document.querySelector('.login-card button');
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Bekleniyor...';
+        
         provider.setCustomParameters({ prompt: 'select_account' });
-        auth.signInWithPopup(provider).catch(e => {
-            if(e.code !== 'auth/popup-closed-by-user') {
-                showModal("Hata", e.message);
+        auth.signInWithPopup(provider)
+        .then(() => {
+            isLoginProcessing = false;
+            btn.innerHTML = originalHtml;
+        })
+        .catch(e => {
+            isLoginProcessing = false;
+            btn.innerHTML = originalHtml;
+            
+            const errStr = String(e.message || '').toLowerCase();
+            const errCode = String(e.code || '').toLowerCase();
+            
+            if(errCode.includes('popup-closed-by-user') || errCode.includes('cancelled-popup-request') || errStr.includes('closed by the user')) {
+                console.log("Kullanıcı giriş penceresini kapattı.");
+                return;
             }
+            
+            showModal("Giriş Hatası", "Bir sorun oluştu. Lütfen tekrar deneyin.\nDetay: " + e.message); 
         }); 
     }
     
     function logout() { 
-        auth.signOut().then(() => {
-            localStorage.removeItem('offlineBackup');
-            localData = JSON.parse(JSON.stringify(defaultData));
-            document.getElementById('app-wrapper').style.display = 'none';
-            document.getElementById('login-screen').style.display = 'flex';
-            showToast("Başarıyla çıkış yapıldı.", "success");
-        }).catch(e => showModal("Hata", e.message)); 
+        showModal("Çıkış Yap", "Hesabınızdan güvenli bir şekilde çıkış yapmak istiyor musunuz?", () => {
+            auth.signOut().then(() => {
+                localStorage.removeItem('offlineBackup');
+                localData = JSON.parse(JSON.stringify(defaultData));
+                document.getElementById('app-wrapper').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'flex';
+                showToast("Başarıyla çıkış yapıldı.", "success");
+            }).catch(e => showToast("Çıkış yapılırken hata: " + e.message, "error")); 
+        });
     }
     
     function saveToCloud() { 
@@ -2046,7 +2074,6 @@
         renderBadgeGroup(streakBadges, 'badgeListStreak', maxStreak);
     }
 
-    // --- BAVUL ŞİFRESİ (WHEEL PICKER) MANTIĞI YENİLENDİ ---
     function openCustomDatePicker() {
         document.getElementById('customDatePickerModal').style.display = 'flex';
         setPickerMode(pickerMode); 
@@ -2123,7 +2150,6 @@
         let targetIndex = 0;
         let index = 0;
         
-        // Blank item for top padding inside scroll (TAM HİZALAMA İÇİN 40px YERİNE 35px VE İLGİLİ CSS MATEMATİĞİ KULLANILDI)
         col.innerHTML += `<div class="wheel-item" style="height:35px;"></div>`;
 
         for(let i=start; i<=end; i++) {
@@ -2133,7 +2159,6 @@
             index++;
         }
         
-        // Blank item for bottom padding inside scroll
         col.innerHTML += `<div class="wheel-item" style="height:35px;"></div>`;
 
         setTimeout(() => {
@@ -2304,11 +2329,8 @@
                     };
                 }
                 
-                // --- ARTIK NET DEĞİŞİME GÖRE ÇALIŞIR ---
                 let netDiff = parseFloat(r.newVal) - parseFloat(r.oldVal);
                 summaryStats[key].diff += netDiff;
-                
-                // Old val güncellemesi: En eski kayıt döngünün en sonunda gelir, o yüzden üstüne yazmak yeterlidir
                 summaryStats[key].oldVal = parseFloat(r.oldVal);
 
                 if (isMonthMode) {
@@ -2411,7 +2433,6 @@
             return; 
         }
 
-        // DETAYLI LİSTE (TÜMÜ VEYA GÜNLÜK SEÇİM İÇİN)
         const renderLimit = isFiltered ? displayData.length : 50;
         const dataToRender = displayData.slice(0, renderLimit);
 
@@ -2514,7 +2535,6 @@
     window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
     
-    // --- YENİ EKLENEN TEMİZLEME FONKSİYONU ---
     window.resetCalculatorInputs = function() {
         showModal("Sıfırla", "Hesaplama sihirbazındaki tüm tarihleri temizlemek istiyor musunuz?", () => {
             for(let i=0; i<5; i++) {
