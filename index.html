@@ -951,18 +951,6 @@
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
-    
-    // YENİ EKLENEN: Yönlendirme (Redirect) sonucunu dinleyerek hata varsa state'i temizleme
-    auth.getRedirectResult().catch((error) => {
-        console.error("Yönlendirme hatası:", error);
-        isLoginProcessing = false;
-        document.getElementById('loading-overlay').style.display = 'none';
-        document.getElementById('app-wrapper').style.display = 'none';
-        document.getElementById('login-screen').style.display = 'flex';
-        const btn = document.querySelector('.login-card button');
-        if(btn) btn.innerHTML = '<i class="fab fa-google me-2"></i> Google ile Giriş';
-        showToast("Giriş yapılırken hata oluştu: " + error.message, "error");
-    });
 
     let dbRef = null;
 
@@ -1087,16 +1075,21 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Bekleniyor...';
         
-        // GÜNCELLEME: Hesap değiştirirken oluşan sıkışmayı önlemek için 
-        // Provider sayfa yüklendiğinde değil, sadece burada oluşturuluyor.
+        // GÜNCELLEME: Popup kullanımı yapıldı
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
 
-        auth.signInWithRedirect(provider).catch(e => {
+        auth.signInWithPopup(provider).then((result) => {
+            isLoginProcessing = false;
+            // Başarılı olursa onAuthStateChanged yakalar.
+        }).catch(error => {
             isLoginProcessing = false;
             btn.innerHTML = originalHtml;
-            showModal("Giriş Hatası", "Bir sorun oluştu. Lütfen tekrar deneyin.\nDetay: " + e.message); 
-        }); 
+            // Eğer kullanıcı popup'ı kapatırsa veya istek iptal olursa sessiz kal
+            if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+                showModal("Giriş Hatası", "Bir sorun oluştu. Lütfen tekrar deneyin.\nDetay: " + error.message);
+            }
+        });
     }
     
     function logout() { 
@@ -1108,8 +1101,7 @@
                 document.getElementById('login-screen').style.display = 'flex';
                 showToast("Başarıyla çıkış yapıldı.", "success");
                 
-                // GÜNCELLEME: Çıkış yaptıktan sonra farklı bir hesap ile girerken "invalid action" hatası
-                // alınmaması için Firebase'in arka plan durumunu sayfayı yenileyerek sıfırlıyoruz.
+                // GÜNCELLEME: Çıkış yaptıktan sonra state sıfırlaması için yenile
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
