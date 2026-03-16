@@ -951,7 +951,11 @@
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
+    
+    // GİRİŞ ÇIKIŞ HATASINI ÖNLEMEK İÇİN PROVIDER TEK SEFERDE BURADA TANIMLANDI
     const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    
     let dbRef = null;
 
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
@@ -1066,6 +1070,7 @@
     });
 
     let isLoginProcessing = false;
+    
     function loginWithGoogle() { 
         if(isLoginProcessing) return;
         isLoginProcessing = true;
@@ -1074,25 +1079,10 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Bekleniyor...';
         
-        provider.setCustomParameters({ prompt: 'select_account' });
-        
-        auth.signInWithPopup(provider)
-        .then(() => {
+        // PWA ve Mobilde çakışmayı önlemek için Yönlendirme (Redirect) kullanıyoruz.
+        auth.signInWithRedirect(provider).catch(e => {
             isLoginProcessing = false;
             btn.innerHTML = originalHtml;
-        })
-        .catch(e => {
-            isLoginProcessing = false;
-            btn.innerHTML = originalHtml;
-            
-            const errStr = String(e.message || '').toLowerCase();
-            const errCode = String(e.code || '').toLowerCase();
-            
-            if(errCode.includes('popup-closed-by-user') || errCode.includes('cancelled-popup-request') || errStr.includes('closed by the user')) {
-                console.log("Kullanıcı giriş penceresini kapattı.");
-                return;
-            }
-            
             showModal("Giriş Hatası", "Bir sorun oluştu. Lütfen tekrar deneyin.\nDetay: " + e.message); 
         }); 
     }
@@ -1101,7 +1091,10 @@
         showModal("Çıkış Yap", "Hesabınızdan güvenli bir şekilde çıkış yapmak istiyor musunuz?", () => {
             auth.signOut().then(() => {
                 localStorage.removeItem('offlineBackup');
-                window.location.reload(); 
+                localData = JSON.parse(JSON.stringify(defaultData));
+                document.getElementById('app-wrapper').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'flex';
+                showToast("Başarıyla çıkış yapıldı.", "success");
             }).catch(e => showToast("Çıkış yapılırken hata: " + e.message, "error")); 
         });
     }
@@ -2149,7 +2142,6 @@
         let targetIndex = 0;
         let index = 0;
         
-        // Blank item for top padding inside scroll (TAM HİZALAMA İÇİN 35px YERİNE 40px VE İLGİLİ CSS MATEMATİĞİ KULLANILDI)
         col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
 
         for(let i=start; i<=end; i++) {
@@ -2159,7 +2151,6 @@
             index++;
         }
         
-        // Blank item for bottom padding inside scroll
         col.innerHTML += `<div class="wheel-item" style="height:40px;"></div>`;
 
         setTimeout(() => {
