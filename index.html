@@ -1075,17 +1075,20 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Bekleniyor...';
         
-        // GÜNCELLEME: Popup kullanımı yapıldı
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-
-        auth.signInWithPopup(provider).then((result) => {
+        // ZORUNLU KİLİT VE LOKAL OTURUM AYARI
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
+            return firebase.auth().signInWithPopup(provider);
+        })
+        .then((result) => {
             isLoginProcessing = false;
-            // Başarılı olursa onAuthStateChanged yakalar.
-        }).catch(error => {
+        })
+        .catch(error => {
             isLoginProcessing = false;
             btn.innerHTML = originalHtml;
-            // Eğer kullanıcı popup'ı kapatırsa veya istek iptal olursa sessiz kal
+            // Popup kullanıcı tarafından kapatılırsa veya önceden açılmışsa sessizce görmezden gel
             if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
                 showModal("Giriş Hatası", "Bir sorun oluştu. Lütfen tekrar deneyin.\nDetay: " + error.message);
             }
@@ -1101,9 +1104,9 @@
                 document.getElementById('login-screen').style.display = 'flex';
                 showToast("Başarıyla çıkış yapıldı.", "success");
                 
-                // GÜNCELLEME: Çıkış yaptıktan sonra state sıfırlaması için yenile
+                // SAYFAYI ZORLA YENİLE (TARAYICI ÖNBELLEĞİNİ SIFIRLAMAK İÇİN)
                 setTimeout(() => {
-                    window.location.reload();
+                    window.location.reload(true);
                 }, 1000);
                 
             }).catch(e => showToast("Çıkış yapılırken hata: " + e.message, "error")); 
