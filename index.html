@@ -952,10 +952,18 @@
     const db = firebase.database();
     const auth = firebase.auth();
     
-    // GİRİŞ ÇIKIŞ HATASINI ÖNLEMEK İÇİN PROVIDER TEK SEFERDE BURADA TANIMLANDI
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-    
+    // YENİ EKLENEN: Yönlendirme (Redirect) sonucunu dinleyerek hata varsa state'i temizleme
+    auth.getRedirectResult().catch((error) => {
+        console.error("Yönlendirme hatası:", error);
+        isLoginProcessing = false;
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('app-wrapper').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+        const btn = document.querySelector('.login-card button');
+        if(btn) btn.innerHTML = '<i class="fab fa-google me-2"></i> Google ile Giriş';
+        showToast("Giriş yapılırken hata oluştu: " + error.message, "error");
+    });
+
     let dbRef = null;
 
     function getCurrentDateSimple() { const d = new Date(); return d.toLocaleDateString('tr-TR'); }
@@ -1079,7 +1087,11 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Bekleniyor...';
         
-        // PWA ve Mobilde çakışmayı önlemek için Yönlendirme (Redirect) kullanıyoruz.
+        // GÜNCELLEME: Hesap değiştirirken oluşan sıkışmayı önlemek için 
+        // Provider sayfa yüklendiğinde değil, sadece burada oluşturuluyor.
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+
         auth.signInWithRedirect(provider).catch(e => {
             isLoginProcessing = false;
             btn.innerHTML = originalHtml;
@@ -1095,6 +1107,13 @@
                 document.getElementById('app-wrapper').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex';
                 showToast("Başarıyla çıkış yapıldı.", "success");
+                
+                // GÜNCELLEME: Çıkış yaptıktan sonra farklı bir hesap ile girerken "invalid action" hatası
+                // alınmaması için Firebase'in arka plan durumunu sayfayı yenileyerek sıfırlıyoruz.
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+                
             }).catch(e => showToast("Çıkış yapılırken hata: " + e.message, "error")); 
         });
     }
