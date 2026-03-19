@@ -289,7 +289,6 @@
         .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .calc-item { flex: 1; min-width: 150px; text-align: center; }
         .calc-label-small { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-color); opacity: 0.7; margin-bottom: 5px; display: block; }
-        /* Yeni: Date input'lar readonly olduğu için tıklanabilir imleç eklendi */
         .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; cursor: pointer; user-select: none; }
         .date-input::placeholder { color: var(--placeholder-color); opacity: 1; }
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; border-radius: 8px; }
@@ -599,7 +598,7 @@
     </div>
 </div>
 
-<!-- YENİ: Hesaplama Sihirbazı Tarih Seçici Modal -->
+<!-- Hesaplama Sihirbazı Tarih Seçici Modal -->
 <div id="calcDatePickerModal" class="custom-modal-overlay" style="z-index: 2015;">
     <div class="custom-modal" style="padding: 25px 20px;">
         <h5 class="fw-bold mb-3"><i class="fas fa-calendar-check me-2 text-success"></i><br><span id="calcPickerTitleText" style="font-size:1.2rem;">Tarih Seç</span></h5>
@@ -972,8 +971,8 @@
             { 
                 "src": pwaIcon, 
                 "sizes": "512x512", 
-                "type": "image/png", // Eskiden svg idi, şimdi png yaptık
-                "purpose": "any maskable" // EN ÖNEMLİ KISIM: Logonun kenarlarının kesilmesini ve bozulmasını engeller!
+                "type": "image/png", 
+                "purpose": "any maskable" 
             }
         ] 
     })], {type: 'application/json'});
@@ -996,9 +995,20 @@
 
     // --- HESAPLAMA SİHİRBAZI TARİH SEÇİCİ DEĞİŞKENLERİ ---
     let currentCalcRowIndex = 0;
-    let currentCalcInputType = 0; // 0: Sorumluluk Başlangıcı, 1: Düzenli Başlama
+    let currentCalcInputType = 0; 
 
-    function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
+    // --- GELİŞTİRİLMİŞ AKILLI TİTREŞİM FONKSİYONU ---
+    function triggerHaptic(type = "normal") { 
+        if (!navigator.vibrate) return;
+        
+        if (type === "normal") {
+            navigator.vibrate(10); // Normal hafif tıklama
+        } else if (type === "warning") {
+            navigator.vibrate([30, 50, 30]); // Hedefe yaklaşınca çift titreşim
+        } else if (type === "success") {
+            navigator.vibrate([100, 50, 100, 50, 200]); // Hedef tamamlandığında uzun ve ritmik titreşim
+        }
+    }
     
     function hideLoader() {
         const loader = document.getElementById('loading-overlay');
@@ -2783,15 +2793,41 @@
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
     
     window.upTes = function(i, d) { 
-        triggerHaptic(); 
         const item = localData.tesbihat[i]; 
         const target = item.target; 
-        if (d > 0 && item.current >= target) { showModal("Tebrikler", "Bu tesbihat için günlük hedef tamamlandı."); return; } 
+        
+        if (d > 0 && item.current >= target) { 
+            showModal("Tebrikler", "Bu tesbihat için günlük hedef tamamlandı."); 
+            return; 
+        } 
+        
         const newVal = item.current + d; 
         if (newVal < 0) return; 
+        
+        // --- AKILLI TİTREŞİM MANTIĞI BURADA BAŞLIYOR ---
+        if (d > 0) {
+            const remaining = target - newVal;
+            
+            if (newVal === target) {
+                // Hedef tam ulaşıldığında uzun kutlama titreşimi
+                triggerHaptic("success");
+            } else if (remaining > 0 && remaining <= 3) {
+                // Son 3 kala uyarı titreşimi (dikkat çekici)
+                triggerHaptic("warning");
+            } else {
+                // Normal tıklama
+                triggerHaptic("normal");
+            }
+        } else {
+            // Eksiye basıldığında normal titreşim
+            triggerHaptic("normal");
+        }
+        // ----------------------------------------------
+        
         item.current = newVal; 
         saveToCloud(); 
         renderTesbihat(); 
+        
         if (d > 0 && newVal === target) { 
             jsConfetti.addConfetti(); 
             setTimeout(() => { showModal("Hedef Tamamlandı!", "Allah kabul etsin, gönlüne şifa olsun. 🌹"); }, 800); 
@@ -2799,15 +2835,22 @@
     };
     
     window.addTes = function(i) { 
-        triggerHaptic(); 
+        triggerHaptic("normal"); 
         const valInput = document.getElementById(`manZ-${i}`); 
         const v = parseInt(valInput.value) || 0; 
         if(v > 0) { 
             const item = localData.tesbihat[i]; 
             const target = item.target; 
             if (item.current >= target) { showModal("Tebrikler", "Zaten hedef tamamlandı."); return; } 
-            const newVal = item.current + v; 
+            
+            let newVal = item.current + v; 
+            // Manuel eklemede hedef aşılırsa hedefe sabitle (isteğe bağlı, şu an direkt ekliyor)
             item.current = newVal; 
+            
+            if (newVal >= target) {
+                 triggerHaptic("success");
+            }
+
             saveToCloud(); 
             renderTesbihat(); 
             valInput.value = ""; 
@@ -3059,10 +3102,10 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '70%', /* İç halkayı biraz daha incelttim */
+                cutout: '70%', 
                 plugins: {
-                    legend: { display: false }, /* Varsayılan lejantı kapattım */
-                    datalabels: { display: false }, /* Grafik üzerindeki etiketleri kapattım */
+                    legend: { display: false }, 
+                    datalabels: { display: false }, 
                     tooltip: {
                         enabled: true,
                         yAlign: 'bottom', 
@@ -3071,7 +3114,6 @@
             }
         }); 
 
-        // --- YENİ EKLENEN CUSTOM LEGEND KODU ---
         let pctDone = totalTarget > 0 ? (totalDone / totalTarget * 100).toFixed(1) : 0;
         let pctRem = totalTarget > 0 ? ((totalTarget - totalDone) / totalTarget * 100).toFixed(1) : 0;
         
@@ -3097,11 +3139,9 @@
                 </div>
             `;
         }
-        // ----------------------------------------
 
         const ctx2 = document.getElementById('barChart').getContext('2d'); if (barChart) barChart.destroy(); barChart = new Chart(ctx2, { type: 'bar', data: { labels: labels, datasets: [ { label: 'Kılınan', data: doneData, backgroundColor: '#609979', borderRadius: 5 }, { label: 'Kalan', data: remainingData, backgroundColor: '#fd7e14', borderRadius: 5 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: lc } }, datalabels: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false }, ticks:{ color: lc } }, x: { grid: { display: false }, ticks: { color: lc, font: { family: 'Poppins' } } } } } }); 
         
-        // --- GRAFİK DÜZELTMESİ BURADA YAPILDI ---
         const ctx3 = document.getElementById('lineChart').getContext('2d'); 
         if (lineChart) lineChart.destroy(); 
         const gradientLine = ctx3.createLinearGradient(0, 0, 0, 200); 
@@ -3113,7 +3153,6 @@
         let pointRadiusVal = 3; 
         let labelText = "";
         
-        // --- Düğmeleri senkronize et ---
         document.querySelectorAll('.chart-period-btn').forEach(btn => btn.classList.remove('active'));
         if(currentChartPeriod === 'weekly') {
             document.getElementById('btn-period-weekly')?.classList.add('active');
@@ -3457,7 +3496,7 @@
     };
 
     window.changeFasting = function(type, delta) {
-        triggerHaptic();
+        triggerHaptic("normal");
         const item = localData.fasting[type];
         
         if(type === 'kaza' && item.hasTarget && delta > 0 && item.target > 0 && item.done >= item.target) {
@@ -3480,6 +3519,7 @@
             if(type === 'nafile' && item.hasTarget && item.done === item.target) success = true;
 
             if(success) {
+                triggerHaptic("success");
                 jsConfetti.addConfetti({ emojis: ['🌙', '⭐', '✨'], emojiSize: 40, confettiNumber: 60 });
                 setTimeout(() => { showModal("Harika!", "Hedefine ulaştın. Allah kabul etsin! 🤲"); }, 2500);
             } else {
