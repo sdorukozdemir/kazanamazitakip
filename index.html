@@ -8,10 +8,7 @@
     <meta name="theme-color" content="#609979">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- iPhone/iOS Cihazlar İçin Logo Ayarı -->
     <link rel="apple-touch-icon" href="./logo.png">
-    
     <link rel="manifest" id="my-manifest">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -292,7 +289,8 @@
         .calc-body { padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .calc-item { flex: 1; min-width: 150px; text-align: center; }
         .calc-label-small { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--text-color); opacity: 0.7; margin-bottom: 5px; display: block; }
-        .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; }
+        /* Yeni: Date input'lar readonly olduğu için tıklanabilir imleç eklendi */
+        .date-input { text-align: center; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--border-color); width: 100%; padding: 8px; border-radius: 8px; height: 45px; cursor: pointer; user-select: none; }
         .date-input::placeholder { color: var(--placeholder-color); opacity: 1; }
         .calc-result-input { font-weight: bold; color: #d9534f; text-align: center; font-size: 1.3rem; height: 45px; background-color: var(--input-bg); border: 2px solid var(--border-color); width: 100%; border-radius: 8px; }
         .calc-group-box { background: var(--calc-item-bg); border: 1px solid var(--calc-item-border); border-radius: 12px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
@@ -459,7 +457,6 @@
         .wheel-item { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; color: var(--text-color); opacity: 0.3; scroll-snap-align: center; transition: all 0.2s; cursor: pointer; }
         .wheel-item.active { opacity: 1; font-size: 1.35rem; color: #609979; font-weight: 800; }
 
-        /* YENİ EKLENEN DİKEY ÖZET KARTLARI (VERTICAL SUMMARY CARDS) */
         .summary-vertical-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -543,7 +540,7 @@
     </div>
 </div>
 
-<!-- Bavul Şifresi Tarzı Tarih Seçici Modal -->
+<!-- Bavul Şifresi Tarzı Tarih Seçici Modal (İstatistikler İçin) -->
 <div id="customDatePickerModal" class="custom-modal-overlay" style="z-index: 2010;">
     <div class="custom-modal" style="padding: 25px 20px;">
         <h5 class="fw-bold mb-3"><i class="fas fa-calendar-alt me-2 text-success"></i>Dönem Seçimi</h5>
@@ -598,6 +595,25 @@
         <div class="modal-btn-group mt-4">
             <button class="modal-btn btn-cancel" onclick="closeCustomDatePicker()">İptal</button>
             <button class="modal-btn btn-confirm bg-success border-0" onclick="applyCustomPicker()">Uygula</button>
+        </div>
+    </div>
+</div>
+
+<!-- YENİ: Hesaplama Sihirbazı Tarih Seçici Modal -->
+<div id="calcDatePickerModal" class="custom-modal-overlay" style="z-index: 2015;">
+    <div class="custom-modal" style="padding: 25px 20px;">
+        <h5 class="fw-bold mb-3"><i class="fas fa-calendar-check me-2 text-success"></i><br><span id="calcPickerTitleText" style="font-size:1.2rem;">Tarih Seç</span></h5>
+        
+        <div class="wheel-picker-wrap">
+            <div class="wheel-highlight"></div>
+            <div class="wheel-col" id="calcWheelDay" onscroll="updateWheelActive(this)"></div>
+            <div class="wheel-col" id="calcWheelMonth" onscroll="updateWheelActive(this)"></div>
+            <div class="wheel-col" id="calcWheelYear" onscroll="updateWheelActive(this)"></div>
+        </div>
+
+        <div class="modal-btn-group mt-4">
+            <button class="modal-btn btn-cancel" onclick="closeCalcDatePicker()">İptal</button>
+            <button class="modal-btn btn-confirm bg-success border-0" onclick="applyCalcPicker()">Seç</button>
         </div>
     </div>
 </div>
@@ -978,6 +994,10 @@
     let isTesbihatDetailView = false;
     let activeFastingIndex = 0; 
 
+    // --- HESAPLAMA SİHİRBAZI TARİH SEÇİCİ DEĞİŞKENLERİ ---
+    let currentCalcRowIndex = 0;
+    let currentCalcInputType = 0; // 0: Sorumluluk Başlangıcı, 1: Düzenli Başlama
+
     function triggerHaptic() { if (navigator.vibrate) navigator.vibrate(10); }
     
     function hideLoader() {
@@ -1020,11 +1040,6 @@
         if(parts.length !== 3) return isoDate;
         const [y, m, d] = parts;
         return `${d}.${m}.${y}`;
-    }
-    function parseHistoryDate(timeStr) {
-        const [datePart] = timeStr.split(' ');
-        const [d, m, y] = datePart.split('.');
-        return new Date(`${y}-${m}-${d}T12:00:00`);
     }
 
     const defaultData = {
@@ -1140,7 +1155,6 @@
         .catch(error => {
             isLoginProcessing = false;
             btn.innerHTML = originalHtml;
-            // Popup kullanıcı tarafından kapatılırsa veya önceden açılmışsa sessizce görmezden gel
             if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
                 showModal("Giriş Hatası", "Bir sorun oluştu. Lütfen tekrar deneyin.\nDetay: " + error.message);
             }
@@ -1155,12 +1169,7 @@
                 document.getElementById('app-wrapper').style.display = 'none';
                 document.getElementById('login-screen').style.display = 'flex';
                 showToast("Başarıyla çıkış yapıldı.", "success");
-                
-                // SAYFAYI ZORLA YENİLE (TARAYICI ÖNBELLEĞİNİ SIFIRLAMAK İÇİN)
-                setTimeout(() => {
-                    window.location.reload(true);
-                }, 1000);
-                
+                setTimeout(() => { window.location.reload(true); }, 1000);
             }).catch(e => showToast("Çıkış yapılırken hata: " + e.message, "error")); 
         });
     }
@@ -1715,9 +1724,146 @@
         }, 100);
     }
     
-    window.renderCalculatorRows = function() { const c = document.getElementById('calcRowsContainer'); if(!c || c.innerHTML.trim()) return; const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; prayerTypes.forEach((p, i) => { c.innerHTML += `<div class="calc-row" id="row-${i}"><div class="calc-header">${p}</div><div class="calc-body"><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Sorumluluk Başlangıcı</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date')" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box"><span class="calc-label-small">Düzenli Başlama Tarihi</span><input type="text" class="form-control date-input" placeholder="gg.aa.yyyy" ontouchstart="(this.type='date')" onfocus="(this.type='date'); if('showPicker' in HTMLInputElement.prototype) this.showPicker();" onblur="(this.type='text'); this.value = formatDateTR(this.value);" onchange="window.calcRow(${i})"></div></div><div class="calc-item"><div class="calc-group-box" style="justify-content:center;"><span class="calc-label-small">Hesaplanan Gün</span><input type="number" class="form-control calc-result-input" id="res-${i}" value="0"></div></div></div></div>`; }); };
-    window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
+    // --- HESAPLAMA SİHİRBAZI YENİ TARİH SEÇİCİ ---
+    window.renderCalculatorRows = function() { 
+        const c = document.getElementById('calcRowsContainer'); 
+        if(!c || c.innerHTML.trim()) return; 
+        const prayerTypes = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"]; 
+        prayerTypes.forEach((p, i) => { 
+            c.innerHTML += `
+            <div class="calc-row" id="row-${i}">
+                <div class="calc-header">${p}</div>
+                <div class="calc-body">
+                    <div class="calc-item">
+                        <div class="calc-group-box">
+                            <span class="calc-label-small">Sorumluluk Başlangıcı</span>
+                            <input type="text" class="form-control date-input" placeholder="Seçiniz" readonly onclick="openCalcDatePicker(${i}, 0, '${p} - Sorumluluk Başlangıcı')">
+                        </div>
+                    </div>
+                    <div class="calc-item">
+                        <div class="calc-group-box">
+                            <span class="calc-label-small">Düzenli Başlama Tarihi</span>
+                            <input type="text" class="form-control date-input" placeholder="Seçiniz" readonly onclick="openCalcDatePicker(${i}, 1, '${p} - Düzenli Başlama Tarihi')">
+                        </div>
+                    </div>
+                    <div class="calc-item">
+                        <div class="calc-group-box" style="justify-content:center;">
+                            <span class="calc-label-small">Hesaplanan Gün</span>
+                            <input type="number" class="form-control calc-result-input" id="res-${i}" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>`; 
+        }); 
+    };
+
+    window.openCalcDatePicker = function(rowIndex, inputType, titleText) {
+        currentCalcRowIndex = rowIndex;
+        currentCalcInputType = inputType;
+        
+        document.getElementById('calcPickerTitleText').innerText = titleText;
+        
+        const row = document.getElementById(`row-${rowIndex}`);
+        const inputs = row.querySelectorAll('input.date-input');
+        const currentVal = inputs[inputType].value;
+        
+        let d = new Date().getDate();
+        let m = new Date().getMonth();
+        let y = new Date().getFullYear();
+        
+        if(currentVal && currentVal.includes('.')) {
+            const parts = currentVal.split('.');
+            if(parts.length === 3) {
+                d = parseInt(parts[0]);
+                m = parseInt(parts[1]) - 1;
+                y = parseInt(parts[2]);
+            }
+        }
+        
+        document.getElementById('calcDatePickerModal').style.display = 'flex';
+        
+        populateWheel('calcWheelDay', 1, 31, val => String(val).padStart(2, '0'), d);
+        populateWheel('calcWheelMonth', 0, 11, val => MONTH_NAMES[val], m);
+        populateWheel('calcWheelYear', 1950, new Date().getFullYear() + 1, val => val, y);
+    }
     
+    window.closeCalcDatePicker = function() {
+        document.getElementById('calcDatePickerModal').style.display = 'none';
+    }
+    
+    window.applyCalcPicker = function() {
+        triggerHaptic();
+        const getActiveVal = (colId) => {
+            const col = document.getElementById(colId);
+            const activeItem = col.querySelector('.wheel-item.active');
+            return activeItem ? activeItem.getAttribute('data-val') : null;
+        };
+        
+        const dVal = parseInt(getActiveVal('calcWheelDay'));
+        const mVal = parseInt(getActiveVal('calcWheelMonth'));
+        const yVal = getActiveVal('calcWheelYear');
+        
+        const dStr = String(dVal).padStart(2, '0');
+        const mStr = String(mVal + 1).padStart(2, '0');
+        const dateStr = `${dStr}.${mStr}.${yVal}`;
+        
+        const row = document.getElementById(`row-${currentCalcRowIndex}`);
+        const inputs = row.querySelectorAll('input.date-input');
+        inputs[currentCalcInputType].value = dateStr;
+        
+        closeCalcDatePicker();
+        window.calcRow(currentCalcRowIndex);
+    }
+
+    window.calcRow = function(i) { 
+        const r = document.getElementById(`row-${i}`); 
+        const inputs = r.querySelectorAll('input.date-input'); 
+        let s = inputs[0].value; 
+        let e = inputs[1].value; 
+        function parseDateTR(val) { 
+            if(!val) return null; 
+            if(val.includes('.') && val.split('.').length === 3) { 
+                const parts = val.split('.'); 
+                return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); 
+            } 
+            return new Date(val); 
+        } 
+        if(s && e) { 
+            const startDate = parseDateTR(s); 
+            const endDate = parseDateTR(e); 
+            if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { 
+                let totalDays = Math.ceil((endDate - startDate)/(86400000)); 
+                if(localData.gender === 'female') { 
+                    const totalMonths = totalDays / 30.44; 
+                    const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); 
+                    totalDays = totalDays - menstrualDeduction; 
+                } 
+                document.getElementById(`res-${i}`).value = Math.max(0, totalDays); 
+            } 
+        } 
+    };
+    
+    window.copyStartDate = function() { 
+        const v = document.querySelectorAll('#row-0 input.date-input')[0].value; 
+        if(!v) return;
+        for(let i=1;i<5;i++) { 
+            document.querySelectorAll(`#row-${i} input.date-input`)[0].value = v; 
+            window.calcRow(i); 
+        } 
+        triggerHaptic();
+    };
+    
+    window.copyEndDate = function() { 
+        const v = document.querySelectorAll('#row-0 input.date-input')[1].value; 
+        if(!v) return;
+        for(let i=1;i<5;i++) { 
+            document.querySelectorAll(`#row-${i} input.date-input`)[1].value = v; 
+            window.calcRow(i); 
+        } 
+        triggerHaptic();
+    };
+    // ----------------------------------------------------
+
     window.upT = function(i, v) { localData.counts[i].target = parseInt(v) || 0; saveToCloud(); renderApp(); };
     window.upD = function(i, v) { 
         const val = parseInt(v) || 0;
@@ -2632,22 +2778,6 @@
         }
     }
 
-    window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
-    window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
-    
-    window.resetCalculatorInputs = function() {
-        showModal("Sıfırla", "Hesaplama sihirbazındaki tüm tarihleri temizlemek istiyor musunuz?", () => {
-            for(let i=0; i<5; i++) {
-                const row = document.getElementById(`row-${i}`);
-                const inputs = row.querySelectorAll('input');
-                inputs[0].value = ""; 
-                inputs[1].value = ""; 
-                document.getElementById(`res-${i}`).value = 0; 
-            }
-            showToast("Tarihler temizlendi.", "success");
-        });
-    }
-
     function calculateEstFinish(totalDoneInput, elapsedDaysInput) { const dailyTarget = localData.daily.target || 10; let totalDebt = 0; localData.counts.forEach(c => totalDebt += (c.target - c.done)); const elContainer = document.getElementById('prediction-container'); const elSuccess = document.getElementById('prediction-success'); if (totalDebt <= 0) { elContainer.style.display = 'none'; elSuccess.style.display = 'block'; return; } elContainer.style.display = 'block'; elSuccess.style.display = 'none'; if (dailyTarget > 0) { const daysLeft = Math.ceil(totalDebt / dailyTarget); const today = new Date(); const finishDate = new Date(); finishDate.setDate(today.getDate() + daysLeft); const options = { year: 'numeric', month: 'long', day: 'numeric' }; document.getElementById('estFinishDate').innerText = finishDate.toLocaleDateString('tr-TR', options); document.getElementById('estDaysLeft').innerText = `${daysLeft} Gün Kaldı`; } else { document.getElementById('estFinishDate').innerText = "Belirlenmedi"; document.getElementById('estDaysLeft').innerText = "-"; } const avgDaily = totalDoneInput > 0 ? (totalDoneInput / elapsedDaysInput) : 0; const elDateAvg = document.getElementById('estFinishDateAvg'); const elDaysAvg = document.getElementById('estDaysLeftAvg'); if(avgDaily > 0) { const daysLeftAvg = Math.ceil(totalDebt / avgDaily); const todayAvg = new Date(); const finishDateAvg = new Date(); finishDateAvg.setDate(todayAvg.getDate() + daysLeftAvg); elDateAvg.innerText = finishDateAvg.toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }); elDaysAvg.innerText = `(${daysLeftAvg} Gün)`; } else { elDateAvg.innerText = "Veri Yok"; elDaysAvg.innerText = "Henüz kazaya başlanmadı"; } }
     function showModal(title, message, onConfirm) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalMessage').innerText = message; const btnGroup = document.getElementById('modalButtons'); btnGroup.innerHTML = ''; if (onConfirm) { btnGroup.innerHTML = `<button class="modal-btn btn-cancel" onclick="closeModal()">İptal</button><button class="modal-btn btn-confirm" id="modalConfirmBtn">Onayla</button>`; document.getElementById('modalConfirmBtn').onclick = () => { triggerHaptic(); onConfirm(); closeModal(); }; } else { btnGroup.innerHTML = `<button class="modal-btn btn-ok" onclick="closeModal()">Tamam</button>`; } document.getElementById('customModal').style.display = 'flex'; }
     function closeModal() { document.getElementById('customModal').style.display = 'none'; }
@@ -3100,8 +3230,7 @@
         
         return { monthly: monthlyTotal, months3: m3, months6: m6, yearly: y1, last7Data, last7Labels, last30Data, last30Labels, last90Data, last90Labels }; 
     }
-    window.copyStartDate = function() { const v = document.querySelector('#row-0 input').value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[0].value = v; window.calcRow(i); } };
-    window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input')[1].value; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input`)[1].value = v; window.calcRow(i); } };
+    
     window.applyAdvancedCalculation = function() { showModal("Onay", "Kılınacak sayılar güncellensin mi?", () => { for(let i=0;i<5;i++) localData.counts[i].target = parseInt(document.getElementById(`res-${i}`).value)||0; saveToCloud(); showSection('dashboard'); }); };
     window.downloadDataAsCSV = function() { let csv = "\uFEFFNamaz;Hedef;Kılınan\n"; localData.counts.forEach(c => { csv += `${c.name};${c.target};${c.done}\n`; }); const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "kaza_takip.csv"; link.click(); };
     window.downloadBackupJSON = function() { const jsonStr = JSON.stringify(localData); const blob = new Blob([jsonStr], { type: 'application/json' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "ibadet_yedek_" + new Date().toISOString().split('T')[0] + ".json"; link.click(); };
