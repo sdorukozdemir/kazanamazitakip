@@ -60,7 +60,6 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
 .wheel-picker-wrap { position: relative; height: 120px; background: var(--input-bg); border-radius: 12px; border: 1px solid var(--border-color); display: flex; overflow: hidden; margin-top: 5px; } .wheel-highlight { position: absolute; top: 40px; left: 0; width: 100%; height: 40px; background: rgba(96, 153, 121, 0.15); border-top: 2px solid #609979; border-bottom: 2px solid #609979; pointer-events: none; z-index: 1; } .wheel-col { flex: 1; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; padding: 0; position: relative; z-index: 2; text-align: center; } .wheel-col::-webkit-scrollbar { display: none; } .wheel-item { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; color: var(--text-color); opacity: 0.3; scroll-snap-align: center; transition: all 0.2s; cursor: pointer; } .wheel-item.active { opacity: 1; font-size: 1.35rem; color: #609979; font-weight: 800; }
 .summary-vertical-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 100%; position: relative; overflow: hidden; transition: transform 0.2s; } .summary-vertical-card:active { transform: scale(0.96); } .svc-top-bar { position: absolute; top: 0; left: 0; width: 100%; height: 5px; } .bg-namaz-total .svc-top-bar { background: linear-gradient(90deg, #609979, #3e6b53); } .bg-oruc-total .svc-top-bar { background: linear-gradient(90deg, #4facfe, #00f2fe); } .svc-icon-wrapper { width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; } .bg-namaz-total .svc-icon-wrapper { background: rgba(96, 153, 121, 0.15); color: #609979; } .bg-oruc-total .svc-icon-wrapper { background: rgba(79, 172, 254, 0.15); color: #4facfe; } .svc-value { font-size: 1.8rem; font-weight: 800; line-height: 1; margin-bottom: 5px; } .svc-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; opacity: 0.6; color: var(--text-color); } body.dark-mode .summary-vertical-card { box-shadow: 0 4px 15px rgba(0,0,0,0.2); } body.dark-mode .bg-namaz-total .svc-icon-wrapper { background: rgba(96, 153, 121, 0.2); color: #75b798; } body.dark-mode .bg-oruc-total .svc-icon-wrapper { background: rgba(79, 172, 254, 0.2); color: #81d4fa; }
 
-/* YENİ: VAKİTLER SAĞ PANEL CSS */
 .right-prayer-panel { position: fixed; top: 0; right: -320px; width: 320px; height: 100vh; background: var(--card-bg); color: var(--text-color); box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 2010; padding: 25px 20px; display: flex; flex-direction: column; overflow-y: auto; } .right-prayer-panel.open { right: 0; } #right-panel-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 2009; display: none; backdrop-filter: blur(2px); } #right-panel-overlay.active { display: block; } .prayer-toggle-btn { position: fixed; right: -5px; top: 50%; transform: translateY(-50%); background: var(--sidebar-bg); color: white; width: 45px; height: 60px; border-radius: 15px 0 0 15px; display: flex; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; z-index: 2005; box-shadow: -2px 0 10px rgba(0,0,0,0.2); transition: right 0.3s, background 0.3s; padding-right: 5px; } .prayer-toggle-btn:hover { right: 0; } .pt-card { background: var(--input-bg); border: 1px solid var(--border-color); transition: all 0.2s ease; } .pt-card.active { background: linear-gradient(135deg, #609979, #3e6b53); color: white !important; border-color: transparent !important; transform: scale(1.03); box-shadow: 0 4px 15px rgba(96,153,121,0.3); } .pt-card.active .pt-val { color: white !important; opacity: 1 !important; } .vakitler-hero { background: linear-gradient(135deg, #609979, #2c3e50); border-radius: 24px; padding: 30px 20px; color: white; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden; } .vakitler-hero::before { content: '\f66f'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -20px; bottom: -30px; font-size: 8rem; opacity: 0.1; } body.dark-mode .vakitler-hero { background: linear-gradient(135deg, #112820, #1e1e1e); }
 
 @media (max-width: 768px) { .bottom-nav { display: flex; } #content { padding-bottom: 90px; } .btn-success.d-md-none { display: none !important; } }
@@ -77,10 +76,7 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
     <div class="custom-modal">
         <h4 class="mb-3 fw-bold">Yeni Zikir Ekle</h4>
         <input type="text" id="newZikrNameInput" class="form-control mb-3 text-center" placeholder="Zikir ismi giriniz..." style="font-size:1.1rem; padding:10px;">
-        <div class="modal-btn-group">
-            <button class="modal-btn btn-cancel" onclick="document.getElementById('addZikrModal').style.display='none'">İptal</button>
-            <button class="modal-btn btn-confirm bg-success border-0" onclick="confirmAddZikr()">Ekle</button>
-        </div>
+        <div class="modal-btn-group"><button class="modal-btn btn-cancel" onclick="document.getElementById('addZikrModal').style.display='none'">İptal</button><button class="modal-btn btn-confirm bg-success border-0" onclick="confirmAddZikr()">Ekle</button></div>
     </div>
 </div>
 
@@ -98,11 +94,7 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
 <div id="customDatePickerModal" class="custom-modal-overlay" style="z-index: 2010;">
     <div class="custom-modal" style="padding: 25px 20px;">
         <h5 class="fw-bold mb-3"><i class="fas fa-calendar-alt me-2 text-success"></i>Dönem Seçimi</h5>
-        <div class="row g-2 mb-3">
-            <div class="col-6"><button class="w-100 filter-mode-btn" id="btnFilterMode-month" onclick="setPickerMode('month')">Aylık</button></div>
-            <div class="col-6"><button class="w-100 filter-mode-btn active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük</button></div>
-            <div class="col-12"><button class="w-100 filter-mode-btn" id="btnFilterMode-range" onclick="setPickerMode('range')"><i class="fas fa-arrows-alt-h me-2"></i>Özel Tarih Aralığı</button></div>
-        </div>
+        <div class="row g-2 mb-3"><div class="col-6"><button class="w-100 filter-mode-btn" id="btnFilterMode-month" onclick="setPickerMode('month')">Aylık</button></div><div class="col-6"><button class="w-100 filter-mode-btn active" id="btnFilterMode-date" onclick="setPickerMode('date')">Günlük</button></div><div class="col-12"><button class="w-100 filter-mode-btn" id="btnFilterMode-range" onclick="setPickerMode('range')"><i class="fas fa-arrows-alt-h me-2"></i>Özel Tarih Aralığı</button></div></div>
         <div id="singleWheelContainer"><div class="wheel-picker-wrap"><div class="wheel-highlight"></div><div class="wheel-col" id="wheelDay" onscroll="updateWheelActive(this)"></div><div class="wheel-col" id="wheelMonth" onscroll="updateWheelActive(this)"></div><div class="wheel-col" id="wheelYear" onscroll="updateWheelActive(this)"></div></div></div>
         <div id="rangeWheelContainer" style="display:none; position: relative;">
             <div style="position: absolute; left: 13px; top: 35px; bottom: 35px; width: 2px; background: rgba(96, 153, 121, 0.3); z-index: 0;"></div>
@@ -126,37 +118,18 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
 </div>
 <div id="overlay" onclick="toggleSidebar()"></div>
 
-<!-- YENİ: Sağ Panel (Namaz Vakitleri İçin) -->
 <div id="right-panel-overlay" onclick="toggleRightPanel()"></div>
 <div id="right-prayer-panel" class="right-prayer-panel">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-bold m-0" style="color: var(--text-color);"><i class="fas fa-mosque text-success me-2"></i>Vakitler</h5>
-        <button class="btn-close" style="filter: var(--text-color) == '#e0e0e0' ? 'invert(1)' : 'none';" onclick="toggleRightPanel()"></button>
-    </div>
+    <div class="d-flex justify-content-between align-items-center mb-4"><h5 class="fw-bold m-0" style="color: var(--text-color);"><i class="fas fa-mosque text-success me-2"></i>Vakitler</h5><button class="btn-close" style="filter: var(--text-color) == '#e0e0e0' ? 'invert(1)' : 'none';" onclick="toggleRightPanel()"></button></div>
     <select class="form-select city-select mb-4 fw-bold" style="background-color: var(--input-bg); color: var(--input-text); border-color: var(--border-color);" onchange="fetchPrayerTimes(this.value)"></select>
-    
-    <div class="prayer-countdown-box text-center mb-4 p-3 rounded-4 shadow-sm border" style="background: var(--fade-box-bg); border-color: var(--border-color);">
-        <div class="prayer-countdown-label small fw-bold text-uppercase mb-1" style="opacity:0.7;">Hesaplanıyor...</div>
-        <div class="prayer-countdown-time fs-2 fw-bold text-success">--:--:--</div>
-    </div>
-    
-    <div class="prayer-times-list d-flex flex-column gap-2">
-        <div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="0"><span class="fw-bold">İmsak</span><span class="pt-val pt-val-Imsak fs-5 fw-bold text-muted">--:--</span></div>
-        <div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="1"><span class="fw-bold">Güneş</span><span class="pt-val pt-val-Gunes fs-5 fw-bold text-muted">--:--</span></div>
-        <div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="2"><span class="fw-bold">Öğle</span><span class="pt-val pt-val-Ogle fs-5 fw-bold text-muted">--:--</span></div>
-        <div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="3"><span class="fw-bold">İkindi</span><span class="pt-val pt-val-Ikindi fs-5 fw-bold text-muted">--:--</span></div>
-        <div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="4"><span class="fw-bold">Akşam</span><span class="pt-val pt-val-Aksam fs-5 fw-bold text-muted">--:--</span></div>
-        <div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="5"><span class="fw-bold">Yatsı</span><span class="pt-val pt-val-Yatsi fs-5 fw-bold text-muted">--:--</span></div>
-    </div>
+    <div class="prayer-countdown-box text-center mb-4 p-3 rounded-4 shadow-sm border" style="background: var(--fade-box-bg); border-color: var(--border-color);"><div class="prayer-countdown-label small fw-bold text-uppercase mb-1" style="opacity:0.7;">Hesaplanıyor...</div><div class="prayer-countdown-time fs-2 fw-bold text-success">--:--:--</div></div>
+    <div class="prayer-times-list d-flex flex-column gap-2"><div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="0"><span class="fw-bold">İmsak</span><span class="pt-val pt-val-Imsak fs-5 fw-bold text-muted">--:--</span></div><div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="1"><span class="fw-bold">Güneş</span><span class="pt-val pt-val-Gunes fs-5 fw-bold text-muted">--:--</span></div><div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="2"><span class="fw-bold">Öğle</span><span class="pt-val pt-val-Ogle fs-5 fw-bold text-muted">--:--</span></div><div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="3"><span class="fw-bold">İkindi</span><span class="pt-val pt-val-Ikindi fs-5 fw-bold text-muted">--:--</span></div><div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="4"><span class="fw-bold">Akşam</span><span class="pt-val pt-val-Aksam fs-5 fw-bold text-muted">--:--</span></div><div class="pt-card d-flex justify-content-between align-items-center p-3 rounded-3" data-idx="5"><span class="fw-bold">Yatsı</span><span class="pt-val pt-val-Yatsi fs-5 fw-bold text-muted">--:--</span></div></div>
 </div>
 
 <div id="prayer-toggle-btn" class="prayer-toggle-btn" onclick="toggleRightPanel()"><i class="fas fa-chevron-left mb-1"></i><i class="fas fa-clock fs-5"></i></div>
 
 <div id="login-screen">
-    <div class="login-card p-5 text-center" style="max-width: 400px;">
-        <h3 class="text-success fw-bold mb-4">İbadet Takip</h3>
-        <button class="btn btn-dark w-100 py-3 rounded-pill" onclick="loginWithGoogle()"><i class="fab fa-google me-2"></i> Google ile Giriş</button>
-    </div>
+    <div class="login-card p-5 text-center" style="max-width: 400px;"><h3 class="text-success fw-bold mb-4">İbadet Takip</h3><button class="btn btn-dark w-100 py-3 rounded-pill" onclick="loginWithGoogle()"><i class="fab fa-google me-2"></i> Google ile Giriş</button></div>
 </div>
 
 <div id="app-wrapper" class="wrapper" style="display:none;">
@@ -212,13 +185,13 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
         <!-- YENİ: Vakitler Tam Sayfa (Menüden ve alttan erişim) -->
         <div id="section-vakitler" class="app-section">
             <div class="vakitler-hero">
-                <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex flex-column gap-3 mb-3">
                     <h4 class="fw-bold m-0"><i class="fas fa-kaaba text-warning me-2"></i>Namaz Vakitleri</h4>
-                    <select class="form-select w-auto city-select fw-bold bg-white text-dark border-0 rounded-pill px-3" style="box-shadow: 0 4px 10px rgba(0,0,0,0.1);" onchange="fetchPrayerTimes(this.value)"></select>
+                    <select class="form-select city-select fw-bold bg-white text-dark border-0 rounded-pill px-3" style="box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; text-align: center; text-align-last: center;" onchange="fetchPrayerTimes(this.value)"></select>
                 </div>
                 <div class="prayer-countdown-label text-white-50 small fw-bold text-uppercase mb-1">Hesaplanıyor...</div>
                 <div class="prayer-countdown-time display-3 fw-bold text-white mb-2" style="text-shadow: 0 4px 10px rgba(0,0,0,0.3);">--:--:--</div>
-                <div class="small fw-bold text-white-50"><i class="fas fa-info-circle me-1"></i> Diyanet İşleri Başkanlığı Verileri</div>
+                <div class="small fw-bold text-white-50"><i class="fas fa-info-circle me-1"></i> Tahmini Vakitler (Açısal Hesaplama)</div>
             </div>
 
             <div class="row g-3">
