@@ -1,17 +1,17 @@
-const CACHE_NAME = 'ibadet-takip-v1.06'; // Sürüm güncellendi
+const CACHE_NAME = 'ibadet-takip-v1.07'; // Sürüm güncellendi
 
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './manifest.json', // Manifest dosyası önbelleğe eklendi
+  './manifest.json',
   './logo.png',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:wght@700&display=swap',
+  'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Amiri:wght@700&family=Playfair+Display:wght@700;900&display=swap',
   'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js',
   'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js',
-  'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js',
+  'https://cdn.jsdelivr.net/npm/chart.js',
   'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0',
   'https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js'
 ];
@@ -19,7 +19,16 @@ const STATIC_ASSETS = [
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then((cache) => {
+      // Promise.allSettled kullanarak tek bir harici link hata verse dahi SW kurulumunun tamamlanmasını sağlıyoruz
+      return Promise.allSettled(
+        STATIC_ASSETS.map((asset) => {
+          return cache.add(asset).catch((err) => {
+            console.warn(`[Service Worker] Önbelleğe alınamadı: ${asset}`, err);
+          });
+        })
+      );
+    })
   );
 });
 
