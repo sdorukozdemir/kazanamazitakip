@@ -521,11 +521,51 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
     window.addEventListener('offline', () => { showToast("İnternet bağlantısı kesildi.", "error"); document.body.style.filter = "grayscale(100%)"; });
     window.addEventListener('online', () => { showToast("Tekrar çevrimiçi oldunuz!", "success"); document.body.style.filter = "none"; });
 
-    let deferredPrompt; const installContainer = document.getElementById('installAppContainer');
-    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; if (!window.matchMedia('(display-mode: standalone)').matches) { if(installContainer) installContainer.style.display = 'block'; } });
-    async function installPWA() { if (!deferredPrompt) return; deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; deferredPrompt = null; if (outcome === 'accepted') { if(installContainer) installContainer.style.display = 'none'; } }
-    window.addEventListener('appinstalled', () => { if(installContainer) installContainer.style.display = 'none'; deferredPrompt = null; showToast("Uygulama yüklendi!", "success"); });
-    if (window.matchMedia('(display-mode: standalone)').matches) { if(installContainer) installContainer.style.display = 'none'; }
+    // --- PWA İNDİRME MANTIĞI ---
+    let deferredPrompt; 
+    const installContainer = document.getElementById('installAppContainer');
+    
+    // Cihazın iOS olup olmadığını anla
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    if (isStandalone) {
+        if(installContainer) installContainer.style.display = 'none';
+    } 
+    else if (isIOS) {
+        // iPhone ise Apple kuralları gereği buton çalışmaz, uyarı metni gösterilir
+        if(installContainer) {
+            installContainer.style.display = 'block';
+            const btn = installContainer.querySelector('button');
+            btn.innerHTML = '<i class="fas fa-share-square me-2"></i> Nasıl Kurulur?';
+            btn.onclick = () => showModal("iPhone Kurulumu", "Apple kuralları gereği bu butona basarak otomatik kurulum yapamazsınız.\n\nKurmak için:\n1. Tarayıcının altındaki 'Paylaş' simgesine dokunun.\n2. 'Ana Ekrana Ekle' seçeneğine dokunun.");
+        }
+    }
+
+    // Android / Chrome için otomatik kurulum tetikleyicisi
+    window.addEventListener('beforeinstallprompt', (e) => { 
+        e.preventDefault(); 
+        deferredPrompt = e; 
+        if (!isStandalone && !isIOS) { 
+            if(installContainer) installContainer.style.display = 'block'; 
+        } 
+    });
+
+    async function installPWA() { 
+        if (!deferredPrompt) return; 
+        deferredPrompt.prompt(); 
+        const { outcome } = await deferredPrompt.userChoice; 
+        deferredPrompt = null; 
+        if (outcome === 'accepted') { 
+            if(installContainer) installContainer.style.display = 'none'; 
+        } 
+    }
+
+    window.addEventListener('appinstalled', () => { 
+        if(installContainer) installContainer.style.display = 'none'; 
+        deferredPrompt = null; 
+        showToast("Uygulama başarıyla yüklendi! 📱", "success"); 
+    });
 </script>
 </body>
 </html>
