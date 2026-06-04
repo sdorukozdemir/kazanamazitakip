@@ -5,7 +5,7 @@ const CACHE_NAME = 'ibadet-takip-v1.02';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './assets/icon.svg',
+  './logo.png',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:wght@700&display=swap',
