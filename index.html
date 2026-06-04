@@ -256,13 +256,31 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
 </div>
 
 <script>
-    const pwaIcon = "./logo.png?v=2"; 
-    const manifestBlob = new Blob([JSON.stringify({ 
-        "name": "Kaza İbadet Takip", "short_name": "İbadet", "start_url": "./index.html", "display": "standalone",  
-        "orientation": "any", "background_color": "#f8f9fa", "theme_color": "#609979", 
-        "icons":[{"src": pwaIcon, "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}] 
-    })], {type: 'application/json'});
-    document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
+const pwaIcon = "./logo.png?v=2"; 
+const manifestBlob = new Blob([JSON.stringify({ 
+    "name": "Kaza İbadet Takip", 
+    "short_name": "İbadet", 
+    "start_url": "./index.html", 
+    "display": "standalone",  
+    "orientation": "any", 
+    "background_color": "#f8f9fa", 
+    "theme_color": "#609979", 
+    "icons": [
+        {
+            "src": pwaIcon, 
+            "sizes": "192x192", 
+            "type": "image/png", 
+            "purpose": "any maskable"
+        },
+        {
+            "src": pwaIcon, 
+            "sizes": "512x512", 
+            "type": "image/png", 
+            "purpose": "any maskable"
+        }
+    ] 
+})], {type: 'application/json'});
+document.querySelector('#my-manifest').href = URL.createObjectURL(manifestBlob);
 
     const jsConfetti = new JSConfetti();
     let currentChartPeriod = 'weekly'; 
