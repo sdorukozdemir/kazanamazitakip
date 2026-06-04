@@ -1,10 +1,9 @@
-// Sadece bu satırı değiştirin (Örn: v3)
-const CACHE_NAME = 'ibadet-takip-v1.05'; 
+const CACHE_NAME = 'ibadet-takip-v1.06'; // Sürüm güncellendi
 
-// Geri kalan kodlar aynı kalabilir...
 const STATIC_ASSETS = [
   './',
   './index.html',
+  './manifest.json', // Manifest dosyası önbelleğe eklendi
   './logo.png',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
@@ -54,10 +53,3 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
-
-
-
-
-
-
-
