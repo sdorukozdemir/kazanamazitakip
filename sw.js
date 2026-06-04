@@ -1,5 +1,5 @@
 // Sadece bu satırı değiştirin (Örn: v3)
-const CACHE_NAME = 'ibadet-takip-v1.01'; 
+const CACHE_NAME = 'ibadet-takip-v1.02'; 
 
 // Geri kalan kodlar aynı kalabilir...
 const STATIC_ASSETS = [
