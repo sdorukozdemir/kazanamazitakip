@@ -381,6 +381,28 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
     window.copyStartDate = function() { const v = document.querySelectorAll('#row-0 input.date-input')[0].value; if(!v) return; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input.date-input`)[0].value = v; window.calcRow(i); } triggerHaptic("normal"); };
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input.date-input')[1].value; if(!v) return; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input.date-input`)[1].value = v; window.calcRow(i); } triggerHaptic("normal"); };
 
+    // Gün değiştiğinde arayüzü ve verileri otomatik güncelleyen fonksiyon
+function handleAutoDateCheck() {
+    if (checkDailyReset()) {
+        renderApp();
+        // Eğer o esnada analiz sekmesi aktifse istatistikleri de yenile
+        const statsSec = document.getElementById('section-stats');
+        if (statsSec && statsSec.classList.contains('active')) {
+            renderStats();
+        }
+        showToast("Yeni güne geçildi, günlük hedefler sıfırlandı.", "success");
+    }
+}
+
+// DURUM 1: Uygulama arka plandan ön plana alındığında tetiklenir
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        handleAutoDateCheck();
+    }
+});
+
+// DURUM 2: Uygulama ekranda açıkken gece yarısı (00:00) geçişini yakalamak için her 30 saniyede bir kontrol eder
+setInterval(handleAutoDateCheck, 30000);
     // --- NAMAZ VAKİTLERİ ALTYAPISI ---
     const CITIES =["Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"];
     let currentCity = localStorage.getItem('selectedCity') || 'İstanbul'; let todayTimings = null; let countdownInterval = null;
@@ -480,7 +502,7 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
     if(localStorage.getItem('theme')==='dark') { document.body.classList.add('dark-mode'); document.getElementById('darkModeText').innerText = "Gündüz Modu"; }
     document.getElementById('startDate').addEventListener('change', (e) => { localData.startDate = e.target.value; saveToCloud(); renderApp(); });
     const dInput = document.getElementById('startDate'); dInput.onfocus = function() { this.type='date'; }; dInput.onblur = function() { this.type='text'; this.value = formatDateTR(this.value); }; dInput.placeholder = 'gg.aa.yyyy';
-    function checkDailyReset() { const t = getCurrentDateSimple(); if (localData.daily.date !== t) { localData.daily.date = t; localData.daily.counts = [0,0,0,0,0]; saveToCloud(); } }
+    function checkDailyReset() { const t = getCurrentDateSimple(); if (localData.daily && localData.daily.date !== t) { localData.daily.date = t; localData.daily.counts = [0,0,0,0,0]; saveToCloud(); return true; } return false; }
     function getElapsedDays() { if (!localData.startDate) return 1; const s = new Date(localData.startDate); const n = new Date(); s.setHours(0,0,0,0); n.setHours(0,0,0,0); return Math.ceil(Math.abs(n - s) / (1000 * 60 * 60 * 24)) || 1; }
     function getCurrentTime() { return new Date().toLocaleString('tr-TR'); }
     function addHistory(n, o, nv) { const r = { namaz: n, oldVal: parseInt(o), newVal: parseInt(nv), time: getCurrentTime() }; if (!localData.history) localData.history =[]; localData.history.unshift(r); saveToCloud(); }
