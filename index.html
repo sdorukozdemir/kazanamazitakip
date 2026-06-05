@@ -380,16 +380,24 @@ input[type="date"] { appearance: none; -webkit-appearance: none; color: var(--te
     window.calcRow = function(i) { const r = document.getElementById(`row-${i}`); const inputs = r.querySelectorAll('input.date-input'); let s = inputs[0].value; let e = inputs[1].value; function parseDateTR(val) { if(!val) return null; if(val.includes('.') && val.split('.').length === 3) { const parts = val.split('.'); return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`); } return new Date(val); } if(s && e) { const startDate = parseDateTR(s); const endDate = parseDateTR(e); if(startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) { let totalDays = Math.ceil((endDate - startDate)/(86400000)); if(localData.gender === 'female') { const totalMonths = totalDays / 30.44; const menstrualDeduction = Math.floor(totalMonths * (localData.menstrualDaysPerMonth || 6)); totalDays = totalDays - menstrualDeduction; } document.getElementById(`res-${i}`).value = Math.max(0, totalDays); } } };
     window.copyStartDate = function() { const v = document.querySelectorAll('#row-0 input.date-input')[0].value; if(!v) return; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input.date-input`)[0].value = v; window.calcRow(i); } triggerHaptic("normal"); };
     window.copyEndDate = function() { const v = document.querySelectorAll('#row-0 input.date-input')[1].value; if(!v) return; for(let i=1;i<5;i++) { document.querySelectorAll(`#row-${i} input.date-input`)[1].value = v; window.calcRow(i); } triggerHaptic("normal"); };
-
-    // Gün değiştiğinde arayüzü ve verileri otomatik güncelleyen fonksiyon
+// Gün değiştiğinde arayüzü, verileri ve namaz vakitlerini otomatik güncelleyen fonksiyon
 function handleAutoDateCheck() {
     if (checkDailyReset()) {
         renderApp();
+        
         // Eğer o esnada analiz sekmesi aktifse istatistikleri de yenile
         const statsSec = document.getElementById('section-stats');
         if (statsSec && statsSec.classList.contains('active')) {
             renderStats();
         }
+
+        // İnternet bağlantısının uyanması için 2 saniye bekleyip yeni günün vakitlerini çek
+        setTimeout(() => {
+            if (typeof fetchPrayerTimes === 'function' && currentCity) {
+                fetchPrayerTimes(currentCity);
+            }
+        }, 2000); 
+
         showToast("Yeni güne geçildi, günlük hedefler sıfırlandı.", "success");
     }
 }
@@ -403,6 +411,7 @@ document.addEventListener('visibilitychange', () => {
 
 // DURUM 2: Uygulama ekranda açıkken gece yarısı (00:00) geçişini yakalamak için her 30 saniyede bir kontrol eder
 setInterval(handleAutoDateCheck, 30000);
+
     // --- NAMAZ VAKİTLERİ ALTYAPISI ---
     const CITIES =["Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"];
     let currentCity = localStorage.getItem('selectedCity') || 'İstanbul'; let todayTimings = null; let countdownInterval = null;
